@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNet.Identity
+<nav class="navbar navbar-inverse navbar-fixed-top pmd-navbar pmd-z-depth">
+    <div class="container-fluid">
+        <div class="navbar-header pull-right">
+            <div class="dropdown notification icons pmd-dropdown">
+                <a href="javascript:void(0)" title="Notification" class="dropdown-toggle pmd-ripple-effect" data-toggle="dropdown" role="button" aria-expanded="true">
+                    <div data-badge="3" class="material-icons md-light pmd-sm pmd-badge  pmd-badge-overlap">account_circle</div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right pmd-card pmd-card-default pmd-z-depth" role="menu">
+                    @if (Request.IsAuthenticated)
+                    {
+                        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="pmd-card-title">
+                                <div class="media-body media-middle">
+                                    <a href="notifications.html" class="pull-right">Profile</a> 
+                                    <h3 class="pmd-card-title-text">Howdy @User.Identity.GetUserName()!</h3>
+                                </div>
+                            </div>
+                            <ul class="list-group pmd-list-avatar pmd-card-list">
+                                <li>
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                                </li>
+                            </ul>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="navbar-header">
+            <a href="javascript:void(0);" class="btn btn-sm pmd-btn-fab pmd-btn-flat pmd-ripple-effect pull-left margin-r8 pmd-sidebar-toggle" style="display: inherit;"><i class="material-icons">menu</i></a>
+            <a href="#" class="navbar-brand">Talento</a>
+        </div>
+    </div>
+</nav>
