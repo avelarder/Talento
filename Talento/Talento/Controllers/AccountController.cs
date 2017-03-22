@@ -58,6 +58,12 @@ namespace Talento.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+
+            if (HttpContext.Request.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
             return View();
         }
 
@@ -96,6 +102,11 @@ namespace Talento.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            if (HttpContext.Request.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
             return View();
         }
 
@@ -147,6 +158,11 @@ namespace Talento.Controllers
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
+            if (HttpContext.Request.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
             return View();
         }
 
@@ -183,6 +199,11 @@ namespace Talento.Controllers
         [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
         {
+            if (HttpContext.Request.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
             return View();
         }
 
