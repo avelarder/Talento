@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Talento.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Talento.Controllers
 {
@@ -95,7 +96,10 @@ namespace Talento.Controllers
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
-        {
+        { 
+            var roleMngr = HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
+            var roles = roleMngr.Roles.ToList();
+
             return View();
         }
 

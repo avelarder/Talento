@@ -40,7 +40,7 @@ namespace Talento
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
             // Configure validation logic for usernames
@@ -81,7 +81,7 @@ namespace Talento
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
+                manager.UserTokenProvider =
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
@@ -104,6 +104,71 @@ namespace Talento
         public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
         {
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
+        }
+    }
+
+    public class ApplicationRoleManager : RoleManager<ApplicationRole>
+    {
+        public ApplicationRoleManager(IRoleStore<ApplicationRole, string> roleStore)
+            : base(roleStore)
+        {
+        }
+
+        public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
+        {
+            return new ApplicationRoleManager(new RoleStore<ApplicationRole>(context.Get<ApplicationDbContext>()));
+        }
+    }
+
+    public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
+    {
+        protected override void Seed(ApplicationDbContext context)
+        {
+            InitializeIdentityForEF(context);
+            base.Seed(context);
+        }
+      
+        public static void InitializeIdentityForEF(ApplicationDbContext db)
+        {
+            var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
+            const string name = "basic@example.com";
+            const string password = "Basic@123456";
+            const string roleName = "Basic";
+
+            List<string> listaRoles = new List<string>();
+            listaRoles.Add("Basic");
+            listaRoles.Add("PM");
+            listaRoles.Add("RMG");
+            listaRoles.Add("TAG");
+            listaRoles.Add("TL");
+
+            //Create roles.
+            foreach (string rol in listaRoles)
+            {
+                var role = roleManager.FindByName(rol);
+                if (role == null)
+                {
+                    role = new ApplicationRole(rol);
+                    var roleresult = roleManager.Create(role);
+                }
+            }
+
+            ApplicationRole userRole = roleManager.FindByName(roleName);
+
+            var user = userManager.FindByName(name);
+            if (user == null)
+            {
+                user = new ApplicationUser { UserName = name, Email = name };
+                var result = userManager.Create(user, password);
+                result = userManager.SetLockoutEnabled(user.Id, false);
+            }
+
+            var rolesForUser = userManager.GetRoles(user.Id);
+            if (!rolesForUser.Contains(userRole.Name))
+            {
+                var result = userManager.AddToRole(user.Id, userRole.Name);
+            }
         }
     }
 }
