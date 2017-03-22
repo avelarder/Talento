@@ -23,7 +23,7 @@ namespace Talento.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -35,9 +35,9 @@ namespace Talento.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -96,7 +96,7 @@ namespace Talento.Controllers
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
-        { 
+        {
             var roleMngr = HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
             var roles = roleMngr.Roles.ToList();
 
@@ -114,10 +114,17 @@ namespace Talento.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
+
+                var rolesForUser = UserManager.GetRoles(user.Id);
+                if (!rolesForUser.Contains(model.UserType))
+                {
+                    result = UserManager.AddToRole(user.Id, model.UserType);
+                }
+
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -242,7 +249,7 @@ namespace Talento.Controllers
             // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
-        
+
         //
         // POST: /Account/LogOff
         [HttpPost]
