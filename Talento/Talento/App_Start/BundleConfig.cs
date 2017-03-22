@@ -22,16 +22,14 @@ namespace Talento
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js",
-                      "~/Scripts/mdb.min.js",
-                      "~/Scripts/tether.min.js"));
+                      "~/Scripts/propeller.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
-                      "~/Scripts/mdb.js",
                       "~/Scripts/app.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/mdb.min.css",
+                      "~/Content/propeller.min.css",
                       "~/Content/styles.css"));
         }
     }

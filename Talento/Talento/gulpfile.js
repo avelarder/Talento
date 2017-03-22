@@ -12,7 +12,7 @@ const browserSync = require("browser-sync").create();
 const source = require("vinyl-source-stream");
 const browserReload = browserSync.reload();
 const browserStream = browserSync.stream();
-
+ 
 // # App #
 const devURL = "localhost:54343/"; // Change to URL including port by ASP.net
 const path = {  // Enviroment Paths
