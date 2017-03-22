@@ -3,13 +3,11 @@
     ViewBag.BodyClass = "dashboard-home";
     Layout = "~/Views/Shared/_LayoutBasic.cshtml";
 }
+@* Header *@
 @Html.Partial("~/Views/Dashboard/Shared/_PartialTopNavigation.cshtml")
-<div class="main-container">
-    <p>
-        Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod, iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel.
 
-        Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod, iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel.
+@* Sidebar Navigation *@
+@Html.Partial("~/Views/Dashboard/Shared/_PartialSidebarNavigation.cshtml")
 
-        Tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod, iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel.
-    </p>
-</div>
+@* Main Container *@
+@Html.Partial("~/Views/Dashboard/Shared/_PartialContent.cshtml")

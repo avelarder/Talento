@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Talento.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Basic")]
     public class DashboardController : Controller
     {
         // GET: Dashboard

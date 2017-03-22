@@ -1,31 +1,34 @@
 ﻿@using Microsoft.AspNet.Identity
-<nav class="navbar navbar-inverse navbar-fixed-top pmd-navbar pmd-z-depth">
+<!-- Top Navigation -->
+<nav id="navigation" class="navbar navbar-inverse navbar-fixed-top pmd-navbar pmd-z-depth">
     <div class="container-fluid">
         <div class="navbar-header pull-right">
-            <div class="dropdown notification icons pmd-dropdown">
-                <a href="javascript:void(0)" title="Notification" class="dropdown-toggle pmd-ripple-effect" data-toggle="dropdown" role="button" aria-expanded="true">
-                    <div data-badge="3" class="material-icons md-light pmd-sm pmd-badge  pmd-badge-overlap">account_circle</div>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right pmd-card pmd-card-default pmd-z-depth" role="menu">
-                    @if (Request.IsAuthenticated)
-                    {
-                        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "" }))
+            <div class="dropdown icons pmd-dropdown">
+                @if (Request.IsAuthenticated)
+                {
+                    <span class="user-name">Howdy @User.Identity.GetUserName()! </span>
+                    <a href="javascript:void(0)" title="Notification" class="dropdown-toggle pmd-ripple-effect" data-toggle="dropdown" role="button" aria-expanded="true">
+                        <div class="material-icons">account_circle</div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right pmd-card pmd-card-default pmd-z-depth" role="menu">
+                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "" }))
                         {
                             @Html.AntiForgeryToken()
-                            <div class="pmd-card-title">
-                                <div class="media-body media-middle">
-                                    <a href="notifications.html" class="pull-right">Profile</a> 
-                                    <h3 class="pmd-card-title-text">Howdy @User.Identity.GetUserName()!</h3>
-                                </div>
-                            </div>
+                            <div class="dropdown-header">@User.Identity.GetUserName()</div>  
                             <ul class="list-group pmd-list-avatar pmd-card-list">
+                                <li>
+                                    <a href="#">Profile</a>
+                                </li>
+                                <li>
+                                    <a href="#">Settings</a>
+                                </li>
                                 <li>
                                     <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
                                 </li>
                             </ul>
                         }
-                    }
-                </div>
+                    </div>
+                }
             </div>
         </div>
         <div class="navbar-header">

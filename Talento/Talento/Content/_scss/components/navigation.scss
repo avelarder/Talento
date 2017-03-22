@@ -1,0 +1,42 @@
+﻿// Top Navigation
+#navigation {
+    .dropdown {
+        color: $color-1;
+        top: 10px;
+        margin-right: 10px;
+    }
+
+    .dropdown-toggle {
+        top: 6px;
+        left: 5px;
+        color: $color-1;
+    }
+
+    .navbar-brand {
+        color:$color-1;
+    }
+}
+
+// Aside Navigation
+#navigation-side {
+    .pmd-user-info {
+        .user-image {
+            img {
+                max-width:100%;
+                height:auto;
+                border-radius:50%;
+            }
+        }
+
+        & > a {
+            background-color: #545454;
+        }
+
+        .dropdown-menu {
+            background-color: rgb(128, 128, 128);
+            a {
+                color:$color-1;
+            }
+        }
+    }
+}
