@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Talento.Models;
+using System.IO;
 
 namespace Talento.Controllers
 {
@@ -124,9 +125,8 @@ namespace Talento.Controllers
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                    SendEmailConfirmation();
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
                     ViewData["RegisterCode"] = HttpUtility.UrlEncode(code);
                     ViewData["UserId"] = user.Id;
                     return View("RegisterConfirmation");
@@ -139,9 +139,18 @@ namespace Talento.Controllers
             return View(model);
         }
 
-        private void SendEmailConfirmation()
+        [AllowAnonymous]
+        public ActionResult RegistrationFileDownload(string userId, string code)
         {
-            //throw new NotImplementedException();
+            MemoryStream memoryStream = new MemoryStream();
+            TextWriter tw = new StreamWriter(memoryStream);
+            tw.WriteLine("[InternetShortcut]\n" + "URL=http://" + HttpContext.Request.Url.Host +
+                ":"+HttpContext.Request.Url.Port+
+                "/Account/ConfirmEmail/?userId=" +userId+"&code="+HttpUtility.UrlEncode(code));
+            tw.Flush();
+            tw.Close();
+            return File(memoryStream.GetBuffer(), "application/octet-stream", "ConfirmMyAccount.url");
+
         }
 
         //
@@ -151,7 +160,8 @@ namespace Talento.Controllers
         {
             if (userId == null || code == null)
             {
-                return View("Error");
+                ModelState.AddModelError("", "The operation you are trying to execute is not valid.");
+                return View("Login");
             }
 
             if (UserManager.IsEmailConfirmed(userId))
@@ -163,7 +173,8 @@ namespace Talento.Controllers
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             if (result.Succeeded)
             {
-                return RedirectToAction("Login", "Account");
+                ModelState.AddModelError("", "Your Account has been activated successfully.");
+                return View("Login");
             }
             else
             {

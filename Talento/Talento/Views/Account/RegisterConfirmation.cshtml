@@ -17,22 +17,19 @@
         <h2>Register Account Confirmation in <strong>TALENTO</strong></h2>
     </div>
 
-        <div class="pmd-card-body">
-            <p>This section is meant to simulate the email address confirmation scenario. In which you would recieve the link here attached to this page.</p>
-            <a href="/Account/ConfirmEmail/?userId=@userId&code=@code">@HttpContext.Current.Request.Url.Host/Account/ConfirmEmail/?userId=@userId&code=@code</a>
-            <p>In order to proceed with account confirmation you can either use this link above or click the button below in order to redirect you to the confirmation simulating the email that you would be reading in the release version of the TALENTO application.</p>
-        </div>
+    <div class="pmd-card-body">
+        <p>This section is meant to simulate the email address confirmation scenario. In which you would recieve the link here attached to this page.</p>
+        <a href="/Account/ConfirmEmail/?userId=@userId&code=@code">Activation Link</a>
+        <p>In order to proceed with account confirmation you can either use this link above or click the button below in order to redirect you to the confirmation simulating the email that you would be reading in the release version of the TALENTO application.</p>
+    </div>
 
-        <div class="pmd-card-footer card-footer-no-border card-footer-p16 text-center">
-            <div class="form-group clearfix">
-                <a href="/Account/ConfirmEmail/?userId=@userId&code=@code" class="btn pmd-ripple-effect btn-primary btn-block">Confirm Registration</a>
-                <p>
-                    <br />
-                    Don't have an account?
-                    @Html.ActionLink("Sign Up", "Register").
-                </p>
-            </div>
+     <div class="pmd-card-footer card-footer-no-border card-footer-p16 text-center">
+        <div class="form-group clearfix">
+            <a href="/Account/ConfirmEmail/?userId=@userId&code=@code" class="btn pmd-ripple-effect btn-primary btn-block">Confirm Registration</a>
         </div>
+        <p>This section is meant to simulate the email address confirmation scenario. In which you would recieve the link here attached to this page.</p>
+        <a href="/Account/RegistrationFileDownload/?userId=@userId&code=@code" class="btn pmd-ripple-effect btn-primary btn-block">Download Verification File</a>
+    </div>
 </div>
 
 
