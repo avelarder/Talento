@@ -21,6 +21,11 @@
 
         <div class="pmd-card-body">
 
+            @if (!Html.ViewData.ModelState.IsValid)
+            {
+                @Html.ValidationSummary("", new { @class = "alert alert-danger", @role = "alert" })
+            }
+
             <div class="form-group pmd-textfield pmd-textfield-floating-label">
                 @Html.LabelFor(m => m.Name, new { @class = "control-label pmd-input-group-label" })
                 <div class="input-group">
@@ -31,10 +36,6 @@
                 </div>
             </div>
 
-            @if (!Html.ViewData.ModelState.IsValid)
-            {
-                @Html.ValidationSummary("", new { @class = "alert alert-danger", @role = "alert" })
-            }
             <div class="form-group pmd-textfield pmd-textfield-floating-label">
                 @Html.LabelFor(m => m.Email, new { @class = "control-label pmd-input-group-label" })
                 <div class="input-group">

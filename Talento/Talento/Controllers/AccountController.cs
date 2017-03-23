@@ -119,17 +119,36 @@ namespace Talento.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Check if Role exists
+                var roleManager = HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
+                var role = roleManager.FindByName(model.UserType);
+                if (role == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid role.");
+
+                    List<ApplicationRole> roles = roleManager.Roles.ToList();
+                    List<string> rolesName = new List<string>();
+                    foreach (ApplicationRole rol in roles)
+                    {
+                        rolesName.Add(rol.Name);
+                    }
+
+                    ViewBag.Roles = rolesName;
+                    return View(model);
+                }
+
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
 
-                var rolesForUser = UserManager.GetRoles(user.Id);
-                if (!rolesForUser.Contains(model.UserType))
-                {
-                    result = UserManager.AddToRole(user.Id, model.UserType);
-                }
-
                 if (result.Succeeded)
                 {
+                    var rolesForUser = UserManager.GetRoles(user.Id);
+
+                    if (!rolesForUser.Contains(model.UserType))
+                    {
+                        result = UserManager.AddToRole(user.Id, model.UserType);
+                    }
+
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
