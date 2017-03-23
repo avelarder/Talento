@@ -86,7 +86,7 @@ namespace Talento.Controllers
                 {
                     if (user.EmailConfirmed == true)
                     {
-                        await SignInManager.PasswordSignInAsync(model.Email,model.Password,false,false);
+                        await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
                         return RedirectToLocal(returnUrl);
                     }
                     else
@@ -121,13 +121,16 @@ namespace Talento.Controllers
             List<string> rolesName = new List<string>();
             foreach (ApplicationRole rol in roles)
             {
-                rolesName.Add(rol.Name);
+                if (rol.Name != "Admin")
+                {
+                    rolesName.Add(rol.Name);
+                }
             }
 
             ViewBag.Roles = rolesName;
             return View();
         }
-               
+
 
         //
         // POST: /Account/Register
@@ -141,7 +144,7 @@ namespace Talento.Controllers
                 //Check if Role exists
                 var roleManager = HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
                 var role = roleManager.FindByName(model.UserType);
-                if (role == null)
+                if (role == null || role.Name == "Admin")
                 {
                     ModelState.AddModelError(string.Empty, "Invalid role.");
 
@@ -149,7 +152,10 @@ namespace Talento.Controllers
                     List<string> rolesName = new List<string>();
                     foreach (ApplicationRole rol in roles)
                     {
-                        rolesName.Add(rol.Name);
+                        if (rol.Name != "Admin")
+                        {
+                            rolesName.Add(rol.Name);
+                        }
                     }
 
                     ViewBag.Roles = rolesName;
@@ -193,8 +199,8 @@ namespace Talento.Controllers
             MemoryStream memoryStream = new MemoryStream();
             TextWriter tw = new StreamWriter(memoryStream);
             tw.WriteLine("[InternetShortcut]\n" + "URL=http://" + HttpContext.Request.Url.Host +
-                ":"+HttpContext.Request.Url.Port+
-                "/Account/ConfirmEmail/?userId=" +userId+"&code="+HttpUtility.UrlEncode(code));
+                ":" + HttpContext.Request.Url.Port +
+                "/Account/ConfirmEmail/?userId=" + userId + "&code=" + HttpUtility.UrlEncode(code));
             tw.Flush();
             tw.Close();
             return File(memoryStream.GetBuffer(), "application/octet-stream", "ConfirmMyAccount.url");
