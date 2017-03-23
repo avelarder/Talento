@@ -2,8 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Talento.Controllers;
 using System.Web.Mvc;
-using Moq;
-using Talento.Models;
 
 namespace Talento.Tests.Controllers
 {
@@ -17,6 +15,19 @@ namespace Talento.Tests.Controllers
 
             // Act
             var result = controller.Login("Google.com");
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+        }
+
+        [TestMethod]
+        public void Register()
+        {
+            AccountController controller = new AccountController();
+
+            // Act
+            var result = controller.Register();
 
             // Assert
             Assert.IsNotNull(result);
