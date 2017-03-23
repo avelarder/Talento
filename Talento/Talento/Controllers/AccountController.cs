@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using Talento.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Talento.Controllers
 {
@@ -70,34 +71,40 @@ namespace Talento.Controllers
         }
 
         //
-        // POST: /Account/Login
+
+
+        //// POST: /Account/Login 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(model);
-            }
-
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, shouldLockout: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                var user = await UserManager.FindAsync(model.Email, model.Password);
+                if (user != null)
+                {
+                    if (user.EmailConfirmed == true)
+                    {
+                        await SignInManager.PasswordSignInAsync(model.Email,model.Password,false,false);
+                        return RedirectToLocal(returnUrl);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Your email is registered but the Account has not been activated.");
+                        return View(model);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid username or password.");
                     return View(model);
+                }
             }
+            ModelState.AddModelError("", "Error in login action");
+            return View(model);
         }
+
 
         //
         // GET: /Account/Register
@@ -120,6 +127,7 @@ namespace Talento.Controllers
             ViewBag.Roles = rolesName;
             return View();
         }
+               
 
         //
         // POST: /Account/Register
@@ -164,17 +172,33 @@ namespace Talento.Controllers
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    return RedirectToAction("Index", "Dashboard");
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    ViewData["RegisterCode"] = HttpUtility.UrlEncode(code);
+                    ViewData["UserId"] = user.Id;
+                    return View("RegisterConfirmation");
+                    //return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult RegistrationFileDownload(string userId, string code)
+        {
+            MemoryStream memoryStream = new MemoryStream();
+            TextWriter tw = new StreamWriter(memoryStream);
+            tw.WriteLine("[InternetShortcut]\n" + "URL=http://" + HttpContext.Request.Url.Host +
+                ":"+HttpContext.Request.Url.Port+
+                "/Account/ConfirmEmail/?userId=" +userId+"&code="+HttpUtility.UrlEncode(code));
+            tw.Flush();
+            tw.Close();
+            return File(memoryStream.GetBuffer(), "application/octet-stream", "ConfirmMyAccount.url");
+
         }
 
         //
@@ -184,10 +208,27 @@ namespace Talento.Controllers
         {
             if (userId == null || code == null)
             {
-                return View("Error");
+                ModelState.AddModelError("", "The operation you are trying to execute is not valid.");
+                return View("Login");
             }
+
+            if (UserManager.IsEmailConfirmed(userId))
+            {
+                ModelState.AddModelError("", "Account is activated already.");
+                return View("Login");
+            }
+
             var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            if (result.Succeeded)
+            {
+                ModelState.AddModelError("", "Your Account has been activated successfully.");
+                return View("Login")
+            }
+            else
+            {
+                ModelState.AddModelError("", "The operation you are trying to execute is not valid.");
+                return View("Login");
+            }
         }
 
         //

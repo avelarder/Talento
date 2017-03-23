@@ -284,6 +284,7 @@
     <Content Include="Views\Dashboard\Shared\_PartialContent.cshtml" />
     <Content Include="Views\Dashboard\Widgets\DataTable.cshtml" />
     <Content Include="Views\Dashboard\Widgets\Accordion.cshtml" />
+    <Content Include="Views\Account\RegisterConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
