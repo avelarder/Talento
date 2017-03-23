@@ -12,6 +12,8 @@ using Talento.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Mail;
+using System.Diagnostics;
 
 namespace Talento.Controllers
 {
@@ -179,18 +181,18 @@ namespace Talento.Controllers
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    #if DEBUG == false
+#if DEBUG == false
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                    #endif
+#endif
                     ViewData["RegisterCode"] = HttpUtility.UrlEncode(code);
                     ViewData["UserId"] = user.Id;
-                    #if DEBUG
+#if DEBUG
                     return View("RegisterConfirmation");
-                    #else
+#else
                     ModelState.AddModelError("", "A link has been sent to your registered mail address. Check for it in order to activate the account before being able to login.");
                     return View("Login");
-                    #endif
+#endif
                     //return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
@@ -275,10 +277,10 @@ namespace Talento.Controllers
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form
@@ -288,13 +290,14 @@ namespace Talento.Controllers
         //
         // GET: /Account/ForgotPasswordConfirmation
         [AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation()
+        public ActionResult ForgotPasswordConfirmation(string code)
         {
             if (HttpContext.Request.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
 
+            ViewData["code"] = code;
             return View();
         }
 
@@ -303,7 +306,8 @@ namespace Talento.Controllers
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
-            return code == null ? View("Error") : View();
+            ViewData["code"] = code;
+            return code == null ? View("Error") : View("ForgotPasswordConfirmation");
         }
 
         //
@@ -321,15 +325,16 @@ namespace Talento.Controllers
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                return View("Login");
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                ModelState.AddModelError("", "Your Password has been changed successfully");
+                return View("Login");
             }
             AddErrors(result);
-            return View();
+            return View("Login");
         }
 
         //
@@ -338,6 +343,37 @@ namespace Talento.Controllers
         public ActionResult ResetPasswordConfirmation()
         {
             return View();
+        }
+
+        //
+        // GET: /Account/MailSent
+        [AllowAnonymous]
+        public ActionResult MailSent(string code)
+        {
+            ViewData["code"] = code;
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> SendmeanEmail(ForgotPasswordViewModel model)
+        {
+            string code = "";
+            var callbackUrl = "";
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByNameAsync(model.Email);
+                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                {
+                    ModelState.AddModelError("", "Invalid operation");
+                    return View("Login");
+                }
+                code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+            }
+            ViewData["link"] = callbackUrl;
+            ViewData["code"] = code;
+            return View("MailSent");
         }
 
         //
@@ -389,7 +425,7 @@ namespace Talento.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -446,6 +482,6 @@ namespace Talento.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
-#endregion
+        #endregion
     }
 }
