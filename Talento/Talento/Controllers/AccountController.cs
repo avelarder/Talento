@@ -141,26 +141,25 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            var roleManager = HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
+            List<ApplicationRole> roles = roleManager.Roles.ToList();
+            List<string> rolesName = new List<string>();
+            foreach (ApplicationRole rol in roles)
+            {
+                if (rol.Name != "Admin")
+                {
+                    rolesName.Add(rol.Name);
+                }
+            }
+            ViewBag.Roles = rolesName;
+
             if (ModelState.IsValid)
             {
                 //Check if Role exists
-                var roleManager = HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
                 var role = roleManager.FindByName(model.UserType);
                 if (role == null || role.Name == "Admin")
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid role.");
-
-                    List<ApplicationRole> roles = roleManager.Roles.ToList();
-                    List<string> rolesName = new List<string>();
-                    foreach (ApplicationRole rol in roles)
-                    {
-                        if (rol.Name != "Admin")
-                        {
-                            rolesName.Add(rol.Name);
-                        }
-                    }
-
-                    ViewBag.Roles = rolesName;
+                    ModelState.AddModelError(string.Empty, "Invalid role.");              
                     return View(model);
                 }
 
