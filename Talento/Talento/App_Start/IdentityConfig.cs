@@ -53,7 +53,7 @@ namespace Talento
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
+                RequiredLength = 8,
                 RequireNonLetterOrDigit = true,
                 RequireDigit = true,
                 RequireLowercase = true,
@@ -132,11 +132,13 @@ namespace Talento
         {
             var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
-            const string name = "basic@example.com";
-            const string password = "Basic@123456";
-            const string roleName = "Basic";
+            const string name = "admin@example.com";
+            const string password = "Admin@123456";
+            const string roleName = "Admin";
+            const bool emailConfirmed = true;
 
             List<string> listaRoles = new List<string>();
+            listaRoles.Add("Admin");
             listaRoles.Add("Basic");
             listaRoles.Add("PM");
             listaRoles.Add("RMG");
@@ -159,7 +161,7 @@ namespace Talento
             var user = userManager.FindByName(name);
             if (user == null)
             {
-                user = new ApplicationUser { UserName = name, Email = name };
+                user = new ApplicationUser { UserName = name, Email = name, EmailConfirmed=emailConfirmed };
                 var result = userManager.Create(user, password);
                 result = userManager.SetLockoutEnabled(user.Id, false);
             }
