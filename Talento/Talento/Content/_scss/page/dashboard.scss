@@ -1,1 +1,14 @@
-﻿
+﻿.basic-role {
+    .navbar-inverse {
+        background-color: $color-9;
+        border-color: $color-10;
+    }
+
+    .pmd-sidebar .pmd-user-info > a {
+        background-color: $color-10!important;
+    }
+
+    #navigation-side .pmd-user-info .dropdown-menu {
+        background-color:$color-9;
+    }
+}

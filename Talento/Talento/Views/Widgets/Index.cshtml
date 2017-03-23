@@ -1,5 +1,5 @@
 @{
-    ViewBag.Title = "Dashboard";
+    ViewBag.Title = "Widgets";
     ViewBag.BodyClass = "dashboard-home";
     Layout = "~/Views/Shared/_LayoutBasic.cshtml";
 }
@@ -10,5 +10,5 @@
 @Html.Partial("~/Views/Dashboard/Shared/_PartialSidebarNavigation.cshtml")
 
 @* Main Container *@
-@Html.Partial("~/Views/Dashboard/Shared/"+ ViewData["Dashboard"])
- 
+@Html.Partial("~/Views/Dashboard/Shared/_PartialContent.cshtml")
+
