@@ -125,11 +125,18 @@ namespace Talento.Controllers
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    #if DEBUG == false
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    #endif
                     ViewData["RegisterCode"] = HttpUtility.UrlEncode(code);
                     ViewData["UserId"] = user.Id;
+                    #if DEBUG
                     return View("RegisterConfirmation");
+                    #else
+                    ModelState.AddModelError("", "A link has been sent to your registered mail address. Check for it in order to activate the account before being able to login.");
+                    return View("Login");
+                    #endif
                     //return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
@@ -174,7 +181,7 @@ namespace Talento.Controllers
             if (result.Succeeded)
             {
                 ModelState.AddModelError("", "Your Account has been activated successfully.");
-                return View("Login")
+                return View("Login");
             }
             else
             {
@@ -318,7 +325,7 @@ namespace Talento.Controllers
             base.Dispose(disposing);
         }
 
-        #region Helpers
+#region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -375,6 +382,6 @@ namespace Talento.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
-        #endregion
+#endregion
     }
 }
