@@ -222,7 +222,7 @@ namespace Talento.Controllers
             if (result.Succeeded)
             {
                 ModelState.AddModelError("", "Your Account has been activated successfully.");
-                return View("Login")
+                return View("Login");
             }
             else
             {
