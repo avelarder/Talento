@@ -5,6 +5,7 @@
     Layout = "~/Views/Account/Shared/_LayoutLogin.cshtml";
 }
 
+
 <div class="login-card">
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
@@ -19,10 +20,22 @@
         </div>
 
         <div class="pmd-card-body">
+
             @if (!Html.ViewData.ModelState.IsValid)
             {
                 @Html.ValidationSummary("", new { @class = "alert alert-danger", @role = "alert" })
             }
+
+            <div class="form-group pmd-textfield pmd-textfield-floating-label">
+                @Html.LabelFor(m => m.Name, new { @class = "control-label pmd-input-group-label" })
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="material-icons md-dark pmd-sm">face</i>
+                    </div>
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                </div>
+            </div>
+
             <div class="form-group pmd-textfield pmd-textfield-floating-label">
                 @Html.LabelFor(m => m.Email, new { @class = "control-label pmd-input-group-label" })
                 <div class="input-group">
@@ -56,12 +69,11 @@
                     <div class="input-group-addon">
                         <i class="material-icons md-dark pmd-sm">account_circle</i>
                     </div>
-                    <select class="select-simple form-control pmd-select2" tabindex="-1" aria-hidden="true">
-                        <option>Basic</option>
-                        <option>RMG</option>
-                        <option>TAG</option>
-                        <option>PM</option>
-                        <option>TL</option>
+                    <select class="select-simple form-control pmd-select2" tabindex="-1" aria-hidden="true" name="UserType">
+                        @foreach (string rol in ViewBag.Roles)
+                        {
+                            <option>@rol</option>
+                        }
                     </select>
                 </div>
             </div>

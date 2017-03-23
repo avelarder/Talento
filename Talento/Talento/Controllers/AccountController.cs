@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Talento.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
 
 namespace Talento.Controllers
 {
@@ -22,7 +24,7 @@ namespace Talento.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +36,9 @@ namespace Talento.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -107,6 +109,15 @@ namespace Talento.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
 
+            var roleMngr = HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
+            List<ApplicationRole> roles = roleMngr.Roles.ToList();
+            List<string> rolesName = new List<string>();
+            foreach (ApplicationRole rol in roles)
+            {
+                rolesName.Add(rol.Name);
+            }
+
+            ViewBag.Roles = rolesName;
             return View();
         }
 
@@ -119,12 +130,38 @@ namespace Talento.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Check if Role exists
+                var roleManager = HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
+                var role = roleManager.FindByName(model.UserType);
+                if (role == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid role.");
+
+                    List<ApplicationRole> roles = roleManager.Roles.ToList();
+                    List<string> rolesName = new List<string>();
+                    foreach (ApplicationRole rol in roles)
+                    {
+                        rolesName.Add(rol.Name);
+                    }
+
+                    ViewBag.Roles = rolesName;
+                    return View(model);
+                }
+
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    var rolesForUser = UserManager.GetRoles(user.Id);
+
+                    if (!rolesForUser.Contains(model.UserType))
+                    {
+                        result = UserManager.AddToRole(user.Id, model.UserType);
+                    }
+
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -259,7 +296,7 @@ namespace Talento.Controllers
             // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
-        
+
         //
         // POST: /Account/LogOff
         [HttpPost]
