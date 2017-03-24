@@ -318,13 +318,13 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
         //
         // GET: /Account/ForgotPasswordConfirmation
         [AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation(string code)
+        public ActionResult ForgotPasswordConfirmation(string code, string mail)
         {
             if (HttpContext.Request.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
-
+            ViewData["mail"] = mail;
             ViewData["code"] = code;
             return View();
         }
@@ -332,8 +332,9 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
+        public ActionResult ResetPassword(string code, string mail)
         {
+            ViewData["mail"] = mail;
             ViewData["code"] = code;
             return code == null ? View("Error") : View("ForgotPasswordConfirmation");
         }
@@ -345,14 +346,23 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
+            string mail = string.Empty;
+            byte[] decriptedmail = Convert.FromBase64String(model.Email);
+            mail = System.Text.Encoding.Unicode.GetString(decriptedmail);
+            model.Email = mail;
+            ModelState.Clear();
+            TryValidateModel(model);
+            var user = await UserManager.FindByNameAsync(model.Email);
+            
             if (!ModelState.IsValid)
             {
-                return View(model);
+                ModelState.AddModelError("", "An error occurred when trying to reset the password");
+                return View("Login");
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
+                ModelState.AddModelError("", "An error occurred when trying to reset the password");
                 return View("Login");
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
@@ -376,8 +386,9 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
         //
         // GET: /Account/MailSent
         [AllowAnonymous]
-        public ActionResult MailSent(string code)
+        public ActionResult MailSent(string code, string mail)
         {
+            ViewData["mail"] = mail;
             ViewData["code"] = code;
             return View();
         }
@@ -393,12 +404,30 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
-                    ModelState.AddModelError("", "Invalid operation");
+                    ModelState.AddModelError("", "The Email has been sent, please check your inbox");
                     return View("Login");
                 }
                 code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+#if DEBUG == false
+                SmtpClient SmtpServer = new SmtpClient("smtp.sendgrid.net");
+                SmtpServer.Port = 465;
+                SmtpServer.Credentials = new System.Net.NetworkCredential("apikey", "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");
+                SmtpServer.UseDefaultCredentials = false;
+                SmtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("pablorcarmona@hotmail.com");
+                mail.To.Add(user.Email);
+                mail.Subject = "Reset Password";
+                mail.Body = "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>";
+                SmtpServer.EnableSsl = true;
+                SmtpServer.Send(mail);
+#endif
             }
+            string result = string.Empty;
+            byte[] encriptedmail = System.Text.Encoding.Unicode.GetBytes(model.Email);
+            result = Convert.ToBase64String(encriptedmail);
+            ViewData["mail"] = result;
             ViewData["link"] = callbackUrl;
             ViewData["code"] = code;
             return View("MailSent");
@@ -453,7 +482,7 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
             base.Dispose(disposing);
         }
 
-        #region Helpers
+#region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -510,6 +539,6 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
-        #endregion
+#endregion
     }
 }
