@@ -33,5 +33,19 @@ namespace Talento.Tests.Controllers
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(ViewResult));
         }
+
+        [TestMethod]
+        public async void SendmeanEmail()
+        {
+            AccountController controller = new AccountController();
+            Models.ForgotPasswordViewModel model = new Models.ForgotPasswordViewModel();
+            
+            //Act
+            var result = await controller.SendmeanEmail(model);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+        }
     }
 }
