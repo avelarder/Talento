@@ -75,9 +75,28 @@ namespace Talento.Controllers
         public ActionResult RequestToken(string Email)
         {
 #if DEBUG
-            string iduser = UserManager.FindByEmail(Email).Id;
-            string token = UserManager.GenerateEmailConfirmationToken(iduser);
-            return RegistrationFileDownload(iduser,token);
+            try
+            {
+                MailAddress email = new MailAddress(Email);
+
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "The Email is not a valid email address.");
+                return View("RequestToken");
+            }
+            var user = UserManager.FindByEmail(Email);
+            if (user != null)
+            {
+                string iduser = user.Id;
+                string token = UserManager.GenerateEmailConfirmationToken(iduser);
+                return RegistrationFileDownload(iduser, token);
+            }
+            else
+            {
+                ModelState.AddModelError("", "An email has been sent with the url for the account activation.");
+                return View("Login");
+            }
 #else
 var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
 await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
@@ -299,8 +318,9 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
+                    ModelState.AddModelError("","Error");
                     // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
+                    return View();
                 }
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -409,6 +429,14 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
                 }
                 code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+
+                string result = string.Empty;
+                byte[] encriptedmail = System.Text.Encoding.Unicode.GetBytes(model.Email);
+                result = Convert.ToBase64String(encriptedmail);
+                ViewData["mail"] = result;
+                ViewData["link"] = callbackUrl;
+                ViewData["code"] = code;
+                return View("MailSent");
 #if DEBUG == false
                 SmtpClient SmtpServer = new SmtpClient("smtp.sendgrid.net");
                 SmtpServer.Port = 465;
@@ -424,13 +452,9 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
                 SmtpServer.Send(mail);
 #endif
             }
-            string result = string.Empty;
-            byte[] encriptedmail = System.Text.Encoding.Unicode.GetBytes(model.Email);
-            result = Convert.ToBase64String(encriptedmail);
-            ViewData["mail"] = result;
-            ViewData["link"] = callbackUrl;
-            ViewData["code"] = code;
-            return View("MailSent");
+            ModelState.Clear();
+            ModelState.AddModelError("", "The email does not have valid format of email address.");
+            return View("ForgotPassword");
         }
 
         //
