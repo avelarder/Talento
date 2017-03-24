@@ -322,6 +322,7 @@ namespace Talento.Controllers
             if (user == null)
             {
                 // Don't reveal that the user does not exist
+                ModelState.AddModelError("", "An error occurred when trying to reset the password");
                 return View("Login");
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
@@ -362,11 +363,25 @@ namespace Talento.Controllers
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
-                    ModelState.AddModelError("", "Invalid operation");
+                    ModelState.AddModelError("", "The Email has been sent, please check your inbox");
                     return View("Login");
                 }
                 code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+#if DEBUG == false
+                SmtpClient SmtpServer = new SmtpClient("smtp.sendgrid.net");
+                SmtpServer.Port = 465;
+                SmtpServer.Credentials = new System.Net.NetworkCredential("apikey", "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");
+                SmtpServer.UseDefaultCredentials = false;
+                SmtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("pablorcarmona@hotmail.com");
+                mail.To.Add(user.Email);
+                mail.Subject = "Reset Password";
+                mail.Body = "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>";
+                SmtpServer.EnableSsl = true;
+                SmtpServer.Send(mail);
+#endif
             }
             ViewData["link"] = callbackUrl;
             ViewData["code"] = code;
@@ -422,7 +437,7 @@ namespace Talento.Controllers
             base.Dispose(disposing);
         }
 
-        #region Helpers
+#region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -479,6 +494,6 @@ namespace Talento.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
-        #endregion
+#endregion
     }
 }
