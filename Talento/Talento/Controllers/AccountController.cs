@@ -287,13 +287,13 @@ namespace Talento.Controllers
         //
         // GET: /Account/ForgotPasswordConfirmation
         [AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation(string code)
+        public ActionResult ForgotPasswordConfirmation(string code, string mail)
         {
             if (HttpContext.Request.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
-
+            ViewData["mail"] = mail;
             ViewData["code"] = code;
             return View();
         }
@@ -301,8 +301,9 @@ namespace Talento.Controllers
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
+        public ActionResult ResetPassword(string code, string mail)
         {
+            ViewData["mail"] = mail;
             ViewData["code"] = code;
             return code == null ? View("Error") : View("ForgotPasswordConfirmation");
         }
@@ -314,11 +315,19 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
+            string mail = string.Empty;
+            byte[] decriptedmail = Convert.FromBase64String(model.Email);
+            mail = System.Text.Encoding.Unicode.GetString(decriptedmail);
+            model.Email = mail;
+            ModelState.Clear();
+            TryValidateModel(model);
+            var user = await UserManager.FindByNameAsync(model.Email);
+            
             if (!ModelState.IsValid)
             {
-                return View(model);
+                ModelState.AddModelError("", "An error occurred when trying to reset the password");
+                return View("Login");
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
@@ -346,8 +355,9 @@ namespace Talento.Controllers
         //
         // GET: /Account/MailSent
         [AllowAnonymous]
-        public ActionResult MailSent(string code)
+        public ActionResult MailSent(string code, string mail)
         {
+            ViewData["mail"] = mail;
             ViewData["code"] = code;
             return View();
         }
@@ -383,6 +393,10 @@ namespace Talento.Controllers
                 SmtpServer.Send(mail);
 #endif
             }
+            string result = string.Empty;
+            byte[] encriptedmail = System.Text.Encoding.Unicode.GetBytes(model.Email);
+            result = Convert.ToBase64String(encriptedmail);
+            ViewData["mail"] = result;
             ViewData["link"] = callbackUrl;
             ViewData["code"] = code;
             return View("MailSent");
