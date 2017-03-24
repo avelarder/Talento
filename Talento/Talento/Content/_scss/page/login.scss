@@ -1,0 +1,27 @@
+﻿.login-home{
+    height:100vh;
+}
+#login-page {
+    max-width:100%;
+    height:auto;    
+    .info-section {
+        color:#FFF;
+        background-color:$color-9;
+        height:auto;
+        padding-bottom:30px;
+        .info-header {
+            background-color: $color-10;
+            padding: 10px 10px 15px 10px;
+        }
+        @media( min-width: $size-md ) {
+            height:100%;
+             padding-bottom:0px;
+        }
+    }
+    .login-container {
+         height:100%;
+    }
+    @media( min-width: $size-md ) {
+        height:100%;
+    }
+}

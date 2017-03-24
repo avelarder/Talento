@@ -1,0 +1,57 @@
+﻿// Top Navigation
+#navigation {
+    .dropdown {
+        color: $color-1;
+        top: 10px;
+        margin-right: 10px;
+    }
+
+    .dropdown-toggle {
+        top: 6px;
+        left: 5px;
+        color: $color-1;
+    }
+
+    .navbar-brand {
+        color:$color-1;
+    }
+}
+
+// Aside Navigation
+#navigation-side {
+    .pmd-user-info {
+        .user-image {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+            img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 50%;
+            }
+        }
+
+        .media-body {
+            display: inline-block;
+            vertical-align: middle;
+            span {
+                text-transform:capitalize;
+                font-weight:bold;
+            }
+        }
+
+        & > a {
+            display: table;
+            background-color: #545454;
+            width:100%;
+        }
+
+        .dropdown-menu {
+            background-color: rgb(128, 128, 128);
+
+            a {
+                color: $color-1;
+            }
+        }
+    }
+}

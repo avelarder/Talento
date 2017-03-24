@@ -1,0 +1,41 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutBasic.cshtml";
+}
+
+<div id="login-page" class="container-fluid">
+    <div class="col-md-8 col-sm-6 info-section">
+        <div class="row info-header">
+            <img src="https://webmail.tcs.com/domcfg.nsf/b6525b687f8a0deb65257cf00021db98/$Body/0.692E?OpenElement&amp;FieldElemFormat=gif" alt="TCS">
+        </div>
+        <div class="">
+            <div class="text-center">
+                <h1>Talento tool for TCS Uruguay</h1>
+                <p>
+                    This Website and the information, tools and material contained in it (this "Site") are not directed to, or intended for distribution to or use by, any person or entity who is a citizen or resident of or located in any jurisdiction where such distribution, publication, availability or use would be contrary to law or regulation or which would subject Tata Consultancy Services Limited or its affiliates (collectively "TCS") to any registration or licensing requirement within such jurisdiction.
+                </p>
+                <p>
+                    This Site is subject to periodic update and revision. Materials should only be considered current as of the date of initial publication appearing thereon, without regard to the date on which you may access the information. TCS maintains the right to delete or modify information on this Site without prior notice.
+                </p>
+                <p>
+                    Past financial performance should not be taken as an indication or guarantee of future performance, and no representation or warranty, express or implied is made regarding future performance.
+                </p>
+                <div id="login_footer">
+                    Copyright © 2017 Tata Consultancy Services |
+                    <a onclick="openTermsWindow()" style="cursor:pointer">
+                        <font color="white"><b>Terms of Use</b></font>
+                    </a> | <a onclick="browserCompatibilityWindow()" style="cursor:pointer">
+                        <font color="white"><b>Browser and Display Compatibility</b></font>
+                    </a><br>
+                    Entry to this site is restricted to employees and affiliates of Tata Consultancy Services Limited
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6 login-container">
+        @RenderBody()
+    </div>
+</div>
+
+
+

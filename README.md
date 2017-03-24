@@ -2,6 +2,10 @@
 
 This is an academic project to learn MVC.NET with a real-world useful application.
 
+## Prerequisites
+
+You will need to enable Nuget Package Restore in order to build the project properly.
+
 ## Built With
 
 * [Microsoft Visual Studio 2017 Community](https://www.visualstudio.com/downloads/)

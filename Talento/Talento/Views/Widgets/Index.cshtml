@@ -1,0 +1,14 @@
+@{
+    ViewBag.Title = "Widgets";
+    ViewBag.BodyClass = "dashboard-home";
+    Layout = "~/Views/Shared/_LayoutBasic.cshtml";
+}
+@* Header *@
+@Html.Partial("~/Views/Dashboard/Shared/_PartialTopNavigation.cshtml")
+
+@* Sidebar Navigation *@
+@Html.Partial("~/Views/Dashboard/Shared/_PartialSidebarNavigation.cshtml")
+
+@* Main Container *@
+@Html.Partial("~/Views/Dashboard/Shared/_PartialContent.cshtml")
+

@@ -1,0 +1,39 @@
+﻿@model Talento.Models.ResetPasswordViewModel
+
+@{
+    ViewBag.Title = "MailSent";
+    ViewBag.BodyClass = "login-home";
+    Layout = "~/Views/Account/Shared/_LayoutLogin.cshtml";
+}
+@using (Html.BeginForm("ForgotPasswordConfirmation", "Account", FormMethod.Post, new { id = "ResetPassword" } ))
+{
+    @Html.AntiForgeryToken()
+        <div class="pmd-card-title card-header-border text-center">
+            <div class="loginlogo">
+                <a href="javascript:void(0);">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/b/b1/Tata_Consultancy_Services_Logo.svg" alt="Logo TCS">
+                </a>
+            </div>
+            <h2>Password recovery in <strong>TALENTO</strong></h2>
+            <h3>This page is a simulation of the Email that would be sent</h3>
+            <h4>Please click on the link <a href="javascript:document.getElementById('ResetPassword').submit()">@ViewData["link"]</a> to reset your password</h4>
+            
+        </div>
+        <div class="pmd-card-footer card-footer-no-border card-footer-p16 text-center">
+            <div class="form-group clearfix">
+                <span class="pull-right">
+                    Already a User? @Html.ActionLink("Login", "Login")
+                </span>
+            </div>
+            <div class="form-group clearfix">
+                <input class="form-control" value=@ViewData["mail"] id="mail" name="mail" type="hidden">
+                <input class="form-control" value=@ViewData["code"] id="code" name="code" type="hidden">
+                <p>
+                    <br />
+                    Don't have an account?
+                    @Html.ActionLink("Sign Up", "Register").
+                </p>
+            </div>
+        </div>
+}
+
