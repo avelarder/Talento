@@ -52,6 +52,37 @@ namespace Talento.Controllers
                 _userManager = value;
             }
         }
+        
+        //
+        // GET: /Account/Login
+        [AllowAnonymous]
+        public ActionResult RequestToken()
+        {
+            return View();
+        }
+
+        //
+
+
+        //// POST: /Account/Login 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult RequestToken(string Email)
+        {
+#if DEBUG
+            string iduser = UserManager.FindByEmail(Email).Id;
+            string token = UserManager.GenerateEmailConfirmationToken(iduser);
+            return RegistrationFileDownload(iduser,token);
+#else
+var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+            ModelState.AddModelError("","Your token has been sent to the email address.");
+            return View("Login");
+#endif
+
+        }
+
 
         //
         // GET: /Account/Login
@@ -84,7 +115,7 @@ namespace Talento.Controllers
                 {
                     if (user.EmailConfirmed == true)
                     {
-                        await SignInManager.PasswordSignInAsync(model.Email,model.Password,false,false);
+                        await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
                         return RedirectToLocal(returnUrl);
                     }
                     else
