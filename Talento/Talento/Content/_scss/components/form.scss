@@ -1,10 +1,15 @@
-﻿.login-card {
+﻿.input-group {
+    width:100%;
+}
+
+.login-card {
     .pmd-card-title {
         img {
-            max-width:100%;
+            max-width: 100%;
         }
+
         h2 {
-            color:$color-11;
+            color: $color-11;
         }
     }
 }
