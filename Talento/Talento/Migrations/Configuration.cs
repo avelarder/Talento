@@ -32,34 +32,29 @@ namespace Talento.Migrations
             roles.ForEach(r => context.Roles.AddOrUpdate(p => p.Name, r));
             context.SaveChanges();
 
-            var passwordHash = new PasswordHasher();
-            string password = passwordHash.HashPassword("Admin@123456");
-            context.Users.AddOrUpdate(u => u.UserName,
-                new ApplicationUser
-                {
-                    UserName = "admin@example.com",
-                    Email = "admin@example.com",
-                    PasswordHash = password,
-                    EmailConfirmed = true
-                });
-
-
-            if (!context.Users.Any(u => u.UserName == "adm@example.com"))
+            if (!context.Users.Any(u => u.UserName == "Admin@example.com"))
             {
                 var store = new UserStore<ApplicationUser>(context);
                 var manager = new UserManager<ApplicationUser>(store);
+
+                var passwordHash = new PasswordHasher();
+                string password = passwordHash.HashPassword("Admin@123456");
+
                 var user = new ApplicationUser
                 {
-                    UserName = "adm@example.com",
-                    Email = "adm@example.com",
+                    UserName = "Admin@example.com",
+                    Email = "Admin@example.com",
                     PasswordHash = password,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString()
                 };
-                IdentityResult resultCreate = manager.Create(user, "ChangeItAsap!");
+
+                IdentityResult resultCreate = manager.Create(user);
                 if (resultCreate.Succeeded == false)
                 {
                     throw new Exception(resultCreate.Errors.First());
                 }
+
                 IdentityResult resultAddToRole = manager.AddToRole(user.Id, "Admin");
                 if (resultAddToRole.Succeeded == false)
                 {
