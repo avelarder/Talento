@@ -29,7 +29,7 @@
     @media( min-width: $size-md ) {
         min-height: 100vh;
         display: table;
-
+        height: 100px;
         .info-section, .login-container {
             float: none;
             display: table-cell;
