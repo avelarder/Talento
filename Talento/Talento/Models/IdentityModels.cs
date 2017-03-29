@@ -37,5 +37,11 @@ namespace Talento.Models
         {
             return new ApplicationDbContext();
         }
+        
+        public virtual System.Data.Entity.DbSet<Talento.Models.Tag> Tags { get; set; }
+
+        public virtual System.Data.Entity.DbSet<Talento.Models.Position> Positions { get; set; }
+
+        public virtual System.Data.Entity.DbSet<Talento.Models.Entities.PositionLog> PositionLogs { get; set; }
     }
 }

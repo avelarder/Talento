@@ -61,7 +61,15 @@ namespace Talento.Migrations
                     throw new Exception(resultAddToRole.Errors.First());
                 }
             }
+            context.SaveChanges();
 
+            var tags = new List<Tag>
+            {
+                new Tag { Name = ".Net"},
+                new Tag { Name = "Java"},
+                new Tag { Name = "SQL"}
+            };
+            tags.ForEach(r => context.Tags.AddOrUpdate(p => p.Name, r));
             context.SaveChanges();
         }
     }
