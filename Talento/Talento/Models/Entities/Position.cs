@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -10,10 +11,11 @@ namespace Talento.Models
 {
     public class Position
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [StringLength(50, ErrorMessage = "Title must have 50 characters maximum")]
-        [Required(ErrorMessage ="Title is required")]
+        [Required(ErrorMessage = "Title is required")]
         public string Title { get; set; }
 
         [StringLength(500, ErrorMessage = "Descriptiom must have 500 characters maximum")]
@@ -21,7 +23,6 @@ namespace Talento.Models
         public string Description { get; set; }
 
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreationDate { get; set; }
 
         [StringLength(20, ErrorMessage = "Area must have 20 characters maximum")]
@@ -41,15 +42,18 @@ namespace Talento.Models
 
         public List<Tag> Tags { get; set; }
 
-        [Required(ErrorMessage = "Owner is required")]
-        public ApplicationUser Owner { get; set; }
+        public string ApplicationUser_Id { get; set; }
+
+        [Required]
+        [ForeignKey("ApplicationUser_Id")]
+        public virtual ApplicationUser Owner { get; set; }
     }
 
     public enum Status
     {
-        Canceled,
-        Open,
-        Removed,
-        Closed
+        Canceled = 1,
+        Open = 2,
+        Removed = 3,
+        Closed = 4
     }
 }
