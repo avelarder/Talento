@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.BodyClass = "dashboard-home";
+    Layout = "~/Views/Shared/_LayoutBasic.cshtml";
+}
+@* Header *@
+@Html.Partial("~/Views/Shared/Dashboard/_PartialTopNavigation.cshtml")
+
+@* Sidebar Navigation *@
+@Html.Partial("~/Views/Shared/Dashboard/_PartialSidebarNavigation.cshtml")
+
+<!-- Main Container -->
+<div class="pmd-content pmd-content-custom dropdown-component" id="content">
+    <div class="container-fluid">
+        <div class="row">
+            @* Render Content *@
+            @RenderBody()
+        </div>
+    </div>
+</div>
