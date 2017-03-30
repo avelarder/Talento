@@ -291,17 +291,18 @@
     <Content Include="Views\Account\Shared\_LayoutLogin.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
-    <Content Include="Views\Dashboard\Shared\_PartialTopNavigation.cshtml" />
-    <Content Include="Views\Dashboard\Shared\_PartialSidebarNavigation.cshtml" />
-    <Content Include="Views\Dashboard\Shared\_PartialContent.cshtml" />
+    <Content Include="Views\Shared\Dashboard\_PartialTopNavigation.cshtml" />
+    <Content Include="Views\Shared\Dashboard\_PartialSidebarNavigation.cshtml" />
+    <Content Include="Views\Dashboard\Partials\_PartialContent.cshtml" />
     <Content Include="Views\Widgets\DataTable.cshtml" />
     <Content Include="Views\Widgets\Accordion.cshtml" />
     <Content Include="Views\Widgets\Index.cshtml" />
-    <Content Include="Views\Dashboard\Shared\_PartialContentAdmin.cshtml" />
+    <Content Include="Views\Dashboard\Partials\_PartialContentAdmin.cshtml" />
     <Content Include="Views\Account\RegisterConfirmation.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\MailSent.cshtml" />
     <Content Include="Views\Account\RequestToken.cshtml" />
+    <Content Include="Views\Shared\_LayoutDashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
