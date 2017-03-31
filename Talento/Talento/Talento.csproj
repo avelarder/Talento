@@ -64,6 +64,12 @@
     <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -294,7 +300,7 @@
     <Content Include="Views\Shared\Dashboard\_PartialTopNavigation.cshtml" />
     <Content Include="Views\Shared\Dashboard\_PartialSidebarNavigation.cshtml" />
     <Content Include="Views\Dashboard\Partials\_PartialContent.cshtml" />
-    <Content Include="Views\Widgets\DataTable.cshtml" />
+    <Content Include="Views\Widgets\Tables\AdminTable.cshtml" />
     <Content Include="Views\Widgets\Accordion.cshtml" />
     <Content Include="Views\Widgets\Index.cshtml" />
     <Content Include="Views\Dashboard\Partials\_PartialContentAdmin.cshtml" />
@@ -303,6 +309,7 @@
     <Content Include="Views\Account\MailSent.cshtml" />
     <Content Include="Views\Account\RequestToken.cshtml" />
     <Content Include="Views\Shared\_LayoutDashboard.cshtml" />
+    <Content Include="Views\Widgets\Tables\BasicTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
