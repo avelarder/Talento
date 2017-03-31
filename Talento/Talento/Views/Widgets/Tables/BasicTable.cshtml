@@ -8,35 +8,50 @@
 
 @using (Html.BeginForm("Index", "Dashboard", FormMethod.Get))
 {
-    <p>
-        Filter: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
-    </p>
-
-    <p>
-        Status: @Html.DropDownList("Status", new List<SelectListItem>
+    {
+        <p>
+            Filter By: @Html.DropDownList("FilterBy", new List<SelectListItem>
                 {
-                        new SelectListItem() {Text = "Open", Value="Open"},
-                        new SelectListItem() {Text = "Canceled", Value="Canceled"},
-                        new SelectListItem() {Text = "Removed", Value="Removed"},
-                        new SelectListItem() {Text = "Closed", Value="Closed"}
+                        new SelectListItem() {Text = "Status", Value="Status"},
+                        new SelectListItem() {Text = "Title", Value="Title"},
+                        new SelectListItem() {Text = "Owner", Value="Owner"},
+                        new SelectListItem() {Text = "EM", Value="EM"},
                 })
-    </p>
+
+            Filter: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }
 }
-<h1>Table Basic</h1>
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Id", "Index", new { sortOrder = ViewBag.IdSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
             @Html.ActionLink("Status", "Index", new { sortOrder = ViewBag.StatusSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("EM", "Index", new { sortOrder = ViewBag.EMSortParm, currentFilter = ViewBag.CurrentFilter })
+            EM
+            @*@Html.ActionLink("EM", "Index", new { sortOrder = ViewBag.EMSortParm, currentFilter = ViewBag.CurrentFilter })*@
+        </th>
+        <th>
+            Area
+            @*@Html.ActionLink("Area", "Index", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter })*@
+        </th>
+        <th>
+            Owner
+            @*@Html.ActionLink("Owner", "Index", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter })*@
+        </th>
+        <th>
+            Open Days
+            @*@Html.ActionLink("Open Days", "Index", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter })*@
         </th>
         <th></th>
     </tr>
@@ -44,24 +59,36 @@
     {
         <tr>
             <td>
-                @p.Title
-            </td>
-            <td>
                 @p.CreationDate
             </td>
             <td>
-                @p.Status
+                @p.Id
+            </td>
+            <td>
+                @p.Title
+            </td>
+            <td>
+                @p.Status.ToString()
             </td>
             <td>
                 @p.EngagementManager
             </td>
+            <td>
+                @p.Area
+            </td>
+            <td>
+                @p.Owner.UserName
+            </td>
+            <td>
+                @DateTime.Now.Subtract(p.CreationDate).Days.ToString()
+            </td>
         </tr>
     }
-    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-    @Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 </table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+ @Html.PagedListPager(Model, page => Url.Action("Index",
+new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 <br />
 
 

@@ -46,7 +46,7 @@ namespace Talento.Controllers
 
             //Setting headings parameters and their probable values
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : ""; //Default date ascending
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_asc" : ""; //Default date ascending
             ViewBag.TitleSortParm = sortOrder == "Title" ? "title_desc" : "Title";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
             ViewBag.EMSortParm = sortOrder == "EM" ? "em_desc" : "EM";
@@ -96,8 +96,8 @@ namespace Talento.Controllers
                 case "Title":
                     query = query.OrderBy(p => p.Title);
                     break;
-                case "date_desc":
-                    query = query.OrderByDescending(p => p.CreationDate);
+                case "date_asc":
+                    query = query.OrderBy(p => p.CreationDate);
                     break;
                 case "Status":
                     query = query.OrderBy(p => p.Status);
@@ -129,15 +129,14 @@ namespace Talento.Controllers
             return query.ToPagedList(pageNumber, pageSize);
         }
 
-        public IPagedList<Position> BasicTable(string sortOrder, string Status, string currentFilter, string searchString, int? page)
+        public IPagedList<Position> BasicTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
         {
-
             //Setting headings parameters and their probable values
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : ""; //Default date ascending
             ViewBag.TitleSortParm = sortOrder == "Title" ? "title_desc" : "Title";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
-            ViewBag.EMSortParm = sortOrder == "EM" ? "em_desc" : "EM";
+            ViewBag.IdSortParm = sortOrder == "Id" ? "id_desc" : "Id";
 
             //Keeping paging and sorting
             if (searchString != null)
@@ -153,20 +152,29 @@ namespace Talento.Controllers
 
             //Linq query that lists the positions
             var query = from p in db.Positions
-                        where p.Status != Models.Status.Removed
+                        where p.Status != Status.Removed
                         select p;
 
             //Filtering the positions by the parameters given
-            if (Status != null)
-            {
-                query = query.Where(p => p.Status.ToString().Contains(Status));
-            }
-
-
             if (!String.IsNullOrEmpty(searchString))
             {
-                query = query.Where(p => p.Title.Contains(searchString)
-                                       || p.Owner.UserName.Contains(searchString));
+                switch (FilterBy)
+                {
+                    case "Status":
+                        query = query.Where(p => p.Status.ToString().Contains(searchString));
+                        break;
+                    case "Title":
+                        query = query.Where(p => p.Title.Contains(searchString));
+                        break;
+                    case "Owner":
+                        query = query.Where(p => p.Owner.UserName.ToString().Contains(searchString));
+                        break;
+                    case "EM":
+                        query = query.Where(p => p.EngagementManager.Contains(searchString));
+                        break;
+                    default:
+                        break;
+                }
             }
 
             //Sorting the list by the heading parameter given
@@ -187,19 +195,31 @@ namespace Talento.Controllers
                 case "status_desc":
                     query = query.OrderByDescending(p => p.Status);
                     break;
-                case "EM":
-                    query = query.OrderBy(p => p.EngagementManager);
+                case "Id":
+                    query = query.OrderBy(p => p.Id);
                     break;
-                case "em_desc":
-                    query = query.OrderByDescending(p => p.EngagementManager);
+                case "id_desc":
+                    query = query.OrderByDescending(p => p.Id);
                     break;
-                default:  // Date ascending 
-                    query = query.OrderBy(p => p.CreationDate);
+                //case "EM":
+                //    query = query.OrderBy(p => p.EngagementManager);
+                //    break;
+                //case "em_desc":
+                //    query = query.OrderByDescending(p => p.EngagementManager);
+                //    break;
+                //case "Owner":
+                //    query = query.OrderBy(p => p.Owner.UserName);
+                //    break;
+                //case "owner_desc":
+                //    query = query.OrderByDescending(p => p.Owner.UserName);
+                //    break;
+                default:  // Date descending 
+                    query = query.OrderByDescending(p => p.CreationDate);
                     break;
             }
 
             //Sending the query to the list (25 positions per page)
-            int pageSize = 2;
+            int pageSize = 25;
             int pageNumber = (page ?? 1);
             return query.ToPagedList(pageNumber, pageSize);
         }
