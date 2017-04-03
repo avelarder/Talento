@@ -154,7 +154,7 @@ namespace Talento.Core.Migrations
                     Area="IT",
                     RGS="",
                     Status = Status.Canceled,
-                    CreationDate = DateTime.Now,
+                    CreationDate = DateTime.Now.AddDays(-30),
                     EngagementManager ="El PropioEM",
                     Description = "Here is the description",
                     Tags = new List<Tag>{ context.Tags.Find("Java") }
@@ -167,7 +167,7 @@ namespace Talento.Core.Migrations
                     Area="IT",
                     RGS="",
                     Status = Status.Closed,
-                    CreationDate = DateTime.Now,
+                    CreationDate = DateTime.Now.AddDays(-6),
                     EngagementManager ="La Carito",
                     Description = "Hear iz de thescriction",
                     Tags = new List<Tag>{ context.Tags.Find(".Net") }
@@ -180,7 +180,7 @@ namespace Talento.Core.Migrations
                     Area="IT",
                     RGS="",
                     Status = Status.Removed,
-                    CreationDate = DateTime.Now,
+                    CreationDate = DateTime.Now.AddDays(-1),
                     EngagementManager ="Il Padrino",
                     Description = "Add description here",
                     Tags = new List<Tag>{ context.Tags.Find("SQL") }
@@ -193,7 +193,7 @@ namespace Talento.Core.Migrations
                     Area="IT",
                     RGS="",
                     Status = Status.Open,
-                    CreationDate = DateTime.Now,
+                    CreationDate = DateTime.Now.AddDays(-3),
                     EngagementManager ="Engagement Manager",
                     Description = "Add description here",
                     Tags = new List<Tag>{ context.Tags.Find("SQL") }
@@ -206,7 +206,7 @@ namespace Talento.Core.Migrations
                     Area="IT",
                     RGS="",
                     Status = Status.Closed,
-                    CreationDate = DateTime.Now,
+                    CreationDate = DateTime.Now.AddDays(-4),
                     EngagementManager ="Il Padrino",
                     Description = "Add description here",
                     Tags = new List<Tag>{ context.Tags.Find(".Net") }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -42,4 +43,33 @@ namespace Talento.Models
         [Required]
         public ApplicationUser Owner { get; set; }
     }
+
+    public class PositionsPagedList : PagedList<PositionModel>
+    {
+        public PositionsPagedList(IEnumerable<PositionModel> positions, int pageNumber, int pageSize) : base(positions.AsQueryable(), pageNumber, pageSize)
+        {
+        }
+    }
+
+    public class DashBoardViewModel
+    {
+        public PositionsPagedList Positions { get; set; }
+
+        public bool HasNextPage { get; set; }
+
+        public bool HasPreviousPage { get; set; }
+
+        public int TotalItemCount { get; set; }
+
+        public bool IsFirstPage { get; set; }
+
+        public bool IsLastPage { get; set; }
+
+        public int PageNumber { get; set; }
+
+        public int PageCount { get; set; }
+
+        //and other props from ipagedlist
+    }
+
 }

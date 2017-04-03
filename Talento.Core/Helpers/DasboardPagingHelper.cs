@@ -14,7 +14,7 @@ namespace Talento.Core.Helpers
         {
         }
 
-        public IPagedList<Position> GetAdminTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
+        public List<Position> GetAdminTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
         {
             ////Setting headings parameters and their probable values
             //ViewBag.CurrentSort = sortOrder;
@@ -93,10 +93,10 @@ namespace Talento.Core.Helpers
             //Sending the query to the list (25 positions per page)
             int pageSize = 2;
             int pageNumber = (page ?? 1);
-            return query.ToPagedList(pageNumber, pageSize);
+            return query.ToList();
         }
 
-        public IPagedList<Position> GetBasicTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
+        public List<Position> GetBasicTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
         {
             ////Setting headings parameters and their probable values
             //ViewBag.CurrentSort = sortOrder;
@@ -181,10 +181,10 @@ namespace Talento.Core.Helpers
             //Sending the query to the list (25 positions per page)
             int pageSize = 2;
             int pageNumber = (page ?? 1);
-            return query.ToPagedList(pageNumber, pageSize);
+            return query.ToList();
         }
 
-        public IPagedList<Position> GetByWidget(string sortOrder, string currentFilter, string searchString, int? page)
+        public List<Position> GetByWidget(string sortOrder, string currentFilter, string searchString, int? page)
         {
             //Setting headings parameters and their probable values
             //ViewBag.CurrentSort = sortOrder;
@@ -249,7 +249,7 @@ namespace Talento.Core.Helpers
             //Sending the query to the list (25 positions per page)
             int pageSize = 25;
             int pageNumber = (page ?? 1);
-            return query.ToPagedList(pageNumber, pageSize);
+            return query.ToList();
         }
     }
 }

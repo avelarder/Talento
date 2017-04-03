@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<Talento.Models.PositionModel>
+﻿@model Talento.Models.DashBoardViewModel
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "Widgets";
@@ -36,7 +36,7 @@
         </th>
         <th></th>
     </tr>
-    @foreach (var p in Model)
+    @foreach (var p in Model.Positions)
     {
         <tr>
             <td>
@@ -58,6 +58,5 @@
     }
 </table>
 <br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-@Html.PagedListPager(Model, page => Url.Action("Index",
+@Html.PagedListPager(Model.Positions, page => Url.Action("Index",
 new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

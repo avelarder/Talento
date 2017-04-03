@@ -25,23 +25,23 @@ namespace Talento.Controllers
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Position, PositionModel>()
-                    .ForMember(t=>t.ApplicationUser_Id, opt=>opt.MapFrom(s=>s.ApplicationUser_Id))
+                    .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id))
                 ;
             });
         }
         // GET: Dashboard
-        public ActionResult Index(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
+        public ActionResult Index(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page = 1)
         {
             string Dashboard = "_PartialContent.cshtml";
             string Role = "basic";
 
-            IPagedList<Position> rawData;
+            List<Position> rawData;
             if (Roles.IsUserInRole("Admin"))
             {
                 Dashboard = "_PartialContentAdmin.cshtml";
                 Role = "admin";
                 rawData = DashboardPagingHelper.GetAdminTable(sortOrder, FilterBy, currentFilter, searchString, page);
-                
+
             }
             else
             {
@@ -59,9 +59,12 @@ namespace Talento.Controllers
             ViewData["Role"] = Role;
 
             var temp = AutoMapper.Mapper.Map<List<PositionModel>>(rawData.ToList());
-            IPagedList<PositionModel> Model = new PagedList<PositionModel>(temp.AsEnumerable(), rawData.PageNumber, rawData.PageSize);
-            
-            return View(rawData);
+            //IPagedList<PositionModel> Model = new PagedList<PositionModel>(temp.AsEnumerable(), rawData.PageNumber, rawData.PageSize) {};
+
+            return View(new DashBoardViewModel()
+            {
+                Positions = new PositionsPagedList(temp, page.Value, 25)
+            });
         }
     }
 }
