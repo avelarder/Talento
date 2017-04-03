@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Talento</title>
+    <!-- Render Styles -->
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="@ViewBag.BodyClass @ViewData["RoleClass"]">
+    <!-- Render Body -->
+    @RenderBody()
+
+
+    <a href="#" id="test">Test</a>
+    <script type="text/javascript">
+        window.onload = function () {
+            (function ($) {
+                $(document).ready(function () {
+                    $("#test").on("click", function () {
+                        console.log("Sape");
+                    });
+                });
+            }(jQuery))
+        }
+    </script>
+    <!-- Scripts -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/scripts")
+</body>
+</html>
+
