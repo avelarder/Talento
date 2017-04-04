@@ -35,12 +35,15 @@ namespace Talento.Core.Migrations
                         CreationDate = c.DateTime(nullable: false),
                         Area = c.String(nullable: false, maxLength: 20),
                         EngagementManager = c.String(nullable: false, maxLength: 20),
+                        PortfolioManager_Id = c.String(nullable: false, maxLength: 128),
                         RGS = c.String(),
                         Status = c.Int(nullable: false),
                         ApplicationUser_Id = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
+                .ForeignKey("dbo.AspNetUsers", t => t.PortfolioManager_Id)
+                .Index(t => t.PortfolioManager_Id)
                 .Index(t => t.ApplicationUser_Id);
             
             CreateTable(
@@ -132,6 +135,7 @@ namespace Talento.Core.Migrations
             DropForeignKey("dbo.PositionLogs", "ApplicationUser_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.PositionLogs", "Position_Id", "dbo.Positions");
             DropForeignKey("dbo.Tags", "Position_Id", "dbo.Positions");
+            DropForeignKey("dbo.Positions", "PortfolioManager_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Positions", "ApplicationUser_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
@@ -144,6 +148,7 @@ namespace Talento.Core.Migrations
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.Positions", new[] { "ApplicationUser_Id" });
+            DropIndex("dbo.Positions", new[] { "PortfolioManager_Id" });
             DropIndex("dbo.PositionLogs", new[] { "Position_Id" });
             DropIndex("dbo.PositionLogs", new[] { "ApplicationUser_Id" });
             DropTable("dbo.AspNetRoles");
