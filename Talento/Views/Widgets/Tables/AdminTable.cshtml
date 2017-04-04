@@ -7,17 +7,28 @@
 @using (Html.BeginForm("Index", "Dashboard", FormMethod.Get))
 {
     <p>
-        Filter By: @Html.DropDownList("FilterBy", new List<SelectListItem>
+        <div class="form-group col-sm-2">
+            <label for="FilterBy" class="control-label">Filter By:</label>
+            @Html.DropDownList("FilterBy", new List<SelectListItem>
                 {
                         new SelectListItem() {Text = "Status", Value="Status"},
                         new SelectListItem() {Text = "Title", Value="Title"},
                         new SelectListItem() {Text = "Owner", Value="Owner"},
-                })
-        Filter: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
+                }, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group col-sm-4">
+            <label for="searchString" class="control-label">Filter:</label>
+            @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control" })
+        </div>
     </p>
+    <div class="form-group">
+        <hr />
+        <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Search" style="margin-top: 4px"/>
+    </div>
 }
-<table class="table">
+
+<table id="example-checkbox" class="table pmd-table table-hover table-striped display responsive nowrap" cellspacing="0" width="100%">
     <tr>
         <th>
             @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm, currentFilter = ViewBag.CurrentFilter })
