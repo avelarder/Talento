@@ -13,7 +13,7 @@ namespace Talento.Core.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
             ContextKey = "Talento.Core.Data.ApplicationDbContext";
         }
 
@@ -123,6 +123,36 @@ namespace Talento.Core.Migrations
             context.SaveChanges();
             #endregion
 
+            #region TL User1
+            if (!context.Users.Any(u => u.UserName == "Tluser1@example.com"))
+            {
+                var passwordHash = new PasswordHasher();
+                string password = passwordHash.HashPassword("Tluser1@123456");
+
+                var user = new ApplicationUser
+                {
+                    UserName = "Tluser1@example.com",
+                    Email = "Tluser1@example.com",
+                    PasswordHash = password,
+                    EmailConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString()
+                };
+
+                IdentityResult resultCreate = manager.Create(user);
+                if (resultCreate.Succeeded == false)
+                {
+                    throw new Exception(resultCreate.Errors.First());
+                }
+
+                IdentityResult resultAddToRole = manager.AddToRole(user.Id, "TL");
+                if (resultAddToRole.Succeeded == false)
+                {
+                    throw new Exception(resultAddToRole.Errors.First());
+                }
+            }
+            context.SaveChanges();
+            #endregion
+
             var tags = new List<Tag>
             {
                 new Tag { Name = ".Net"},
@@ -179,7 +209,7 @@ namespace Talento.Core.Migrations
                   new Position
                 {
                     Title = "Programador php",
-                    Owner = manager.FindByEmail("Pmuser2@example.com"),
+                    Owner = manager.FindByEmail("Tluser1@example.com"),
                     Area="IT",
                     RGS="",
                     Status = Status.Removed,
@@ -193,7 +223,7 @@ namespace Talento.Core.Migrations
                   new Position
                 {
                     Title = "Programador SQL",
-                    Owner = manager.FindByEmail("Pmuser2@example.com"),
+                    Owner = manager.FindByEmail("Tluser1@example.com"),
                     Area="IT",
                     RGS="",
                     Status = Status.Open,

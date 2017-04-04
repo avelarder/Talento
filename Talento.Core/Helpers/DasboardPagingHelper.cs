@@ -8,9 +8,9 @@ using Talento.Entities;
 
 namespace Talento.Core.Helpers
 {
-    public class DasboardPagingHelper : BaseHelper, ICustomPagingList
+    public class DashboardPagingHelper : BaseHelper, ICustomPagingList
     {
-        public DasboardPagingHelper(Talento.Core.Data.ApplicationDbContext _db) : base(_db)
+        public DashboardPagingHelper(Talento.Core.Data.ApplicationDbContext _db) : base(_db)
         {
         }
 
@@ -40,8 +40,9 @@ namespace Talento.Core.Helpers
                         select p;
 
             //Filtering the positions by the parameters given
-            if (!String.IsNullOrEmpty(searchString.Trim()))
+            if (!String.IsNullOrEmpty(searchString))
             {
+                searchString = searchString.Trim();
                 switch (FilterBy)
                 {
                     case "Status":
@@ -91,7 +92,6 @@ namespace Talento.Core.Helpers
             }
 
             //Sending the query to the list (25 positions per page)
-            int pageSize = 2;
             int pageNumber = (page ?? 1);
             return query.ToList();
         }
@@ -124,8 +124,9 @@ namespace Talento.Core.Helpers
                         select p;
 
             //Filtering the positions by the parameters given
-            if (!String.IsNullOrEmpty(searchString.Trim()))
+            if (!String.IsNullOrEmpty(searchString))
             {
+                searchString = searchString.Trim();
                 switch (FilterBy)
                 {
                     case "Status":
@@ -185,7 +186,6 @@ namespace Talento.Core.Helpers
             }
 
             //Sending the query to the list (25 positions per page)
-            int pageSize = 2;
             int pageNumber = (page ?? 1);
             return query.ToList();
         }

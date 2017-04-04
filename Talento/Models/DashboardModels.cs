@@ -32,6 +32,8 @@ namespace Talento.Models
         [Required(ErrorMessage = "Engagement Manager is required")]
         public string EngagementManager { get; set; }
 
+        public string PortfolioManager_Id { get; set; }
+
         [Required]
         public ApplicationUser PortfolioManager { get; set; }
 
