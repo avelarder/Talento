@@ -13,7 +13,7 @@ namespace Talento.Core.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             ContextKey = "Talento.Core.Data.ApplicationDbContext";
         }
 
@@ -142,6 +142,7 @@ namespace Talento.Core.Migrations
                     RGS="",
                     Status = Status.Open,
                     CreationDate = DateTime.Now,
+                    PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Il Padrino",
                     Description = "Add description here",
                     Tags = new List<Tag>{ context.Tags.Find(".Net") }
@@ -156,6 +157,7 @@ namespace Talento.Core.Migrations
                     Status = Status.Canceled,
                     CreationDate = DateTime.Now.AddDays(-30),
                     EngagementManager ="El PropioEM",
+                    PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     Description = "Here is the description",
                     Tags = new List<Tag>{ context.Tags.Find("Java") }
                 },
@@ -169,6 +171,7 @@ namespace Talento.Core.Migrations
                     Status = Status.Closed,
                     CreationDate = DateTime.Now.AddDays(-6),
                     EngagementManager ="La Carito",
+                    PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     Description = "Hear iz de thescriction",
                     Tags = new List<Tag>{ context.Tags.Find(".Net") }
                 },
@@ -182,6 +185,7 @@ namespace Talento.Core.Migrations
                     Status = Status.Removed,
                     CreationDate = DateTime.Now.AddDays(-1),
                     EngagementManager ="Il Padrino",
+                    PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     Description = "Add description here",
                     Tags = new List<Tag>{ context.Tags.Find("SQL") }
                 },
@@ -194,6 +198,7 @@ namespace Talento.Core.Migrations
                     RGS="",
                     Status = Status.Open,
                     CreationDate = DateTime.Now.AddDays(-3),
+                    PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Engagement Manager",
                     Description = "Add description here",
                     Tags = new List<Tag>{ context.Tags.Find("SQL") }
@@ -207,6 +212,7 @@ namespace Talento.Core.Migrations
                     RGS="",
                     Status = Status.Closed,
                     CreationDate = DateTime.Now.AddDays(-4),
+                    PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Il Padrino",
                     Description = "Add description here",
                     Tags = new List<Tag>{ context.Tags.Find(".Net") }
@@ -221,6 +227,7 @@ namespace Talento.Core.Migrations
                     Status = Status.Removed,
                     CreationDate = DateTime.Now,
                     EngagementManager ="Claudia",
+                    PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     Description = "Add description here",
                     Tags = new List<Tag>{ context.Tags.Find(".Net") }
                 },

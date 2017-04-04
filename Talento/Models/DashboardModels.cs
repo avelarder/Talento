@@ -32,6 +32,9 @@ namespace Talento.Models
         [Required(ErrorMessage = "Engagement Manager is required")]
         public string EngagementManager { get; set; }
 
+        [Required]
+        public ApplicationUser PortfolioManager { get; set; }
+
         [RegularExpression("^[0-9]*$", ErrorMessage = "Invalid RGS")]
         public string RGS { get; set; }
 

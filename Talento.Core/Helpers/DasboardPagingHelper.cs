@@ -40,7 +40,7 @@ namespace Talento.Core.Helpers
                         select p;
 
             //Filtering the positions by the parameters given
-            if (!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(searchString.Trim()))
             {
                 switch (FilterBy)
                 {
@@ -124,7 +124,7 @@ namespace Talento.Core.Helpers
                         select p;
 
             //Filtering the positions by the parameters given
-            if (!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(searchString.Trim()))
             {
                 switch (FilterBy)
                 {
@@ -136,6 +136,12 @@ namespace Talento.Core.Helpers
                         break;
                     case "Owner":
                         query = query.Where(p => p.Owner.UserName.ToString().Contains(searchString));
+                        break;
+                    case "EM":
+                        query = query.Where(p => p.EngagementManager.Contains(searchString));
+                        break;
+                    case "PM":
+                        query = query.Where(p => p.PortfolioManager.UserName.Contains(searchString));
                         break;
                     default:
                         break;
