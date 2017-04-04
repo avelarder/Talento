@@ -1,0 +1,67 @@
+@model Talento.Models.PositionModel
+@{
+    ViewBag.Title = "Position details";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<style>
+    .bottom {
+        border-bottom: 1px solid #ccc;
+    }
+</style>
+<script type="text/javascript">
+    window.onload = function () {
+        $(document).ready(function () {
+            $("input[name='delete']").click(function () {
+                return confirm('Delete all selected elements?');
+            });
+        });
+    }
+</script>
+
+<div class="col-md-8">
+    <div>
+        <div class="col-md-8">
+            <b>Title:</b> @Html.DisplayFor(x => x.Title)
+        </div>
+        <div class="col-md-4">
+            <b>Creation date:</b> @Html.DisplayFor(x => x.CreationDate)
+        </div>
+    </div>
+    <div class="bottom">&nbsp;</div>
+    <br />
+    <div class="col-md-11">
+        <p><b>Description: </b>@Html.DisplayFor(x => x.Description)</p>
+        <p><b>Area: </b>@Html.DisplayFor(x => x.Area)<p />
+        <p><b>Engagement manager: </b>@Html.DisplayFor(x => x.EngagementManager)<p />
+        <p><b>RGS: </b>@Html.DisplayFor(x => x.RGS)<p />
+        <p><b>Status: </b>@Html.DisplayFor(x => x.Status)<p />
+        <input type="text" value="@Html.DisplayFor(x => x.Tags)" data-role="tagsinput" disabled />
+    </div>
+    <div class="col-md-8">
+        <input type="button" name="back" class="btn pmd-ripple-effect btn-primary" value="Back" onclick="@("window.location.href='" + @Url.Action("Index", "Dashboard") + "'");" />
+        <input type="button" name="edit" class="btn pmd-ripple-effect btn-primary" value="Edit" onclick="alert('yo man, you dreamin\'')" />
+        <input data-target="#complete-dialog" data-toggle="modal" class="btn pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />
+
+        <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    @*<div class="modal-header">
+                            <h2 class="pmd-card-title-text">Do you want to delete this position?</h2>
+                        </div>
+                    *@
+                    <div class="modal-body">
+                        <p>Do you want to delete this position?</p>
+                    </div>
+                    <div class="pmd-modal-action pmd-modal-bordered text-right">
+                        <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
+                        <button data-dismiss="modal" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-sm-4">
+    @*@Html.Action("Index", "PositionLogs", new { id = ViewBag.Id })*@
+</div>

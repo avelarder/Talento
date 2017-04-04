@@ -10,5 +10,6 @@ namespace Talento.Entities
     {
         [Key]
         public string Name { get; set; }
+        //public int Position_Id { get; set; }
     }
 }

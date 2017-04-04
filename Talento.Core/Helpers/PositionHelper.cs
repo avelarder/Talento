@@ -11,9 +11,10 @@ namespace Talento.Core.Helpers
 {
     public class PositionHelper : BaseHelper, IPosition
     {
-        public PositionHelper(Core.Data.ApplicationDbContext db) : base(db)
+        ITag Tags;
+        public PositionHelper(Core.Data.ApplicationDbContext db, ITag tags) : base(db)
         {
-
+            Tags = tags;
         }
 
         public Task Create(Position log)
@@ -31,9 +32,12 @@ namespace Talento.Core.Helpers
             throw new NotImplementedException();
         }
 
-        public Task<Position> Get(int Id)
+        public async Task<Position> Get(int Id)
         {
-            throw new NotImplementedException();
+            var position = await Db.Positions.SingleAsync(x => x.Id == Id);
+            //position.Tags = Tags.GetByPositionId(position.Id);
+
+            return position;
         }
 
         public async Task<List<Position>> GetAll()

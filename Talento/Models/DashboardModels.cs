@@ -40,6 +40,8 @@ namespace Talento.Models
 
         public string ApplicationUser_Id { get; set; }
 
+        public List<Tag> Tags { get; set; }
+
         [Required]
         public ApplicationUser Owner { get; set; }
     }

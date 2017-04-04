@@ -25,8 +25,7 @@ namespace Talento.Controllers
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Position, PositionModel>()
-                    .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id))
-                ;
+                    .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id));
             });
         }
         // GET: Dashboard

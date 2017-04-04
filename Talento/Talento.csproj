@@ -309,11 +309,11 @@
     <Content Include="Views\Account\RequestToken.cshtml" />
     <Content Include="Views\Shared\_LayoutDashboard.cshtml" />
     <Content Include="Views\Widgets\Tables\BasicTable.cshtml" />
+    <Content Include="Views\Positions\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\PositionLogs\" />
-    <Folder Include="Views\Positions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

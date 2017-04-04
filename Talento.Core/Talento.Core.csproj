@@ -70,6 +70,14 @@
     <Compile Include="Migrations\201704021220110_InitialCreate.Designer.cs">
       <DependentUpon>201704021220110_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704041654287_Migracion Tag has changed.cs" />
+    <Compile Include="Migrations\201704041654287_Migracion Tag has changed.Designer.cs">
+      <DependentUpon>201704041654287_Migracion Tag has changed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704041716519_Migration with original model.cs" />
+    <Compile Include="Migrations\201704041716519_Migration with original model.Designer.cs">
+      <DependentUpon>201704041716519_Migration with original model.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -86,6 +94,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201704021220110_InitialCreate.resx">
       <DependentUpon>201704021220110_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704041654287_Migracion Tag has changed.resx">
+      <DependentUpon>201704041654287_Migracion Tag has changed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704041716519_Migration with original model.resx">
+      <DependentUpon>201704041716519_Migration with original model.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

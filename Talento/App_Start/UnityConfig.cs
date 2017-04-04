@@ -47,6 +47,8 @@ namespace Talento.App_Start
             container.RegisterType<ICustomPagingList, Core.Helpers.DasboardPagingHelper>();
             container.RegisterType<IPositionLog, Core.Helpers.PositionLogHelper>();
             container.RegisterType<AccountController>(new InjectionConstructor());
+            container.RegisterType<IPosition, Core.Helpers.PositionHelper>();
+            container.RegisterType<ITag, Core.Helpers.TagHelper>();
         }
     }
 }
