@@ -29,9 +29,12 @@ namespace Talento.Core.Helpers
             }
         }
 
-        public async Task<List<PositionLog>> GetAll(int Id)
+        public List<PositionLog> GetAll(int Id)
         {
-            return await Db.PositionLogs.Where(p => p.Position_Id == Id).OrderByDescending(p => p.Date).ToListAsync();
+            return Db.PositionLogs
+                .Where(p => p.Position_Id == Id)
+                .OrderByDescending(p => p.Date)
+                .ToList();
         }
     }
 }

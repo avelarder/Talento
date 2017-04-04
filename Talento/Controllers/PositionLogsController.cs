@@ -23,9 +23,9 @@ namespace Talento.Controllers
             LogHelper = logHelper;
         }
         // Show: PositionLogs
-        public async Task<ActionResult> List(int Id)
+        public ActionResult List(int Id)
         {
-            return View(await LogHelper.GetAll(Id));
+            return View(LogHelper.GetAll(Id));
         }
     }
 }
