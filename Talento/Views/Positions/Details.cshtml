@@ -21,10 +21,10 @@
 
 <div class="col-md-8">
     <div>
-        <div class="col-md-8">
+        <div class="col-md-7">
             <b>Title:</b> @Html.DisplayFor(x => x.Title)
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <b>Creation date:</b> @Html.DisplayFor(x => x.CreationDate)
         </div>
     </div>
@@ -33,10 +33,12 @@
     <div class="col-md-11">
         <p><b>Description: </b>@Html.DisplayFor(x => x.Description)</p>
         <p><b>Area: </b>@Html.DisplayFor(x => x.Area)<p />
-        <p><b>Engagement manager: </b>@Html.DisplayFor(x => x.EngagementManager)<p />
+        <p><b>Owner: </b>@Html.DisplayFor(x => x.Owner.UserName)<p />
+        <p><b>Engagement Manager: </b>@Html.DisplayFor(x => x.EngagementManager)<p />
+        <p><b>Portfolio Manager: </b>@Html.DisplayFor(x => x.PortfolioManager.UserName)<p />
         <p><b>RGS: </b>@Html.DisplayFor(x => x.RGS)<p />
         <p><b>Status: </b>@Html.DisplayFor(x => x.Status)<p />
-        <input type="text" value="@Html.DisplayFor(x => x.Tags)" data-role="tagsinput" disabled />
+        @*<input type="text" value="@Html.DisplayFor(x => x.Tags)" data-role="tagsinput" disabled />*@
     </div>
     <div class="col-md-8">
         <input type="button" name="back" class="btn pmd-ripple-effect btn-primary" value="Back" onclick="@("window.location.href='" + @Url.Action("Index", "Dashboard") + "'");" />

@@ -46,6 +46,9 @@ namespace Talento.Controllers
             {
                 return HttpNotFound();
             }
+
+            //position.CreationDate = position.CreationDate.Date;
+
             return View(position);
         }
 
