@@ -51,30 +51,19 @@ namespace Talento.Models
 
     public class PositionsPagedList : PagedList<PositionModel>
     {
+        public int TotalCount { get; set; }
+        public List<PositionModel> Subset { get; set; }
+
         public PositionsPagedList(IEnumerable<PositionModel> positions, int pageNumber, int pageSize) : base(positions.AsQueryable(), pageNumber, pageSize)
         {
+            TotalCount = base.TotalItemCount;
+            Subset = base.Subset;
         }
     }
 
     public class DashBoardViewModel
     {
         public PositionsPagedList Positions { get; set; }
-
-        public bool HasNextPage { get; set; }
-
-        public bool HasPreviousPage { get; set; }
-
-        public int TotalItemCount { get; set; }
-
-        public bool IsFirstPage { get; set; }
-
-        public bool IsLastPage { get; set; }
-
-        public int PageNumber { get; set; }
-
-        public int PageCount { get; set; }
-
-        //and other props from ipagedlist
     }
 
 }
