@@ -18,8 +18,8 @@
         });
     }
 </script>
-
 <div class="col-md-8">
+    <br />
     <div>
         <div class="col-md-7">
             <b>Title:</b> @Html.DisplayFor(x => x.Title)
@@ -43,7 +43,7 @@
     <div class="col-md-8">
         <input type="button" name="back" class="btn pmd-ripple-effect btn-primary" value="Back" onclick="@("window.location.href='" + @Url.Action("Index", "Dashboard") + "'");" />
         <input type="button" name="edit" class="btn pmd-ripple-effect btn-primary" value="Edit" onclick="alert('yo man, you dreamin\'')" />
-        <input data-target="#complete-dialog" data-toggle="modal" class="btn pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />
+        <input data-target="#complete-dialog" data-toggle="modal" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />
 
         <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
@@ -65,5 +65,5 @@
     </div>
 </div>
 <div class="col-sm-4">
-    @*@Html.Action("Index", "PositionLogs", new { id = ViewBag.Id })*@
+    @Html.Action("List", "PositionLogs", new { id = Model.Id })
 </div>

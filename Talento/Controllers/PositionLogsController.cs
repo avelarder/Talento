@@ -13,7 +13,7 @@ using Talento.Entities;
 
 namespace Talento.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "PM, TL, TAG, RMG")]
     public class PositionLogsController : Controller
     {
         IPositionLog LogHelper;
@@ -25,6 +25,7 @@ namespace Talento.Controllers
         // Show: PositionLogs
         public ActionResult List(int Id)
         {
+
             return View(LogHelper.GetAll(Id));
         }
     }

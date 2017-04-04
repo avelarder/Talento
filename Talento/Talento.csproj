@@ -312,11 +312,9 @@
     <Content Include="Views\Widgets\Tables\BasicTable.cshtml" />
     <Content Include="Views\Positions\Details.cshtml" />
     <Content Include="Views\PositionLogs\List.cshtml" />
-    <Content Include="Views\Positions\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\PositionLogs\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
