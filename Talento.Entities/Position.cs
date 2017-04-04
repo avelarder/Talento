@@ -33,6 +33,12 @@ namespace Talento.Entities
         [Required(ErrorMessage = "Engagement Manager is required")]
         public string EngagementManager { get; set; }
 
+        public string PortfolioManager_Id { get; set; }
+
+        [Required]
+        [ForeignKey("PortfolioManager_Id")]
+        public virtual ApplicationUser PortfolioManager { get; set; }
+
         [RegularExpression("^[0-9]*$", ErrorMessage = "Invalid RGS")]
         public string RGS { get; set; }
 
