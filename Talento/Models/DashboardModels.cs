@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 using Talento.Entities;
@@ -30,6 +31,7 @@ namespace Talento.Models
         public string Area { get; set; }
 
         [Required(ErrorMessage = "Engagement Manager is required")]
+        [DisplayName("Engagement Manager")]
         public string EngagementManager { get; set; }
 
         [RegularExpression("^[0-9]*$", ErrorMessage = "Invalid RGS")]

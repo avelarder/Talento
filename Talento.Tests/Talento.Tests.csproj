@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountControllerTest.cs" />
+    <Compile Include="Controllers\PositionControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +98,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Talento.Core\Talento.Core.csproj">
+      <Project>{e6f9ad82-4a13-4ca8-b78c-0f825fd8463d}</Project>
+      <Name>Talento.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Talento.Entities\Talento.Entities.csproj">
+      <Project>{b516ce38-2555-46b2-8b6e-1f1f324b0803}</Project>
+      <Name>Talento.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Talento\Talento.csproj">
       <Project>{D1BFEC25-2F01-4501-8E16-65FDADC4895C}</Project>
       <Name>Talento</Name>

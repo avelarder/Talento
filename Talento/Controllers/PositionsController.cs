@@ -54,9 +54,7 @@ namespace Talento.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(
-            [Bind(Include = "Id,Title,Description,CreationDate,Area,EngagementManager,RGS,Status")]
-            PositionModel position)
+        public async Task<ActionResult> Create(PositionModel position)
         {
             if (ModelState.IsValid)
             {

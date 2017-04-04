@@ -1,0 +1,28 @@
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using Talento.Controllers;
+using Talento.Models;
+using System.Web.Mvc;
+
+namespace Talento.Tests.Controllers
+{
+    [TestClass]
+    public class PositionControllerTest
+    {
+        Mock<Talento.Core.Data.ApplicationDbContext> mockedDb = new Mock<Core.Data.ApplicationDbContext>();
+        Mock<Talento.Core.Helpers.PositionHelper> mockePh = new Mock<Core.Helpers.PositionHelper>();
+
+        [TestMethod]
+        public async void CreateFail()
+        {
+            PositionsController controller = new PositionsController(mockePh.Object);
+            PositionModel pm = new PositionModel();
+
+            var result = await controller.Create(pm);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(PositionModel));
+        }
+    }
+}

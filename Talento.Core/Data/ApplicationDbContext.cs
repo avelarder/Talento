@@ -58,5 +58,6 @@ namespace Talento.Core.Data
         public virtual System.Data.Entity.DbSet<Position> Positions { get; set; }
 
         public virtual System.Data.Entity.DbSet<PositionLog> PositionLogs { get; set; }
+
     }
 }
