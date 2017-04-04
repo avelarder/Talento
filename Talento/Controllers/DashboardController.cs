@@ -12,7 +12,6 @@ using Talento.Entities;
 
 namespace Talento.Controllers
 {
-    //[Authorize(Roles = "Basic")]
     [Authorize]
     public class DashboardController : Controller
     {
@@ -58,7 +57,6 @@ namespace Talento.Controllers
             ViewData["Role"] = Role;
 
             var temp = AutoMapper.Mapper.Map<List<PositionModel>>(rawData.ToList());
-            //IPagedList<PositionModel> Model = new PagedList<PositionModel>(temp.AsEnumerable(), rawData.PageNumber, rawData.PageSize) {};
 
             return View(new DashBoardViewModel()
             {
