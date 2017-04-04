@@ -232,12 +232,57 @@ namespace Talento.Core.Migrations
             {
                 new PositionLog
                 {
-                    Action = Entities.Action.Delete,
-                    PreviousStatus = Status.Open,
-                    ActualStatus = Status.Closed,
+                    Action = Entities.Action.Create,
+                    PreviousStatus = Status.Closed,
+                    ActualStatus = Status.Open,
                     User = manager.FindByEmail("Admin@example.com"),
                     Position = context.Positions.Find(1),
                     Date = DateTime.Today
+                },
+                new PositionLog
+                {
+                    Action = Entities.Action.Delete,
+                    PreviousStatus = Status.Open,
+                    ActualStatus = Status.Removed,
+                    User = manager.FindByEmail("Admin@example.com"),
+                    Position = context.Positions.Find(1),
+                    Date = DateTime.Today.AddMinutes(10)
+                },
+                new PositionLog
+                {
+                    Action = Entities.Action.Create,
+                    PreviousStatus = Status.Closed,
+                    ActualStatus = Status.Open,
+                    User = manager.FindByEmail("Pmuser1@example.com"),
+                    Position = context.Positions.Find(2),
+                    Date = DateTime.Today.AddMinutes(60)
+                },
+                new PositionLog
+                {
+                    Action = Entities.Action.ChangeStatus,
+                    PreviousStatus = Status.Open,
+                    ActualStatus = Status.Canceled,
+                    User = manager.FindByEmail("Pmuser1@example.com"),
+                    Position = context.Positions.Find(2),
+                    Date = DateTime.Today.AddMinutes(90)
+                },
+                new PositionLog
+                {
+                    Action = Entities.Action.Create,
+                    PreviousStatus = Status.Closed,
+                    ActualStatus = Status.Open,
+                    User = manager.FindByEmail("Pmuser2@example.com"),
+                    Position = context.Positions.Find(3),
+                    Date = DateTime.Today.AddMinutes(90)
+                },
+                new PositionLog
+                {
+                    Action = Entities.Action.Edit,
+                    PreviousStatus = Status.Open,
+                    ActualStatus = Status.Open,
+                    User = manager.FindByEmail("Pmuser2@example.com"),
+                    Position = context.Positions.Find(3),
+                    Date = DateTime.Today.AddMinutes(100)
                 }
             };
             positionLogs.ForEach(r => context.PositionLogs.AddOrUpdate(p => p.Id, r));

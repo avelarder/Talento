@@ -72,4 +72,30 @@ namespace Talento.Models
         //and other props from ipagedlist
     }
 
+    public class PositionLogViewModel
+    {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Date is required")]
+        public DateTime Date { get; set; }
+
+        public string ApplicationUser_Id { get; set; }
+
+        [Required(ErrorMessage = "User is required")]
+        public virtual ApplicationUser User { get; set; }
+
+        public int Position_Id { get; set; }
+
+        [Required(ErrorMessage = "Position is required")]
+        public virtual Position Position { get; set; }
+
+        [Required(ErrorMessage = "Action is required")]
+        public Entities.Action Action { get; set; }
+
+        [Required(ErrorMessage = "Previous Status is required")]
+        public Status PreviousStatus { get; set; }
+
+        [Required(ErrorMessage = "Actual Status is required")]
+        public Status ActualStatus { get; set; }
+    }
 }
