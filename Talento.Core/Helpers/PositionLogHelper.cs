@@ -44,12 +44,21 @@ namespace Talento.Core.Helpers
             throw new NotImplementedException();
         }
 
-        public List<PositionLog> GetAll(int Id)
+        public List<PositionLog> GetAll(int? Id)
         {
-            return Db.PositionLogs
-                .Where(p => p.Position_Id == Id)
-                .OrderByDescending(p => p.Date)
-                .ToList();
+            try { 
+                List<PositionLog> log = Db.PositionLogs
+                    .Where(p => p.Position_Id == Id)
+                    .OrderByDescending(p => p.Date)
+                    .ToList();
+                return log;
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.ToString());
+            }
+                
         }
         
     }
