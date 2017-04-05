@@ -14,6 +14,7 @@ using Talento.Entities;
 namespace Talento.Controllers
 {
     [Authorize(Roles = "PM, TL, TAG, RMG")]
+    [HandleError]
     public class PositionLogsController : Controller
     {
         IPositionLog LogHelper;
@@ -21,12 +22,33 @@ namespace Talento.Controllers
         public PositionLogsController(IPositionLog logHelper)
         {
             LogHelper = logHelper;
-        }
-        // Show: PositionLogs
-        public ActionResult List(int Id)
-        {
 
-            return View(LogHelper.GetAll(Id));
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Entities.PositionLog, Models.PositionLogViewModel>();
+            });
+        }
+
+        // Show: PositionLogs
+        [ChildActionOnly]
+        public ActionResult List(int? Id)
+        {
+            try
+            {
+                if( Id == null )
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                var logs = AutoMapper.Mapper.Map<List<PositionLogViewModel>>(LogHelper.GetAll(Id).ToList());
+                ViewData["Count"] = logs.Count;
+
+                return View(logs);
+            }
+            catch (Exception e)
+            {
+                return HttpNotFound();
+            }
         }
     }
 }
