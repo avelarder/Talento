@@ -14,5 +14,7 @@ namespace Talento.Core
         Task Create(Position log);
         bool Edit(Position log, string EmailModifier);
         Task Delete(int Id);
+        ApplicationUser SearchPM(string userName);
+        ApplicationUser GetUser(string user);
     }
 }
