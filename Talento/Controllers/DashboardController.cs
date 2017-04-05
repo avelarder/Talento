@@ -50,6 +50,8 @@ namespace Talento.Controllers
             ViewBag.TitleSortParm = sortOrder == "Title" ? "title_desc" : "Title";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
             ViewBag.IdSortParm = sortOrder == "Id" ? "id_desc" : "Id";
+            ViewBag.OwnerSortParm = sortOrder == "Owner" ? "owner_desc" : "Owner";
+            ViewBag.EMSortParm = sortOrder == "EM" ? "em_desc" : "EM";
             ViewBag.CurrentFilter = searchString;
 
             ViewData["RoleClass"] = Role + "-role";
