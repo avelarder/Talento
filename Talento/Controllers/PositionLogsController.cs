@@ -8,15 +8,17 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Talento.Models;
+using Talento.Core;
 using Talento.Entities;
 
 namespace Talento.Controllers
 {
+    [Authorize(Roles = "PM, TL, TAG, RMG")]
     public class PositionLogsController : Controller
     {
-        Core.IPositionLog LogHelper;
+        IPositionLog LogHelper;
 
-        public PositionLogsController(Core.IPositionLog logHelper)
+        public PositionLogsController(IPositionLog logHelper)
         {
             LogHelper = logHelper;
             AutoMapper.Mapper.Initialize(cfg =>
@@ -24,26 +26,11 @@ namespace Talento.Controllers
                 cfg.CreateMap<PositionLog, PositionLogViewModel>();
             });
         }
-        // GET: PositionLogs
-        public async Task<ActionResult> Index()
+        // Show: PositionLogs
+        public ActionResult List(int Id)
         {
-            return View(await LogHelper.GetAll());
-        }
 
-        // GET: PositionLogs/Details/5
-        public async Task<ActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            PositionLog positionLog = await LogHelper.Get(id.Value);
-
-            if (positionLog == null)
-            {
-                return HttpNotFound();
-            }
-            return View(positionLog);
+            return View(LogHelper.GetAll(Id));
         }
 
         // GET: PositionLogs/Create

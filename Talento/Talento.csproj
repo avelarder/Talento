@@ -262,6 +262,7 @@
     <Content Include="Content\_scss\page\dashboard.scss" />
     <Content Include="Content\_scss\components\navigation.scss" />
     <Content Include="Content\_scss\components\widgets.scss" />
+    <Content Include="Content\_scss\components\logs.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -310,6 +311,8 @@
     <Content Include="Views\Shared\_LayoutDashboard.cshtml" />
     <Content Include="Views\Widgets\Tables\BasicTable.cshtml" />
     <Content Include="Views\Positions\Edit.cshtml" />
+    <Content Include="Views\Positions\Details.cshtml" />
+    <Content Include="Views\PositionLogs\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

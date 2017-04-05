@@ -11,35 +11,30 @@ namespace Talento.Core.Helpers
 {
     public class PositionLogHelper : BaseHelper, IPositionLog
     {
-        public PositionLogHelper(Core.Data.ApplicationDbContext db) : base(db)
+        public PositionLogHelper(Data.ApplicationDbContext db) : base(db)
         {
 
         }
 
         public void Create(PositionLog log)
         {
-            Db.PositionLogs.Add(log);
-            Db.SaveChanges();
+            try
+            {
+                Db.PositionLogs.Add(log);
+                Db.SaveChangesAsync();
+
+            } catch ( Exception )
+            {
+                throw new Exception();
+            }
         }
 
-        public Task Delete(int Id)
+        public List<PositionLog> GetAll(int Id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task Edit(PositionLog log)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PositionLog> Get(int Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<PositionLog>> GetAll()
-        {
-            return await Db.PositionLogs.ToListAsync();
+            return Db.PositionLogs
+                .Where(p => p.Position_Id == Id)
+                .OrderByDescending(p => p.Date)
+                .ToList();
         }
     }
 }

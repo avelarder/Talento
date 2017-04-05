@@ -10,6 +10,7 @@ namespace Talento.Core
     public interface ITag
     {
         Task<Tag> Get(int Id);
+        List<Tag> GetByPositionId(int Id);
         Task<List<Tag>> GetAll();
         Task Create(Tag log);
         Task Edit(Tag log);

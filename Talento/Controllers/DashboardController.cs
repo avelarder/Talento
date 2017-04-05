@@ -12,7 +12,6 @@ using Talento.Entities;
 
 namespace Talento.Controllers
 {
-    //[Authorize(Roles = "Basic")]
     [Authorize]
     public class DashboardController : Controller
     {
@@ -25,8 +24,7 @@ namespace Talento.Controllers
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Position, PositionModel>()
-                    .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id))
-                ;
+                    .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id));
             });
         }
         // GET: Dashboard
@@ -59,7 +57,6 @@ namespace Talento.Controllers
             ViewData["Role"] = Role;
 
             var temp = AutoMapper.Mapper.Map<List<PositionModel>>(rawData.ToList());
-            //IPagedList<PositionModel> Model = new PagedList<PositionModel>(temp.AsEnumerable(), rawData.PageNumber, rawData.PageSize) {};
 
             return View(new DashBoardViewModel()
             {

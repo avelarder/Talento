@@ -17,13 +17,35 @@ namespace Talento.Core.Helpers
             PositionLoghelper = positionLoghelper;
         }
 
-        public Task Create(Position log)
+        public Task Create(Position position)
         {
+            // Create log on Creation
+            PositionLog log = new PositionLog()
+            {
+                Date = DateTime.Today,
+                User = new ApplicationUser(), // Modify to get current User
+                Position = position,
+                Action = Entities.Action.Create,
+                PreviousStatus = Status.Closed,
+                ActualStatus = Status.Open
+            };
+        
             throw new NotImplementedException();
         }
 
         public Task Delete(int Id)
         {
+            // Create log on Delete
+            Position position = (Position) Db.Positions.Where(p => p.Id == Id);
+            PositionLog log = new PositionLog()
+            {
+                Date = DateTime.Today,
+                User = new ApplicationUser(), // Modify to get current User
+                Position = position,
+                Action = Entities.Action.Delete,
+                PreviousStatus = position.Status,
+                ActualStatus = Status.Removed
+            };
             throw new NotImplementedException();
         }
 
@@ -70,13 +92,14 @@ namespace Talento.Core.Helpers
             }
         }
 
-        public Task<Position> Get(int Id)
+        public async Task<Position> Get(int Id)
         {
-            var query = from p in Db.Positions
-                        select p;
-            return query.SingleAsync(p => p.Id == Id);
-        }
+            var position = await Db.Positions.SingleAsync(x => x.Id == Id);
+            //position.Tags = Tags.GetByPositionId(position.Id);
 
+            return position;
+        }
+        
         public async Task<List<Position>> GetAll()
         {
             return await Db.Positions.ToListAsync();

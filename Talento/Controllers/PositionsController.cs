@@ -44,6 +44,7 @@ namespace Talento.Controllers
             return View(await PositionHelper.GetAll());
         }
 
+        [Authorize(Roles = "PM, TL, TAG, RMG")]
         // GET: Positions/Details/5
         public async Task<ActionResult> Details(int? id)
         {
@@ -56,6 +57,9 @@ namespace Talento.Controllers
             {
                 return HttpNotFound();
             }
+
+            //position.CreationDate = position.CreationDate.Date;
+
             return View(position);
         }
 
