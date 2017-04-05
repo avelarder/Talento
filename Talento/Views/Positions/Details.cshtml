@@ -42,7 +42,7 @@
     </div>
     <div class="col-md-8">
         <input type="button" name="back" class="btn pmd-ripple-effect btn-primary" value="Back" onclick="@("window.location.href='" + @Url.Action("Index", "Dashboard") + "'");" />
-        <input type="button" name="edit" class="btn pmd-ripple-effect btn-primary" value="Edit" onclick="alert('yo man, you dreamin\'')" />
+        <input type="button" name="edit" class="btn pmd-ripple-effect btn-primary" value="Edit" onclick="@("window.location.href='" + @Url.Action("Edit", "Positions", new { id=Model.Id}) + "'")" />
         <input data-target="#complete-dialog" data-toggle="modal" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />
 
         <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">

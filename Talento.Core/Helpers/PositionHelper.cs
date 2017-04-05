@@ -11,10 +11,10 @@ namespace Talento.Core.Helpers
 {
     public class PositionHelper : BaseHelper, IPosition
     {
-        ITag Tags;
-        public PositionHelper(Core.Data.ApplicationDbContext db, ITag tags) : base(db)
+        IPositionLog PositionLoghelper;
+        public PositionHelper(Core.Data.ApplicationDbContext db, IPositionLog positionLoghelper) : base(db)
         {
-            Tags = tags;
+            PositionLoghelper = positionLoghelper;
         }
 
         public Task Create(Position position)
@@ -49,19 +49,49 @@ namespace Talento.Core.Helpers
             throw new NotImplementedException();
         }
 
-        public Task Edit(Position position)
+        public bool Edit(Position log, string EmailModifier)
         {
-            // Create log on Edit
-            PositionLog log = new PositionLog()
+            try
             {
-                Date = DateTime.Today,
-                User = new ApplicationUser(), // Modify to get current User
-                Position = position,
-                Action = Entities.Action.Edit,
-                PreviousStatus = position.Status,
-                ActualStatus = Status.Open
-            };
-            throw new NotImplementedException();
+                //Obtaining the position in its original state
+                Position position = Db.Positions.Single(p => p.Id == log.Id);
+                //And obtaining the user that is modifying the Position
+                ApplicationUser User = Db.Users.Single(u => u.Email.Equals(EmailModifier));
+                var previousStatus = position.Status;
+                //Modifying the position info from the edit form
+                position.Area = log.Area;
+                position.Status = log.Status;
+                position.Title = log.Title;
+                position.Description = log.Description;
+                position.EngagementManager = log.EngagementManager;
+                position.RGS = log.RGS;
+                position.ApplicationUser_Id = position.ApplicationUser_Id;
+                position.PortfolioManager_Id = position.PortfolioManager_Id;
+                position.Owner = position.Owner;
+                position.PortfolioManager = position.PortfolioManager;
+
+                Db.SaveChanges();
+                //I create the log containing the pertinent information
+                PositionLog CreateLog = new PositionLog()
+                {
+                    Action = Entities.Action.Edit,
+                    ActualStatus = log.Status,
+                    PreviousStatus = previousStatus,
+                    Date = DateTime.Now,
+                    ApplicationUser_Id = User.Id,
+                    Position_Id = position.Id,
+                    Position = position,
+                    User = User,
+
+                };
+                PositionLoghelper.Create(CreateLog);
+              
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
         }
 
         public async Task<Position> Get(int Id)

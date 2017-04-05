@@ -310,6 +310,7 @@
     <Content Include="Views\Account\RequestToken.cshtml" />
     <Content Include="Views\Shared\_LayoutDashboard.cshtml" />
     <Content Include="Views\Widgets\Tables\BasicTable.cshtml" />
+    <Content Include="Views\Positions\Edit.cshtml" />
     <Content Include="Views\Positions\Details.cshtml" />
     <Content Include="Views\PositionLogs\List.cshtml" />
   </ItemGroup>
@@ -327,6 +328,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Talento.Core\Talento.Core.csproj">

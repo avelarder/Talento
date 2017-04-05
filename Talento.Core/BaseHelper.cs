@@ -12,7 +12,7 @@ namespace Talento.Core
 
         public BaseHelper(Talento.Core.Data.ApplicationDbContext db )
         {
-            Db = db;                
+            Db = db;
         }
     }
 }

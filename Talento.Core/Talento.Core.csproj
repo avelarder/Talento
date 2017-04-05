@@ -80,15 +80,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\201704021220110_InitialCreate.resx">
+      <DependentUpon>201704021220110_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Talento.Entities\Talento.Entities.csproj">
       <Project>{b516ce38-2555-46b2-8b6e-1f1f324b0803}</Project>
       <Name>Talento.Entities</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704021220110_InitialCreate.resx">
-      <DependentUpon>201704021220110_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
