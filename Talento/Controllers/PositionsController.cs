@@ -10,13 +10,16 @@ using System.Web.Mvc;
 using Talento.Models;
 using Talento.Core.Data;
 using Talento.Entities;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Talento.Controllers
 {
+    [Authorize(Roles ="PM, TAG, RMG, TM")]
     public class PositionsController : Controller
     {
         Core.IPosition PositionHelper;
-
+        ApplicationUser appUser;
         public PositionsController(Core.IPosition positionHelper)
         {
             PositionHelper = positionHelper;
@@ -54,7 +57,7 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(await PositionHelper.Get(id.Value));
-            if (position == null)
+            if (position == null || position.Status == Status.Removed)
             {
                 return HttpNotFound();
             }
@@ -63,6 +66,7 @@ namespace Talento.Controllers
         }
 
         // GET: Positions/Create
+
         public ActionResult Create()
         {
             return View();
@@ -73,17 +77,45 @@ namespace Talento.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(
-            [Bind(Include = "Id,Title,Description,CreationDate,Area,EngagementManager,RGS,Status")]
-            PositionModel position)
+        public ActionResult Create(CreatePositionViewModel position)
         {
+            ApplicationUser pmUser = PositionHelper.SearchPM(position.EmailPM);
+
+            if (pmUser == null)
+            {
+                ModelState.AddModelError(string.Empty, "PM is not valid");
+                
+            }
+
+            var user = User.Identity.GetUserId();
+            //ApplicationDbContext db = new ApplicationDbContext();
+            //ApplicationUser appUser1 = db.Users.FirstOrDefault(x => x.Id == user);
+
             if (ModelState.IsValid)
             {
-                await PositionHelper.Create(AutoMapper.Mapper.Map<Position>(position));
-                return RedirectToAction("Index");
+                Position pos = new Position()
+                {
+                    Owner = PositionHelper.GetUser(user),
+                    Area = position.Area,
+                    EngagementManager = position.EngagementManager,
+                    Title = position.Title,
+                    CreationDate = DateTime.Now,
+                    Description = position.Description,
+                    PortfolioManager = pmUser,
+                    RGS = position.RGS,
+                    Status = Status.Open,
+                    PortfolioManager_Id = position.EmailPM,
+                    ApplicationUser_Id = appUser.Id
+                                                            
+                };
+                //PositionHelper.Create(AutoMapper.Mapper.Map<Position>(pos));
+                PositionHelper.Create(pos);
+                return RedirectToAction("Index","Dashboard");
+
             }
 
             return View(position);
+
         }
 
         // GET: Positions/Edit/5
