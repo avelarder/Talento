@@ -52,31 +52,7 @@ namespace Talento.Models
         [Required]
         public ApplicationUser Owner { get; set; }
     }
-
-    public class PositionLogViewModel
-    {
-        public int Id { get; set; }
-
-        [Required]
-        public DateTime Date { get; set; }
-
-        [Required]
-        public Entities.Action Action { get; set; }
-
-        [Required]
-        public Entities.Status PreviousStatus { get; set; }
-
-        [Required]
-        public Entities.Status ActualStatus { get; set; }
-
-        [Required]
-        public int Position_Id { get; set; }
-
-        [Required]
-        public string User_Id { get; set; }
-
-    }
-
+    
     public class EditPositionViewModel
     {
         public int Id { get; set; }
@@ -97,6 +73,7 @@ namespace Talento.Models
         public string EngagementManager { get; set; }
 
         [RegularExpression("^[0-9]*$", ErrorMessage = "Invalid RGS")]
+        [Range(1,999999999)]
         public string RGS { get; set; }
 
         [Required(ErrorMessage = "Status is required")]

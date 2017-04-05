@@ -88,18 +88,29 @@ namespace Talento.Controllers
         }
 
         // GET: Positions/Edit/5
+        [Authorize(Roles = "PM, TM")]
         public async Task<ActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            try {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The designated Position does not have a valid ID");
+                }
+                EditPositionViewModel position = AutoMapper.Mapper.Map<EditPositionViewModel>(await PositionHelper.Get(id.Value));
+                if (position == null)
+                {
+                    return HttpNotFound();
+                }
+                if (position.Status.Equals(Status.Removed))
+                {
+                    return HttpNotFound();
+                }
+                return View(position);
             }
-            EditPositionViewModel position = AutoMapper.Mapper.Map<EditPositionViewModel>(await PositionHelper.Get(id.Value));
-            if (position == null)
+            catch (InvalidOperationException)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The designated Position does not have a valid ID");
             }
-            return View(position);
         }
 
         // POST: Positions/Edit/5
@@ -111,8 +122,15 @@ namespace Talento.Controllers
         {
             if (ModelState.IsValid)
             {
-                PositionHelper.Edit(AutoMapper.Mapper.Map<Position>(position),User.Identity.Name);
-                return View("Index","Dashboard");
+                if (PositionHelper.Edit(AutoMapper.Mapper.Map<Position>(position), User.Identity.Name))
+                {
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                else
+                {
+                    return View(position);
+                }
+
             }
             return View(position);
         }

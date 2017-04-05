@@ -49,7 +49,7 @@ namespace Talento.Core.Helpers
             throw new NotImplementedException();
         }
 
-        public void Edit(Position log, string EmailModifier)
+        public bool Edit(Position log, string EmailModifier)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Talento.Core.Helpers
                 Position position = Db.Positions.Single(p => p.Id == log.Id);
                 //And obtaining the user that is modifying the Position
                 ApplicationUser User = Db.Users.Single(u => u.Email.Equals(EmailModifier));
-
+                var previousStatus = position.Status;
                 //Modifying the position info from the edit form
                 position.Area = log.Area;
                 position.Status = log.Status;
@@ -65,6 +65,10 @@ namespace Talento.Core.Helpers
                 position.Description = log.Description;
                 position.EngagementManager = log.EngagementManager;
                 position.RGS = log.RGS;
+                position.ApplicationUser_Id = position.ApplicationUser_Id;
+                position.PortfolioManager_Id = position.PortfolioManager_Id;
+                position.Owner = position.Owner;
+                position.PortfolioManager = position.PortfolioManager;
 
                 Db.SaveChanges();
                 //I create the log containing the pertinent information
@@ -72,7 +76,7 @@ namespace Talento.Core.Helpers
                 {
                     Action = Entities.Action.Edit,
                     ActualStatus = log.Status,
-                    PreviousStatus = position.Status,
+                    PreviousStatus = previousStatus,
                     Date = DateTime.Now,
                     ApplicationUser_Id = User.Id,
                     Position_Id = position.Id,
@@ -81,15 +85,13 @@ namespace Talento.Core.Helpers
 
                 };
                 PositionLoghelper.Create(CreateLog);
-                /*
-                Db.PositionLogs.Add(CreateLog);
-                Db.SaveChanges();
-                    */
+              
             }
             catch (Exception e)
             {
-                System.Threading.Thread.Sleep(1000);
+                return false;
             }
+            return true;
         }
 
         public async Task<Position> Get(int Id)

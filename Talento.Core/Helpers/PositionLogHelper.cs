@@ -21,12 +21,27 @@ namespace Talento.Core.Helpers
             try
             {
                 Db.PositionLogs.Add(log);
-                Db.SaveChangesAsync();
+                Db.SaveChanges();
 
-            } catch ( Exception )
+            } catch ( Exception e)
             {
                 throw new Exception();
             }
+        }
+
+        public Task Delete(int Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Edit(PositionLog log)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PositionLog> Get(int Id)
+        {
+            throw new NotImplementedException();
         }
 
         public List<PositionLog> GetAll(int Id)
@@ -36,5 +51,6 @@ namespace Talento.Core.Helpers
                 .OrderByDescending(p => p.Date)
                 .ToList();
         }
+        
     }
 }
