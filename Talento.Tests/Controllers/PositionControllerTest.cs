@@ -54,26 +54,13 @@ namespace Talento.Tests.Controllers
 
             var result = controller.Details(1);
 
-            //Assert.IsNotNull(result);
-            //Assert.IsInstanceOfType(result, typeof(ViewResult));
-            //Assert.IsTrue(((ViewResult) result).Model is DashBoardViewModel);
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result.Result, typeof(ViewResult));
+
+            //Assert.IsTrue(((Task<ActionResult>)result).Result is DashBoardViewModel);
             //var viewmodel = ((DashBoardViewModel)((ViewResult)result).Model).Positions;
             //Assert.IsTrue(viewmodel.TotalCount == 1);
             //Assert.IsTrue(viewmodel.Subset is List<PositionModel>);
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
