@@ -20,10 +20,21 @@ namespace Talento.Controllers
         public PositionsController(Core.IPosition positionHelper)
         {
             PositionHelper = positionHelper;
-
             AutoMapper.Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<Entities.Position, Models.PositionModel>();
+                cfg.CreateMap<Position, PositionModel>()
+                    .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id))
+                ;
+                cfg.CreateMap<Position, EditPositionViewModel>();
+                cfg.CreateMap<EditPositionViewModel,Position>();
+
+                /*
+               This could be useful in future in case of needing to edit the owner user account. It is not yet requested in the Edit user story 295
+               4 / 4 / 2017 - Charlie
+               cfg.CreateMap<Position, EditPositionViewModel>()
+                    .ForMember(t => t.OwnerEmail, opt => opt.MapFrom(s => s.Owner.Email))
+                ;
+                */
             });
         }
 
@@ -76,18 +87,29 @@ namespace Talento.Controllers
         }
 
         // GET: Positions/Edit/5
+        [Authorize(Roles = "PM, TM")]
         public async Task<ActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            try {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The designated Position does not have a valid ID");
+                }
+                EditPositionViewModel position = AutoMapper.Mapper.Map<EditPositionViewModel>(await PositionHelper.Get(id.Value));
+                if (position == null)
+                {
+                    return HttpNotFound();
+                }
+                if (position.Status.Equals(Status.Removed))
+                {
+                    return HttpNotFound();
+                }
+                return View(position);
             }
-            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(await PositionHelper.Get(id.Value));
-            if (position == null)
+            catch (InvalidOperationException)
             {
-                return HttpNotFound();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The designated Position does not have a valid ID");
             }
-            return View(position);
         }
 
         // POST: Positions/Edit/5
@@ -95,12 +117,19 @@ namespace Talento.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Description,CreationDate,Area,EngagementManager,RGS,Status")] Position position)
+        public async Task<ActionResult> Edit(EditPositionViewModel position)
         {
             if (ModelState.IsValid)
             {
-                await PositionHelper.Edit(AutoMapper.Mapper.Map<Position>(position));
-                return RedirectToAction("Index");
+                if (PositionHelper.Edit(AutoMapper.Mapper.Map<Position>(position), User.Identity.Name))
+                {
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                else
+                {
+                    return View(position);
+                }
+
             }
             return View(position);
         }

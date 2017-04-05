@@ -13,8 +13,10 @@ namespace Talento.Models
         public string Name { get; set; }
     }
 
+
     public class PositionModel
     {
+    
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Title is required")]
@@ -50,15 +52,48 @@ namespace Talento.Models
         [Required]
         public ApplicationUser Owner { get; set; }
     }
+    
+    public class EditPositionViewModel
+    {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Title is required")]
+        public string Title { get; set; }
+
+        [Required(ErrorMessage = "Description is required")]
+        public string Description { get; set; }
+
+        [Required]
+        public DateTime CreationDate { get; set; }
+
+        [Required(ErrorMessage = "Area is required")]
+        public string Area { get; set; }
+
+        [Required(ErrorMessage = "Engagement Manager is required")]
+        public string EngagementManager { get; set; }
+
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Invalid RGS")]
+        [Range(1,999999999)]
+        public string RGS { get; set; }
+
+        [Required(ErrorMessage = "Status is required")]
+        public Status Status { get; set; }
+
+        /*
+        This could be useful in future in case of needing to edit the owner user account.It is not yet requested in the Edit user story 295
+        4/4/2017 - Charlie
+        public string OwnerEmail { get; set; }
+        */
+    }
 
     public class PositionsPagedList : PagedList<PositionModel>
     {
-        public int TotalCount { get; set; }
-        public List<PositionModel> Subset { get; set; }
+        public new int TotalItemCount { get; set; }
+        public new List<PositionModel> Subset { get; set; }
 
         public PositionsPagedList(IEnumerable<PositionModel> positions, int pageNumber, int pageSize) : base(positions.AsQueryable(), pageNumber, pageSize)
         {
-            TotalCount = base.TotalItemCount;
+            TotalItemCount = base.TotalItemCount;
             Subset = base.Subset;
         }
     }

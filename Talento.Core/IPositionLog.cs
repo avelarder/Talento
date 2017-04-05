@@ -11,7 +11,11 @@ namespace Talento.Core
 {
     public interface IPositionLog
     {
-        List<PositionLog> GetAll(int Id);
+        Task<PositionLog> Get(int Id);
+        List<PositionLog> GetAll(int? Id);
         void Create(PositionLog log);
+        Task Edit(PositionLog log);
+        Task Delete(int Id);
+
     }
 }
