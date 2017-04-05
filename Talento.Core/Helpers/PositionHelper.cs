@@ -17,7 +17,7 @@ namespace Talento.Core.Helpers
 
         }
 
-        public Task Create(Position log)
+        public void Create(Position log)
         {
             Db.Positions.Add(log);
             Db.SaveChanges();
@@ -63,19 +63,19 @@ namespace Talento.Core.Helpers
 
                 Db.SaveChanges();
                 //I create the log containing the pertinent information
-                PositionLog CreateLog = new PositionLog()
-                {
-                    Action = Entities.Action.Edit,
-                    ActualStatus = log.Status,
-                    PreviousStatus = previousStatus,
-                    Date = DateTime.Now,
-                    ApplicationUser_Id = User.Id,
-                    Position_Id = position.Id,
-                    Position = position,
-                    User = User,
+                //PositionLog CreateLog = new PositionLog()
+                //{
+                //    Action = Entities.Action.Edit,
+                //    ActualStatus = log.Status,
+                //    PreviousStatus = previousStatus,
+                //    Date = DateTime.Now,
+                //    ApplicationUser_Id = User.Id,
+                //    Position_Id = position.Id,
+                //    Position = position,
+                //    User = User,
 
-                };
-                PositionLoghelper.Create(CreateLog);
+                //};
+                //PositionLoghelper.Create(CreateLog);
               
             }
             catch (Exception e)
