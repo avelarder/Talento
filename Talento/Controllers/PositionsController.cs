@@ -57,7 +57,7 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(await PositionHelper.Get(id.Value));
-            if (position == null)
+            if (position == null || position.Status == Status.Removed)
             {
                 return HttpNotFound();
             }
