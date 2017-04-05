@@ -24,20 +24,28 @@ namespace Talento.Core.Helpers
 
         }
 
-        public Task Delete(int Id)
+        public void Delete(int Id, string uId)
         {
-            // Create log on Delete
-            Position position = (Position)Db.Positions.Where(p => p.Id == Id);
-            PositionLog log = new PositionLog()
+            //Search for the position
+            var query = from p in Db.Positions
+                        where p.Id == Id
+                        select p;
+
+            foreach (Position p in query)
             {
-                Date = DateTime.Today,
-                User = new ApplicationUser(), // Modify to get current User
-                Position = position,
-                Action = Entities.Action.Delete,
-                PreviousStatus = position.Status,
-                ActualStatus = Status.Removed
-            };
-            throw new NotImplementedException();
+                // Create log on Delete
+                PositionLog log = new PositionLog()
+                {
+                    Date = DateTime.Today,
+                    User = Db.Users.Single(u=>u.Id.Equals(uId)), //Get Current User
+                    Position = p,
+                    Action = Entities.Action.Delete,
+                    PreviousStatus = p.Status,
+                    ActualStatus = Status.Removed
+                };
+                p.Status = Status.Removed;
+            }
+            Db.SaveChanges();
         }
 
         public bool Edit(Position log, string EmailModifier)
