@@ -1,12 +1,13 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Talento.Controllers;
-using Talento.Models;
 using System.Web.Mvc;
+using Moq;
+using Talento.Models;
 
 namespace Talento.Tests.Controllers
 {
+
     [TestClass]
     public class PositionControllerTest
     {
@@ -17,12 +18,16 @@ namespace Talento.Tests.Controllers
         public async void CreateFail()
         {
             PositionsController controller = new PositionsController(mockePh.Object);
-            PositionModel pm = new PositionModel();
+            CreatePositionViewModel pm = new CreatePositionViewModel();
 
-            var result = await controller.Create(pm);
+            var result = controller.Create(pm);
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(PositionModel));
+            Assert.IsInstanceOfType(result, typeof(CreatePositionViewModel));
         }
     }
+
 }
+
+    
+

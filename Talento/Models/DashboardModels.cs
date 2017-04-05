@@ -14,6 +14,31 @@ namespace Talento.Models
         public string Name { get; set; }
     }
 
+    public class CreatePositionViewModel
+    {
+        [Required(ErrorMessage = "Title is required")]
+        public string Title { get; set; }
+
+        [Required(ErrorMessage = "Description is required")]
+        public string Description { get; set; }
+
+        [Required(ErrorMessage = "Area is required")]
+        public string Area { get; set; }
+
+        [Required(ErrorMessage = "Engagement Manager is required")]
+        [DisplayName("Engagement Manager")]
+        public string EngagementManager { get; set; }
+
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Invalid RGS")]
+        public string RGS { get; set; }
+
+        [Required(ErrorMessage = "Portfolio Manager Email is required")]
+        [DisplayName("Portfolio Manager")]
+        [EmailAddress]
+        public string EmailPM { get; set; }
+
+    }
+
     public class PositionModel
     {
         public int Id { get; set; }

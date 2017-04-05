@@ -1,4 +1,4 @@
-﻿@model Talento.Models.PositionModel
+﻿@model Talento.Models.CreatePositionViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -7,9 +7,10 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Positions", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
+    
 
     <div class="form-horizontal">
         <h4>Position</h4>
@@ -18,7 +19,7 @@
         <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
             @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.Title,"", new { @class = "text-danger" })
         </div>
 
         <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
@@ -40,17 +41,18 @@
         </div>
 
         <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+            @Html.LabelFor(model => model.EmailPM, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.EmailPM, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmailPM,"", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
             @Html.LabelFor(model => model.RGS, htmlAttributes: new { @class = "control-label" })
             @Html.EditorFor(model => model.RGS, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.RGS, "", new { @class = "text-danger" })
         </div>
 
-        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
-            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label" })
-            @Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
-        </div>
-
+        
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" />
