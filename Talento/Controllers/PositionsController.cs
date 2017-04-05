@@ -41,13 +41,12 @@ namespace Talento.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(await PositionHelper.Get(id.Value));
             if (position == null)
             {
                 return HttpNotFound();
             }
-
-            //position.CreationDate = position.CreationDate.Date;
 
             return View(position);
         }

@@ -29,14 +29,14 @@ namespace Talento.Core.Helpers
                 PreviousStatus = Status.Closed,
                 ActualStatus = Status.Open
             };
-        
+
             throw new NotImplementedException();
         }
 
         public Task Delete(int Id)
         {
             // Create log on Delete
-            Position position = (Position) Db.Positions.Where(p => p.Id == Id);
+            Position position = (Position)Db.Positions.Where(p => p.Id == Id);
             PositionLog log = new PositionLog()
             {
                 Date = DateTime.Today,
@@ -66,12 +66,17 @@ namespace Talento.Core.Helpers
 
         public async Task<Position> Get(int Id)
         {
-            var position = await Db.Positions.SingleAsync(x => x.Id == Id);
-            //position.Tags = Tags.GetByPositionId(position.Id);
-
-            return position;
+            try
+            {
+                var position = await Db.Positions.SingleAsync(x => x.Id == Id);
+                return position;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
-        
+
         public async Task<List<Position>> GetAll()
         {
             return await Db.Positions.ToListAsync();
