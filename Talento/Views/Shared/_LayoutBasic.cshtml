@@ -12,19 +12,6 @@
     <!-- Render Body -->
     @RenderBody()
 
-
-    <a href="#" id="test">Test</a>
-    <script type="text/javascript">
-        window.onload = function () {
-            (function ($) {
-                $(document).ready(function () {
-                    $("#test").on("click", function () {
-                        console.log("Sape");
-                    });
-                });
-            }(jQuery))
-        }
-    </script>
     <!-- Scripts -->
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

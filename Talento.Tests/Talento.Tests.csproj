@@ -98,7 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Talento\Talento.csproj">
-      <Project>{D1BFEC25-2F01-4501-8E16-65FDADC4895C}</Project>
+      <Project>{d1bfec25-2f01-4501-8e16-65fdadc4895c}</Project>
       <Name>Talento</Name>
     </ProjectReference>
   </ItemGroup>

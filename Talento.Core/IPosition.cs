@@ -12,7 +12,7 @@ namespace Talento.Core
         Task<Position> Get(int Id);
         Task<List<Position>> GetAll();
         Task Create(Position log);
-        Task Edit(Position log);
+        void Edit(Position log, string EmailModifier);
         Task Delete(int Id);
     }
 }

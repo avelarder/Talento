@@ -20,8 +20,24 @@ namespace Talento.Controllers
         public PositionsController(Core.IPosition positionHelper)
         {
             PositionHelper = positionHelper;
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Position, PositionModel>()
+                    .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id))
+                ;
+                cfg.CreateMap<Position, EditPositionViewModel>();
+                cfg.CreateMap<EditPositionViewModel,Position>();
+
+                /*
+               This could be useful in future in case of needing to edit the owner user account. It is not yet requested in the Edit user story 295
+               4 / 4 / 2017 - Charlie
+               cfg.CreateMap<Position, EditPositionViewModel>()
+                    .ForMember(t => t.OwnerEmail, opt => opt.MapFrom(s => s.Owner.Email))
+                ;
+                */
+            });
         }
-        
+
         // GET: Positions
         public async Task<ActionResult> Index()
         {
@@ -74,7 +90,7 @@ namespace Talento.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(await PositionHelper.Get(id.Value));
+            EditPositionViewModel position = AutoMapper.Mapper.Map<EditPositionViewModel>(await PositionHelper.Get(id.Value));
             if (position == null)
             {
                 return HttpNotFound();
@@ -87,12 +103,12 @@ namespace Talento.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Description,CreationDate,Area,EngagementManager,RGS,Status")] Position position)
+        public async Task<ActionResult> Edit(EditPositionViewModel position)
         {
             if (ModelState.IsValid)
             {
-                await PositionHelper.Edit(AutoMapper.Mapper.Map<Position>(position));
-                return RedirectToAction("Index");
+                PositionHelper.Edit(AutoMapper.Mapper.Map<Position>(position),User.Identity.Name);
+                return View("Index","Dashboard");
             }
             return View(position);
         }
@@ -121,6 +137,6 @@ namespace Talento.Controllers
             return RedirectToAction("Index");
         }
 
-      
+
     }
 }

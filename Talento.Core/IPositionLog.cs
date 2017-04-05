@@ -13,7 +13,7 @@ namespace Talento.Core
     {
         Task<PositionLog> Get(int Id);
         Task<List<PositionLog>> GetAll();
-        Task Create(PositionLog log);
+        void Create(PositionLog log);
         Task Edit(PositionLog log);
         Task Delete(int Id);
 

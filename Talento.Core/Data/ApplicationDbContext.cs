@@ -16,6 +16,7 @@ namespace Talento.Core.Data
         public ApplicationDbContext()
             : base("TalentoDB", throwIfV1Schema: false)
         {
+
         }
 
         public static ApplicationDbContext Create()
@@ -58,5 +59,6 @@ namespace Talento.Core.Data
         public virtual System.Data.Entity.DbSet<Position> Positions { get; set; }
 
         public virtual System.Data.Entity.DbSet<PositionLog> PositionLogs { get; set; }
+
     }
 }

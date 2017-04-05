@@ -16,9 +16,10 @@ namespace Talento.Core.Helpers
 
         }
 
-        public Task Create(PositionLog log)
+        public void Create(PositionLog log)
         {
-            throw new NotImplementedException();
+            Db.PositionLogs.Add(log);
+            Db.SaveChanges();
         }
 
         public Task Delete(int Id)

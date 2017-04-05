@@ -19,6 +19,10 @@ namespace Talento.Controllers
         public PositionLogsController(Core.IPositionLog logHelper)
         {
             LogHelper = logHelper;
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<PositionLog, PositionLogViewModel>();
+            });
         }
         // GET: PositionLogs
         public async Task<ActionResult> Index()
@@ -53,11 +57,11 @@ namespace Talento.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Date,Action,PreviousStatus,ActualStatus")] PositionLog positionLog)
+        public async Task<ActionResult> Create(PositionLogViewModel positionLog)
         {
             if (ModelState.IsValid)
             {
-                await LogHelper.Create(positionLog);
+                LogHelper.Create(AutoMapper.Mapper.Map<PositionLog>(positionLog));
                 return RedirectToAction("Index");
             }
 
