@@ -26,7 +26,7 @@ namespace Talento.Controllers
                 cfg.CreateMap<Entities.Position, Models.PositionModel>();
             });
         }
-        
+
         // GET: Positions
         public async Task<ActionResult> Index()
         {
@@ -43,7 +43,7 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(await PositionHelper.Get(id.Value));
-            if (position == null)
+            if (position == null || position.Status == Status.Removed)
             {
                 return HttpNotFound();
             }
@@ -129,6 +129,6 @@ namespace Talento.Controllers
             return RedirectToAction("Index");
         }
 
-      
+
     }
 }
