@@ -14,6 +14,7 @@ using Talento.Entities;
 namespace Talento.Controllers
 {
     [Authorize(Roles = "PM, TL, TAG, RMG")]
+    [HandleError]
     public class PositionLogsController : Controller
     {
         IPositionLog LogHelper;
@@ -46,7 +47,7 @@ namespace Talento.Controllers
             }
             catch (Exception e)
             {
-                return View("Error", e);
+                return HttpNotFound();
             }
         }
     }
