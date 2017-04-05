@@ -13,6 +13,6 @@ namespace Talento.Core
         Task<List<Position>> GetAll();
         Task Create(Position log);
         Task Edit(Position log);
-        Task Delete(int Id);
+        void Delete(int Id, string uId);
     }
 }
