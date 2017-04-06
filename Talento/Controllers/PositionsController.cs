@@ -167,6 +167,7 @@ namespace Talento.Controllers
         }
 
         // GET: Positions/Delete/5
+        [Authorize(Roles = "PM, TL, TAG, RMG")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
