@@ -178,16 +178,9 @@ namespace Talento.Controllers
             {
                 return HttpNotFound();
             }
-            return View(position);
-        }
-
-        // POST: Positions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            await PositionHelper.Delete(id);
-            return RedirectToAction("Index");
+            string uId = User.Identity.GetUserId();
+            PositionHelper.Delete(id.Value, uId);
+            return RedirectToAction("Index","Dashboard");
         }
 
 

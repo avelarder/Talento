@@ -13,7 +13,7 @@ namespace Talento.Core
         Task<List<Position>> GetAll();
         void Create(Position log);
         bool Edit(Position log, string EmailModifier);
-        Task Delete(int Id);
+        void Delete(int Id, string uId);
         ApplicationUser SearchPM(string userName);
         ApplicationUser GetUser(string user);
     }

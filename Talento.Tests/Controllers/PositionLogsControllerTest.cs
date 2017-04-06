@@ -19,7 +19,7 @@ namespace Talento.Tests.Controllers
         {
             var mocks = new MockRepository(MockBehavior.Default);
             Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
-            mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
+            mockPrincipal.Setup(p => p.IsInRole("PM")).Returns(true);
 
             // Mock Controller of Context
             var mockContext = new Mock<ControllerContext>();
@@ -35,10 +35,55 @@ namespace Talento.Tests.Controllers
 
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(ViewResult));
-            Assert.IsTrue(((ViewResult)result).Model is PositionLogViewModel);
-            var viewModel = ((PositionLogViewModel)((ViewResult)result).Model);
-            //Assert.IsTrue(viewModel. == 1);
-            //Assert.IsTrue(viewModel is List<PositionModel>);
+            Assert.IsTrue(((ViewResult)result).Model is List<PositionLogViewModel>);
+            var viewModel = ((List<PositionLogViewModel>)(((ViewResult)result).Model));
+            Assert.IsTrue(viewModel.Count == 1);
+        }
+
+        [TestMethod]
+        public void ListIdNotFound()
+        {
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            mockPrincipal.Setup(p => p.IsInRole("PM")).Returns(true);
+
+            // Mock Controller of Context
+            var mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+
+            // Controller
+            Mock<IPositionLog> logsList = new Mock<IPositionLog>();
+            PositionLogsController controller = new PositionLogsController(logsList.Object);
+
+            var result = controller.List(1);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(HttpStatusCodeResult));
+            Assert.IsTrue(((HttpNotFoundResult)result).StatusCode == 404);
+        }
+
+        [TestMethod]
+        public void ListIdNull()
+        {
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            mockPrincipal.Setup(p => p.IsInRole("PM")).Returns(true);
+
+            // Mock Controller of Context
+            var mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+
+            // Controller
+            Mock<IPositionLog> logsList = new Mock<IPositionLog>();
+            PositionLogsController controller = new PositionLogsController(logsList.Object);
+
+            var result = controller.List(null);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(HttpStatusCodeResult));
+            Assert.IsTrue(((HttpNotFoundResult)result).StatusCode == 404);
         }
     }
 }
