@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Talento.Entities;
 using System.Data;
 using System.Data.Entity;
+using Talento.Core.Data;
 
 namespace Talento.Core.Helpers
 {
@@ -15,38 +16,34 @@ namespace Talento.Core.Helpers
         public PositionHelper(Core.Data.ApplicationDbContext db, IPositionLog positionLoghelper) : base(db)
         {
             PositionLoghelper = positionLoghelper;
+
         }
 
-        public Task Create(Position position)
+        public void Create(Position log)
         {
-            // Create log on Creation
-            PositionLog log = new PositionLog()
-            {
-                Date = DateTime.Today,
-                User = new ApplicationUser(), // Modify to get current User
-                Position = position,
-                Action = Entities.Action.Create,
-                PreviousStatus = Status.Closed,
-                ActualStatus = Status.Open
-            };
+            Db.Positions.Add(log);
+            Db.SaveChanges();
 
-            throw new NotImplementedException();
         }
 
-        public Task Delete(int Id)
+        public void Delete(int Id, string uId)
         {
-            // Create log on Delete
-            Position position = (Position)Db.Positions.Where(p => p.Id == Id);
+            ApplicationUser cu = Db.Users.Single(u => u.Id.Equals(uId)); //Get Current User
+            var p = Db.Positions.Where(x => x.Id == Id).Single();
             PositionLog log = new PositionLog()
             {
-                Date = DateTime.Today,
-                User = new ApplicationUser(), // Modify to get current User
-                Position = position,
+                Date = DateTime.Now,
+                User = cu,
+                Position = p,
                 Action = Entities.Action.Delete,
-                PreviousStatus = position.Status,
-                ActualStatus = Status.Removed
+                PreviousStatus = p.Status,
+                ActualStatus = Status.Removed,
+                ApplicationUser_Id = cu.Id,
+                Position_Id = p.Id,
             };
-            throw new NotImplementedException();
+            PositionLoghelper.Create(log);
+            p.Status = Status.Removed;
+            Db.SaveChanges();
         }
 
         public bool Edit(Position log, string EmailModifier)
@@ -72,20 +69,20 @@ namespace Talento.Core.Helpers
 
                 Db.SaveChanges();
                 //I create the log containing the pertinent information
-                PositionLog CreateLog = new PositionLog()
-                {
-                    Action = Entities.Action.Edit,
-                    ActualStatus = log.Status,
-                    PreviousStatus = previousStatus,
-                    Date = DateTime.Now,
-                    ApplicationUser_Id = User.Id,
-                    Position_Id = position.Id,
-                    Position = position,
-                    User = User,
+                //PositionLog CreateLog = new PositionLog()
+                //{
+                //    Action = Entities.Action.Edit,
+                //    ActualStatus = log.Status,
+                //    PreviousStatus = previousStatus,
+                //    Date = DateTime.Now,
+                //    ApplicationUser_Id = User.Id,
+                //    Position_Id = position.Id,
+                //    Position = position,
+                //    User = User,
 
-                };
-                PositionLoghelper.Create(CreateLog);
-              
+                //};
+                //PositionLoghelper.Create(CreateLog);
+
             }
             catch (Exception e)
             {
@@ -101,7 +98,7 @@ namespace Talento.Core.Helpers
                 var position = await Db.Positions.SingleAsync(x => x.Id == Id);
                 return position;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -111,5 +108,27 @@ namespace Talento.Core.Helpers
         {
             return await Db.Positions.ToListAsync();
         }
+
+        public ApplicationUser SearchPM(string userName)
+        {
+
+            var PM = Db.Roles.Single(r => r.Name == "PM");
+            if (userName != null)
+            {
+                var usuario = Db.Users.Single(x => x.UserName == userName);
+                if (usuario.Roles.Where(x => x.RoleId == PM.Id).Count() > 0)
+                {
+                    return usuario;
+                }
+            }
+
+            return null;
+        }
+
+        public ApplicationUser GetUser(string user)
+        {
+            return Db.Users.Single(x => x.Id == user.ToString());
+        }
+
     }
 }

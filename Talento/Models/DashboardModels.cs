@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 using Talento.Entities;
@@ -13,6 +14,30 @@ namespace Talento.Models
         public string Name { get; set; }
     }
 
+    public class CreatePositionViewModel
+    {
+        [Required(ErrorMessage = "Title is required")]
+        public string Title { get; set; }
+
+        [Required(ErrorMessage = "Description is required")]
+        public string Description { get; set; }
+
+        [Required(ErrorMessage = "Area is required")]
+        public string Area { get; set; }
+
+        [Required(ErrorMessage = "Engagement Manager is required")]
+        [DisplayName("Engagement Manager")]
+        public string EngagementManager { get; set; }
+
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Invalid RGS")]
+        public string RGS { get; set; }
+
+        [Required(ErrorMessage = "Portfolio Manager Email is required")]
+        [DisplayName("Portfolio Manager")]
+        [EmailAddress]
+        public string EmailPM { get; set; }
+
+    }
 
     public class PositionModel
     {
@@ -32,6 +57,7 @@ namespace Talento.Models
         public string Area { get; set; }
 
         [Required(ErrorMessage = "Engagement Manager is required")]
+        [DisplayName("Engagement Manager")]
         public string EngagementManager { get; set; }
 
         public string PortfolioManager_Id { get; set; }
@@ -51,6 +77,24 @@ namespace Talento.Models
 
         [Required]
         public ApplicationUser Owner { get; set; }
+
+        public string LastOpenedBy_Id { get; set; }
+
+        public virtual ApplicationUser LastOpenedBy { get; set; }
+
+        public string LastCancelledBy_Id { get; set; }
+
+        public virtual ApplicationUser LastCancelledBy { get; set; }
+
+        public string LastClosedBy_Id { get; set; }
+
+        public virtual ApplicationUser LastClosedBy { get; set; }
+
+        public DateTime LastOpenedDate { get; set; }
+
+        public DateTime LastCancelledDate { get; set; }
+
+        public DateTime LastClosedDate { get; set; }
     }
     
     public class EditPositionViewModel

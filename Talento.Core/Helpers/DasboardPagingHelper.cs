@@ -86,6 +86,19 @@ namespace Talento.Core.Helpers
                 case "id_desc":
                     query = query.OrderByDescending(p => p.Id);
                     break;
+                case "EM":
+                    query = query.OrderBy(p => p.EngagementManager);
+                    break;
+                case "em_desc":
+                    query = query.OrderByDescending(p => p.EngagementManager);
+                    break;
+                case "Owner":
+                    query = query.OrderBy(p => p.Owner.UserName);
+                    break;
+                case "owner_desc":
+                    query = query.OrderByDescending(p => p.Owner.UserName);
+                    break;
+
                 default:  // Date descending 
                     query = query.OrderByDescending(p => p.CreationDate);
                     break;
@@ -179,6 +192,12 @@ namespace Talento.Core.Helpers
                 case "owner_desc":
                     query = query.OrderByDescending(p => p.Owner.UserName);
                     break;
+                case "Id":
+                    query = query.OrderBy(p => p.Id);
+                    break;
+                case "id_desc":
+                    query = query.OrderByDescending(p => p.Id);
+                    break;
 
                 default:  // Date ascending 
                     query = query.OrderBy(p => p.CreationDate);
@@ -253,7 +272,6 @@ namespace Talento.Core.Helpers
             }
 
             //Sending the query to the list (25 positions per page)
-            int pageSize = 25;
             int pageNumber = (page ?? 1);
             return query.ToList();
         }

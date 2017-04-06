@@ -37,7 +37,7 @@ namespace Talento.Controllers
             {
                 if( Id == null )
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    return HttpNotFound();
                 }
 
                 var logs = AutoMapper.Mapper.Map<List<PositionLogViewModel>>(LogHelper.GetAll(Id).ToList());
@@ -45,7 +45,7 @@ namespace Talento.Controllers
 
                 return View(logs);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return HttpNotFound();
             }
