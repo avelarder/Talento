@@ -28,25 +28,24 @@ namespace Talento.Core.Helpers
 
         public void Delete(int Id, string uId)
         {
-            //Search for the position
-            var query = from p in Db.Positions
-                        where p.Id == Id
-                        select p;
+            ApplicationUser cu = Db.Users.Single(u => u.Id.Equals(uId)); //Get Current User
 
-            foreach (Position p in query)
+            var p = Db.Positions.Where(x => x.Id == Id).Single();
+
+
+            PositionLog log = new PositionLog()
             {
-                // Create log on Delete
-                PositionLog log = new PositionLog()
-                {
-                    Date = DateTime.Today,
-                    User = Db.Users.Single(u=>u.Id.Equals(uId)), //Get Current User
-                    Position = p,
-                    Action = Entities.Action.Delete,
-                    PreviousStatus = p.Status,
-                    ActualStatus = Status.Removed
-                };
-                p.Status = Status.Removed;
-            }
+                Date = DateTime.Now,
+                User = cu,
+                Position = p,
+                Action = Entities.Action.Delete,
+                PreviousStatus = p.Status,
+                ActualStatus = Status.Removed,
+                ApplicationUser_Id = cu.Id,
+                Position_Id = p.Id,
+            };
+            PositionLoghelper.Create(log);
+            p.Status = Status.Removed;
             Db.SaveChanges();
         }
 
@@ -86,7 +85,7 @@ namespace Talento.Core.Helpers
 
                 //};
                 //PositionLoghelper.Create(CreateLog);
-              
+
             }
             catch (Exception e)
             {
@@ -131,7 +130,7 @@ namespace Talento.Core.Helpers
 
         public ApplicationUser GetUser(string user)
         {
-           return Db.Users.Single(x => x.Id == user.ToString());
+            return Db.Users.Single(x => x.Id == user.ToString());
         }
 
     }
