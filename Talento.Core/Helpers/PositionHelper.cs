@@ -12,8 +12,10 @@ namespace Talento.Core.Helpers
 {
     public class PositionHelper : BaseHelper, IPosition
     {
-        public PositionHelper(Core.Data.ApplicationDbContext db) : base(db)
+        IPositionLog PositionLoghelper;
+        public PositionHelper(Core.Data.ApplicationDbContext db, IPositionLog positionLoghelper) : base(db)
         {
+            PositionLoghelper = positionLoghelper;
 
         }
 
