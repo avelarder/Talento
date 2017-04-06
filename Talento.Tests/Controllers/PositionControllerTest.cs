@@ -48,7 +48,7 @@ namespace Talento.Tests.Controllers
                 Title = ""
             };
 
-            position.Setup(x => x.Get(1)).Returns(Task.FromResult(posParam));
+            position.Setup(x => x.Get(1)).Returns((posParam));
 
             PositionsController controller = new PositionsController(position.Object);
 

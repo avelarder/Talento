@@ -21,7 +21,7 @@ namespace Talento.Core.Helpers
 
         public void Create(Position position)
         {
-            Db.Positions.Add(log);
+            Db.Positions.Add(position);
             Db.SaveChanges();
 
         }
