@@ -52,7 +52,7 @@ namespace Talento.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(await PositionHelper.Get(id.Value));
+            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
             if (position == null)
             {
                 return HttpNotFound();
@@ -78,9 +78,10 @@ namespace Talento.Controllers
             [Bind(Include = "Id,Title,Description,CreationDate,Area,EngagementManager,RGS,Status")]
             PositionModel position)
         {
+            
             if (ModelState.IsValid)
             {
-                await PositionHelper.Create(AutoMapper.Mapper.Map<Position>(position));
+                PositionHelper.Create(AutoMapper.Mapper.Map<Position>(position));
                 return RedirectToAction("Index");
             }
 
@@ -88,15 +89,11 @@ namespace Talento.Controllers
         }
 
         // GET: Positions/Edit/5
-        [Authorize(Roles = "PM, TM")]
-        public async Task<ActionResult> Edit(int? id)
+        [Authorize(Roles = "PM, TL")]
+        public ActionResult Edit(int id)
         {
             try {
-                if (id == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The designated Position does not have a valid ID");
-                }
-                EditPositionViewModel position = AutoMapper.Mapper.Map<EditPositionViewModel>(await PositionHelper.Get(id.Value));
+                EditPositionViewModel position = AutoMapper.Mapper.Map<EditPositionViewModel>(PositionHelper.Get(id));
                 if (position == null)
                 {
                     return HttpNotFound();
@@ -117,10 +114,11 @@ namespace Talento.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "PM, TL")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditPositionViewModel position)
         {
-            if (ModelState.IsValid)
+            if (this.IsStateValid())
             {
                 if (PositionHelper.Edit(AutoMapper.Mapper.Map<Position>(position), User.Identity.Name))
                 {
@@ -142,7 +140,7 @@ namespace Talento.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(await PositionHelper.Get(id.Value));
+            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
             if (position == null)
             {
                 return HttpNotFound();
@@ -159,6 +157,10 @@ namespace Talento.Controllers
             return RedirectToAction("Index");
         }
 
+        public virtual bool IsStateValid()
+        {
+            return this.ModelState.IsValid;
+        }
 
     }
 }

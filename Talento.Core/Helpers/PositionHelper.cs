@@ -18,7 +18,7 @@ namespace Talento.Core.Helpers
 
         }
 
-        public Task Create(Position position)
+        public void Create(Position position)
         {
             // Create log on Creation
             PositionLog log = new PositionLog()
@@ -95,9 +95,9 @@ namespace Talento.Core.Helpers
             return true;
         }
 
-        public async Task<Position> Get(int Id)
+        public Position Get(int Id)
         {
-            var position = await Db.Positions.SingleAsync(x => x.Id == Id);
+            var position =  Db.Positions.Single(x => x.Id == Id);
             //position.Tags = Tags.GetByPositionId(position.Id);
 
             return position;

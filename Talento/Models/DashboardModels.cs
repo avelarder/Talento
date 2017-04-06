@@ -88,12 +88,12 @@ namespace Talento.Models
 
     public class PositionsPagedList : PagedList<PositionModel>
     {
-        public int TotalCount { get; set; }
+        public int TotalItemCount { get; set; }
         public List<PositionModel> Subset { get; set; }
 
         public PositionsPagedList(IEnumerable<PositionModel> positions, int pageNumber, int pageSize) : base(positions.AsQueryable(), pageNumber, pageSize)
         {
-            TotalCount = base.TotalItemCount;
+            TotalItemCount = base.TotalItemCount;
             Subset = base.Subset;
         }
     }
