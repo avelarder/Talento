@@ -29,10 +29,7 @@ namespace Talento.Core.Helpers
         public void Delete(int Id, string uId)
         {
             ApplicationUser cu = Db.Users.Single(u => u.Id.Equals(uId)); //Get Current User
-
             var p = Db.Positions.Where(x => x.Id == Id).Single();
-
-
             PositionLog log = new PositionLog()
             {
                 Date = DateTime.Now,
