@@ -15,6 +15,7 @@ namespace Talento.Core.Helpers
         public PositionHelper(Core.Data.ApplicationDbContext db, IPositionLog positionLoghelper) : base(db)
         {
             PositionLoghelper = positionLoghelper;
+
         }
 
         public Task Create(Position position)
