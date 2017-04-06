@@ -98,7 +98,7 @@ namespace Talento.Core.Helpers
                 var position = await Db.Positions.SingleAsync(x => x.Id == Id);
                 return position;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }

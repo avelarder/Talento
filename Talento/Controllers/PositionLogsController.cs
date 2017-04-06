@@ -45,7 +45,7 @@ namespace Talento.Controllers
 
                 return View(logs);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return HttpNotFound();
             }
