@@ -62,5 +62,131 @@ namespace Talento.Tests.Controllers
             Assert.IsNotNull(viewModel);
             Assert.IsTrue(viewModel is PositionModel);
         }
+
+        [TestMethod]
+        public void GetPositionIdNotFoundTest()
+        {
+            ApplicationUser appUser = new ApplicationUser();
+            Position posPoco = new Position();
+            posPoco.PortfolioManager = appUser;
+
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
+
+            // create mock controller context
+            var mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+
+            Mock<IPosition> position = new Mock<IPosition>();
+            Position posParam = new Position()
+            {
+                Id = 1,
+                Area = "fafaf",
+                CreationDate = DateTime.MaxValue,
+                Description = "lala",
+                Status = Status.Open,
+                EngagementManager = "lala",
+                PortfolioManager = posPoco.PortfolioManager,
+                Owner = appUser,
+                RGS = "kjh",
+                Tags = null,
+                Title = ""
+            };
+
+            // create controller
+            PositionsController posController = new PositionsController(position.Object);
+
+            var result = posController.Details(-1);
+            var httpStatusCodeResult = ((HttpStatusCodeResult)(((Task<ActionResult>)result).Result));
+            Assert.IsNotNull(httpStatusCodeResult);
+            Assert.IsInstanceOfType(httpStatusCodeResult, typeof(HttpStatusCodeResult));
+            Assert.IsTrue(((HttpStatusCodeResult)result.Result).StatusCode == 404);
+        }
+
+        [TestMethod]
+        public void GetPositionIdIsNullTest()
+        {
+            ApplicationUser appUser = new ApplicationUser();
+            Position posPoco = new Position();
+            posPoco.PortfolioManager = appUser;
+
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
+
+            // create mock controller context
+            var mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+
+            Mock<IPosition> position = new Mock<IPosition>();
+            Position posParam = new Position()
+            {
+                Id = 1,
+                Area = "fafaf",
+                CreationDate = DateTime.MaxValue,
+                Description = "lala",
+                Status = Status.Open,
+                EngagementManager = "lala",
+                PortfolioManager = posPoco.PortfolioManager,
+                Owner = appUser,
+                RGS = "kjh",
+                Tags = null,
+                Title = ""
+            };
+
+            // create controller
+            PositionsController posController = new PositionsController(position.Object);
+
+            var result = posController.Details(null);
+            var httpStatusCodeResult = ((HttpStatusCodeResult)(((Task<ActionResult>)result).Result));
+            Assert.IsNotNull(httpStatusCodeResult);
+            Assert.IsInstanceOfType(httpStatusCodeResult, typeof(HttpStatusCodeResult));
+            Assert.IsTrue(((HttpStatusCodeResult)result.Result).StatusCode == 400);
+        }
+
+        [TestMethod]
+        public void GetRemovedPositionStatusTest()
+        {
+            ApplicationUser appUser = new ApplicationUser();
+            Position posPoco = new Position();
+            posPoco.PortfolioManager = appUser;
+
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
+
+            // create mock controller context
+            var mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+
+            Mock<IPosition> position = new Mock<IPosition>();
+            Position posParam = new Position()
+            {
+                Id = 1,
+                Area = "fafaf",
+                CreationDate = DateTime.MaxValue,
+                Description = "lala",
+                Status = Status.Removed,
+                EngagementManager = "lala",
+                PortfolioManager = posPoco.PortfolioManager,
+                Owner = appUser,
+                RGS = "kjh",
+                Tags = null,
+                Title = ""
+            };
+
+            // create controller
+            PositionsController posController = new PositionsController(position.Object);
+
+            var result = posController.Details(1);
+            var httpStatusCodeResult = ((HttpStatusCodeResult)(((Task<ActionResult>)result).Result));
+            Assert.IsNotNull(httpStatusCodeResult);
+            Assert.IsInstanceOfType(httpStatusCodeResult, typeof(HttpStatusCodeResult));
+            Assert.IsTrue(((HttpStatusCodeResult)result.Result).StatusCode == 404);
+        }
     }
 }
