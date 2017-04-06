@@ -60,6 +60,22 @@ namespace Talento.Controllers
 
             var temp = AutoMapper.Mapper.Map<List<PositionModel>>(rawData.ToList());
 
+            foreach (PositionModel item in temp)
+            {
+                switch (item.Status)
+                {
+                    case Status.Open:
+                        item.OpenDays = (DateTime.Now - item.LastOpenedDate).Days;
+                        break;
+                    case Status.Closed:
+                        item.OpenDays = (item.LastClosedDate - item.LastOpenedDate).Days;
+                        break;
+                    case Status.Canceled:
+                        item.OpenDays = (item.LastCancelledDate - item.LastOpenedDate).Days;
+                        break;
+                }
+            }
+
             return View(new DashBoardViewModel()
             {
                 Positions = new PositionsPagedList(temp, page.Value, 25)

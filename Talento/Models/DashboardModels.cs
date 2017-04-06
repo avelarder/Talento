@@ -95,6 +95,8 @@ namespace Talento.Models
         public DateTime LastCancelledDate { get; set; }
 
         public DateTime LastClosedDate { get; set; }
+
+        public int OpenDays { get; set; }
     }
     
     public class EditPositionViewModel
