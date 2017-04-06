@@ -9,7 +9,7 @@ namespace Talento.Core
 {
     public interface IPosition
     {
-        Task<Position> Get(int Id);
+        Position Get(int Id);
         Task<List<Position>> GetAll();
         void Create(Position log);
         bool Edit(Position log, string EmailModifier);

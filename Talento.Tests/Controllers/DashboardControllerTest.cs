@@ -60,6 +60,32 @@ namespace Talento.Tests.Controllers
 
             // create controller
             Mock<ICustomPagingList> mCustomPagingList = new Mock<ICustomPagingList>();
+            mCustomPagingList.Setup(x => x.GetBasicTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { Id = 1 } });
+            DashboardController controller = new DashboardController(mCustomPagingList.Object);
+
+            var result = controller.Index("", "Status", "", "", 1);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+            Assert.IsTrue(((ViewResult)result).Model is DashBoardViewModel);
+            var viewmodel = ((DashBoardViewModel)((ViewResult)result).Model).Positions;
+            Assert.IsTrue(viewmodel.TotalItemCount == 1);
+            Assert.IsTrue(viewmodel.Subset is List<PositionModel>);
+        }
+        [TestMethod]
+        public void Edit()
+        {
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            mockPrincipal.Setup(p => p.IsInRole("TM")).Returns(true);
+
+            // create mock controller context
+            var mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+
+            // create controller
+            Mock<ICustomPagingList> mCustomPagingList = new Mock<ICustomPagingList>();
             mCustomPagingList.Setup(x => x.GetAdminTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { Id = 1 } });
             DashboardController controller = new DashboardController(mCustomPagingList.Object);
 
