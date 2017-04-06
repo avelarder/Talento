@@ -22,6 +22,7 @@ namespace Talento.Controllers
         ApplicationUser appUser;
         public PositionsController(Core.IPosition positionHelper)
         {
+
             PositionHelper = positionHelper;
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -167,7 +168,7 @@ namespace Talento.Controllers
         }
 
         // GET: Positions/Delete/5
-        [Authorize(Roles = "PM, TL, TAG, RMG")]
+        [Authorize(Roles = "PM, TL")]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -175,10 +176,15 @@ namespace Talento.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(await PositionHelper.Get(id.Value));
-            if (position == null)
+            if (position == null) 
             {
                 return HttpNotFound();
             }
+            if(position.Status == Status.Removed)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
             string uId = User.Identity.GetUserId();
             PositionHelper.Delete(id.Value, uId);
             return RedirectToAction("Index","Dashboard");
