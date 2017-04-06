@@ -53,6 +53,27 @@ namespace Talento.Entities
         [Required]
         [ForeignKey("ApplicationUser_Id")]
         public virtual ApplicationUser Owner { get; set; }
+
+        public string LastOpenedBy_Id { get; set; }
+
+        [ForeignKey("LastOpenedBy_Id")]
+        public virtual ApplicationUser LastOpenedBy { get; set; }
+
+        public string LastCancelledBy_Id { get; set; }
+
+        [ForeignKey("LastCancelledBy_Id")]
+        public virtual ApplicationUser LastCancelledBy { get; set; }
+
+        public string LastClosedBy_Id { get; set; }
+
+        [ForeignKey("LastClosedBy_Id")]
+        public virtual ApplicationUser LastClosedBy { get; set; }
+
+        public DateTime? LastOpenedDate { get; set; }
+
+        public DateTime? LastCancelledDate { get; set; }
+
+        public DateTime? LastClosedDate { get; set; }
     }
 
     public enum Status

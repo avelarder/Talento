@@ -272,7 +272,6 @@ namespace Talento.Core.Helpers
             }
 
             //Sending the query to the list (25 positions per page)
-            int pageSize = 25;
             int pageNumber = (page ?? 1);
             return query.ToList();
         }

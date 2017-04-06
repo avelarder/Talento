@@ -49,6 +49,24 @@ namespace Talento.Models
 
         [Required]
         public ApplicationUser Owner { get; set; }
+
+        public string LastOpenedBy_Id { get; set; }
+
+        public virtual ApplicationUser LastOpenedBy { get; set; }
+
+        public string LastCancelledBy_Id { get; set; }
+
+        public virtual ApplicationUser LastCancelledBy { get; set; }
+
+        public string LastClosedBy_Id { get; set; }
+
+        public virtual ApplicationUser LastClosedBy { get; set; }
+
+        public DateTime LastOpenedDate { get; set; }
+
+        public DateTime LastCancelledDate { get; set; }
+
+        public DateTime LastClosedDate { get; set; }
     }
 
     public class PositionsPagedList : PagedList<PositionModel>

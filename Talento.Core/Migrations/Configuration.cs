@@ -157,7 +157,8 @@ namespace Talento.Core.Migrations
             {
                 new Tag { Name = ".Net"},
                 new Tag { Name = "Java"},
-                new Tag { Name = "SQL"}
+                new Tag { Name = "SQL"},
+                new Tag { Name = "PMP"}
             };
             tags.ForEach(r => context.Tags.AddOrUpdate(p => p.Name, r));
             context.SaveChanges();
@@ -166,100 +167,55 @@ namespace Talento.Core.Migrations
             {
                 new Position
                 {
+                    Id = 1,
                     Title = "Programador .Net",
                     Owner = manager.FindByEmail("Pmuser1@example.com"),
                     Area="IT",
                     RGS="",
                     Status = Status.Open,
-                    CreationDate = DateTime.Now,
+                    CreationDate = Convert.ToDateTime("2017-03-15T13:45:30"),
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
-                    EngagementManager ="Il Padrino",
-                    Description = "Add description here",
-                    Tags = new List<Tag>{ context.Tags.Find(".Net") }
+                    EngagementManager ="Napoleon bonaparte",
+                    Description = "Full-stack .Net developer with knowledge in everything.",
+                    Tags = new List<Tag>{ context.Tags.Find(".Net") },
+                    LastOpenedBy = manager.FindByEmail("Pmuser1@example.com"),
+                    LastOpenedDate = Convert.ToDateTime("2017-03-15T13:45:30")
                 },
-
-                 new Position
+                new Position
                 {
-                    Title = "Programador java",
-                    Owner = manager.FindByEmail("Pmuser2@example.com"),
-                    Area="IT",
+                    Id = 2,
+                    Title = "Project Manager",
+                    Owner = manager.FindByEmail("Tluser1@example.com"),
+                    Area="BPO",
+                    RGS="",
+                    Status = Status.Closed,
+                    CreationDate = Convert.ToDateTime("2017-03-22T09:43:30"),
+                    PortfolioManager = manager.FindByEmail("Pmuser2@example.com"),
+                    EngagementManager ="Alejandro Magno",
+                    Description = "Project manager with Mode-God on",
+                    Tags = new List<Tag>{ context.Tags.Find("PMP") },
+                    LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
+                    LastOpenedDate = Convert.ToDateTime("2017-03-22T09:43:30"),
+                    LastClosedBy = manager.FindByEmail("Pmuser1@example.com"),
+                    LastClosedDate = Convert.ToDateTime("2017-03-30T18:01:30")
+                },
+                new Position
+                {
+                    Id = 3,
+                    Title = "Java Programmer",
+                    Owner = manager.FindByEmail("Tluser1@example.com"),
+                    Area="BPO",
                     RGS="",
                     Status = Status.Canceled,
-                    CreationDate = DateTime.Now.AddDays(-30),
-                    EngagementManager ="El PropioEM",
+                    CreationDate = Convert.ToDateTime("2017-02-15T11:13:30"),
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
-                    Description = "Here is the description",
-                    Tags = new List<Tag>{ context.Tags.Find("Java") }
-                },
-
-                  new Position
-                {
-                    Title = "Project Manager",
-                    Owner = manager.FindByEmail("Pmuser1@example.com"),
-                    Area="IT",
-                    RGS="",
-                    Status = Status.Closed,
-                    CreationDate = DateTime.Now.AddDays(-6),
-                    EngagementManager ="La Carito",
-                    PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
-                    Description = "Hear iz de thescriction",
-                    Tags = new List<Tag>{ context.Tags.Find(".Net") }
-                },
-
-                  new Position
-                {
-                    Title = "Programador php",
-                    Owner = manager.FindByEmail("Tluser1@example.com"),
-                    Area="IT",
-                    RGS="",
-                    Status = Status.Removed,
-                    CreationDate = DateTime.Now.AddDays(-1),
-                    EngagementManager ="Il Padrino",
-                    PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
-                    Description = "Add description here",
-                    Tags = new List<Tag>{ context.Tags.Find("SQL") }
-                },
-
-                  new Position
-                {
-                    Title = "Programador SQL",
-                    Owner = manager.FindByEmail("Tluser1@example.com"),
-                    Area="IT",
-                    RGS="",
-                    Status = Status.Open,
-                    CreationDate = DateTime.Now.AddDays(-3),
-                    PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
-                    EngagementManager ="Engagement Manager",
-                    Description = "Add description here",
-                    Tags = new List<Tag>{ context.Tags.Find("SQL") }
-                },
-
-                  new Position
-                {
-                    Title = "Programador .Net",
-                    Owner = manager.FindByEmail("Pmuser1@example.com"),
-                    Area="IT",
-                    RGS="",
-                    Status = Status.Closed,
-                    CreationDate = DateTime.Now.AddDays(-4),
-                    PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
-                    EngagementManager ="Il Padrino",
-                    Description = "Add description here",
-                    Tags = new List<Tag>{ context.Tags.Find(".Net") }
-                },
-
-                    new Position
-                {
-                    Title = "Programador Java",
-                    Owner = manager.FindByEmail("Pmuser1@example.com"),
-                    Area="IT",
-                    RGS="",
-                    Status = Status.Removed,
-                    CreationDate = DateTime.Now,
-                    EngagementManager ="Claudia",
-                    PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
-                    Description = "Add description here",
-                    Tags = new List<Tag>{ context.Tags.Find(".Net") }
+                    EngagementManager ="Anibal Barca",
+                    Description = "Java programmer. Not Javascript!!!!",
+                    Tags = new List<Tag>{ context.Tags.Find("Java") },
+                    LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
+                    LastOpenedDate = Convert.ToDateTime("2017-02-15T11:13:30"),
+                    LastCancelledBy = manager.FindByEmail("Tluser1@example.com"),
+                    LastCancelledDate = Convert.ToDateTime("2017-02-22T13:58:30")
                 },
             };
             positions.ForEach(r => context.Positions.AddOrUpdate(p => p.Id, r));
@@ -270,57 +226,45 @@ namespace Talento.Core.Migrations
                 new PositionLog
                 {
                     Action = Entities.Action.Create,
-                    PreviousStatus = Status.Closed,
                     ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Admin@example.com"),
+                    User = manager.FindByEmail("Pmuser1@example.com"),
                     Position = context.Positions.Find(1),
-                    Date = DateTime.Today
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Delete,
-                    PreviousStatus = Status.Open,
-                    ActualStatus = Status.Removed,
-                    User = manager.FindByEmail("Admin@example.com"),
-                    Position = context.Positions.Find(1),
-                    Date = DateTime.Today.AddMinutes(10)
+                    Date = Convert.ToDateTime("2017-03-15T13:45:30")
                 },
                 new PositionLog
                 {
                     Action = Entities.Action.Create,
-                    PreviousStatus = Status.Closed,
                     ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
+                    User = manager.FindByEmail("Tluser1@example.com"),
                     Position = context.Positions.Find(2),
-                    Date = DateTime.Today.AddMinutes(60)
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.ChangeStatus,
-                    PreviousStatus = Status.Open,
-                    ActualStatus = Status.Canceled,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(2),
-                    Date = DateTime.Today.AddMinutes(90)
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Create,
-                    PreviousStatus = Status.Closed,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser2@example.com"),
-                    Position = context.Positions.Find(3),
-                    Date = DateTime.Today.AddMinutes(90)
+                    Date = Convert.ToDateTime("2017-03-22T09:43:30")
                 },
                 new PositionLog
                 {
                     Action = Entities.Action.Edit,
                     PreviousStatus = Status.Open,
+                    ActualStatus = Status.Closed,
+                    User = manager.FindByEmail("Pmuser1@example.com"),
+                    Position = context.Positions.Find(2),
+                    Date = Convert.ToDateTime("2017-03-30T18:01:30")
+                },
+                new PositionLog
+                {
+                    Action = Entities.Action.Create,
                     ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser2@example.com"),
+                    User = manager.FindByEmail("Tluser1@example.com"),
                     Position = context.Positions.Find(3),
-                    Date = DateTime.Today.AddMinutes(100)
-                }
+                    Date = Convert.ToDateTime("2017-02-15T11:13:30"),
+                },
+                new PositionLog
+                {
+                    Action = Entities.Action.Edit,
+                    PreviousStatus = Status.Open,
+                    ActualStatus = Status.Canceled,
+                    User = manager.FindByEmail("Tluser1@example.com"),
+                    Position = context.Positions.Find(3),
+                    Date = Convert.ToDateTime("2017-02-22T13:58:30")
+                },
             };
             positionLogs.ForEach(r => context.PositionLogs.AddOrUpdate(p => p.Id, r));
             context.SaveChanges();
