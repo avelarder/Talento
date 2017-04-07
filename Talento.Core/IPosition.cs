@@ -11,7 +11,7 @@ namespace Talento.Core
     {
         Position Get(int Id);
         Task<List<Position>> GetAll();
-        void Create(Position log);
+        void Create(Position log,string EmailModifier);
         bool Edit(Position log, string EmailModifier);
         void Delete(int Id, string uId);
         ApplicationUser SearchPM(string userName);

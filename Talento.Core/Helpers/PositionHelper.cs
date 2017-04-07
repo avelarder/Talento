@@ -19,10 +19,26 @@ namespace Talento.Core.Helpers
 
         }
 
-        public void Create(Position position)
+        public void Create(Position position, string EmailModifier)
         {
+            ApplicationUser User = Db.Users.Single(u => u.Email.Equals(EmailModifier));
+
             Db.Positions.Add(position);
             Db.SaveChanges();
+
+            PositionLog CreateLog = new PositionLog()
+            {
+                Action = Entities.Action.Create,
+                ActualStatus = position.Status,
+                PreviousStatus = 0,
+                Date = DateTime.Now,
+                ApplicationUser_Id = User.Id,
+                Position_Id = position.Id,
+                Position = position,
+                User = User,
+
+            };
+            PositionLoghelper.Create(CreateLog);
 
         }
 
@@ -67,21 +83,39 @@ namespace Talento.Core.Helpers
                 position.Owner = position.Owner;
                 position.PortfolioManager = position.PortfolioManager;
 
-                Db.SaveChanges();
-                //I create the log containing the pertinent information
-                //PositionLog CreateLog = new PositionLog()
-                //{
-                //    Action = Entities.Action.Edit,
-                //    ActualStatus = log.Status,
-                //    PreviousStatus = previousStatus,
-                //    Date = DateTime.Now,
-                //    ApplicationUser_Id = User.Id,
-                //    Position_Id = position.Id,
-                //    Position = position,
-                //    User = User,
+                switch (position.Status = log.Status)
+                {
+                    case Status.Canceled:
+                        position.LastCancelledDate = DateTime.Now;
+                        position.LastCancelledBy = User;
+                        break;
+                    case Status.Open:
+                        position.LastOpenedDate = DateTime.Now;
+                        position.LastOpenedBy = User;
+                        break;
+                    case Status.Closed:
+                        position.LastClosedDate = DateTime.Now;
+                        position.LastClosedBy = User;
+                        break;
 
-                //};
-                //PositionLoghelper.Create(CreateLog);
+                }
+
+                Db.SaveChanges();
+
+                //I create the log containing the pertinent information
+                PositionLog CreateLog = new PositionLog()
+                {
+                    Action = Entities.Action.Edit,
+                    ActualStatus = log.Status,
+                    PreviousStatus = previousStatus,
+                    Date = DateTime.Now,
+                    ApplicationUser_Id = User.Id,
+                    Position_Id = position.Id,
+                    Position = position,
+                    User = User,
+
+                };
+                PositionLoghelper.Create(CreateLog);
 
             }
             catch (Exception e)
@@ -93,12 +127,12 @@ namespace Talento.Core.Helpers
 
         public Position Get(int Id)
         {
-            var position =  Db.Positions.Single(x => x.Id == Id);
+            var position = Db.Positions.Single(x => x.Id == Id);
             //position.Tags = Tags.GetByPositionId(position.Id);
 
             return position;
         }
-        
+
         public async Task<List<Position>> GetAll()
         {
             return await Db.Positions.ToListAsync();
@@ -106,17 +140,22 @@ namespace Talento.Core.Helpers
 
         public ApplicationUser SearchPM(string userName)
         {
-
-            var PM = Db.Roles.Single(r => r.Name == "PM");
-            if (userName != null)
+            try
             {
-                var usuario = Db.Users.Single(x => x.UserName == userName);
-                if (usuario.Roles.Where(x => x.RoleId == PM.Id).Count() > 0)
+                var PM = Db.Roles.Single(r => r.Name == "PM");
+                if (userName != null)
                 {
-                    return usuario;
+                    var usuario = Db.Users.Single(x => x.UserName == userName);
+                    if (usuario.Roles.Where(x => x.RoleId == PM.Id).Count() > 0)
+                    {
+                        return usuario;
+                    }
                 }
             }
-
+            catch (Exception)
+            {
+                return null;
+            }
             return null;
         }
 

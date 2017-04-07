@@ -19,7 +19,6 @@ namespace Talento.Controllers
     public class PositionsController : Controller
     {
         Core.IPosition PositionHelper;
-        ApplicationUser appUser;
         public PositionsController(Core.IPosition positionHelper)
         {
 
@@ -106,11 +105,12 @@ namespace Talento.Controllers
                     RGS = position.RGS,
                     Status = Status.Open,
                     PortfolioManager_Id = position.EmailPM,
-                    ApplicationUser_Id = appUser.Id
-                                                            
+                    ApplicationUser_Id= User.Identity.Name,
+                    LastOpenedBy = PositionHelper.GetUser(user),
+                    LastOpenedDate = DateTime.Now
                 };
                 //PositionHelper.Create(AutoMapper.Mapper.Map<Position>(pos));
-                PositionHelper.Create(pos);
+                PositionHelper.Create(pos, User.Identity.Name);
                 return RedirectToAction("Index","Dashboard");
 
             }
@@ -172,7 +172,7 @@ namespace Talento.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(await PositionHelper.Get(id.Value));
+            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
             if (position == null) 
             {
                 return HttpNotFound();
