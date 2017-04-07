@@ -37,16 +37,16 @@ namespace Talento.Tests.Controllers
             Position posParam = new Position()
             {
                 Id = 1,
-                Area = "fafaf",
+                Area = "IT",
                 CreationDate = DateTime.MaxValue,
-                Description = "lala",
+                Description = ".Net Developer",
                 Status = Status.Open,
-                EngagementManager = "lala",
+                EngagementManager = "Arthur",
                 PortfolioManager = posPoco.PortfolioManager,
                 Owner = appUser,
-                RGS = "kjh",
+                RGS = "Unknown101",
                 Tags = null,
-                Title = ""
+                Title = "Need a Developer to do stuff"
             };
 
             position.Setup(x => x.Get(1)).Returns((posParam));
@@ -84,16 +84,16 @@ namespace Talento.Tests.Controllers
             Position posParam = new Position()
             {
                 Id = 1,
-                Area = "fafaf",
+                Area = "IT",
                 CreationDate = DateTime.MaxValue,
-                Description = "lala",
+                Description = ".Net Developer",
                 Status = Status.Open,
-                EngagementManager = "lala",
+                EngagementManager = "Arthur",
                 PortfolioManager = posPoco.PortfolioManager,
                 Owner = appUser,
-                RGS = "kjh",
+                RGS = "Unknown101",
                 Tags = null,
-                Title = ""
+                Title = "Need a Developer to do stuff"
             };
 
             // create controller
@@ -126,16 +126,16 @@ namespace Talento.Tests.Controllers
             Position posParam = new Position()
             {
                 Id = 1,
-                Area = "fafaf",
+                Area = "IT",
                 CreationDate = DateTime.MaxValue,
-                Description = "lala",
+                Description = ".Net Developer",
                 Status = Status.Open,
-                EngagementManager = "lala",
+                EngagementManager = "Arthur",
                 PortfolioManager = posPoco.PortfolioManager,
                 Owner = appUser,
-                RGS = "kjh",
+                RGS = "Unknown101",
                 Tags = null,
-                Title = ""
+                Title = "Need a Developer to do stuff"
             };
 
             // create controller
@@ -168,16 +168,16 @@ namespace Talento.Tests.Controllers
             Position posParam = new Position()
             {
                 Id = 1,
-                Area = "fafaf",
+                Area = "IT",
                 CreationDate = DateTime.MaxValue,
-                Description = "lala",
-                Status = Status.Removed,
-                EngagementManager = "lala",
+                Description = ".Net Developer",
+                Status = Status.Open,
+                EngagementManager = "Arthur",
                 PortfolioManager = posPoco.PortfolioManager,
                 Owner = appUser,
-                RGS = "kjh",
+                RGS = "Unknown101",
                 Tags = null,
-                Title = ""
+                Title = "Need a Developer to do stuff"
             };
 
             // create controller
@@ -190,7 +190,7 @@ namespace Talento.Tests.Controllers
             Assert.IsTrue(((HttpStatusCodeResult)result.Result).StatusCode == 404);
         }
 
-        public async void DeleteTest()
+        public void DeleteTest()
         {
             var claim = new Claim("test", "UserTestId");
             var mockIdentity = Mock.Of<ClaimsIdentity>(id => id.FindFirst(It.IsAny<string>()) == claim);
@@ -208,20 +208,20 @@ namespace Talento.Tests.Controllers
             Position posParam = new Position()
             {
                 Id = 1,
-                Area = "fafaf",
+                Area = "IT",
                 CreationDate = DateTime.MaxValue,
-                Description = "lala",
+                Description = ".Net Developer",
                 Status = Status.Open,
-                EngagementManager = "lala",
+                EngagementManager = "Arthur",
                 PortfolioManager = posPoco.PortfolioManager,
                 Owner = appUser,
-                RGS = "kjh",
+                RGS = "Unknown101",
                 Tags = null,
-                Title = ""
+                Title = "Need a Developer to do stuff"
             };
 
-            position.Setup(x => x.Get(1)).Returns(Task.FromResult(posParam));
-            var result = await controller.Delete(posParam.Id);
+            position.Setup(x => x.Get(1)).Returns(posParam);
+            var result = controller.Delete(posParam.Id);
 
             Assert.IsNotNull(result);
             Assert.IsNotInstanceOfType(result, typeof(RedirectToRouteResult));

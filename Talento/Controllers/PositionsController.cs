@@ -166,13 +166,13 @@ namespace Talento.Controllers
 
         // GET: Positions/Delete/5
         [Authorize(Roles = "PM, TL")]
-        public async Task<ActionResult> Delete(int? id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(await PositionHelper.Get(id.Value));
+            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
             if (position == null) 
             {
                 return HttpNotFound();
