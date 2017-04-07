@@ -9,6 +9,7 @@ using Talento.Controllers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Talento.Models;
+using System.Security.Claims;
 
 namespace Talento.Tests.Controllers
 {
@@ -62,5 +63,43 @@ namespace Talento.Tests.Controllers
             //Assert.IsTrue(viewmodel.TotalCount == 1);
             //Assert.IsTrue(viewmodel.Subset is List<PositionModel>);
         }
+
+        public async void DeleteTest()
+        {
+            var claim = new Claim("test", "UserTestId");
+            var mockIdentity = Mock.Of<ClaimsIdentity>(id => id.FindFirst(It.IsAny<string>()) == claim);
+            Mock<IPosition> positionhelper = new Mock<IPosition>();
+            var mockContext = Mock.Of<ControllerContext>(c => c.HttpContext.User == mockIdentity);
+            PositionsController controller = new PositionsController(positionhelper.Object)
+            {
+                ControllerContext = mockContext
+            };
+
+            ApplicationUser appUser = new ApplicationUser();
+            Position posPoco = new Position();
+            posPoco.PortfolioManager = appUser;
+            Mock<IPosition> position = new Mock<IPosition>();
+            Position posParam = new Position()
+            {
+                Id = 1,
+                Area = "fafaf",
+                CreationDate = DateTime.MaxValue,
+                Description = "lala",
+                Status = Status.Open,
+                EngagementManager = "lala",
+                PortfolioManager = posPoco.PortfolioManager,
+                Owner = appUser,
+                RGS = "kjh",
+                Tags = null,
+                Title = ""
+            };
+
+            position.Setup(x => x.Get(1)).Returns(Task.FromResult(posParam));
+            var result = await controller.Delete(posParam.Id);
+
+            Assert.IsNotNull(result);
+            Assert.IsNotInstanceOfType(result, typeof(RedirectToRouteResult));
+        }
+
     }
 }
