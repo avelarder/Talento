@@ -69,6 +69,9 @@ namespace Talento.Controllers
 
         public ActionResult Create()
         {
+            string role = "basic";
+            ViewData["Role"] = role;
+            ViewData["RoleClass"] = role + "-role";
             return View();
         }
 
@@ -79,18 +82,17 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreatePositionViewModel position)
         {
+            //Search EmailPM in SearchPM Helper
             ApplicationUser pmUser = PositionHelper.SearchPM(position.EmailPM);
 
+            //If EmailPM is null return AddModelError
             if (pmUser == null)
             {
                 ModelState.AddModelError(string.Empty, "PM is not valid");
-                
             }
 
-            var user = User.Identity.GetUserId();
-            //ApplicationDbContext db = new ApplicationDbContext();
-            //ApplicationUser appUser1 = db.Users.FirstOrDefault(x => x.Id == user);
-
+            string user = User.Identity.GetUserId();
+            
             if (ModelState.IsValid)
             {
                 Position pos = new Position()
@@ -106,16 +108,13 @@ namespace Talento.Controllers
                     Status = Status.Open,
                     PortfolioManager_Id = position.EmailPM,
                     ApplicationUser_Id = appUser.Id
-                                                            
                 };
-                //PositionHelper.Create(AutoMapper.Mapper.Map<Position>(pos));
+                
                 PositionHelper.Create(pos);
                 return RedirectToAction("Index","Dashboard");
-
             }
 
             return View(position);
-
         }
 
         // GET: Positions/Edit/5
