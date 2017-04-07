@@ -220,8 +220,8 @@ namespace Talento.Tests.Controllers
                 Title = ""
             };
 
-            //position.Setup(x => x.Get(1)).Returns(Task.FromResult(posParam));
-            var result = controller.Delete(posParam.Id);
+            position.Setup(x => x.Get(1)).Returns((posParam));
+            var result = await controller.Delete(posParam.Id);
 
             Assert.IsNotNull(result);
             Assert.IsNotInstanceOfType(result, typeof(RedirectToRouteResult));

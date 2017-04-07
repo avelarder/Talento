@@ -104,12 +104,14 @@ namespace Talento.Controllers
                     PortfolioManager = pmUser,
                     RGS = position.RGS,
                     Status = Status.Open,
+                    PortfolioManager_Id = position.EmailPM,
+                    ApplicationUser_Id= User.Identity.Name,
                     LastOpenedBy = PositionHelper.GetUser(user),
                     LastOpenedDate = DateTime.Now
                 };
                 //PositionHelper.Create(AutoMapper.Mapper.Map<Position>(pos));
-                PositionHelper.Create(pos);
-                return RedirectToAction("Index", "Dashboard");
+                PositionHelper.Create(pos, User.Identity.Name);
+                return RedirectToAction("Index","Dashboard");
 
             }
 
@@ -172,7 +174,7 @@ namespace Talento.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
-            if (position == null)
+            if (position == null) 
             {
                 return HttpNotFound();
             }
