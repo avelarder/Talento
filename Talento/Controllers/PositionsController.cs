@@ -48,8 +48,8 @@ namespace Talento.Controllers
             return View(await PositionHelper.GetAll());
         }
 
-        [Authorize(Roles = "PM, TL, TAG, RMG")]
         // GET: Positions/Details/5
+        [Authorize(Roles = "PM, TL, TAG, RMG")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
