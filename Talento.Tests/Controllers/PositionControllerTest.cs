@@ -190,7 +190,7 @@ namespace Talento.Tests.Controllers
             Assert.IsTrue(((HttpStatusCodeResult)result.Result).StatusCode == 404);
         }
 
-        public async void DeleteTest()
+        public void DeleteTest()
         {
             var claim = new Claim("test", "UserTestId");
             var mockIdentity = Mock.Of<ClaimsIdentity>(id => id.FindFirst(It.IsAny<string>()) == claim);

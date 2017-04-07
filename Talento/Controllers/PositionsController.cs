@@ -15,11 +15,10 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Talento.Controllers
 {
-    [Authorize(Roles ="PM, TAG, RMG, TM")]
+    [Authorize(Roles = "PM, TAG, RMG, TM")]
     public class PositionsController : Controller
     {
         Core.IPosition PositionHelper;
-        ApplicationUser appUser;
         public PositionsController(Core.IPosition positionHelper)
         {
 
@@ -30,7 +29,7 @@ namespace Talento.Controllers
                     .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id))
                 ;
                 cfg.CreateMap<Position, EditPositionViewModel>();
-                cfg.CreateMap<EditPositionViewModel,Position>();
+                cfg.CreateMap<EditPositionViewModel, Position>();
 
                 /*
                This could be useful in future in case of needing to edit the owner user account. It is not yet requested in the Edit user story 295
@@ -92,7 +91,7 @@ namespace Talento.Controllers
             if (pmUser == null)
             {
                 ModelState.AddModelError(string.Empty, "PM is not valid");
-                
+
             }
 
             var user = User.Identity.GetUserId();
@@ -113,11 +112,12 @@ namespace Talento.Controllers
                     RGS = position.RGS,
                     Status = Status.Open,
                     PortfolioManager_Id = position.EmailPM,
-                    ApplicationUser_Id = appUser.Id
-                                                            
+                    ApplicationUser_Id= User.Identity.Name,
+                    LastOpenedBy = PositionHelper.GetUser(user),
+                    LastOpenedDate = DateTime.Now
                 };
                 //PositionHelper.Create(AutoMapper.Mapper.Map<Position>(pos));
-                PositionHelper.Create(pos);
+                PositionHelper.Create(pos, User.Identity.Name);
                 return RedirectToAction("Index","Dashboard");
 
             }
@@ -177,7 +177,7 @@ namespace Talento.Controllers
 
         // GET: Positions/Delete/5
         [Authorize(Roles = "PM, TL")]
-        public async Task<ActionResult> Delete(int? id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -188,14 +188,14 @@ namespace Talento.Controllers
             {
                 return HttpNotFound();
             }
-            if(position.Status == Status.Removed)
+            if (position.Status == Status.Removed)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
 
             string uId = User.Identity.GetUserId();
             PositionHelper.Delete(id.Value, uId);
-            return RedirectToAction("Index","Dashboard");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         public virtual bool IsStateValid()
