@@ -16,6 +16,7 @@ using System.Net.Mail;
 using System.Diagnostics;
 using Talento.Entities;
 using Talento.Providers;
+using System.Web.Security;
 
 namespace Talento.Controllers
 {
@@ -170,10 +171,9 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
                 return RedirectToAction("Index", "Dashboard");
             }
 
-            var roleMngr = HttpContext.GetOwinContext().Get<CustomRoleProvider>();
             List<string> rolesName = new List<string>();
 
-            foreach (string rol in roleMngr.GetAllRoles())
+            foreach (string rol in Roles.GetAllRoles())
             {
                 if (rol != "Admin")
                 {
@@ -193,8 +193,7 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            var roleManager = HttpContext.GetOwinContext().Get<CustomRoleProvider>();
-            var roles = roleManager.GetAllRoles();
+            var roles = Roles.GetAllRoles();
             List<string> rolesName = new List<string>();
             foreach (var rol in roles)
             {

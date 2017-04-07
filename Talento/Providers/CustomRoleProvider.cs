@@ -40,7 +40,8 @@ namespace Talento.Providers
 
         public override string[] GetAllRoles()
         {
-            throw new NotImplementedException();
+            return (from r in DbContext.Roles
+                    select r.Name).ToArray();
         }
 
         public override string[] GetRolesForUser(string username)
