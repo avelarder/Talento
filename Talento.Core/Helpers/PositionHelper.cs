@@ -19,9 +19,9 @@ namespace Talento.Core.Helpers
 
         }
 
-        public void Create(Position log)
+        public void Create(Position position)
         {
-            Db.Positions.Add(log);
+            Db.Positions.Add(position);
             Db.SaveChanges();
 
         }
@@ -91,19 +91,14 @@ namespace Talento.Core.Helpers
             return true;
         }
 
-        public async Task<Position> Get(int Id)
+        public Position Get(int Id)
         {
-            try
-            {
-                var position = await Db.Positions.SingleAsync(x => x.Id == Id);
-                return position;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
+            var position =  Db.Positions.Single(x => x.Id == Id);
+            //position.Tags = Tags.GetByPositionId(position.Id);
 
+            return position;
+        }
+        
         public async Task<List<Position>> GetAll()
         {
             return await Db.Positions.ToListAsync();
