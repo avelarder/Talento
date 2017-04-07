@@ -15,7 +15,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Talento.Controllers
 {
-    [Authorize(Roles = "PM, TAG, RMG, TM")]
+    [Authorize(Roles = "PM, TAG, RMG, TL")]
     public class PositionsController : Controller
     {
         Core.IPosition PositionHelper;
