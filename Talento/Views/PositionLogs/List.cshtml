@@ -14,7 +14,7 @@ else
             <div class="log-item pmd-card pmd-card-default pmd-z-depth">
                 <div class="log-user"><i class="material-icons">face</i>@log.User.Email</div>
                 <div class="log-action pmd-z-depth @log.Action"><bold>@log.Action</bold></div>
-                <div class="log-status">
+                <div class="log-status @(log.PreviousStatus == 0 ? "full-width" : "")">
                     <div class="log-previous @log.PreviousStatus"><span>Previous: </span> <bold>@log.PreviousStatus</bold></div>
                     <div class="log-actual @log.ActualStatus"><span>Actual: </span><bold>@log.ActualStatus</bold></div>
                 </div>

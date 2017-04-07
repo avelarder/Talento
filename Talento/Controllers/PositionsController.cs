@@ -52,6 +52,10 @@ namespace Talento.Controllers
         [Authorize(Roles = "PM, TL, TAG, RMG")]
         public async Task<ActionResult> Details(int? id)
         {
+            string role = "basic";
+            ViewData["Role"] = role;
+            ViewData["RoleClass"] = role + "-role";
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -70,6 +74,9 @@ namespace Talento.Controllers
 
         public ActionResult Create()
         {
+            string role = "basic";
+            ViewData["Role"] = role;
+            ViewData["RoleClass"] = role + "-role";
             return View();
         }
 
@@ -123,6 +130,10 @@ namespace Talento.Controllers
         [Authorize(Roles = "PM, TL")]
         public ActionResult Edit(int id)
         {
+            string role = "basic";
+            ViewData["Role"] = role;
+            ViewData["RoleClass"] = role + "-role";
+
             try {
                 EditPositionViewModel position = AutoMapper.Mapper.Map<EditPositionViewModel>(PositionHelper.Get(id));
                 if (position == null)
@@ -172,7 +183,7 @@ namespace Talento.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(await PositionHelper.Get(id.Value));
+            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
             if (position == null) 
             {
                 return HttpNotFound();

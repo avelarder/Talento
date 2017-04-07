@@ -84,7 +84,7 @@ namespace Talento.Core.Helpers
                 //PositionLoghelper.Create(CreateLog);
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

@@ -34,9 +34,9 @@ namespace Talento.Tests.Controllers
             var result = controller.List(1);
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(ViewResult));
-            Assert.IsTrue(((ViewResult)result).Model is List<PositionLogViewModel>);
-            var viewModel = ((List<PositionLogViewModel>)(((ViewResult)result).Model));
+            Assert.IsInstanceOfType(result, typeof(PartialViewResult));
+            Assert.IsTrue(((PartialViewResult)result).Model is List<PositionLogViewModel>);
+            var viewModel = ((List<PositionLogViewModel>)(((PartialViewResult)result).Model));
             Assert.IsTrue(viewModel.Count == 1);
         }
 

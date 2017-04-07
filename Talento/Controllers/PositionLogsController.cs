@@ -43,7 +43,7 @@ namespace Talento.Controllers
                 var logs = AutoMapper.Mapper.Map<List<PositionLogViewModel>>(LogHelper.GetAll(Id).ToList());
                 ViewData["Count"] = logs.Count;
 
-                return View(logs);
+                return PartialView(logs);
             }
             catch (Exception)
             {
