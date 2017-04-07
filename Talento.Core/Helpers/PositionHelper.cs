@@ -113,26 +113,7 @@ namespace Talento.Core.Helpers
             return await Db.Positions.ToListAsync();
         }
 
-        public ApplicationUser SearchPM(string userName)
-        {
-
-            var PM = Db.Roles.Single(r => r.Name == "PM");
-            if (userName != null)
-            {
-                var usuario = Db.Users.Single(x => x.UserName == userName);
-                if (usuario.Roles.Where(x => x.RoleId == PM.Id).Count() > 0)
-                {
-                    return usuario;
-                }
-            }
-
-            return null;
-        }
-
-        public ApplicationUser GetUser(string user)
-        {
-           return Db.Users.Single(x => x.Id == user.ToString());
-        }
+        
 
     }
 }

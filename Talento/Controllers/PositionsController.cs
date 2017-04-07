@@ -19,9 +19,11 @@ namespace Talento.Controllers
     public class PositionsController : Controller
     {
         Core.IPosition PositionHelper;
+        Core.ICustomUser UserHelper;
         ApplicationUser appUser;
-        public PositionsController(Core.IPosition positionHelper)
+        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper)
         {
+            UserHelper = userHelper;
             PositionHelper = positionHelper;
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -82,8 +84,9 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreatePositionViewModel position)
         {
+
             //Search EmailPM in SearchPM Helper
-            ApplicationUser pmUser = PositionHelper.SearchPM(position.EmailPM);
+            ApplicationUser pmUser = UserHelper.SearchPM(position.EmailPM);
 
             //If EmailPM is null return AddModelError
             if (pmUser == null)
@@ -91,13 +94,13 @@ namespace Talento.Controllers
                 ModelState.AddModelError(string.Empty, "PM is not valid");
             }
 
-            string user = User.Identity.GetUserId();
+            string user = User.Identity.Name;
             
-            if (ModelState.IsValid)
+            if (IsStateValid())
             {
                 Position pos = new Position()
                 {
-                    Owner = PositionHelper.GetUser(user),
+                    Owner = UserHelper.GetUser(user),
                     Area = position.Area,
                     EngagementManager = position.EngagementManager,
                     Title = position.Title,
@@ -107,7 +110,7 @@ namespace Talento.Controllers
                     RGS = position.RGS,
                     Status = Status.Open,
                     PortfolioManager_Id = position.EmailPM,
-                    ApplicationUser_Id = appUser.Id
+                    ApplicationUser_Id = user
                 };
                 
                 PositionHelper.Create(pos);
@@ -141,6 +144,11 @@ namespace Talento.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The designated Position does not have a valid ID");
             }
+        }
+
+        public virtual bool IsStateValid()
+        {
+            return ModelState.IsValid;
         }
 
         // POST: Positions/Edit/5

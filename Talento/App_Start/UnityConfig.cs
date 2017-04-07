@@ -50,6 +50,7 @@ namespace Talento.App_Start
             container.RegisterType<AccountController>(new InjectionConstructor());
             container.RegisterType<IPosition, Core.Helpers.PositionHelper>();
             container.RegisterType<ITag, Core.Helpers.TagHelper>();
+            container.RegisterType<Core.ICustomUser, Core.Helpers.UserHelper>();
         }
     }
 }
