@@ -71,8 +71,8 @@ namespace Talento.Core.Helpers
                 case "Title":
                     query = query.OrderBy(p => p.Title);
                     break;
-                case "date_desc":
-                    query = query.OrderByDescending(p => p.CreationDate);
+                case "date_asc":
+                    query = query.OrderBy(p => p.CreationDate);
                     break;
                 case "Status":
                     query = query.OrderBy(p => p.Status);
@@ -200,7 +200,7 @@ namespace Talento.Core.Helpers
                     break;
 
                 default:  // Date ascending 
-                    query = query.OrderBy(p => p.CreationDate);
+                    query = query.OrderByDescending(p => p.CreationDate);
                     break;
             }
 

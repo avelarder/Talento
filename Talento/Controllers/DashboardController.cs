@@ -46,7 +46,7 @@ namespace Talento.Controllers
                 rawData = DashboardPagingHelper.GetBasicTable(sortOrder, FilterBy, currentFilter, searchString, page);
             }
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_desc" : ""; //Default date ascending
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_asc" : ""; //Default date descending
             ViewBag.TitleSortParm = sortOrder == "Title" ? "title_desc" : "Title";
             ViewBag.StatusSortParm = sortOrder == "Status" ? "status_desc" : "Status";
             ViewBag.IdSortParm = sortOrder == "Id" ? "id_desc" : "Id";
