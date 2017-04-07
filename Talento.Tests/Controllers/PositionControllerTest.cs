@@ -190,21 +190,24 @@ namespace Talento.Tests.Controllers
             Assert.IsTrue(((HttpStatusCodeResult)result.Result).StatusCode == 404);
         }
 
+        [TestMethod]
         public void DeleteTest()
         {
-            var claim = new Claim("test", "UserTestId");
-            var mockIdentity = Mock.Of<ClaimsIdentity>(id => id.FindFirst(It.IsAny<string>()) == claim);
+            ApplicationUser appUser = new ApplicationUser();
+            Position posPoco = new Position();
+            posPoco.PortfolioManager = appUser;
+
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
+            mockPrincipal.SetupGet(p => p.Identity.Name).Returns(mockPrincipal.Name);
             Mock<IPosition> positionhelper = new Mock<IPosition>();
-            var mockContext = Mock.Of<ControllerContext>(c => c.HttpContext.User == mockIdentity);
+            var mockContext = Mock.Of<ControllerContext>(c => c.HttpContext.User == mockPrincipal.Object);
             PositionsController controller = new PositionsController(positionhelper.Object)
             {
                 ControllerContext = mockContext
             };
-
-            ApplicationUser appUser = new ApplicationUser();
-            Position posPoco = new Position();
-            posPoco.PortfolioManager = appUser;
-            Mock<IPosition> position = new Mock<IPosition>();
+            
             Position posParam = new Position()
             {
                 Id = 1,
@@ -219,12 +222,12 @@ namespace Talento.Tests.Controllers
                 Tags = null,
                 Title = "Need a Developer to do stuff"
             };
-
-            position.Setup(x => x.Get(1)).Returns(posParam);
+            
+            positionhelper.Setup(x => x.Get(1)).Returns(posParam);
             var result = controller.Delete(posParam.Id);
 
             Assert.IsNotNull(result);
-            Assert.IsNotInstanceOfType(result, typeof(RedirectToRouteResult));
+            Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
         }
 
     }
