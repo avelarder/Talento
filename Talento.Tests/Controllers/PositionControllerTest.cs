@@ -99,7 +99,7 @@ namespace Talento.Tests.Controllers
                 EngagementManager = "EM",
                 RGS = "TestRGS",
                 Title = "TestTitle",
-                EmailPM = "test@test.com"                
+                EmailPM = "test@test.com"
             };
 
             var user = "test@test.com";
@@ -124,7 +124,10 @@ namespace Talento.Tests.Controllers
             
             var mController = new PositionsController(position.Object, mUser.Object);
             mController.ControllerContext = mockContext.Object;
+
             //mController.IsStateValid = () => { return true; };
+
+            mController.IsStateValid().Equals(true);
 
             var result = mController.Create(positionViewModel);
 
