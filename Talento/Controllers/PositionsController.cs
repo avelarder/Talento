@@ -19,9 +19,11 @@ namespace Talento.Controllers
     public class PositionsController : Controller
     {
         Core.IPosition PositionHelper;
-        public PositionsController(Core.IPosition positionHelper)
+        Core.ICustomUser UserHelper;
+        ApplicationUser appUser;
+        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper)
         {
-
+            UserHelper = userHelper;
             PositionHelper = positionHelper;
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -80,23 +82,24 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreatePositionViewModel position)
         {
-            ApplicationUser pmUser = PositionHelper.SearchPM(position.EmailPM);
 
+            //Search EmailPM in SearchPM Helper
+            ApplicationUser pmUser = UserHelper.SearchPM(position.EmailPM);
+
+            //If EmailPM is null return AddModelError
             if (pmUser == null)
             {
                 ModelState.AddModelError(string.Empty, "PM is not valid");
-
+                
             }
 
-            var user = User.Identity.GetUserId();
-            //ApplicationDbContext db = new ApplicationDbContext();
-            //ApplicationUser appUser1 = db.Users.FirstOrDefault(x => x.Id == user);
-
-            if (ModelState.IsValid)
+            string user = User.Identity.Name;
+            
+            if (IsStateValid())
             {
                 Position pos = new Position()
                 {
-                    Owner = PositionHelper.GetUser(user),
+                    Owner = UserHelper.GetUser(user),
                     Area = position.Area,
                     EngagementManager = position.EngagementManager,
                     Title = position.Title,
@@ -106,18 +109,14 @@ namespace Talento.Controllers
                     RGS = position.RGS,
                     Status = Status.Open,
                     PortfolioManager_Id = position.EmailPM,
-                    ApplicationUser_Id= User.Identity.Name,
-                    LastOpenedBy = PositionHelper.GetUser(user),
+                    ApplicationUser_Id = user,
+                    LastOpenedBy = UserHelper.GetUser(user),
                     LastOpenedDate = DateTime.Now
                 };
-                //PositionHelper.Create(AutoMapper.Mapper.Map<Position>(pos));
-                PositionHelper.Create(pos, User.Identity.Name);
                 return RedirectToAction("Index","Dashboard");
-
             }
 
             return View(position);
-
         }
 
         // GET: Positions/Edit/5
@@ -141,6 +140,11 @@ namespace Talento.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The designated Position does not have a valid ID");
             }
+        }
+
+        public virtual bool IsStateValid()
+        {
+            return ModelState.IsValid;
         }
 
         // POST: Positions/Edit/5
@@ -190,10 +194,6 @@ namespace Talento.Controllers
             return RedirectToAction("Index", "Dashboard");
         }
 
-        public virtual bool IsStateValid()
-        {
-            return this.ModelState.IsValid;
-        }
 
     }
 }

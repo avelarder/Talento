@@ -9,8 +9,6 @@ using Talento.Controllers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Talento.Models;
-using System.Security.Claims;
-using System.Net;
 
 namespace Talento.Tests.Controllers
 {
@@ -51,8 +49,12 @@ namespace Talento.Tests.Controllers
 
             position.Setup(x => x.Get(1)).Returns((posParam));
 
-            // create controller
-            PositionsController controller = new PositionsController(position.Object);
+            Mock<ICustomUser> mUser = new Mock<ICustomUser>();
+            mUser.Setup(u => u.SearchPM("")).Returns(new ApplicationUser());
+            mUser.Setup(p => p.SearchPM("test@test.com")).Returns(new ApplicationUser() { Email = "test@test.com", UserName = "test@test.com" });
+            mUser.Setup(p => p.GetUser("test@test.com")).Returns(new ApplicationUser() { Email = "test@test.com", UserName = "test@test.com" });
+
+            PositionsController controller = new PositionsController(position.Object, mUser.Object);
 
             var result = controller.Details(1);
 
@@ -81,6 +83,7 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
             Mock<IPosition> position = new Mock<IPosition>();
+            Mock<ICustomUser> user = new Mock<ICustomUser>();
             Position posParam = new Position()
             {
                 Id = 1,
@@ -97,7 +100,7 @@ namespace Talento.Tests.Controllers
             };
 
             // create controller
-            PositionsController posController = new PositionsController(position.Object);
+            PositionsController posController = new PositionsController(position.Object, user.Object);
 
             var result = posController.Details(-1);
             var httpStatusCodeResult = ((HttpStatusCodeResult)(((Task<ActionResult>)result).Result));
@@ -123,6 +126,7 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
             Mock<IPosition> position = new Mock<IPosition>();
+            Mock<ICustomUser> user = new Mock<ICustomUser>();
             Position posParam = new Position()
             {
                 Id = 1,
@@ -139,7 +143,7 @@ namespace Talento.Tests.Controllers
             };
 
             // create controller
-            PositionsController posController = new PositionsController(position.Object);
+            PositionsController posController = new PositionsController(position.Object, user.Object);
 
             var result = posController.Details(null);
             var httpStatusCodeResult = ((HttpStatusCodeResult)(((Task<ActionResult>)result).Result));
@@ -165,6 +169,7 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
             Mock<IPosition> position = new Mock<IPosition>();
+            Mock<ICustomUser> user = new Mock<ICustomUser>();
             Position posParam = new Position()
             {
                 Id = 1,
@@ -181,7 +186,7 @@ namespace Talento.Tests.Controllers
             };
 
             // create controller
-            PositionsController posController = new PositionsController(position.Object);
+            PositionsController posController = new PositionsController(position.Object,user.Object);
 
             var result = posController.Details(1);
             var httpStatusCodeResult = ((HttpStatusCodeResult)(((Task<ActionResult>)result).Result));
@@ -202,8 +207,9 @@ namespace Talento.Tests.Controllers
             mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
             mockPrincipal.SetupGet(p => p.Identity.Name).Returns(mockPrincipal.Name);
             Mock<IPosition> positionhelper = new Mock<IPosition>();
+            Mock<ICustomUser> userhelper = new Mock<ICustomUser>();
             var mockContext = Mock.Of<ControllerContext>(c => c.HttpContext.User == mockPrincipal.Object);
-            PositionsController controller = new PositionsController(positionhelper.Object)
+            PositionsController controller = new PositionsController(positionhelper.Object, userhelper.Object)
             {
                 ControllerContext = mockContext
             };
@@ -230,5 +236,72 @@ namespace Talento.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
         }
 
+        
+
+        [TestMethod]
+        public void CreateUsingPositionViewModel()
+        {
+            ApplicationUser appUser = new ApplicationUser();
+            Position posPoco = new Position();
+            posPoco.PortfolioManager = appUser;
+            var mIIdentity = new Mock<IIdentity>();
+            mIIdentity.Setup(p => p.Name).Returns("test@test.com");
+
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            mockPrincipal.Setup(p => p.IsInRole("PM")).Returns(true);
+            mockPrincipal.Setup(p => p.Identity).Returns(mIIdentity.Object);
+
+            var mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+
+            Mock<IPosition> position = new Mock<IPosition>();
+            Mock<ICustomUser> mUser= new Mock<ICustomUser>();
+            mUser.Setup(p => p.SearchPM("test@test.com")).Returns(new ApplicationUser() { Email = "test@test.com", UserName = "test@test.com" });
+            mUser.Setup(p => p.GetUser("test@test.com")).Returns(new ApplicationUser() { Email = "test@test.com", UserName = "test@test.com" });
+            var positionViewModel = new CreatePositionViewModel()
+            {
+                Area = "TestArea",
+                Description = "TestDescription",
+                EngagementManager = "EM",
+                RGS = "TestRGS",
+                Title = "TestTitle",
+                EmailPM = "test@test.com"
+            };
+
+            var user = "test@test.com";
+            appUser.UserName = user;
+
+            Position positionCreate = new Position()
+            {
+                Owner = appUser,
+                Id = 1,
+                Area = positionViewModel.Area,
+                CreationDate = DateTime.MaxValue,
+                Description = positionViewModel.Description,
+                Status = Status.Open,
+                EngagementManager = positionViewModel.Description,
+                //PortfolioManager = user,
+                RGS = positionViewModel.RGS,
+                Tags = null,
+                Title = positionViewModel.Title
+            };
+            
+            position.Setup(x => x.Create(positionCreate,appUser.UserName));
+            
+            var mController = new PositionsController(position.Object, mUser.Object);
+            mController.ControllerContext = mockContext.Object;
+
+            //mController.IsStateValid = () => { return true; };
+
+            mController.IsStateValid().Equals(true);
+
+            var result = mController.Create(positionViewModel);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, (typeof(RedirectToRouteResult)));
+        }
+       
     }
 }

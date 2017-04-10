@@ -14,14 +14,15 @@
             </a>
             <div class="pmd-dropdown-menu-container">
                 <ul class="dropdown-menu">
-                    <li><a href="@Url.Action("Index","Dashboard")">Home</a></li>
+                    <li><a href="@Url.Action("Index", "Dashboard")">Home</a></li>
+                    <li><a href="#">Settings</a></li>
                     <li><a href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
                 </ul>
             </div>
         </li>
-        @if(ViewData["Role"] == "basic") { 
+        @if(ViewData["Role"].ToString() == "basic") { 
         <li>
-            <a class="pmd-ripple-effect" href="@Url.Action("Create","Positions")">
+            <a class="pmd-ripple-effect" href="@Url.Action("Create", "Positions")">
                 <i class="material-icons pmd-sm">note_add</i>
                 <span class="media-body">Create new Position</span>
             </a>
@@ -34,7 +35,7 @@
                 <div class="media-right media-bottom">
                     <i class="dic-more-vert dic"></i>
                 </div>
-            </a>
+            </a>    
             <div class="pmd-dropdown-menu-container">
                 <ul class="dropdown-menu">
                     <li><a href="#">Page 1</a></li>
