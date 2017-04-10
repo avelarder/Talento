@@ -50,6 +50,7 @@ namespace Talento.Tests.Controllers
             position.Setup(x => x.Get(1)).Returns((posParam));
 
             Mock<ICustomUser> mUser = new Mock<ICustomUser>();
+            mUser.Setup(u => u.SearchPM("")).Returns(new ApplicationUser());
             mUser.Setup(p => p.SearchPM("test@test.com")).Returns(new ApplicationUser() { Email = "test@test.com", UserName = "test@test.com" });
             mUser.Setup(p => p.GetUser("test@test.com")).Returns(new ApplicationUser() { Email = "test@test.com", UserName = "test@test.com" });
 
@@ -82,6 +83,7 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
             Mock<IPosition> position = new Mock<IPosition>();
+            Mock<ICustomUser> user = new Mock<ICustomUser>();
             Position posParam = new Position()
             {
                 Id = 1,
@@ -98,7 +100,7 @@ namespace Talento.Tests.Controllers
             };
 
             // create controller
-            PositionsController posController = new PositionsController(position.Object);
+            PositionsController posController = new PositionsController(position.Object, user.Object);
 
             var result = posController.Details(-1);
             var httpStatusCodeResult = ((HttpStatusCodeResult)(((Task<ActionResult>)result).Result));
@@ -124,6 +126,7 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
             Mock<IPosition> position = new Mock<IPosition>();
+            Mock<ICustomUser> user = new Mock<ICustomUser>();
             Position posParam = new Position()
             {
                 Id = 1,
@@ -140,7 +143,7 @@ namespace Talento.Tests.Controllers
             };
 
             // create controller
-            PositionsController posController = new PositionsController(position.Object);
+            PositionsController posController = new PositionsController(position.Object, user.Object);
 
             var result = posController.Details(null);
             var httpStatusCodeResult = ((HttpStatusCodeResult)(((Task<ActionResult>)result).Result));
@@ -166,6 +169,7 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
             Mock<IPosition> position = new Mock<IPosition>();
+            Mock<ICustomUser> user = new Mock<ICustomUser>();
             Position posParam = new Position()
             {
                 Id = 1,
@@ -182,7 +186,7 @@ namespace Talento.Tests.Controllers
             };
 
             // create controller
-            PositionsController posController = new PositionsController(position.Object);
+            PositionsController posController = new PositionsController(position.Object,user.Object);
 
             var result = posController.Details(1);
             var httpStatusCodeResult = ((HttpStatusCodeResult)(((Task<ActionResult>)result).Result));
@@ -203,8 +207,9 @@ namespace Talento.Tests.Controllers
             mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
             mockPrincipal.SetupGet(p => p.Identity.Name).Returns(mockPrincipal.Name);
             Mock<IPosition> positionhelper = new Mock<IPosition>();
+            Mock<ICustomUser> userhelper = new Mock<ICustomUser>();
             var mockContext = Mock.Of<ControllerContext>(c => c.HttpContext.User == mockPrincipal.Object);
-            PositionsController controller = new PositionsController(positionhelper.Object)
+            PositionsController controller = new PositionsController(positionhelper.Object, userhelper.Object)
             {
                 ControllerContext = mockContext
             };
@@ -283,7 +288,7 @@ namespace Talento.Tests.Controllers
                 Title = positionViewModel.Title
             };
             
-            position.Setup(x => x.Create(positionCreate));
+            position.Setup(x => x.Create(positionCreate,appUser.UserName));
             
             var mController = new PositionsController(position.Object, mUser.Object);
             mController.ControllerContext = mockContext.Object;

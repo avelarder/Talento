@@ -110,7 +110,7 @@ namespace Talento.Controllers
                     Status = Status.Open,
                     PortfolioManager_Id = position.EmailPM,
                     ApplicationUser_Id = user,
-                    LastOpenedBy = PositionHelper.GetUser(user),
+                    LastOpenedBy = UserHelper.GetUser(user),
                     LastOpenedDate = DateTime.Now
                 };
                 return RedirectToAction("Index","Dashboard");
@@ -194,10 +194,6 @@ namespace Talento.Controllers
             return RedirectToAction("Index", "Dashboard");
         }
 
-        public virtual bool IsStateValid()
-        {
-            return this.ModelState.IsValid;
-        }
 
     }
 }
