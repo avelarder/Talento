@@ -59,9 +59,11 @@
     <Compile Include="BaseHelper.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
     <Compile Include="Helpers\DasboardPagingHelper.cs" />
+    <Compile Include="IUser.cs" />
     <Compile Include="Helpers\PositionHelper.cs" />
     <Compile Include="Helpers\PositionLogHelper.cs" />
     <Compile Include="Helpers\TagHelper.cs" />
+    <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="ICustomPagingList.cs" />
     <Compile Include="IPositionLog.cs" />
     <Compile Include="IPosition.cs" />
