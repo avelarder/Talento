@@ -69,7 +69,7 @@ namespace Talento.Controllers
                     case Status.Closed:
                         item.OpenDays = (item.LastClosedDate - item.LastOpenedDate).Days;
                         break;
-                    case Status.Canceled:
+                    case Status.Cancelled:
                         item.OpenDays = (item.LastCancelledDate - item.LastOpenedDate).Days;
                         break;
                 }

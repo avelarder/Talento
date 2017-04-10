@@ -60,5 +60,15 @@ namespace Talento.Core.Data
 
         public virtual System.Data.Entity.DbSet<PositionLog> PositionLogs { get; set; }
 
+        public virtual System.Data.Entity.DbSet<Candidate> Candidates { get; set; }
+
+        public virtual System.Data.Entity.DbSet<TcsCandidate> TcsCandidates { get; set; }
+
+        public virtual System.Data.Entity.DbSet<NonTcsCandidate> NonTcsCandidates { get; set; }
+
+        public virtual System.Data.Entity.DbSet<PositionsCandidates> PositionsCandidates { get; set; }
+
+        public virtual System.Data.Entity.DbSet<FileBlob> FileBlobs { get; set; }
+
     }
 }

@@ -29,7 +29,7 @@ namespace Talento.Entities
         [Required(ErrorMessage = "Area is required")]
         public string Area { get; set; }
 
-        [StringLength(20, ErrorMessage = "Enagagement Manager must have 20 characters maximum")]
+        [StringLength(50, ErrorMessage = "Enagagement Manager must have 20 characters maximum")]
         [Required(ErrorMessage = "Engagement Manager is required")]
         public string EngagementManager { get; set; }
 
@@ -74,13 +74,25 @@ namespace Talento.Entities
         public DateTime? LastCancelledDate { get; set; }
 
         public DateTime? LastClosedDate { get; set; }
+        
+        [Required(ErrorMessage = "OpenStatus is required")]
+        [DefaultValue("Open")]
+        public OpenStatus OpenStatus { get; set; }
     }
 
     public enum Status
     {
-        Canceled = 1,
+        Cancelled = 1,
         Open = 2,
         Removed = 3,
         Closed = 4
+    }
+
+    public enum OpenStatus
+    {
+        Screening = 1,
+        Interviewing = 2,
+        Offered = 3
+        
     }
 }

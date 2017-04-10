@@ -85,7 +85,7 @@ namespace Talento.Core.Helpers
 
                 switch (position.Status = log.Status)
                 {
-                    case Status.Canceled:
+                    case Status.Cancelled:
                         position.LastCancelledDate = DateTime.Now;
                         position.LastCancelledBy = User;
                         break;
