@@ -1,4 +1,7 @@
-﻿@using Microsoft.AspNet.Identity
+﻿@{
+    this.ViewContext.HttpContext.Items["RoleClass"] = ViewData["RoleClass"];
+}
+@using Microsoft.AspNet.Identity
 <!-- Top Navigation -->
 <nav id="navigation" class="navbar navbar-inverse navbar-fixed-top pmd-navbar pmd-z-depth">
     <div class="container-fluid">

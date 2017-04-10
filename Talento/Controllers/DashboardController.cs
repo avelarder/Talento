@@ -9,6 +9,9 @@ using PagedList;
 using Talento.Core.Data;
 using Talento.Core;
 using Talento.Entities;
+using System.Security.Claims;
+using Microsoft.AspNet.Identity;
+using Talento.Core.Helpers;
 
 namespace Talento.Controllers
 {
@@ -31,13 +34,11 @@ namespace Talento.Controllers
         public ActionResult Index(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page = 1)
         {
             string Dashboard = "_PartialContent.cshtml";
-            string Role = "basic";
 
             List<Position> rawData;
             if (Roles.IsUserInRole("Admin"))
             {
                 Dashboard = "_PartialContentAdmin.cshtml";
-                Role = "admin";
                 rawData = DashboardPagingHelper.GetAdminTable(sortOrder, FilterBy, currentFilter, searchString, page);
 
             }
@@ -54,9 +55,7 @@ namespace Talento.Controllers
             ViewBag.EMSortParm = sortOrder == "EM" ? "em_desc" : "EM";
             ViewBag.CurrentFilter = searchString;
 
-            ViewData["RoleClass"] = Role + "-role";
             ViewData["Dashboard"] = Dashboard;
-            ViewData["Role"] = Role;
 
             var temp = AutoMapper.Mapper.Map<List<PositionModel>>(rawData.ToList());
 
@@ -81,5 +80,36 @@ namespace Talento.Controllers
                 Positions = new PositionsPagedList(temp, page.Value, 25)
             });
         }
+
+        // Dashboard Partials
+        public ActionResult TopNavigation()
+        {
+            string role = GetRole();
+            ViewData["Role"] = role;
+            ViewData["RoleClass"] = role + "-role";
+
+            return PartialView("~/Views/Shared/Dashboard/_PartialTopNavigation.cshtml");
+        }
+
+        public ActionResult SideNavigation()
+        {
+            string role = GetRole();
+            ViewData["Role"] = role;
+            ViewData["RoleClass"] = role + "-role";
+
+            return PartialView("~/Views/Shared/Dashboard/_PartialSidebarNavigation.cshtml");
+        }
+        
+        // Helpers
+        public string GetRole()
+        {
+            string role = "basic";
+            if( Roles.IsUserInRole("Admin"))
+            {
+                role = "admin";
+            }
+            return role;
+        }
+
     }
 }
