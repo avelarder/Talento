@@ -86,6 +86,9 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreatePositionViewModel position)
         {
+            string role = "basic";
+            ViewData["Role"] = role;
+            ViewData["RoleClass"] = role + "-role";
             ApplicationUser pmUser = PositionHelper.SearchPM(position.EmailPM);
 
             if (pmUser == null)
@@ -160,6 +163,10 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditPositionViewModel position)
         {
+            string role = "basic";
+            ViewData["Role"] = role;
+            ViewData["RoleClass"] = role + "-role";
+
             if (this.IsStateValid())
             {
                 if (PositionHelper.Edit(AutoMapper.Mapper.Map<Position>(position), User.Identity.Name))
