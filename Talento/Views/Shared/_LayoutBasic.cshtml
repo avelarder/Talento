@@ -8,7 +8,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body class="@ViewBag.BodyClass @ViewData["RoleClass"]">
+<body class="@ViewBag.BodyClass @this.ViewContext.HttpContext.Items["RoleClass"]">
     <!-- Render Body -->
     @RenderBody()
 

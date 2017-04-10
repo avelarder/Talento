@@ -3,10 +3,10 @@
     Layout = "~/Views/Shared/_LayoutBasic.cshtml";
 }
 @* Header *@
-@Html.Partial("~/Views/Shared/Dashboard/_PartialTopNavigation.cshtml")
+@Html.Action("TopNavigation", "Dashboard")
 
 @* Sidebar Navigation *@
-@Html.Partial("~/Views/Shared/Dashboard/_PartialSidebarNavigation.cshtml")
+@Html.Action("SideNavigation", "Dashboard")
 
 <!-- Main Container -->
 <div class="pmd-content pmd-content-custom dropdown-component" id="content">

@@ -51,9 +51,6 @@ namespace Talento.Controllers
         [Authorize(Roles = "PM, TL, TAG, RMG")]
         public async Task<ActionResult> Details(int? id)
         {
-            string role = "basic";
-            ViewData["Role"] = role;
-            ViewData["RoleClass"] = role + "-role";
 
             if (id == null)
             {
@@ -73,9 +70,6 @@ namespace Talento.Controllers
 
         public ActionResult Create()
         {
-            string role = "basic";
-            ViewData["Role"] = role;
-            ViewData["RoleClass"] = role + "-role";
             return View();
         }
 
@@ -86,9 +80,6 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreatePositionViewModel position)
         {
-            string role = "basic";
-            ViewData["Role"] = role;
-            ViewData["RoleClass"] = role + "-role";
             ApplicationUser pmUser = PositionHelper.SearchPM(position.EmailPM);
 
             if (pmUser == null)
@@ -133,9 +124,6 @@ namespace Talento.Controllers
         [Authorize(Roles = "PM, TL")]
         public ActionResult Edit(int id)
         {
-            string role = "basic";
-            ViewData["Role"] = role;
-            ViewData["RoleClass"] = role + "-role";
 
             try {
                 EditPositionViewModel position = AutoMapper.Mapper.Map<EditPositionViewModel>(PositionHelper.Get(id));
@@ -163,9 +151,6 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditPositionViewModel position)
         {
-            string role = "basic";
-            ViewData["Role"] = role;
-            ViewData["RoleClass"] = role + "-role";
 
             if (this.IsStateValid())
             {
