@@ -42,7 +42,6 @@ namespace Talento.Models
 
     public class PositionModel
     {
-    
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Title is required")]

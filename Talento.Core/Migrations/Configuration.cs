@@ -496,7 +496,7 @@ namespace Talento.Core.Migrations
                     User = manager.FindByEmail("Pmuser1@example.com"),
                     Position = context.Positions.Find(9),
                     Date = Convert.ToDateTime("2017-07-22T14:00:30")
-                }                
+                }
             };
 
             positionLogs.ForEach(r => context.PositionLogs.AddOrUpdate(p => p.Id, r));
@@ -512,61 +512,81 @@ namespace Talento.Core.Migrations
                    Id = 1,
                    Email = "Candidate1@example.com",
                    Name = "Example Employee 1",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-10T12:30:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.Accepted
                },
                new TcsCandidate{
                    Id = 2,
                    Email = "Candidate2@example.com",
                    Name = "Example Employee 2",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-20T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.Accepted
                },
                new TcsCandidate{
                    Id = 3,
                    Email = "Candidate3@example.com",
                    Name = "Example Employee 3",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-02-09T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.Accepted
                },
                new TcsCandidate{
                    Id = 4,
                    Email = "Candidate4@example.com",
                    Name = "Example Employee 4",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-04-11T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.Accepted
                },
                new TcsCandidate{
                    Id = 5,
                    Email = "Candidate5@example.com",
                    Name = "Example Employee 5",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-01-16T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.Accepted
                },
                new TcsCandidate{
                    Id = 6,
                    Email = "Candidate6@example.com",
                    Name = "Example Employee 6",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-01-17T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.Accepted
                },
                new TcsCandidate{
                    Id = 7,
                    Email = "Candidate7@example.com",
                    Name = "Example Employee 7",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-02-15T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.Accepted
                },
                new TcsCandidate{
                    Id = 8,
                    Email = "Candidate8@example.com",
                    Name = "Example Employee 8",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-15T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.Accepted
                },
                new TcsCandidate{
                    Id = 9,
                    Email = "Candidate9@example.com",
                    Name = "Example Employee 9",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-04-11T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.Accepted
                },
                new TcsCandidate{
                    Id = 10,
                    Email = "Candidate0@example.com",
                    Name = "Example Employee 0",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-02-15T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.Accepted
                }
             };
 
@@ -583,61 +603,81 @@ namespace Talento.Core.Migrations
                    Id = 11,
                    Email = "Candidate11@example.com",
                    Name = "Example Employee 11",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-01T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.New
                },
                new NonTcsCandidate{
                    Id = 12,
                    Email = "Candidate12@example.com",
                    Name = "Example Employee 12",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-04T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.New
                },
                new NonTcsCandidate{
                    Id = 13,
                    Email = "Candidate13@example.com",
                    Name = "Example Employee 13",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-06T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.New
                },
                new NonTcsCandidate{
                    Id = 14,
                    Email = "Candidate14@example.com",
                    Name = "Example Employee 14",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-09T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.New
                },
                new NonTcsCandidate{
                    Id = 15,
                    Email = "Candidate15@example.com",
                    Name = "Example Employee 15",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-12T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.New
                },
                new NonTcsCandidate{
                    Id = 16,
                    Email = "Candidate16@example.com",
                    Name = "Example Employee 16",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-17T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.New
                },
                new NonTcsCandidate{
                    Id = 17,
                    Email = "Candidate17@example.com",
                    Name = "Example Employee 17",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-15T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.New
                },
                new NonTcsCandidate{
                    Id = 18,
                    Email = "Candidate18@example.com",
                    Name = "Example Employee 18",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-20T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.New
                },
                new NonTcsCandidate{
                    Id = 19,
                    Email = "Candidate19@example.com",
                    Name = "Example Employee 19",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-22T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.New
                },
                new NonTcsCandidate{
                    Id = 20,
                    Email = "Candidate00@example.com",
                    Name = "Example Employee 00",
-                   Status = CandidateStatus.Available
+                   CratedOn = Convert.ToDateTime("2017-03-27T13:45:30"),
+                   CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
+                   Status = CandidateStatus.New
                }
             };
 
@@ -646,36 +686,39 @@ namespace Talento.Core.Migrations
 
             #endregion tcscandidates
 
-            #region PositionsCandidate
+            #region PositionCandidates
 
-            var positionsCandidates = new List<PositionsCandidates>
+            var positionsCandidates = new List<PositionCandidates>
             {
-                new PositionsCandidates
+                new PositionCandidates
                 {
                     Candidate = context.Candidates.Find(1),
                     Position = context.Positions.Find(4)
                 },
-                new PositionsCandidates
+                new PositionCandidates
                 {
                     Candidate = context.Candidates.Find(2),
                     Position = context.Positions.Find(5)
                 },
-                new PositionsCandidates
+                new PositionCandidates
                 {
                     Candidate = context.Candidates.Find(3),
                     Position = context.Positions.Find(5)
                 },
-                new PositionsCandidates
+                new PositionCandidates
                 {
                     Candidate = context.Candidates.Find(4),
                     Position = context.Positions.Find(6)
                 },
-                new PositionsCandidates
+                new PositionCandidates
                 {
                     Candidate = context.Candidates.Find(5),
                     Position = context.Positions.Find(6)
                 }
             };
+
+            positionsCandidates.ForEach(r => context.PositionsCandidates.AddOrUpdate(p => p.Candidate_Id, r));
+            context.SaveChanges();
             #endregion
         }
     }
