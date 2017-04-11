@@ -93,7 +93,7 @@ namespace Talento.Controllers
                 
             }
 
-            string user = User.Identity.Name;
+            string user = User.Identity.GetUserId();
             
             if (IsStateValid())
             {
@@ -113,6 +113,7 @@ namespace Talento.Controllers
                     LastOpenedBy = UserHelper.GetUser(user),
                     LastOpenedDate = DateTime.Now
                 };
+                PositionHelper.Create(pos);
                 return RedirectToAction("Index","Dashboard");
             }
 
