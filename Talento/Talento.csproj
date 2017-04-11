@@ -316,6 +316,8 @@
     <Content Include="Views\Positions\Details.cshtml" />
     <Content Include="Views\PositionLogs\List.cshtml" />
     <Content Include="Views\Positions\Create.cshtml" />
+    <Content Include="Views\Dashboard\AppSettings.cshtml" />
+    <Content Include="Views\Dashboard\ManageUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
