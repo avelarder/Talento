@@ -288,7 +288,7 @@ namespace Talento.Tests.Controllers
                 Title = positionViewModel.Title
             };
             
-            position.Setup(x => x.Create(positionCreate,appUser.UserName));
+            position.Setup(x => x.Create(positionCreate));
             
             var mController = new PositionsController(position.Object, mUser.Object);
             mController.ControllerContext = mockContext.Object;
