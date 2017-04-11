@@ -7,11 +7,11 @@ using Talento.Entities;
 
 namespace Talento.Core
 {
-    public interface IPosition
+    public interface ICandidate
     {
-        Position Get(int Id);
-        Task<List<Position>> GetAll();
-        void Create(Position log);
+        Task<Candidate> Get(int Id);
+        Task<List<Candidate>> GetAll();
+        void Create(Position log, string EmailModifier);
         bool Edit(Position log, string EmailModifier);
         void Delete(int Id, string uId);
     }
