@@ -13,7 +13,7 @@ namespace Talento.Entities
     {
         [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public int FileInfoId { get; set; }
+        public int Id { get; set; }
 
         [Key, Column(Order = 1)]
         public int Candidate_Id { get; set; }

@@ -1,0 +1,36 @@
+﻿@using Talento.Models
+@model Tuple<FilesViewModel, List<FileBlobViewModel>>
+
+<script>
+    function aux()
+    {
+        $("#addfile").submit();
+    }
+</script>
+
+<div class="jumbotron">
+    @if (Model.Item2.Count > 0)
+    {
+        foreach (FileBlobViewModel f in Model.Item2)
+        {
+            <p id="file_@f.FileName">
+                <i class="material-icons">insert_drive_file</i>
+                <span>@f.FileName</span>
+                <i class="material-icons" onclick="@("window.location.href='" + @Url.Action("Delete", "File", new { filename = @f.FileName }) + "'");">delete</i>
+
+            </p>
+        }
+    }
+    @using (Html.BeginForm("Add", "File", FormMethod.Post, new { id = "addfile", enctype = "multipart/form-data" }))
+    {
+        <div>
+            <label for="Files">
+                <i class="material-icons">
+                    note_add
+                </i>
+            </label>
+            <input class="hide" id="Files" name="Files" type="file" value="" onchange="return aux()" accept=".doc,.docx,.txt,.pdf" />
+            @Html.ValidationMessageFor(x => x.Item1.Files)
+        </div>
+    }
+</div>
