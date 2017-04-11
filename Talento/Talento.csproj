@@ -279,6 +279,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_dev\app.js" />
     <Content Include="Scripts\_dev\login\login.js" />
+    <Content Include="Scripts\_dev\login\paginationLog.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -315,6 +316,7 @@
     <Content Include="Views\Positions\Details.cshtml" />
     <Content Include="Views\PositionLogs\List.cshtml" />
     <Content Include="Views\Positions\Create.cshtml" />
+    <Content Include="Views\PositionLogs\Pagination.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

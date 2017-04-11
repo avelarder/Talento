@@ -9,6 +9,7 @@ else
     <div id="position-log">
         <h3>Logs: </h3>
         <hr />
+        @Html.Action("Pagination", "PositionLogs", ViewData["Pagination"])
         @foreach (var log in Model)
         {
             <div class="log-item pmd-card pmd-card-default pmd-z-depth">

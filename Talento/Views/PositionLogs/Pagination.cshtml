@@ -1,0 +1,72 @@
+﻿@model Talento.Core.Utilities.Pagination
+<div id="pagination-log">
+    <div id="pagination-log-current"> @Model.Current of @Model.Total </div>
+    @{ 
+        int previousPages = ((Model.Current - 2) > 0) ? 2 : ((Model.Current == 1) ? 0 : 1);
+        int nextPages = ((Model.Current + 2) <= Model.Total) ? 2 : ((Model.Current == Model.Total) ? 0 : 1);
+    }
+    @if (Model.Total > 1)
+    {
+        <ul class="pagination">
+            @if (Model.Current > 3)
+            {
+                <li class="pagination-first">
+                    <a href="@(Model.Url + "?page=" + 1)">First</a>
+                </li>
+            }
+            @if (Model.Prev != 0)
+            {
+                <li class="pagination-prev">
+                    <a href="@(Model.Url + "?page=" + Model.Prev)" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                </li>
+            }
+            @if (Model.Current > 3)
+            {
+                <li class="">
+                    <a href="#">...</a>
+                </li>
+            }
+            @for (int i = previousPages; i > 0; i--)
+            {
+                <li>
+                    <a href="@(Model.Url + "?page=" + (Model.Current - i))">@(Model.Current - i)</a>
+                </li>
+            }
+            <li class="active">
+                <a href="#">@Model.Current</a>
+            </li>
+            @for (int i = 1; i <= nextPages; i++)
+            {
+                <li>
+                    <a href="@(Model.Url + "?page=" + (Model.Current + i))">@(Model.Current + i)</a>
+                </li>
+            }
+            @if (Model.Current < (Model.Total - 2))
+            {
+                <li class="">
+                    <a href="#">...</a>
+                </li>
+            }
+            @if (Model.Next != 0)
+            {
+                <li class="pagination-next">
+                    <a href="@(Model.Url + "?page=" + Model.Next)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            }
+            @if (Model.Current < (Model.Total -2))
+            {
+                <li class="pagination-last">
+                    <a href="@(Model.Url + "?page=" + Model.Total)">last</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
+<style>
+    #pagination-log .current {
+        background-color:black;
+        color:#FFF;
+    }
+</style>
