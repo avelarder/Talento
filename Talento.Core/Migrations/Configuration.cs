@@ -13,7 +13,7 @@ namespace Talento.Core.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             ContextKey = "Talento.Core.Data.ApplicationDbContext";
         }
 
