@@ -112,7 +112,7 @@ namespace Talento.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public ActionResult ManageUsers()
+        public ActionResult ManageUser()
         {
             return View();
         }
