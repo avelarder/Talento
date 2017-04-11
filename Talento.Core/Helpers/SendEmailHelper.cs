@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Talento.Entities;
 using System.Web;
 using System.Web.Security;
+using System.IO;
 
 namespace Talento.Core.Helpers
 {
@@ -17,23 +18,12 @@ namespace Talento.Core.Helpers
 
         }
 
-        public void SendEmail(string userMailFrom)
+        
+        public void SendEmailProfile(string userMailFrom)
         {
-            List<string> listEmailRoles = new List<string>();
-
-            List<ApplicationRole> Roles = new List<ApplicationRole>();
-            ApplicationUser a = new ApplicationUser();
-            var userName = a.UserName;
-
-            foreach (var item in Roles)
-            {
-                if (item.Name == "TAG" || item.Name == "RMG" || item.Name == "TM")
-                {
-                    listEmailRoles.Add(userName);
-                }
-            }
-
-
+            List<ApplicationUser> recipients = Db.Users.Where(x => x.Roles.Equals("TL") || x.Roles.Equals("TM") ||
+                                                x.Roles.Equals("RMG") || x.Roles.Equals("TAG")).ToList();
+         
 #if DEBUG == false
             SmtpClient SmtpServer = new SmtpClient("smtp.gmail.net");
             SmtpServer.Port = 465;
@@ -43,7 +33,7 @@ namespace Talento.Core.Helpers
 
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress(userMailFrom);
-            mail.To.Add(listEmailRoles.ToString());
+            mail.To.Add(recipients.ToString());
             mail.Subject = "New profile added.";
             mail.Body = "A profile has been added to  /*Position Tittle*/  by  /* < User Name who added >*/ please visit the following URL for more information.";
             SmtpServer.EnableSsl = true;
@@ -51,5 +41,30 @@ namespace Talento.Core.Helpers
 
 #endif
         }
+
+
+
+        public void SendEmailFeedback(string userMailFrom)
+        {
+            List<ApplicationUser> recipients = Db.Users.Where(x => x.Roles.Equals("RMG") || 
+                                                                    x.Roles.Equals("TAG")).ToList();
+#if DEBUG == false
+            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.net");
+            SmtpServer.Port = 465;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("apikey", "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");
+            SmtpServer.UseDefaultCredentials = false;
+            SmtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress(userMailFrom);
+            mail.To.Add(recipients.ToString());
+            mail.Subject = "New profile added.";
+            mail.Body = "A profile's interview feedback form has been added to "<Position Tittle>" by <User Name who added> please visit the following URL for more information.";
+            SmtpServer.EnableSsl = true;
+            SmtpServer.Send(mail);
+
+#endif
+        }
+
     }
 }

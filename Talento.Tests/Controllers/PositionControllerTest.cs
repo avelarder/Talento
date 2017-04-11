@@ -288,7 +288,7 @@ namespace Talento.Tests.Controllers
                 Title = positionViewModel.Title
             };
             
-            position.Setup(x => x.Create(positionCreate,appUser.UserName));
+            position.Setup(x => x.Create(positionCreate));
             
             var mController = new PositionsController(position.Object, mUser.Object);
             mController.ControllerContext = mockContext.Object;
@@ -297,10 +297,12 @@ namespace Talento.Tests.Controllers
 
             mController.IsStateValid().Equals(true);
 
+            mController.ModelState.AddModelError("FirstName", "First Name is Required");
+
             var result = mController.Create(positionViewModel);
 
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, (typeof(RedirectToRouteResult)));
+            Assert.IsInstanceOfType(result, (typeof(ViewResult)));
         }
        
     }

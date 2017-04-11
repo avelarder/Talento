@@ -44,5 +44,18 @@ namespace Talento.Core.Helpers
             
             
         }
+
+        public List<ApplicationUser> GetUsersForNewProfileMail()
+        {
+            List<ApplicationUser> recipients = Db.Users.Where(x => x.Roles.Equals("TL") || x.Roles.Equals("TM") ||
+                                                x.Roles.Equals("RMG") || x.Roles.Equals("TAG")).ToList();
+            return recipients;
+        }
+
+        public List<ApplicationUser> GetUsersForNewFeedbackMail()
+        {
+            List<ApplicationUser> recipients = Db.Users.Where(x => x.Roles.Equals("RMG") || x.Roles.Equals("TAG")).ToList();
+            return recipients;
+        }
     }
 }
