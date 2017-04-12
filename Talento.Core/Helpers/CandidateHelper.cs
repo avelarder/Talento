@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace Talento.Core.Helpers
     {
         IPosition PositionHelper;
         ICustomUser UserHelper;
+
         public CandidateHelper(Core.Data.ApplicationDbContext db, ICustomUser userHelper, IPosition positionHelper) : base(db)
         {
             PositionHelper = positionHelper;
@@ -37,9 +39,9 @@ namespace Talento.Core.Helpers
             throw new NotImplementedException();
         }
 
-        public Task<List<Candidate>> GetAll()
+        public async Task<List<Candidate>> GetAll()
         {
-            throw new NotImplementedException();
+            return await Db.Candidates.ToListAsync();
         }
     }
 }
