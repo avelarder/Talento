@@ -28,6 +28,28 @@
             </a>
         </li>
         }
+        @if (ViewData["Role"].ToString() == "admin")
+        {
+            <li>
+                <a class="pmd-ripple-effect" href="@Url.Action("Index", "Dashboard")">
+                    <i class="material-icons pmd-sm">work</i>
+                    <span class="media-body">Positions</span>
+                </a>
+            </li>
+            <li>
+                <a class="pmd-ripple-effect" href="@Url.Action("ManageUser", "Dashboard")">
+                    <i class="material-icons pmd-sm">face</i>
+                    <span class="media-body">Manage User</span>
+                </a>
+            </li>
+            <li>
+                <a class="pmd-ripple-effect" href="@Url.Action("AppSettings", "Dashboard")">
+                    <i class="material-icons pmd-sm">settings</i>
+                    <span class="media-body">Applications Settings</span>
+                </a>
+            </li>
+        }
+
         <li class="dropdown pmd-dropdown">
             <a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle media pmd-ripple-effect " data-sidebar="true" href="javascript:void(0);">
                 <i class="material-icons pmd-sm">layers</i>
