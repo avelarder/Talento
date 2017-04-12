@@ -111,5 +111,16 @@ namespace Talento.Controllers
             return role;
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult ManageUser()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult AppSettings()
+        {
+            return View();
+        }
     }
 }

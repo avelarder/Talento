@@ -8,8 +8,6 @@ namespace Talento.Entities
 {
     public class TcsCandidate : Candidate
     {
-        
-
 
     }
 }

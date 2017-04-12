@@ -82,9 +82,9 @@ namespace Talento.Entities
 
     public enum Status
     {
-        Cancelled = 1,
+        Removed = 1,
         Open = 2,
-        Removed = 3,
+        Cancelled = 3,
         Closed = 4
     }
 
