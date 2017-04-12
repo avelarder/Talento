@@ -84,7 +84,7 @@ namespace Talento.Entities
     {
         Removed = 1,
         Open = 2,
-        Canceled = 3,
+        Cancelled = 3,
         Closed = 4
     }
 

@@ -16,7 +16,6 @@ namespace Talento.Core.Helpers
         public PositionHelper(Core.Data.ApplicationDbContext db, IPositionLog positionLoghelper) : base(db)
         {
             PositionLoghelper = positionLoghelper;
-
         }
 
         public void Create(Position position)
@@ -154,6 +153,5 @@ namespace Talento.Core.Helpers
         {
            return Db.Users.Single(x => x.Id == user.ToString());
         }
-
     }
 }

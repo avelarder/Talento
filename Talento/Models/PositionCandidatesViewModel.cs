@@ -3,25 +3,23 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
+using Talento.Entities;
 
-namespace Talento.Entities
+namespace Talento.Models
 {
-    public class PositionsCandidates
+    public class PositionCandidatesViewModel
     {
-        [Key, Column(Order =0)]
+        //(Email, CreatedOn, CreatedBy, Status (New, Technical Interview, Conditional Offer, Customer Interview, Accepted, Rejected, Canceled))
+
         public int Candidate_Id { get; set; }
 
         [Required]
-        [ForeignKey("Candidate_Id")]
         public virtual Candidate Candidate { get; set; }
 
-        [Key, Column(Order = 1)]
         public int Position_Id { get; set; }
 
         [Required]
-        [ForeignKey("Position_Id")]
         public virtual Position Position { get; set; }
     }
 }
