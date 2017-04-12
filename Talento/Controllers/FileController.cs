@@ -12,61 +12,62 @@ namespace Talento.Controllers
     {
         public ActionResult Index()
         {
-            List<FileBlobViewModel> vm = new List<FileBlobViewModel>();
             if (Session["files"] != null)
             {
-                ((List<FileBlob>)Session["files"]).ForEach(file =>
-                {
-                    vm.Add(new FileBlobViewModel
-                    {
-                        FileName = file.FileName,
-                        Blob = file.Blob
-                    });
-                });
+                Session["files"] = new List<FileBlob>();
             }
-
-            return View("~/Views/Shared/File/Index.cshtml", new Tuple<FilesViewModel, List<FileBlobViewModel>>(new FilesViewModel(), vm));
+            return PartialView("~/Views/Shared/File/Index.cshtml");
         }
 
-        public ActionResult Add(FilesViewModel fileBlobModel)
+        public ActionResult Add()
         {
             if (Session["files"] == null)
             {
                 Session["files"] = new List<FileBlob>();
             }
+            HttpPostedFileBase file = Request.Files.Get(0);
+            byte[] uploadFile = new byte[file.InputStream.Length];
+            file.InputStream.Read(uploadFile, 0, uploadFile.Length);
 
-            foreach (var item in fileBlobModel.Files)
+            bool isValidFile = true;
+            ((List<FileBlob>)Session["files"]).ForEach(x =>
             {
-                byte[] uploadFile = new byte[item.InputStream.Length];
-                item.InputStream.Read(uploadFile, 0, uploadFile.Length);
-
-                bool isValidFile = true;
-                ((List<FileBlob>)Session["files"]).ForEach(x =>
+                if (x.FileName.Equals(file.FileName))
                 {
-                    if (x.FileName.Equals(item.FileName))
-                    {
-                        isValidFile = false;
-                    }
-                });
-
-                if (isValidFile)
-                {
-                    ((List<FileBlob>)Session["files"]).Add(new FileBlob
-                    {
-                        FileName = item.FileName,
-                        Blob = uploadFile,
-                    });
+                    isValidFile = false;
                 }
+            });
+            if (isValidFile)
+            {
+                ((List<FileBlob>)Session["files"]).Add(new FileBlob
+                {
+                    FileName = file.FileName,
+                    Blob = uploadFile,
+                });
             }
-
-            return RedirectToAction("Index", "Dashboard", null);
+            return new EmptyResult();
         }
 
+        public JsonResult ListCurrentFiles()
+        {
+            List<FileBlobViewModel> result = new List<FileBlobViewModel>();
+            if (Session["files"] != null)
+            {
+                ((List<FileBlob>)Session["files"]).ForEach(x => result.Add(new FileBlobViewModel() { FileName = x.FileName }));
+            }
+            return Json(result);
+        }
 
         public ActionResult Delete(string filename)
         {
             ((List<FileBlob>)Session["files"]).Remove(((List<FileBlob>)Session["files"]).Single(x => x.FileName.Equals(filename)));
-            return RedirectToAction("Index", "Dashboard", null);
+            return new EmptyResult();
+        }
+
+        public ActionResult EmptyList()
+        {
+            Session["files"] = null;
+            return new EmptyResult();
         }
     }
 }

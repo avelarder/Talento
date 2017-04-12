@@ -218,6 +218,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CandidateController.cs" />
     <Compile Include="Controllers\CustomRoleManager.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FileController.cs" />
@@ -317,9 +318,11 @@
     <Content Include="Views\PositionLogs\List.cshtml" />
     <Content Include="Views\Positions\Create.cshtml" />
     <Content Include="Views\Shared\File\Index.cshtml" />
+    <Content Include="Views\Candidate\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Profile\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controllers\fonts\glyphicons-halflings-regular.woff" />
