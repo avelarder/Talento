@@ -264,6 +264,7 @@
     <Content Include="Content\_scss\components\navigation.scss" />
     <Content Include="Content\_scss\components\widgets.scss" />
     <Content Include="Content\_scss\components\logs.scss" />
+    <Content Include="Content\_scss\core\animations.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -279,7 +280,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_dev\app.js" />
     <Content Include="Scripts\_dev\login\login.js" />
-    <Content Include="Scripts\_dev\login\paginationLog.js" />
+    <Content Include="Scripts\_dev\utilities\paginationLog.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

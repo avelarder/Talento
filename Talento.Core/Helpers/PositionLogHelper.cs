@@ -30,21 +30,6 @@ namespace Talento.Core.Helpers
             }
         }
 
-        public Task Delete(int Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Edit(PositionLog log)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PositionLog> Get(int Id)
-        {
-            throw new NotImplementedException();
-        }
-
         public List<PositionLog> GetAll(int? Id)
         {
             try { 
@@ -74,6 +59,11 @@ namespace Talento.Core.Helpers
                 int totalCount = logs.Count();
                 // Count of Pages
                 int totalPages = (totalCount - 1) / pageSize + 1;
+                // Null if page requested doesnt exist
+                if (page > totalPages || page < 1)
+                {
+                    return null;
+                }
                 // PositionsLogs to Skip : [PageSize] 12 * ([CurrentPage] 2  - [SkipPreviousPageAlways] 1)
                 int skipLogs = pageSize * (page - 1);
                 // If pagination is necessary 
@@ -100,8 +90,7 @@ namespace Talento.Core.Helpers
             }
             catch (Exception)
             {
-                Tuple<List<PositionLog>, Pagination> error = new Tuple<List<PositionLog>, Pagination>(null,null);
-                return error;
+                return null;
             }
         }
 

@@ -32,7 +32,7 @@ namespace Talento.Controllers
         }
 
         // Show: PositionLogs
-        public ActionResult List(int? id, int page = 1, int pagesize = 5 )
+        public ActionResult List(int? id, int page = 1, int pagesize = 5, string clase = "slide-right")
         {
             try
             {
@@ -40,18 +40,35 @@ namespace Talento.Controllers
                 {
                     throw new SecurityException();
                 }
+                // No ID return 404
                 if ( id == null )
                 {
                     return HttpNotFound();
                 }
+                // Check if it's Ajax request, View check for this viewData
+                ViewData["AjaxTrue"] = false;
+                if (Request.IsAjaxRequest())
+                {
+                    ViewData["AjaxTrue"] = true;
+                }
+                // Url for the pagination Helper
                 string url = Url.Action("List", "PositionLogs");
+                // Get List of PositionLogs and the Pagination
                 var containerLogs = LogHelper.PaginateLogs(id, page, pagesize, url);
+                // No logs with the ID return 404
+                if( containerLogs == null)
+                {
+                    return HttpNotFound();
+                }
+                // Maps PositionLogs to PositionLogViewModel
                 var logs = AutoMapper.Mapper.Map<List<PositionLogViewModel>>(containerLogs.Item1);
+                // Pagination
                 var pagination = containerLogs.Item2;
-
+                // General ViewData
+                ViewData["AnimationClass"] = clase;
                 ViewData["Count"] = logs.Count;
                 ViewData["Pagination"] = pagination;
-
+                
                 return PartialView(logs);
             }
             catch (Exception e)

@@ -1,4 +1,32 @@
-﻿#position-log {
+﻿#position-content {
+    position:relative;
+}
+#pagination-log {
+    position:relative;
+    text-align:center;
+}
+#pagination-log-current {
+    font-size: .9em;
+    width: 100%;
+    top: 0;
+    text-align: center;
+    background-color: $color-9;
+    color: #FFF;
+    
+    .pagination {
+        margin:10px 0;
+    }
+}
+#position-log {
+    overflow: hidden;
+
+    h3 {
+        margin: 0;
+        padding: 10px 5px;
+        background: $color-10;
+        text-align: center;
+        color: #FFF;
+    }
 
     .log-item {
         margin-bottom: 20px;
@@ -63,7 +91,7 @@
             }
 
             .log-previous {
-                display:none;
+                display: none;
             }
         }
     }
