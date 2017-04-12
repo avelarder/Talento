@@ -7,8 +7,8 @@ using Talento.Entities;
 
 namespace Talento.Core
 {
-   public interface IPositionCandidates
+   public interface IPositionCandidate
     {
-        List<PositionCandidates> GetCandidatesByPositionId(int? positionId);
+        List<PositionCandidate> GetCandidatesByPositionId(int? positionId);
     }
 }

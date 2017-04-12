@@ -22,4 +22,19 @@ namespace Talento.Models
 
         public CandidateStatus Status { get; set; }
     }
+
+    public class PositionCandidateViewModel
+    {
+        //(Email, CreatedOn, CreatedBy, Status (New, Technical Interview, Conditional Offer, Customer Interview, Accepted, Rejected, Canceled))
+
+        public int Candidate_Id { get; set; }
+
+        [Required]
+        public virtual Candidate Candidate { get; set; }
+
+        public int Position_Id { get; set; }
+
+        [Required]
+        public virtual Position Position { get; set; }
+    }
 }

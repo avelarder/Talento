@@ -13,6 +13,7 @@ using Talento.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Talento.Core.Helpers;
+using PagedList;
 
 namespace Talento.Controllers
 {
@@ -21,9 +22,9 @@ namespace Talento.Controllers
     {
         Core.IPosition PositionHelper;
         Core.ICustomUser UserHelper;
-        Core.IPositionCandidates PositionsCandidatesHelper;
+        Core.IPositionCandidate PositionsCandidatesHelper;
 
-        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.IPositionCandidates positionsCandidatesHelper)
+        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.IPositionCandidate positionsCandidatesHelper)
         {
             UserHelper = userHelper;
             PositionHelper = positionHelper;
@@ -36,7 +37,7 @@ namespace Talento.Controllers
                 ;
                 cfg.CreateMap<Position, EditPositionViewModel>();
                 cfg.CreateMap<EditPositionViewModel, Position>();
-                cfg.CreateMap<PositionCandidates, PositionCandidatesViewModel>();
+                cfg.CreateMap<PositionCandidate, PositionCandidateViewModel>();
                 cfg.CreateMap<Candidate, CandidateViewModel>();
 
                 /*
@@ -57,9 +58,9 @@ namespace Talento.Controllers
 
         // GET: Positions/Details/5
         [Authorize(Roles = "PM, TL, TAG, RMG")]
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, int? page)
         {
-            var positionsCandidates = AutoMapper.Mapper.Map<List<PositionCandidatesViewModel>>(PositionsCandidatesHelper.GetCandidatesByPositionId(id)); //id.Value
+            var positionCandidate = AutoMapper.Mapper.Map<List<PositionCandidateViewModel>>(PositionsCandidatesHelper.GetCandidatesByPositionId(id)); //id.Value
 
             if (id == null)
             {
@@ -73,7 +74,12 @@ namespace Talento.Controllers
                 return HttpNotFound();
             }
 
-            var tuple = new Tuple<List<PositionCandidatesViewModel>, PositionModel>(positionsCandidates, position);
+            var tuple = new Tuple<List<PositionCandidateViewModel>, PositionModel>(positionCandidate, position);
+
+            var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
+            var onePageOfCandidatePositions = positionCandidate.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+            ViewBag.page = pageNumber;
+            ViewBag.onePageOfCandidatePositions = onePageOfCandidatePositions;
 
             return View(tuple);
         }
