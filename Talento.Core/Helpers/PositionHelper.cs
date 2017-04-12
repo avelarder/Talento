@@ -16,13 +16,10 @@ namespace Talento.Core.Helpers
         public PositionHelper(Core.Data.ApplicationDbContext db, IPositionLog positionLoghelper) : base(db)
         {
             PositionLoghelper = positionLoghelper;
-
         }
 
-        public void Create(Position position, string EmailModifier)
+        public void Create(Position position)
         {
-            ApplicationUser User = Db.Users.Single(u => u.Email.Equals(EmailModifier));
-
             Db.Positions.Add(position);
             Db.SaveChanges();
 
@@ -32,11 +29,9 @@ namespace Talento.Core.Helpers
                 ActualStatus = position.Status,
                 PreviousStatus = 0,
                 Date = DateTime.Now,
-                ApplicationUser_Id = User.Id,
+                ApplicationUser_Id = position.ApplicationUser_Id,
                 Position_Id = position.Id,
                 Position = position,
-                User = User,
-
             };
             PositionLoghelper.Create(CreateLog);
 
@@ -158,6 +153,5 @@ namespace Talento.Core.Helpers
         {
            return Db.Users.Single(x => x.Id == user.ToString());
         }
-
     }
 }

@@ -218,6 +218,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CandidateController.cs" />
     <Compile Include="Controllers\CustomRoleManager.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\PositionLogsController.cs" />
@@ -231,6 +232,7 @@
     <Compile Include="Models\CandidateViewModel.cs" />
     <Compile Include="Models\DashboardModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\PositionCandidatesViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\CustomRoleProvider.cs" />
     <Compile Include="Startup.cs" />
@@ -318,9 +320,12 @@
     <Content Include="Views\PositionLogs\List.cshtml" />
     <Content Include="Views\Positions\Create.cshtml" />
     <Content Include="Views\PositionLogs\Pagination.cshtml" />
+    <Content Include="Views\Dashboard\AppSettings.cshtml" />
+    <Content Include="Views\Dashboard\ManageUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Candidate\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

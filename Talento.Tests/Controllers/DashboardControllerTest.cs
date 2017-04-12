@@ -98,5 +98,29 @@ namespace Talento.Tests.Controllers
             Assert.IsTrue(viewmodel.TotalItemCount == 1);
             Assert.IsTrue(viewmodel.Subset is List<PositionModel>);
         }
+
+        [TestMethod]
+        public void ManageUsersTest()
+        {
+            Mock<ICustomPagingList> dashboardPagingHelper = new Mock<ICustomPagingList>();
+            DashboardController controller = new DashboardController(dashboardPagingHelper.Object);
+
+            var result = controller.ManageUser();
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+        }
+
+        [TestMethod]
+        public void AppSettingsTest()
+        {
+            Mock<ICustomPagingList> dashboardPagingHelper = new Mock<ICustomPagingList>();
+            DashboardController controller = new DashboardController(dashboardPagingHelper.Object);
+
+            var result = controller.AppSettings();
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+        }
     }
 }

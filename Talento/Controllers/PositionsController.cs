@@ -12,6 +12,7 @@ using Talento.Core.Data;
 using Talento.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Talento.Core.Helpers;
 
 namespace Talento.Controllers
 {
@@ -20,11 +21,14 @@ namespace Talento.Controllers
     {
         Core.IPosition PositionHelper;
         Core.ICustomUser UserHelper;
-        ApplicationUser appUser;
-        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper)
+        Core.IPositionCandidates PositionsCandidatesHelper;
+
+        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.IPositionCandidates positionsCandidatesHelper)
         {
             UserHelper = userHelper;
             PositionHelper = positionHelper;
+            PositionsCandidatesHelper = positionsCandidatesHelper;
+
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Position, PositionModel>()
@@ -32,6 +36,8 @@ namespace Talento.Controllers
                 ;
                 cfg.CreateMap<Position, EditPositionViewModel>();
                 cfg.CreateMap<EditPositionViewModel, Position>();
+                cfg.CreateMap<PositionCandidates, PositionCandidatesViewModel>();
+                cfg.CreateMap<Candidate, CandidateViewModel>();
 
                 /*
                This could be useful in future in case of needing to edit the owner user account. It is not yet requested in the Edit user story 295
@@ -51,8 +57,9 @@ namespace Talento.Controllers
 
         // GET: Positions/Details/5
         [Authorize(Roles = "PM, TL, TAG, RMG")]
-        public async Task<ActionResult> Details(int? id)
+        public ActionResult Details(int? id)
         {
+            var positionsCandidates = AutoMapper.Mapper.Map<List<PositionCandidatesViewModel>>(PositionsCandidatesHelper.GetCandidatesByPositionId(id)); //id.Value
 
             if (id == null)
             {
@@ -60,12 +67,15 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
+
             if (position == null || position.Status == Status.Removed)
             {
                 return HttpNotFound();
             }
 
-            return View(position);
+            var tuple = new Tuple<List<PositionCandidatesViewModel>, PositionModel>(positionsCandidates, position);
+
+            return View(tuple);
         }
 
         // GET: Positions/Create
@@ -90,11 +100,11 @@ namespace Talento.Controllers
             if (pmUser == null)
             {
                 ModelState.AddModelError(string.Empty, "PM is not valid");
-                
+
             }
 
-            string user = User.Identity.Name;
-            
+            string user = User.Identity.GetUserId();
+
             if (IsStateValid())
             {
                 Position pos = new Position()
@@ -113,7 +123,8 @@ namespace Talento.Controllers
                     LastOpenedBy = UserHelper.GetUser(user),
                     LastOpenedDate = DateTime.Now
                 };
-                return RedirectToAction("Index","Dashboard");
+                PositionHelper.Create(pos);
+                return RedirectToAction("Index", "Dashboard");
             }
 
             return View(position);
@@ -124,7 +135,8 @@ namespace Talento.Controllers
         public ActionResult Edit(int id)
         {
 
-            try {
+            try
+            {
                 EditPositionViewModel position = AutoMapper.Mapper.Map<EditPositionViewModel>(PositionHelper.Get(id));
                 if (position == null)
                 {
@@ -153,7 +165,7 @@ namespace Talento.Controllers
         [HttpPost]
         [Authorize(Roles = "PM, TL")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(EditPositionViewModel position)
+        public ActionResult Edit(EditPositionViewModel position)
         {
 
             if (this.IsStateValid())
@@ -180,7 +192,7 @@ namespace Talento.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
-            if (position == null) 
+            if (position == null)
             {
                 return HttpNotFound();
             }

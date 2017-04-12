@@ -33,7 +33,16 @@ namespace Talento.Core.Helpers
 
         public ApplicationUser GetUser(string user)
         {
-            return Db.Users.Single(x => x.Id == user.ToString());
+            try
+            {
+                return Db.Users.Single(x => x.Id == user.ToString());
+            }
+            catch(Exception e)
+            {
+                return null;
+            }
+            
+            
         }
     }
 }

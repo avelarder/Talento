@@ -9,6 +9,7 @@ using Talento.Models;
 using Talento.Core;
 using Talento.Entities;
 using Talento.Core.Data;
+using Talento.Core.Helpers;
 
 namespace Talento.App_Start
 {
@@ -44,13 +45,14 @@ namespace Talento.App_Start
             container.RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>();
             container.RegisterType<UserManager<ApplicationUser>>();
             container.RegisterType<ApplicationUserManager>();
-            container.RegisterType<ICustomPagingList, Core.Helpers.DashboardPagingHelper>();
-            container.RegisterType<IPositionLog, Core.Helpers.PositionLogHelper>();
-            container.RegisterType<IPosition, Core.Helpers.PositionHelper>();
+            container.RegisterType<ICustomPagingList, DashboardPagingHelper>();
+            container.RegisterType<IPositionLog, PositionLogHelper>();
+            container.RegisterType<IPosition, PositionHelper>();
             container.RegisterType<AccountController>(new InjectionConstructor());
-            container.RegisterType<IPosition, Core.Helpers.PositionHelper>();
-            container.RegisterType<ITag, Core.Helpers.TagHelper>();
-            container.RegisterType<Core.ICustomUser, Core.Helpers.UserHelper>();
+            container.RegisterType<IPosition, PositionHelper>();
+            container.RegisterType<ITag, TagHelper>();
+            container.RegisterType<ICustomUser, UserHelper>();
+            container.RegisterType<IPositionCandidates, PositionCandidatesHelper>();
         }
     }
 }
