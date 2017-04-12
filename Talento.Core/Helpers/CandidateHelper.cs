@@ -56,8 +56,6 @@ namespace Talento.Core.Helpers
             try
             {
                 var candidate = Db.Candidates.Single(x => x.Id == Id);
-                //position.Tags = Tags.GetByPositionId(position.Id);
-
                 return candidate;
             }
             catch (Exception)

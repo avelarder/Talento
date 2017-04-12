@@ -46,7 +46,7 @@ namespace Talento.Controllers
 
         //GET: Edit Candidate
         [Authorize(Roles = "PM, TL")]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, PositionModel position)
         {
             try
             {
@@ -55,6 +55,12 @@ namespace Talento.Controllers
                 {
                     return HttpNotFound();
                 }
+
+                if (position.Status == Status.Closed || position.Status == Status.Cancelled || position.Status == Status.Removed)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
+                }
+
                 return View(candidate);
             }
             catch (InvalidOperationException)
