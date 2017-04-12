@@ -1,0 +1,33 @@
+﻿@-webkit-keyframes slide-right {
+    100% {
+        right: 0;
+    }
+}
+
+@keyframes slide-right {
+    100% {
+        right: 0;
+    }
+}
+
+@-webkit-keyframes slide-left {
+    100% {
+        left: 0;
+    }
+}
+
+@keyframes slide-left {
+    100% {
+        left: 0;
+    }
+}
+
+.slide-right {
+    right: -100%;
+    animation: slide-right 0.3s forwards;
+}
+
+.slide-left {
+    left: -100%;
+    animation: slide-left 0.3s forwards;
+}

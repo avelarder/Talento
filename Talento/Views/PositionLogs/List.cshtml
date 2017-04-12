@@ -6,20 +6,22 @@
 }
 else
 {
-    <div id="position-log">
+    <div id="@(((bool)(ViewData["AjaxTrue"])) ? "" : "position-log")">
         <h3>Logs: </h3>
-        <hr />
-        @foreach (var log in Model)
-        {
-            <div class="log-item pmd-card pmd-card-default pmd-z-depth">
-                <div class="log-user"><i class="material-icons">face</i>@log.User.Email</div>
-                <div class="log-action pmd-z-depth @log.Action"><bold>@log.Action</bold></div>
-                <div class="log-status @(log.PreviousStatus == 0 ? "full-width" : "")">
-                    <div class="log-previous @log.PreviousStatus"><span>Previous: </span> <bold>@log.PreviousStatus</bold></div>
-                    <div class="log-actual @log.ActualStatus"><span>Actual: </span><bold>@log.ActualStatus</bold></div>
+        @Html.Action("Pagination", "PositionLogs", ViewData["Pagination"])
+        <div id="position-content" class="@ViewData["AnimationClass"]">
+            @foreach (var log in Model)
+            {
+                <div class="log-item pmd-card pmd-card-default pmd-z-depth">
+                    <div class="log-user"><i class="material-icons">face</i>@log.User.Email</div>
+                    <div class="log-action pmd-z-depth @log.Action"><bold>@log.Action</bold></div>
+                    <div class="log-status @(log.PreviousStatus == 0 ? "full-width" : "")">
+                        <div class="log-previous @log.PreviousStatus"><span>Previous: </span> <bold>@log.PreviousStatus</bold></div>
+                        <div class="log-actual @log.ActualStatus"><span>Actual: </span><bold>@log.ActualStatus</bold></div>
+                    </div>
+                    <div class="log-date"><bold>Date: </bold> @log.Date</div>
                 </div>
-                <div class="log-date"><bold>Date: </bold> @log.Date</div>
-            </div>
-        }
+            }
+        </div>
     </div>
 }
