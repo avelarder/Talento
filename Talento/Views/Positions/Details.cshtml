@@ -1,13 +1,18 @@
-@*@model Talento.Models.PositionModel*@
-@model Tuple<List<Talento.Models.PositionCandidatesViewModel>, Talento.Models.PositionModel>
+@using PagedList.Mvc; @*import this so we get our HTML Helper*@
+@using PagedList; @*import this so we can cast our list to IPagedList (only necessary because ViewBag is dynamic)*@
+
+@model Tuple<List<Talento.Models.PositionCandidateViewModel>, Talento.Models.PositionModel>
 @{
     ViewBag.Title = "Position details";
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
+<!-- import the included stylesheet for some (very basic) default styling -->
+<link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
 <div class="row">
     <div class="col-md-8">
-        <br />
+        <h2>Positions</h2>
         <div>
             <div class="col-md-7">
                 <b>Title:</b> @Html.DisplayFor(x => x.Item2.Title)
@@ -31,8 +36,8 @@
             <input type="button" name="back" class="btn pmd-ripple-effect btn-primary" value="Back" onclick="@("window.location.href='" + @Url.Action("Index", "Dashboard") + "'");" />
             <input type="button" name="edit" class="btn pmd-ripple-effect btn-primary" value="Edit" onclick="@("window.location.href='" + @Url.Action("Edit", "Positions", new { id = Model.Item2.Id }) + "'");" />
             <input data-target="#complete-dialog" data-toggle="modal" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />
-            
-            <!--Edit position modal-->
+
+            <!--Delete position modal-->
             <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -47,7 +52,7 @@
                     </div>
                 </div>
             </div>
-            <!--Edit position modal-->
+            <!--Delete position modal-->
         </div>
     </div>
     <div class="col-sm-4">
@@ -55,46 +60,48 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12" style="background-color: aqua">
+    <div class="col-md-12">
+        <h2>Candidates</h2>
 
-        @*(Email, CreatedOn, CreatedBy, Status (New, Technical Interview, Conditional Offer, Customer Interview, Accepted, Rejected, Canceled))*@
-                
-        <table>
+        <!--pagination-->
+        <table class="table">
             <thead>
                 <tr>
-                    <td>Email</td>
-                    <td>Created On</td>
-                    <td>Created By</td>
-                    <td>Status</td>
+                    <th>Email</th>
+                    <th>Created On</th>
+                    <th>Created By</th>
+                    <th>Status</th>
                 </tr>
             </thead>
-            @foreach (var p in Model.Item1)
+            @foreach (var cP in ViewBag.onePageOfCandidatePositions)
             {
                 <tr>
                     <td>
-                        @p.Candidate.Email
+                        @cP.Candidate.Email
                     </td>
                     <td>
-                        @p.Candidate.CratedOn
+                        @cP.Candidate.CratedOn
                     </td>
                     <td>
-                        @p.Candidate.CreatedBy.Email
+                        @cP.Candidate.CreatedBy.Email
                     </td>
                     <td>
-                        @p.Candidate.Status
+                        @cP.Candidate.Status
                     </td>
                     <td>
-                        @*@Html.ActionLink("Edit", null, null, new { id = p.Candidate_Id }, null)*@
                         <a data-toggle="modal" data-target="#edit-position-dialog" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth">Edit</a>
                     </td>
                     <td>
-                        @*@Html.ActionLink("Delete", null, null, new { id = p.Candidate_Id }, new { id = "delete-position-dialog" })*@
                         <a data-toggle="modal" data-target="#delete-position-dialog" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth">Delete</a>
                     </td>
                 </tr>
             }
         </table>
+        <!--pagination-->
 
+        <!-- output a paging control that lets the user navigation to the previous page, next page, etc -->
+        @Html.PagedListPager((IPagedList)ViewBag.onePageOfCandidatePositions, page => Url.Action("Details", "Positions", new { Model.Item2.Id, page })) <!--?page=2-->
+        
         <!--Delete profile modal-->
         <div tabindex="-1" class="modal fade" id="delete-position-dialog" style="display: none;" aria-hidden="true">
             <div class="modal-dialog">

@@ -52,7 +52,7 @@ namespace Talento.App_Start
             container.RegisterType<IPosition, PositionHelper>();
             container.RegisterType<ITag, TagHelper>();
             container.RegisterType<ICustomUser, UserHelper>();
-            container.RegisterType<IPositionCandidates, PositionCandidatesHelper>();
+            container.RegisterType<IPositionCandidate, PositionCandidateHelper>();
         }
     }
 }
