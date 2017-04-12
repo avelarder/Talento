@@ -33,9 +33,20 @@
             <p><b>Status: </b>@Html.DisplayFor(x => x.Item2.Status)<p />
         </div>
         <div class="col-md-8">
-            <input type="button" name="back" class="btn pmd-ripple-effect btn-primary" value="Back" onclick="@("window.location.href='" + @Url.Action("Index", "Dashboard") + "'");" />
-            <input type="button" name="edit" class="btn pmd-ripple-effect btn-primary" value="Edit" onclick="@("window.location.href='" + @Url.Action("Edit", "Positions", new { id = Model.Item2.Id }) + "'");" />
-            <input data-target="#complete-dialog" data-toggle="modal" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />
+            @*<input type="button" name="back" class="btn pmd-ripple-effect btn-primary" value="Back" onclick="@("window.location.href='" + @Url.Action("Index", "Dashboard") + "'");" />*@
+            <a href="@Url.Action("Index", "Dashboard")">
+                <i class="material-icons md-24">assignment_return</i>
+            </a>
+
+            @*<input type="button" name="edit" value="Edit" onclick="@("window.location.href='" + @Url.Action("Edit", "Positions", new { id = Model.Item2.Id }) + "'");" />*@
+            <a href="@Url.Action("Edit", "Positions", new { id = Model.Item2.Id })">
+                <i class="material-icons md-24">mode_edit</i>
+            </a>
+
+            @*<input data-target="#complete-dialog" data-toggle="modal" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />*@
+            <a href="@Url.Action("Delete", "Positions")" data-target="#complete-dialog">
+                <i class="material-icons md-24">delete</i>
+            </a>
 
             <!--Delete position modal-->
             <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
@@ -98,9 +109,8 @@
             }
         </table>
         <!--pagination-->
-
         <!-- output a paging control that lets the user navigation to the previous page, next page, etc -->
-        @Html.PagedListPager((IPagedList)ViewBag.onePageOfCandidatePositions, page => Url.Action("Details", "Positions", new { Model.Item2.Id, page })) <!--?page=2-->
+        @Html.PagedListPager((IPagedList)ViewBag.onePageOfCandidatePositions, page => Url.Action("Details", "Positions", new { Model.Item2.Id, page }))
         
         <!--Delete profile modal-->
         <div tabindex="-1" class="modal fade" id="delete-position-dialog" style="display: none;" aria-hidden="true">
@@ -117,7 +127,6 @@
             </div>
         </div>
         <!--Delete profile modal-->
-
         <!--Edit profile modal-->
         <div tabindex="-1" class="modal fade" id="edit-position-dialog" style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
