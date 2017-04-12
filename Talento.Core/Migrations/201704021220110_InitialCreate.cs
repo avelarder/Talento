@@ -12,12 +12,14 @@ namespace Talento.Core.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                        Email = c.String(maxLength: 100),
+                        Name = c.String(nullable: false, maxLength: 50),
+                        Email = c.String(nullable: false, maxLength: 50),
+                        Competencies = c.String(nullable: false, maxLength: 300),
+                        Description = c.String(nullable: false, maxLength: 300),
                         CratedOn = c.DateTime(),
+                        CreatedBy_Id = c.String(maxLength: 128),
                         Status = c.Int(nullable: false),
                         Discriminator = c.String(nullable: false, maxLength: 128),
-                        CreatedBy_Id = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.CreatedBy_Id)
@@ -86,12 +88,12 @@ namespace Talento.Core.Migrations
                 "dbo.FileBlobs",
                 c => new
                     {
-                        FileInfoId = c.Int(nullable: false),
+                        Id = c.Int(nullable: false),
                         Candidate_Id = c.Int(nullable: false),
                         FileName = c.String(nullable: false),
                         Blob = c.Binary(),
                     })
-                .PrimaryKey(t => new { t.FileInfoId, t.Candidate_Id })
+                .PrimaryKey(t => new { t.Id, t.Candidate_Id })
                 .ForeignKey("dbo.Candidates", t => t.Candidate_Id)
                 .Index(t => t.Candidate_Id);
             

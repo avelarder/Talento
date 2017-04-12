@@ -12,11 +12,13 @@ namespace Talento.Core.Helpers
     {
         IPosition PositionHelper;
         ICustomUser UserHelper;
+        IFileManagerHelper FileManagerHelper;
 
-        public CandidateHelper(Core.Data.ApplicationDbContext db, ICustomUser userHelper, IPosition positionHelper) : base(db)
+        public CandidateHelper(Core.Data.ApplicationDbContext db, ICustomUser userHelper, IPosition positionHelper, IFileManagerHelper fileManagerHelper) : base(db)
         {
             PositionHelper = positionHelper;
             UserHelper = userHelper;
+            FileManagerHelper = fileManagerHelper;
         }
 
         public void Create(Position log, string EmailModifier)
@@ -29,14 +31,39 @@ namespace Talento.Core.Helpers
             throw new NotImplementedException();
         }
 
-        public bool Edit(Position log, string EmailModifier)
+        public bool Edit(Candidate log)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var candidate = Db.Candidates.Single(x => x.Id == log.Id);
+
+                candidate.Competencies = log.Competencies;
+                candidate.Description = log.Description;
+                candidate.Name = log.Name;
+                candidate.Status = log.Status;
+
+                Db.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        public Task<Candidate> Get(int Id)
+        public Candidate Get(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var candidate = Db.Candidates.Single(x => x.Id == Id);
+                //position.Tags = Tags.GetByPositionId(position.Id);
+
+                return candidate;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<List<Candidate>> GetAll()
