@@ -165,7 +165,7 @@ namespace Talento.Controllers
         [HttpPost]
         [Authorize(Roles = "PM, TL")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(EditPositionViewModel position)
+        public ActionResult Edit(EditPositionViewModel position)
         {
 
             if (this.IsStateValid())
