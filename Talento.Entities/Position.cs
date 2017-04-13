@@ -92,7 +92,6 @@ namespace Talento.Entities
     {
         Screening = 1,
         Interviewing = 2,
-        Offered = 3
-        
+        Offered = 3   
     }
 }
