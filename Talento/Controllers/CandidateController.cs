@@ -21,26 +21,42 @@ namespace Talento.Controllers
             UserHelper = userHelper;
         }
 
+        public ActionResult SimulateAttachProfile()
+        {
+            CandidateViewModel model = new CandidateViewModel()
+            {
 
-        public ActionResult AttachProfile(CandidateViewModel model)
+            };
+
+            Position toApply = new Position()
+            {
+                Id = 5,
+                Title = "THE TITLE"
+            };
+
+            return InterviewFeedback(model,toApply);
+        }
+
+
+
+        public ActionResult AttachProfile(CandidateViewModel model, Position toApply)
         {
             MemoryStream ms = new MemoryStream();
             TextWriter tw = new StreamWriter(ms);
+            var callbackUrl = Url.Action("Details", "Positions", new { toApply.Id }, protocol: Request.Url.Scheme);
 
-            var callbackUrl = Url.Action("Details", "Position", new { positionId = 1 }, protocol: Request.Url.Scheme);
-
-            tw.WriteLine("A profile has been added to " + "" + "by " + User.Identity.Name +
-                            "please visit the following URL for more information: " + "http://"  + callbackUrl);
-
-            tw.WriteLine("Recipients: ");
+            tw.WriteLine("A profile has been added to " + toApply.Title + " by " + User.Identity.Name + " . " +
+                            "Please visit the following URL for more information: " + callbackUrl);
+            tw.Write("Recipients: ");
 
             foreach (ApplicationUser user in UserHelper.GetUsersForNewProfileMail())
             {
                 tw.Write(user.Email + ", ");
             }
+
             tw.Flush();
             tw.Close();
-            return File(ms.GetBuffer(), "application/octet-stream", "MailExample.txt");
+            return File(ms.GetBuffer(), "application/octet-stream", "MailNotification.txt");
 
 #if DEBUG == false
 
@@ -51,19 +67,19 @@ namespace Talento.Controllers
         }
 
 
-        public ActionResult InterviewFeedback(CandidateViewModel model)
+        public ActionResult InterviewFeedback(CandidateViewModel model, Position toapply)
         {
             MemoryStream ms = new MemoryStream();
             TextWriter tw = new StreamWriter(ms);
 
-            var callbackUrl = Url.Action("Details", "Position", new { positionId = 1 }, protocol: Request.Url.Scheme);
+            var callbackUrl = Url.Action("Details", "Positions", new { toapply.Id }, protocol: Request.Url.Scheme);
 
-            tw.WriteLine("A profile's interview feedback form has been added to " + "position title" + "by " + User.Identity.Name +
-                            "please visit the following URL for more information: " + "http://"  + callbackUrl);
+            tw.WriteLine("A profile's interview feedback form has been added to " + toapply.Title  + " by " + User.Identity.Name + "." +
+                            " Please visit the following URL for more information: " + callbackUrl);
 
-            tw.WriteLine("Recipients: ");
+            tw.Write("Recipients: ");
 
-            foreach (ApplicationUser user in UserHelper.GetUsersForNewProfileMail())
+            foreach (ApplicationUser user in UserHelper.GetUsersForNewFeedbackMail())
             {
                 tw.Write(user.Email + ", ");
             }

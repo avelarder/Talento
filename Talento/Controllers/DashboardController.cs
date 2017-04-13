@@ -19,10 +19,12 @@ namespace Talento.Controllers
     public class DashboardController : Controller
     {
         ICustomPagingList DashboardPagingHelper;
+        //ISendEmail SendEmail;
 
-        public DashboardController(ICustomPagingList dashboardPagingHelper)
+        public DashboardController(ICustomPagingList dashboardPagingHelper/*, ISendEmail sendemail*/)
         {
             DashboardPagingHelper = dashboardPagingHelper;
+            //SendEmail = sendemail;
 
             AutoMapper.Mapper.Initialize(cfg =>
             {

@@ -47,14 +47,17 @@ namespace Talento.Core.Helpers
 
         public List<ApplicationUser> GetUsersForNewProfileMail()
         {
-            List<ApplicationUser> recipients = Db.Users.Where(x => x.Roles.Equals("TL") || x.Roles.Equals("TM") ||
-                                                x.Roles.Equals("RMG") || x.Roles.Equals("TAG")).ToList();
+           
+            List<ApplicationUser> recipients = Db.Users.Where(x => x.Roles.Any(p => p.RoleId == "62bd6c0f-cbd2-49f1-ab59-dd5034ea8341"/*TL*/) || x.Roles.Any(p => p.RoleId == "95df772e-9444-4ff3-89a8-d2db9d2cfe66"/*RMG*/) || x.Roles.Any(p => p.RoleId == "65ceda4f-8de4-4b2b-b6ab-2d4934934e9c"/*TAG*/)).ToList();
+
             return recipients;
+
         }
 
         public List<ApplicationUser> GetUsersForNewFeedbackMail()
         {
-            List<ApplicationUser> recipients = Db.Users.Where(x => x.Roles.Equals("RMG") || x.Roles.Equals("TAG")).ToList();
+            List<ApplicationUser> recipients = Db.Users.Where(x => x.Roles.Any(p => p.RoleId == "95df772e-9444-4ff3-89a8-d2db9d2cfe66"/*RMG*/) || x.Roles.Any(p => p.RoleId == "65ceda4f-8de4-4b2b-b6ab-2d4934934e9c"/*TAG*/)).ToList();
+
             return recipients;
         }
     }
