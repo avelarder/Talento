@@ -19,7 +19,7 @@ namespace Talento.Core.Migrations
                         CratedOn = c.DateTime(),
                         CreatedBy_Id = c.String(maxLength: 128),
                         Status = c.Int(nullable: false),
-                        Discriminator = c.String(nullable: false, maxLength: 128),
+                        IsTcsEmployee = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.CreatedBy_Id)

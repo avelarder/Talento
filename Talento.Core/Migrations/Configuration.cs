@@ -506,9 +506,9 @@ namespace Talento.Core.Migrations
 
             #region tcscandidates
 
-            var tcsCandidates = new List<TcsCandidate>
+            var tcsCandidates = new List<Candidate>
             {
-               new TcsCandidate{
+               new Candidate{
                    Id = 1,
                    Email = "Candidate1@example.com",
                    Name = "Example Employee 1",
@@ -516,9 +516,10 @@ namespace Talento.Core.Migrations
                    Description = "This is a description",
                    CratedOn = Convert.ToDateTime("2017-03-10T12:30:30"),
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
-                   Status = CandidateStatus.Accepted
+                   Status = CandidateStatus.Accepted,
+                   IsTcsEmployee = true
                },
-               new TcsCandidate{
+               new Candidate{
                    Id = 2,
                    Email = "Candidate2@example.com",
                    Name = "Example Employee 2",
@@ -528,7 +529,7 @@ namespace Talento.Core.Migrations
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
                    Status = CandidateStatus.Accepted
                },
-               new TcsCandidate{
+               new Candidate{
                    Id = 3,
                    Email = "Candidate3@example.com",
                    Name = "Example Employee 3",
@@ -538,7 +539,7 @@ namespace Talento.Core.Migrations
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
                    Status = CandidateStatus.Accepted
                },
-               new TcsCandidate{
+               new Candidate{
                    Id = 4,
                    Email = "Candidate4@example.com",
                    Name = "Example Employee 4",
@@ -548,7 +549,7 @@ namespace Talento.Core.Migrations
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
                    Status = CandidateStatus.Accepted
                },
-               new TcsCandidate{
+               new Candidate{
                    Id = 5,
                    Email = "Candidate5@example.com",
                    Name = "Example Employee 5",
@@ -558,7 +559,7 @@ namespace Talento.Core.Migrations
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
                    Status = CandidateStatus.Accepted
                },
-               new TcsCandidate{
+               new Candidate{
                    Id = 6,
                    Email = "Candidate6@example.com",
                    Name = "Example Employee 6",
@@ -568,7 +569,7 @@ namespace Talento.Core.Migrations
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
                    Status = CandidateStatus.Accepted
                },
-               new TcsCandidate{
+               new Candidate{
                    Id = 7,
                    Email = "Candidate7@example.com",
                    Name = "Example Employee 7",
@@ -578,7 +579,7 @@ namespace Talento.Core.Migrations
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
                    Status = CandidateStatus.Accepted
                },
-               new TcsCandidate{
+               new Candidate{
                    Id = 8,
                    Email = "Candidate8@example.com",
                    Name = "Example Employee 8",
@@ -588,7 +589,7 @@ namespace Talento.Core.Migrations
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
                    Status = CandidateStatus.Accepted
                },
-               new TcsCandidate{
+               new Candidate{
                    Id = 9,
                    Email = "Candidate9@example.com",
                    Name = "Example Employee 9",
@@ -598,7 +599,7 @@ namespace Talento.Core.Migrations
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
                    Status = CandidateStatus.Accepted
                },
-               new TcsCandidate{
+               new Candidate{
                    Id = 10,
                    Email = "Candidate0@example.com",
                    Name = "Example Employee 0",
@@ -617,9 +618,9 @@ namespace Talento.Core.Migrations
 
             #region nontcscandidates
 
-            var nontcsCandidates = new List<NonTcsCandidate>
+            var nontcsCandidates = new List<Candidate>
             {
-               new NonTcsCandidate{
+               new Candidate{
                    Id = 11,
                    Email = "Candidate11@example.com",
                    Name = "Example Employee 11",
@@ -627,9 +628,10 @@ namespace Talento.Core.Migrations
                    Description = "This is a description",
                    CratedOn = Convert.ToDateTime("2017-03-01T13:45:30"),
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
-                   Status = CandidateStatus.New
+                   Status = CandidateStatus.New,
+                   IsTcsEmployee = false
                },
-               new NonTcsCandidate{
+               new Candidate{
                    Id = 12,
                    Email = "Candidate12@example.com",
                    Name = "Example Employee 12",
@@ -637,9 +639,10 @@ namespace Talento.Core.Migrations
                    Description = "This is a description",
                    CratedOn = Convert.ToDateTime("2017-03-04T13:45:30"),
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
-                   Status = CandidateStatus.New
+                   Status = CandidateStatus.New,
+                   IsTcsEmployee = false
                },
-               new NonTcsCandidate{
+               new Candidate{
                    Id = 13,
                    Email = "Candidate13@example.com",
                    Name = "Example Employee 13",
@@ -647,9 +650,10 @@ namespace Talento.Core.Migrations
                    Description = "This is a description",
                    CratedOn = Convert.ToDateTime("2017-03-06T13:45:30"),
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
-                   Status = CandidateStatus.New
+                   Status = CandidateStatus.New,
+                   IsTcsEmployee = false
                },
-               new NonTcsCandidate{
+               new Candidate{
                    Id = 14,
                    Email = "Candidate14@example.com",
                    Name = "Example Employee 14",
@@ -657,9 +661,10 @@ namespace Talento.Core.Migrations
                    Description = "This is a description",
                    CratedOn = Convert.ToDateTime("2017-03-09T13:45:30"),
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
-                   Status = CandidateStatus.New
+                   Status = CandidateStatus.New,
+                   IsTcsEmployee = false
                },
-               new NonTcsCandidate{
+               new Candidate{
                    Id = 15,
                    Email = "Candidate15@example.com",
                    Name = "Example Employee 15",
@@ -667,9 +672,10 @@ namespace Talento.Core.Migrations
                    Description = "This is a description",
                    CratedOn = Convert.ToDateTime("2017-03-12T13:45:30"),
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
-                   Status = CandidateStatus.New
+                   Status = CandidateStatus.New,
+                   IsTcsEmployee = false
                },
-               new NonTcsCandidate{
+               new Candidate{
                    Id = 16,
                    Email = "Candidate16@example.com",
                    Name = "Example Employee 16",
@@ -677,9 +683,10 @@ namespace Talento.Core.Migrations
                    Description = "This is a description",
                    CratedOn = Convert.ToDateTime("2017-03-17T13:45:30"),
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
-                   Status = CandidateStatus.New
+                   Status = CandidateStatus.New,
+                   IsTcsEmployee = false
                },
-               new NonTcsCandidate{
+               new Candidate{
                    Id = 17,
                    Email = "Candidate17@example.com",
                    Name = "Example Employee 17",
@@ -687,9 +694,10 @@ namespace Talento.Core.Migrations
                    Description = "This is a description",
                    CratedOn = Convert.ToDateTime("2017-03-15T13:45:30"),
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
-                   Status = CandidateStatus.New
+                   Status = CandidateStatus.New,
+                   IsTcsEmployee = false
                },
-               new NonTcsCandidate{
+               new Candidate{
                    Id = 18,
                    Email = "Candidate18@example.com",
                    Name = "Example Employee 18",
@@ -697,9 +705,10 @@ namespace Talento.Core.Migrations
                    Description = "This is a description",
                    CratedOn = Convert.ToDateTime("2017-03-20T13:45:30"),
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
-                   Status = CandidateStatus.New
+                   Status = CandidateStatus.New,
+                   IsTcsEmployee = false
                },
-               new NonTcsCandidate{
+               new Candidate{
                    Id = 19,
                    Email = "Candidate19@example.com",
                    Name = "Example Employee 19",
@@ -707,9 +716,10 @@ namespace Talento.Core.Migrations
                    Description = "This is a description",
                    CratedOn = Convert.ToDateTime("2017-03-22T13:45:30"),
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
-                   Status = CandidateStatus.New
+                   Status = CandidateStatus.New,
+                   IsTcsEmployee = false
                },
-               new NonTcsCandidate{
+               new Candidate{
                    Id = 20,
                    Email = "Candidate00@example.com",
                    Name = "Example Employee 00",
@@ -717,7 +727,8 @@ namespace Talento.Core.Migrations
                    Description = "This is a description",
                    CratedOn = Convert.ToDateTime("2017-03-27T13:45:30"),
                    CreatedBy = manager.FindByEmail("Pmuser1@example.com"),
-                   Status = CandidateStatus.New
+                   Status = CandidateStatus.New,
+                   IsTcsEmployee = false
                }
             };
 

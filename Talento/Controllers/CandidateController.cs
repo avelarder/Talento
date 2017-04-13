@@ -14,10 +14,10 @@ namespace Talento.Controllers
     {
         ICandidate CandidateHelper;
         ICustomUser UserHelper;
-        IPositionCandidates PositionsCandidatesHelper;
+        IPositionCandidate PositionsCandidatesHelper;
         IFileManagerHelper FileManagerHelper;
 
-        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPositionCandidates positionsCandidatesHelper, IFileManagerHelper fileManagerHelper)
+        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPositionCandidate positionsCandidatesHelper, IFileManagerHelper fileManagerHelper)
         {
             CandidateHelper = candidateHelper;
             UserHelper = userHelper;
@@ -105,7 +105,7 @@ namespace Talento.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(NewCandidateViewModel candidate)
+        public ActionResult New(CandidateModel candidate)
         {
 
             List<FileBlob> files = ((List<FileBlob>)Session["files"]);

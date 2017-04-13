@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Talento.Entities
 {
-    public abstract class Candidate
+    public class Candidate
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,7 +18,7 @@ namespace Talento.Entities
         [StringLength(50, ErrorMessage = "Name must have 50 characters maximum")]
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
-
+        
         [StringLength(50, ErrorMessage = "Email must have 50 characters maximum")]
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
@@ -43,6 +43,10 @@ namespace Talento.Entities
         [Required(ErrorMessage = "Status is required")]
         [DefaultValue("New")]
         public CandidateStatus Status { get; set; }
+
+        [Required]
+        [DefaultValue(true)]
+        public bool IsTcsEmployee { get; set; }
     }
 
     public enum CandidateStatus

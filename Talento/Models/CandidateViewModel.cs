@@ -9,20 +9,6 @@ namespace Talento.Models
 {
     public class CandidateModel
     {
-        public string Name { get; set; }
-
-        public string Email { get; set; }
-
-        public bool IsTcsEmployee { get; set; }
-
-        public string Competencies { get; set; }
-
-        public string Description { get; set; }
-
-    }
-
-    public class FileBlobViewModel
-    {
         public int Id { get; set; }
 
         [StringLength(50, ErrorMessage = "Name must have 50 characters maximum")]
@@ -51,6 +37,15 @@ namespace Talento.Models
         [Required(ErrorMessage = "Status is required")]
         [Range(0, 6, ErrorMessage = "Status should be a valid one.")]
         public CandidateStatus Status { get; set; }
+    }
+
+    public class FileBlobViewModel
+    {
+    
+        public byte[] Blob { get; set; }
+
+        public string FileName { get; set; }
+
     }
 
     public class PositionCandidateViewModel
