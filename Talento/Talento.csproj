@@ -321,10 +321,10 @@
     <Content Include="Views\PositionLogs\Pagination.cshtml" />
     <Content Include="Views\Dashboard\AppSettings.cshtml" />
     <Content Include="Views\Dashboard\ManageUser.cshtml" />
+    <Content Include="Views\Candidate\Candidate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Candidate\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
