@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Talento.Core;
 using Talento.Entities;
 using Talento.Models;
 
@@ -10,12 +11,26 @@ namespace Talento.Controllers
 {
     public class FileController : Controller
     {
+        IFileManagerHelper FileManagerHelper;
+        ICandidate CandidateHelper;
+        public FileController(IFileManagerHelper fileManagerHelper, ICandidate candidateHelper)
+        {
+            FileManagerHelper = fileManagerHelper;
+            CandidateHelper = candidateHelper;
+        }
+
         public ActionResult Index()
         {
             if (Session["files"] != null)
             {
                 Session["files"] = new List<FileBlob>();
             }
+            return PartialView("~/Views/Shared/File/Index.cshtml");
+        }
+
+        public ActionResult Edit(int candidateId)
+        {
+            Session["files"] = FileManagerHelper.GetAll(CandidateHelper.Get(candidateId));
             return PartialView("~/Views/Shared/File/Index.cshtml");
         }
 
@@ -55,6 +70,13 @@ namespace Talento.Controllers
             {
                 ((List<FileBlob>)Session["files"]).ForEach(x => result.Add(new FileBlobViewModel() { FileName = x.FileName }));
             }
+            return Json(result);
+        }
+
+        public JsonResult ListCandidateFiles(int candidateId)
+        {
+            List<FileBlob> result = new List<FileBlob>();
+            result = FileManagerHelper.GetAll(CandidateHelper.Get(candidateId)).ToList();
             return Json(result);
         }
 

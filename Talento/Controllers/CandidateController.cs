@@ -30,15 +30,36 @@ namespace Talento.Controllers
                 cfg.CreateMap<Candidate, CandidateModel>()
                     .ForMember(t => t.CreatedBy_Id, opt => opt.MapFrom(s => s.CreatedBy_Id))
                 ;
-                cfg.CreateMap<EditCandidateViewModel, Candidate>();
+                cfg.CreateMap<Candidate, EditCandidateViewModel>();
             });
         }
 
         //GET: Edit Candidate
         [Authorize(Roles = "PM, TL")]
-        public ActionResult Edit()
+        public ActionResult Edit(int id, int positionId)
         {
-            return View();
+            EditCandidateViewModel candidate = AutoMapper.Mapper.Map<EditCandidateViewModel>(CandidateHelper.Get(id));
+            List<PositionCandidate> positionsCandidates = PositionsCandidatesHelper.GetCandidatesByPositionId(positionId);
+
+            if (!positionsCandidates.Any(x => x.Candidate.Id.Equals(candidate.Id)))
+            {
+                return HttpNotFound();
+            }
+
+            PositionCandidate item = positionsCandidates[0];
+            {
+                if (item.Position.Status == Status.Cancelled || item.Position.Status == Status.Closed)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
+                }
+            }
+            
+            if (candidate == null)
+            {
+                return HttpNotFound();
+            }
+
+            return PartialView(candidate);
         }
 
         // POST: Candidate/Edit/5
@@ -98,7 +119,7 @@ namespace Talento.Controllers
             };
             Position position = PositionHelper.Get(candidate.Position_Id);
             PositionsCandidatesHelper.Create(newCandidate,position);
-
+            files.ForEach(x => x.Candidate = newCandidate);
             int result = CandidateHelper.Create(newCandidate, files);
             switch (result)
             {

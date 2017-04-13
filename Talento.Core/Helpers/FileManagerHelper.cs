@@ -80,7 +80,7 @@ namespace Talento.Core.Helpers
         {
             try
             {
-                return Db.FileBlobs.Where(x => x.Candidate.Equals(owner)).ToList();                
+                return Db.FileBlobs.Where(x => x.Candidate_Id.Equals(owner.Id)).ToList();                
             }
             catch (Exception)
             {

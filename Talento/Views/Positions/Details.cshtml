@@ -66,7 +66,7 @@
             <!--Delete position modal-->
         </div>
     </div>
-    
+
     <div class="col-sm-4">
         @* Partial of Logs *@
         @Html.Action("List", "PositionLogs", new { id = Model.Item2.Id })
@@ -103,8 +103,8 @@
                         @cP.Candidate.Status
                     </td>
                     <td>
-                        <a href="#" class="edit-candidate" data-toggle="modal" data-candidate="@cP.Candidate_Id" data-target="#edit-position-dialog" alt="Edit candidate">
-                            <i class="material-icons md-24">mode_edit</i>
+                        <a href="@Url.Action("Edit", "Candidate",new { id = cP.Candidate_Id, positionId = Model.Item2.Id } )" class="material-icons md-24 edit-candidate" data-toggle="modal" data-target="#edit-position-dialog" alt="Edit candidate">
+                            mode_edit
                         </a>
                     </td>
                     <td>
@@ -120,6 +120,37 @@
                 </tr>
             }
         </table>
+        <script>
+            window.onload = function () {
+                (function ($) {
+                    // start dude
+                    var $parent = $('#candidates-list');
+                    console.log("first trigger");
+                    $parent.on("click", '.edit-candidate', function (event) {
+                        console.log("candidate trigger");
+                        event.preventDefault();
+                        // vars
+                        var $this = $(this);
+                        var $target = $($this.attr('data-target'));
+                        var $url = $this.attr('href');
+                        $target.html('');
+                        $.ajax({
+                            url: $url
+                        }).fail(function (err) {
+                            var html = '<div class="modal-dialog"> \
+                                < div class="modal-content" > \
+                                    <div class="modal-body" id="edit-position-dialog-body"> Error:'+ err +'</div></div></div>';
+                            $target.html(html);
+                        }).done(function (result) {
+                            console.log("Load trigger");
+                            $target.html(result);
+                            $target.modal()
+                        });
+                    });
+                }(jQuery));
+            }
+
+        </script>
         <!--pagination-->
         <!-- output a paging control that lets the user navigation to the previous page, next page, etc -->
         @Html.PagedListPager((IPagedList)ViewBag.onePageOfCandidatePositions, page => Url.Action("Details", "Positions", new { Model.Item2.Id, page }))
@@ -139,22 +170,7 @@
             </div>
         </div>
         <!--Delete profile modal-->
-
         <!--Edit profile modal-->
-        <div tabindex="-1" class="modal fade" id="edit-position-dialog" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        @Html.Action("Edit", "Candidate")
-                    </div>
-                    <div class="pmd-modal-action pmd-modal-bordered text-right">
-                        <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                        <button data-dismiss="modal" type="button" onclick="@("window.location.href='" + @Url.Action(null, null, new { id = Model.Item2.Id }) + "'");" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Ok</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--Edit profile modal-->
-
+        <div tabindex="-1" class="modal fade" id="edit-position-dialog" aria-hidden="true"></div>
     </div>
 </div>
