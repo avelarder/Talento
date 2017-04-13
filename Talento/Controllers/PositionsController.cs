@@ -37,8 +37,8 @@ namespace Talento.Controllers
                 ;
                 cfg.CreateMap<Position, EditPositionViewModel>();
                 cfg.CreateMap<EditPositionViewModel, Position>();
-                cfg.CreateMap<PositionCandidate, PositionCandidateViewModel>();
-                cfg.CreateMap<Candidate, CandidateViewModel>();
+                cfg.CreateMap<PositionCandidates, PositionCandidatesViewModel>();
+                cfg.CreateMap<Candidate, CandidateModel>();
 
                 /*
                This could be useful in future in case of needing to edit the owner user account. It is not yet requested in the Edit user story 295

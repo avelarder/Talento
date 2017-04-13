@@ -7,7 +7,7 @@ using Talento.Entities;
 
 namespace Talento.Models
 {
-    public class NewCandidateViewModel
+    public class CandidateModel
     {
         public string Name { get; set; }
 
@@ -25,15 +25,31 @@ namespace Talento.Models
     {
         public int Id { get; set; }
 
+        [StringLength(50, ErrorMessage = "Name must have 50 characters maximum")]
+        [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
 
-        [StringLength(100)]
+        [StringLength(50, ErrorMessage = "Email must have 50 characters maximum")]
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress]
         public string Email { get; set; }
+
+        [StringLength(300, ErrorMessage = "Competencies must have 300 characters maximum")]
+        [Required(ErrorMessage = "Competencies is required")]
+        public string Competencies { get; set; }
+
+        [StringLength(300, ErrorMessage = "Competencies must have 300 characters maximum")]
+        [Required(ErrorMessage = "Competencies is required")]
+        public string Description { get; set; }
 
         public DateTime? CratedOn { get; set; }
 
-        public ApplicationUser CreatedBy { get; set; }
+        public string CreatedBy_Id { get; set; }
 
+        public virtual ApplicationUser CreatedBy { get; set; }
+
+        [Required(ErrorMessage = "Status is required")]
+        [Range(0, 6, ErrorMessage = "Status should be a valid one.")]
         public CandidateStatus Status { get; set; }
     }
 
@@ -50,6 +66,38 @@ namespace Talento.Models
 
         [Required]
         public virtual Position Position { get; set; }
+    }
+
+    public class EditCandidateViewModel
+    {
+        public int Id { get; set; }
+
+        [StringLength(50, ErrorMessage = "Name must have 50 characters maximum")]
+        [Required(ErrorMessage = "Name is required")]
+        public string Name { get; set; }
+
+        [StringLength(50, ErrorMessage = "Email must have 50 characters maximum")]
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [StringLength(300, ErrorMessage = "Competencies must have 300 characters maximum")]
+        [Required(ErrorMessage = "Competencies is required")]
+        public string Competencies { get; set; }
+
+        [StringLength(300, ErrorMessage = "Competencies must have 300 characters maximum")]
+        [Required(ErrorMessage = "Competencies is required")]
+        public string Description { get; set; }
+
+        public DateTime? CratedOn { get; set; }
+
+        public string CreatedBy_Id { get; set; }
+
+        public virtual ApplicationUser CreatedBy { get; set; }
+
+        [Required(ErrorMessage = "Status is required")]
+        [Range(0, 6, ErrorMessage = "Status should be a valid one.")]
+        public CandidateStatus Status { get; set; }
     }
 
 }
