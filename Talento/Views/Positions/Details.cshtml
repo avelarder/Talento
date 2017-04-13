@@ -33,9 +33,20 @@
             <p><b>Status: </b>@Html.DisplayFor(x => x.Item2.Status)<p />
         </div>
         <div class="col-md-8">
-            <input type="button" name="back" class="btn pmd-ripple-effect btn-primary" value="Back" onclick="@("window.location.href='" + @Url.Action("Index", "Dashboard") + "'");" />
-            <input type="button" name="edit" class="btn pmd-ripple-effect btn-primary" value="Edit" onclick="@("window.location.href='" + @Url.Action("Edit", "Positions", new { id = Model.Item2.Id }) + "'");" />
-            <input data-target="#complete-dialog" data-toggle="modal" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />
+            @*<input type="button" name="back" class="btn pmd-ripple-effect btn-primary" value="Back" onclick="@("window.location.href='" + @Url.Action("Index", "Dashboard") + "'");" />*@
+            <a href="@Url.Action("Index", "Dashboard")" alt="Back">
+                <i class="material-icons md-24">keyboard_arrow_left</i>
+            </a>
+
+            @*<input type="button" name="edit" value="Edit" onclick="@("window.location.href='" + @Url.Action("Edit", "Positions", new { id = Model.Item2.Id }) + "'");" />*@
+            <a href="@Url.Action("Edit", "Positions", new { id = Model.Item2.Id })" alt="Edit position">
+                <i class="material-icons md-24">mode_edit</i>
+            </a>
+
+            @*<input data-target="#complete-dialog" data-toggle="modal" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />*@
+            <a href="@Url.Action("Delete", "Positions")" data-target="#complete-dialog" alt="Delete position">
+                <i class="material-icons md-24">delete</i>
+            </a>
 
             <!--Delete position modal-->
             <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
@@ -55,10 +66,13 @@
             <!--Delete position modal-->
         </div>
     </div>
+    
     <div class="col-sm-4">
+        @* Partial of Logs *@
         @Html.Action("List", "PositionLogs", new { id = Model.Item2.Id })
     </div>
 </div>
+
 <div class="row">
     <div class="col-md-12">
         <h2>Candidates</h2>
@@ -89,19 +103,27 @@
                         @cP.Candidate.Status
                     </td>
                     <td>
-                        <a data-toggle="modal" data-target="#edit-position-dialog" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth">Edit</a>
+                        <a href="#" data-toggle="modal" data-target="#edit-position-dialog" alt="Edit candidate">
+                            <i class="material-icons md-24">mode_edit</i>
+                        </a>
                     </td>
                     <td>
-                        <a data-toggle="modal" data-target="#delete-position-dialog" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth">Delete</a>
+                        <a href="#" data-toggle="modal" data-target="#delete-position-dialog" alt="Delete candidate">
+                            <i class="material-icons md-24">delete</i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" data-toggle="modal" alt="Add profile">
+                            <i class="material-icons md-24">note_add</i>
+                        </a>
                     </td>
                 </tr>
             }
         </table>
         <!--pagination-->
-
         <!-- output a paging control that lets the user navigation to the previous page, next page, etc -->
-        @Html.PagedListPager((IPagedList)ViewBag.onePageOfCandidatePositions, page => Url.Action("Details", "Positions", new { Model.Item2.Id, page })) <!--?page=2-->
-        
+        @Html.PagedListPager((IPagedList)ViewBag.onePageOfCandidatePositions, page => Url.Action("Details", "Positions", new { Model.Item2.Id, page }))
+
         <!--Delete profile modal-->
         <div tabindex="-1" class="modal fade" id="delete-position-dialog" style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
@@ -127,13 +149,12 @@
                     </div>
                     <div class="pmd-modal-action pmd-modal-bordered text-right">
                         <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                        <button data-dismiss="modal" type="button" onclick="@("window.location.href='" + @Url.Action(null, null, new { id = Model.Item2.Id }) + "'");" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
+                        <button data-dismiss="modal" type="button" onclick="@("window.location.href='" + @Url.Action(null, null, new { id = Model.Item2.Id }) + "'");" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Ok</button>
                     </div>
                 </div>
             </div>
         </div>
         <!--Edit profile modal-->
 
-        <input data-toggle="modal" class="btn btn-info pmd-ripple-effect btn-primary pmd-z-depth" value="Add profile" />
     </div>
 </div>
