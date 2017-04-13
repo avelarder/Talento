@@ -16,12 +16,12 @@
             @if (Model.Current > 3)
             {
                 <li class="pagination-first">
-                    <a href="@(Model.Url + "?page=" + 1)">First</a>
+                    <a href="@(Model.Url + "?pagex=" + 1)">First</a>
                 </li>
             }
             @* Previous page button , disabled when doesn't have previous page *@
             <li class="pagination-prev pagination-arrow @((Model.Prev == 0) ? "disabled" : "" )">
-                <a href="@(Model.Url + "?page=" + Model.Prev)" aria-label="Previous">&laquo;</a>
+                <a href="@(Model.Url + "?pagex=" + Model.Prev)" aria-label="Previous">&laquo;</a>
             </li>
             @* Shows [...] indicating there are more previous pages that the ones displayed *@
             @if (Model.Current > 3)
@@ -34,7 +34,7 @@
             @for (int i = previousPages; i > 0; i--)
             {
                 <li>
-                    <a href="@(Model.Url + "?page=" + (Model.Current - i))">@(Model.Current - i)</a>
+                    <a href="@(Model.Url + "?pagex=" + (Model.Current - i))">@(Model.Current - i)</a>
                 </li>
             }
             @* Shows Current disabled and with no link *@
@@ -45,7 +45,7 @@
             @for (int i = 1; i <= nextPages; i++)
             {
                 <li>
-                    <a href="@(Model.Url + "?page=" + (Model.Current + i))">@(Model.Current + i)</a>
+                    <a href="@(Model.Url + "?pagex=" + (Model.Current + i))">@(Model.Current + i)</a>
                 </li>
             }
             @* Shows [...] indicating there are more next pages that the ones displayed *@
@@ -57,7 +57,7 @@
             }
             @* Next page button , disabled when doesn't have next page *@
             <li class="pagination-next pagination-arrow @((Model.Next == 0) ? "disabled" : "")">
-                <a href="@(Model.Url + "?page=" + Model.Next)" aria-label="Next">
+                <a href="@(Model.Url + "?pagex=" + Model.Next)" aria-label="Next">
                     &raquo;
                 </a>
             </li>
@@ -65,7 +65,7 @@
             @if (Model.Current < (Model.Total -2))
             {
                 <li class="pagination-last">
-                    <a href="@(Model.Url + "?page=" + Model.Total)">last</a>
+                    <a href="@(Model.Url + "?pagex=" + Model.Total)">last</a>
                 </li>
             }
         </ul>

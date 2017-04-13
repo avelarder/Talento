@@ -32,7 +32,7 @@ namespace Talento.Controllers
         }
 
         // Show: PositionLogs
-        public ActionResult List(int? id, int page = 1, int pagesize = 5, string clase = "slide-right")
+        public ActionResult List(int? id, int pagex = 1, int pagesize = 5, string clase = "slide-right")
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Talento.Controllers
                 // Url for the pagination Helper
                 string url = Url.Action("List", "PositionLogs");
                 // Get List of PositionLogs and the Pagination
-                var containerLogs = LogHelper.PaginateLogs(id, page, pagesize, url);
+                var containerLogs = LogHelper.PaginateLogs(id, pagex, pagesize, url);
                 // No logs with the ID return 404
                 if( containerLogs == null)
                 {

@@ -34,40 +34,11 @@ namespace Talento.Controllers
             });
         }
 
-        public virtual bool IsStateValid()
-        {
-            return ModelState.IsValid;
-        }
-
-        // GET: Candidate
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         //GET: Edit Candidate
         [Authorize(Roles = "PM, TL")]
-        public ActionResult Edit(int id, PositionModel position)
+        public ActionResult Edit()
         {
-            try
-            {
-                EditCandidateViewModel candidate = AutoMapper.Mapper.Map<EditCandidateViewModel>(CandidateHelper.Get(id));
-                if (candidate == null)
-                {
-                    return HttpNotFound();
-                }
-
-                if (position.Status == Status.Closed || position.Status == Status.Cancelled || position.Status == Status.Removed)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
-                }
-
-                return View(candidate);
-            }
-            catch (InvalidOperationException)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The designated candidate does not have a valid ID");
-            }
+            return View();
         }
 
         // POST: Candidate/Edit/5
@@ -80,7 +51,7 @@ namespace Talento.Controllers
         {
             try
             {
-                if (this.IsStateValid())
+                if (ModelState.IsValid)
                 {
                     if (CandidateHelper.Edit(AutoMapper.Mapper.Map<Candidate>(candidate)))
                     {

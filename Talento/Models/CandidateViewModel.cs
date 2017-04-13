@@ -132,5 +132,4 @@ namespace Talento.Models
         [Required]
         public string IsTcsEmployee { get; set; }
     }
-
 }

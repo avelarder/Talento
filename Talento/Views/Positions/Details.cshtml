@@ -78,7 +78,7 @@
         <h2>Candidates</h2>
 
         <!--pagination-->
-        <table class="table">
+        <table class="table" id="candidates-list">
             <thead>
                 <tr>
                     <th>Email</th>
@@ -103,7 +103,7 @@
                         @cP.Candidate.Status
                     </td>
                     <td>
-                        <a href="#" data-toggle="modal" data-target="#edit-position-dialog" alt="Edit candidate">
+                        <a href="#" class="edit-candidate" data-toggle="modal" data-candidate="@cP.Candidate_Id" data-target="#edit-position-dialog" alt="Edit candidate">
                             <i class="material-icons md-24">mode_edit</i>
                         </a>
                     </td>
@@ -145,7 +145,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <p>Edit profile</p>
+                        @Html.Action("Edit", "Candidate")
                     </div>
                     <div class="pmd-modal-action pmd-modal-bordered text-right">
                         <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
