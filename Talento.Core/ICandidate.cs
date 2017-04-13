@@ -9,10 +9,10 @@ namespace Talento.Core
 {
     public interface ICandidate
     {
-        Task<Candidate> Get(int Id);
+        Candidate Get(int Id);
         Task<List<Candidate>> GetAll();
         void Create(Position log, string EmailModifier);
-        bool Edit(Position log, string EmailModifier);
+        bool Edit(Candidate log);
         void Delete(int Id, string uId);
     }
 }

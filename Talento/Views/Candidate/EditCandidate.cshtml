@@ -1,0 +1,38 @@
+﻿@model Talento.Models.EditCandidateViewModel
+<form>
+    <input type="hidden" id="CandidateId" name="CandidateId" value="data-candidate-id">
+    <div class="modal-body">
+        <p><strong>Edit Profile</strong></p>
+        <div class="form-group row">
+            <label for="Candidateemail" class="col-md-2 col-form-label">Email</label>
+            <div class="col-md-4">
+                <input disabled class="form-control" type="text" id="CandidateEmail" value="@Model.Email">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="CandidateName" class="col-md-2 col-form-label">Name</label>
+            <div class="col-md-4">
+                <input class="form-control" type="text" id="CandidateName" name="Name" value="@Model.Name">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="CandidateCompetencies" class="col-md-2 col-form-label">Competencies</label>
+            <div class="col-md-4">
+                <textarea class="form-control" rows="6" type="text" id="CandidateCompetencies" name="Competencies">@Model.Competencies</textarea>
+            </div>
+        </div>
+        <div class="checkbox disabled">
+            <label><input type="checkbox" value="" disabled>Is Tcs employee</label>
+        </div>
+        <div class="form-group row">
+            <label for="CandidateDescription" class="col-md-2 col-form-label">Description</label>
+            <div class="col-md-4">
+                <input class="form-control" type="text" id="Description" name="Description" value="@Model.Description">
+            </div>
+        </div>
+    </div>
+    <div class="pmd-modal-action pmd-modal-bordered text-right">
+        <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
+        <button type="submit" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Submit</button>
+    </div>
+</form>

@@ -273,25 +273,25 @@
 //            var user = "test@test.com";
 //            appUser.UserName = user;
 
-//            Position positionCreate = new Position()
-//            {
-//                Owner = appUser,
-//                Id = 1,
-//                Area = positionViewModel.Area,
-//                CreationDate = DateTime.MaxValue,
-//                Description = positionViewModel.Description,
-//                Status = Status.Open,
-//                EngagementManager = positionViewModel.Description,
-//                //PortfolioManager = user,
-//                RGS = positionViewModel.RGS,
-//                Tags = null,
-//                Title = positionViewModel.Title
-//            };
-
-//            position.Setup(x => x.Create(positionCreate, appUser.UserName));
-
-//            var mController = new PositionsController(position.Object, mUser.Object);
-//            mController.ControllerContext = mockContext.Object;
+            Position positionCreate = new Position()
+            {
+                Owner = appUser,
+                Id = 1,
+                Area = positionViewModel.Area,
+                CreationDate = DateTime.MaxValue,
+                Description = positionViewModel.Description,
+                Status = Status.Open,
+                EngagementManager = positionViewModel.Description,
+                //PortfolioManager = user,
+                RGS = positionViewModel.RGS,
+                Tags = null,
+                Title = positionViewModel.Title
+            };
+            
+            position.Setup(x => x.Create(positionCreate));
+            
+            var mController = new PositionsController(position.Object, mUser.Object);
+            mController.ControllerContext = mockContext.Object;
 
 //            //mController.IsStateValid = () => { return true; };
 
