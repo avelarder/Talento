@@ -24,8 +24,8 @@ namespace Talento.Models
         [Required(ErrorMessage = "Competencies is required")]
         public string Competencies { get; set; }
 
-        [StringLength(300, ErrorMessage = "Competencies must have 300 characters maximum")]
-        [Required(ErrorMessage = "Competencies is required")]
+        [StringLength(300, ErrorMessage = "Description must have 300 characters maximum")]
+        [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
 
         public DateTime? CratedOn { get; set; }
@@ -37,6 +37,9 @@ namespace Talento.Models
         [Required(ErrorMessage = "Status is required")]
         [Range(0, 6, ErrorMessage = "Status should be a valid one.")]
         public CandidateStatus Status { get; set; }
+
+        [Required]
+        public bool IsTcsEmployee { get; set; }
     }
 
     public class FileBlobViewModel
@@ -93,6 +96,41 @@ namespace Talento.Models
         [Required(ErrorMessage = "Status is required")]
         [Range(0, 6, ErrorMessage = "Status should be a valid one.")]
         public CandidateStatus Status { get; set; }
+    }
+
+    public class CreateCandidateViewModel
+    {
+        public int Position_Id { get; set; }
+
+        [StringLength(50, ErrorMessage = "Name must have 50 characters maximum")]
+        [Required(ErrorMessage = "Name is required")]
+        public string Name { get; set; }
+
+        [StringLength(50, ErrorMessage = "Email must have 50 characters maximum")]
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [StringLength(300, ErrorMessage = "Competencies must have 300 characters maximum")]
+        [Required(ErrorMessage = "Competencies is required")]
+        public string Competencies { get; set; }
+
+        [StringLength(300, ErrorMessage = "Description must have 300 characters maximum")]
+        [Required(ErrorMessage = "Description is required")]
+        public string Description { get; set; }
+
+        public DateTime? CratedOn { get; set; }
+
+        public string CreatedBy_Id { get; set; }
+
+        public virtual ApplicationUser CreatedBy { get; set; }
+
+        [Required(ErrorMessage = "Status is required")]
+        [Range(0, 6, ErrorMessage = "Status should be a valid one.")]
+        public CandidateStatus Status { get; set; }
+
+        [Required]
+        public string IsTcsEmployee { get; set; }
     }
 
 }

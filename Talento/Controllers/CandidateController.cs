@@ -13,17 +13,18 @@ namespace Talento.Controllers
     public class CandidateController : Controller
     {
         ICandidate CandidateHelper;
+        IPosition PositionHelper;
         ICustomUser UserHelper;
         IPositionCandidate PositionsCandidatesHelper;
         IFileManagerHelper FileManagerHelper;
 
-        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPositionCandidate positionsCandidatesHelper, IFileManagerHelper fileManagerHelper)
+        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPositionCandidate positionsCandidatesHelper, IFileManagerHelper fileManagerHelper, IPosition positionHelper)
         {
             CandidateHelper = candidateHelper;
             UserHelper = userHelper;
             PositionsCandidatesHelper = positionsCandidatesHelper;
             FileManagerHelper = fileManagerHelper;
-
+            PositionHelper = positionHelper;
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Candidate, CandidateModel>()
@@ -105,14 +106,37 @@ namespace Talento.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(CandidateModel candidate)
+        public ActionResult New(CreateCandidateViewModel candidate)
         {
 
             List<FileBlob> files = ((List<FileBlob>)Session["files"]);
+            
+            ApplicationUser user = UserHelper.GetUserByEmail(User.Identity.Name);
 
+            Candidate newCandidate = new Candidate
+            {
+                Competencies = candidate.Competencies,
+                CratedOn = DateTime.Now,
+                CreatedBy = user,
+                Description = candidate.Description,
+                Email = candidate.Email,
+                Name = candidate.Name,
+                IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
+                Status = candidate.Status,
+                CreatedBy_Id = user.Id
+            };
+            Position position = PositionHelper.Get(candidate.Position_Id);
+            PositionsCandidatesHelper.Create(newCandidate,position);
 
-
-            return new EmptyResult();
+            int result = CandidateHelper.Create(newCandidate, files);
+            switch (result)
+            {
+                case -1:
+                    ModelState.AddModelError("", "The designated Candidate already exists");
+                    break;
+            }
+            
+            return RedirectToAction("Index","Dashboard",null);
         }
 
     }

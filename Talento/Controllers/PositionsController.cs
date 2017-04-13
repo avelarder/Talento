@@ -114,7 +114,7 @@ namespace Talento.Controllers
             {
                 Position pos = new Position()
                 {
-                    Owner = UserHelper.GetUser(user),
+                    Owner = UserHelper.GetUserById(user),
                     Area = position.Area,
                     EngagementManager = position.EngagementManager,
                     Title = position.Title,
@@ -125,7 +125,7 @@ namespace Talento.Controllers
                     Status = Status.Open,
                     PortfolioManager_Id = position.EmailPM,
                     ApplicationUser_Id = user,
-                    LastOpenedBy = UserHelper.GetUser(user),
+                    LastOpenedBy = UserHelper.GetUserById(user),
                     LastOpenedDate = DateTime.Now
                 };
                 PositionHelper.Create(pos);

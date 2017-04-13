@@ -11,7 +11,7 @@ namespace Talento.Core
     {
         Candidate Get(int Id);
         Task<List<Candidate>> GetAll();
-        void Create(Position log, string EmailModifier);
+        int Create(Candidate log, List<FileBlob> files);
         bool Edit(Candidate log);
         void Delete(int Id, string uId);
     }

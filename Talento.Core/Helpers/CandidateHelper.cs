@@ -21,9 +21,31 @@ namespace Talento.Core.Helpers
             FileManagerHelper = fileManagerHelper;
         }
 
-        public void Create(Position log, string EmailModifier)
+        public int Create(Candidate newCandidate, List<FileBlob> files)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (Db.Candidates.Any(x=>x.Email.Equals(newCandidate.Email)))
+                {
+                    return -1;
+                }
+                else
+                {
+                    Db.Candidates.Add(newCandidate);
+                    if (files != null)
+                    {
+                        files.ForEach(f => {
+                            FileManagerHelper.AddNewFile(f);
+                        });
+                    }
+                    return Db.SaveChanges();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
         public void Delete(int Id, string uId)
