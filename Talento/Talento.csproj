@@ -233,7 +233,6 @@
     <Compile Include="Models\CandidateViewModel.cs" />
     <Compile Include="Models\DashboardModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\PositionCandidatesViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\CustomRoleProvider.cs" />
     <Compile Include="Startup.cs" />
@@ -325,10 +324,10 @@
     <Content Include="Views\Dashboard\AppSettings.cshtml" />
     <Content Include="Views\Dashboard\ManageUser.cshtml" />
     <Content Include="Views\Candidate\Candidate.cshtml" />
+    <Content Include="Views\Candidate\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Candidate\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controllers\fonts\glyphicons-halflings-regular.woff" />

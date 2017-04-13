@@ -37,7 +37,7 @@ namespace Talento.Controllers
                 ;
                 cfg.CreateMap<Position, EditPositionViewModel>();
                 cfg.CreateMap<EditPositionViewModel, Position>();
-                cfg.CreateMap<PositionCandidates, PositionCandidatesViewModel>();
+                cfg.CreateMap<PositionCandidate, PositionCandidateViewModel>();
                 cfg.CreateMap<Candidate, CandidateModel>();
 
                 /*
