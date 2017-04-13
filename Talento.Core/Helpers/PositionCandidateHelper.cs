@@ -7,13 +7,13 @@ using Talento.Entities;
 
 namespace Talento.Core.Helpers
 {
-    public class PositionCandidatesHelper : BaseHelper, IPositionCandidates
+    public class PositionCandidateHelper : BaseHelper, IPositionCandidate
     {
-        public PositionCandidatesHelper(Core.Data.ApplicationDbContext db) : base(db)
+        public PositionCandidateHelper(Core.Data.ApplicationDbContext db) : base(db)
         {
         }
 
-        public List<PositionCandidates> GetCandidatesByPositionId(int? positionId)
+        public List<PositionCandidate> GetCandidatesByPositionId(int? positionId)
         {
             var positionCandidates = Db.PositionsCandidates.Where(x => x.Position_Id == positionId).OrderByDescending(t => t.Candidate.CratedOn).ToList();
 

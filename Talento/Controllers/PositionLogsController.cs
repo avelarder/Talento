@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using Talento.Models;
 using Talento.Core;
 using Talento.Entities;
+using Talento.Core.Utilities;
+using System.Security;
 
 namespace Talento.Controllers
 {
@@ -30,103 +32,55 @@ namespace Talento.Controllers
         }
 
         // Show: PositionLogs
-        [ChildActionOnly]
-        public ActionResult List(int? Id)
+        public ActionResult List(int? id, int page = 1, int pagesize = 5, string clase = "slide-right")
         {
             try
             {
-                if( Id == null )
+                if (!Request.IsLocal)
+                {
+                    throw new SecurityException();
+                }
+                // No ID return 404
+                if ( id == null )
                 {
                     return HttpNotFound();
                 }
-
-                var logs = AutoMapper.Mapper.Map<List<PositionLogViewModel>>(LogHelper.GetAll(Id).ToList());
+                // Check if it's Ajax request, View check for this viewData
+                ViewData["AjaxTrue"] = false;
+                if (Request.IsAjaxRequest())
+                {
+                    ViewData["AjaxTrue"] = true;
+                }
+                // Url for the pagination Helper
+                string url = Url.Action("List", "PositionLogs");
+                // Get List of PositionLogs and the Pagination
+                var containerLogs = LogHelper.PaginateLogs(id, page, pagesize, url);
+                // No logs with the ID return 404
+                if( containerLogs == null)
+                {
+                    return HttpNotFound();
+                }
+                // Maps PositionLogs to PositionLogViewModel
+                var logs = AutoMapper.Mapper.Map<List<PositionLogViewModel>>(containerLogs.Item1);
+                // Pagination
+                var pagination = containerLogs.Item2;
+                // General ViewData
+                ViewData["AnimationClass"] = clase;
                 ViewData["Count"] = logs.Count;
-
+                ViewData["Pagination"] = pagination;
+                
                 return PartialView(logs);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return HttpNotFound();
+                return HttpNotFound(e.Message);
             }
         }
 
-        // GET: PositionLogs/Create
-        public ActionResult Create()
+        [ChildActionOnly]
+        public ActionResult Pagination(Pagination pagination)
         {
-            return View();
+            return PartialView(pagination);
         }
-
-        // POST: PositionLogs/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(PositionLogViewModel positionLog)
-        {
-            if (ModelState.IsValid)
-            {
-                LogHelper.Create(AutoMapper.Mapper.Map<PositionLog>(positionLog));
-                return RedirectToAction("Index");
-            }
-
-            return View(positionLog);
-        }
-
-        // GET: PositionLogs/Edit/5
-        public async Task<ActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            PositionLog positionLog = await LogHelper.Get(id.Value);
-            if (positionLog == null)
-            {
-                return HttpNotFound();
-            }
-            return View(positionLog);
-        }
-
-        // POST: PositionLogs/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(
-            [Bind(Include = "Id,Date,Action,PreviousStatus,ActualStatus")] PositionLog positionLog)
-        {
-            if (ModelState.IsValid)
-            {
-                await LogHelper.Edit(positionLog);
-                return RedirectToAction("Index");
-            }
-            return View(positionLog);
-        }
-
-        // GET: PositionLogs/Delete/5
-        public async Task<ActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            PositionLog positionLog = await LogHelper.Get(id.Value);
-            if (positionLog == null)
-            {
-                return HttpNotFound();
-            }
-            return View(positionLog);
-        }
-
-        // POST: PositionLogs/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
-            await LogHelper.Delete(id);
-            return RedirectToAction("Index");
-        }
-       
     }
 }

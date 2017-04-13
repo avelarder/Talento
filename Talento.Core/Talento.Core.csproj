@@ -62,9 +62,11 @@
     <Compile Include="Helpers\DasboardPagingHelper.cs" />
     <Compile Include="Helpers\PositionCandidatesHelper.cs" />
     <Compile Include="Helpers\FileManagerHelper.cs" />
+    <Compile Include="Helpers\PositionCandidateHelper.cs" />
     <Compile Include="ICandidate.cs" />
     <Compile Include="IFileManagerHelper.cs" />
     <Compile Include="IPositionCandidates.cs" />
+    <Compile Include="IPositionCandidate.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="Helpers\PositionHelper.cs" />
     <Compile Include="Helpers\PositionLogHelper.cs" />
@@ -80,6 +82,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

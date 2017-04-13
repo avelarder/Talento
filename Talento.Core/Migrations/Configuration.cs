@@ -728,32 +728,57 @@ namespace Talento.Core.Migrations
 
             #region PositionCandidates
 
-            var positionsCandidates = new List<PositionCandidates>
+            var positionsCandidates = new List<PositionCandidate>
             {
-                new PositionCandidates
+                new PositionCandidate
                 {
                     Candidate = context.Candidates.Find(1),
                     Position = context.Positions.Find(4)
                 },
-                new PositionCandidates
+                new PositionCandidate
                 {
                     Candidate = context.Candidates.Find(2),
                     Position = context.Positions.Find(5)
                 },
-                new PositionCandidates
+                new PositionCandidate
                 {
                     Candidate = context.Candidates.Find(3),
                     Position = context.Positions.Find(5)
                 },
-                new PositionCandidates
+                new PositionCandidate
                 {
                     Candidate = context.Candidates.Find(4),
                     Position = context.Positions.Find(6)
                 },
-                new PositionCandidates
+                new PositionCandidate
                 {
                     Candidate = context.Candidates.Find(5),
+                    Position = context.Positions.Find(5)
+                },
+                new PositionCandidate
+                {
+                    Candidate = context.Candidates.Find(6),
+                    Position = context.Positions.Find(5)
+                },
+                new PositionCandidate
+                {
+                    Candidate = context.Candidates.Find(7),
+                    Position = context.Positions.Find(5)
+                },
+                new PositionCandidate
+                {
+                    Candidate = context.Candidates.Find(8),
+                    Position = context.Positions.Find(5)
+                },
+                new PositionCandidate
+                {
+                    Candidate = context.Candidates.Find(9),
                     Position = context.Positions.Find(6)
+                },
+                new PositionCandidate
+                {
+                    Candidate = context.Candidates.Find(1),
+                    Position = context.Positions.Find(5)
                 }
             };
 
