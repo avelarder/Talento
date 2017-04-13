@@ -42,7 +42,6 @@ namespace Talento.Models
 
     public class PositionModel
     {
-    
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Title is required")]
@@ -126,6 +125,7 @@ namespace Talento.Models
         public string RGS { get; set; }
 
         [Required(ErrorMessage = "Status is required")]
+        [Range(2, 4,ErrorMessage ="Positions can only be opened, cancelled or closed")]
         public Status Status { get; set; }
 
         /*

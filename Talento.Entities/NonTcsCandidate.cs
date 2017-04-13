@@ -9,7 +9,5 @@ namespace Talento.Entities
     public class NonTcsCandidate : Candidate
     {
 
-
-
     }
 }

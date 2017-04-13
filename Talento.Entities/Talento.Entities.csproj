@@ -60,7 +60,7 @@
     <Compile Include="NonTcsCandidate.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="PositionLog.cs" />
-    <Compile Include="PositionsCandidates.cs" />
+    <Compile Include="PositionCandidate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tag.cs" />
     <Compile Include="TcsCandidate.cs" />
