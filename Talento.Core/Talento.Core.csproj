@@ -60,8 +60,10 @@
     <Compile Include="Data\ApplicationDbContext.cs" />
     <Compile Include="Helpers\CandidateHelper.cs" />
     <Compile Include="Helpers\DasboardPagingHelper.cs" />
+    <Compile Include="Helpers\FileManagerHelper.cs" />
     <Compile Include="Helpers\PositionCandidateHelper.cs" />
     <Compile Include="ICandidate.cs" />
+    <Compile Include="IFileManagerHelper.cs" />
     <Compile Include="IPositionCandidate.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="Helpers\PositionHelper.cs" />
