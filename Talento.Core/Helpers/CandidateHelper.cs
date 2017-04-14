@@ -53,23 +53,32 @@ namespace Talento.Core.Helpers
             throw new NotImplementedException();
         }
 
-        public bool Edit(Candidate log)
+        public int Edit(Candidate log, List<FileBlob> files)
         {
             try
             {
-                var candidate = Db.Candidates.Single(x => x.Id == log.Id);
 
-                candidate.Competencies = log.Competencies;
-                candidate.Description = log.Description;
-                candidate.Name = log.Name;
-                candidate.Status = log.Status;
+                Db.Candidates.Single(x => x.Id == log.Id).Competencies = log.Competencies;
+                Db.Candidates.Single(x => x.Id == log.Id).Description = log.Description;
+                Db.Candidates.Single(x => x.Id == log.Id).Name = log.Name;
+                Db.Candidates.Single(x => x.Id == log.Id).Status = log.Status;
+                Db.Candidates.Single(x => x.Id == log.Id).IsTcsEmployee = log.IsTcsEmployee;
 
                 Db.SaveChanges();
-                return true;
+
+                Candidate candidate = Db.Candidates.Single(x => x.Id == log.Id);
+
+                FileManagerHelper.RemoveAll(candidate);
+                if (files != null)
+                {
+                    files.ForEach(x => FileManagerHelper.AddNewFile(x));
+                }
+
+                return 0;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return false;
+                throw;
             }
         }
 

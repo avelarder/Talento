@@ -12,7 +12,7 @@ namespace Talento.Entities
     public class FileBlob
     {
         [Key, Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Key, Column(Order = 1)]

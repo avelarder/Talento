@@ -1,3 +1,4 @@
+
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -91,4 +92,3 @@ namespace Talento.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
         }
     }
-}

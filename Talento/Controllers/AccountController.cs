@@ -195,6 +195,7 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
         {
             var roles = Roles.GetAllRoles();
             List<string> rolesName = new List<string>();
+
             foreach (var rol in roles)
             {
                 if (rol != "Admin")

@@ -19,10 +19,11 @@ namespace Talento.Core.Helpers
             try
             {
                 Db.FileBlobs.Add(file);
+                Db.SaveChanges();
             }
             catch (Exception)
             {
-                throw new Exception();
+                throw;
             }
         }
 
@@ -63,24 +64,25 @@ namespace Talento.Core.Helpers
                 throw;
             }
         }
-
-        public void DeleteAll(Candidate owner)
+        
+        public void RemoveAll(Candidate owner)
         {
-            try { 
-            Db.FileBlobs.RemoveRange(Db.FileBlobs.Where(x => x.Candidate.Equals(owner)));
-            Db.SaveChanges();
+            try
+            {
+                Db.FileBlobs.RemoveRange(Db.FileBlobs.Where(x => x.Candidate_Id.Equals(owner.Id)));
+                Db.SaveChanges();
             }
             catch (Exception)
             {
                 throw;
             }
         }
-        
+
         public List<FileBlob> GetAll(Candidate owner)
         {
             try
             {
-                return Db.FileBlobs.Where(x => x.Candidate.Equals(owner)).ToList();                
+                return Db.FileBlobs.Where(x => x.Candidate_Id.Equals(owner.Id)).ToList();                
             }
             catch (Exception)
             {

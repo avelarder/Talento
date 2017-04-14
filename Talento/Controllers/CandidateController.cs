@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -12,6 +13,7 @@ namespace Talento.Controllers
 {
     public class CandidateController : Controller
     {
+
         ICandidate CandidateHelper;
         IPosition PositionHelper;
         ICustomUser UserHelper;
@@ -30,44 +32,99 @@ namespace Talento.Controllers
                 cfg.CreateMap<Candidate, CandidateModel>()
                     .ForMember(t => t.CreatedBy_Id, opt => opt.MapFrom(s => s.CreatedBy_Id))
                 ;
-                cfg.CreateMap<EditCandidateViewModel, Candidate>();
+                cfg.CreateMap<Candidate, EditCandidateViewModel>();//.ForMember(c => c.IsTcsEmployee, opt => opt.MapFrom(s => s.IsTcsEmployee));
+                
             });
         }
+
+        public ActionResult AttachProfile(CandidateViewModel model, Position toApply)
+        {
+            MemoryStream ms = new MemoryStream();
+            TextWriter tw = new StreamWriter(ms);
+            var callbackUrl = Url.Action("Details", "Positions", new { toApply.Id }, protocol: Request.Url.Scheme);
+
+            tw.WriteLine("A profile has been added to " + toApply.Title + " by " + User.Identity.Name + " . " +
+                            "Please visit the following URL for more information: " + callbackUrl);
+            tw.Write("Recipients: ");
+
+            foreach (ApplicationUser user in UserHelper.GetUsersForNewProfileMail())
+            {
+                tw.Write(user.Email + ", ");
+            }
+
+            tw.Flush();
+            tw.Close();
+            return File(ms.GetBuffer(), "application/octet-stream", "MailNotification.txt");
+
+#if DEBUG == false
+
+            string currentUser = User.Identity.Name;
+            SendEmailHelper.SendEmailProfile(currentUser);
+#endif
+
+        }
+
+        //Charlie: call this action when generate a feedback interview
+        public ActionResult InterviewFeedback(CandidateViewModel model, Position toapply)
+        {
+            MemoryStream ms = new MemoryStream();
+            TextWriter tw = new StreamWriter(ms);
+
+            var callbackUrl = Url.Action("Details", "Positions", new { toapply.Id }, protocol: Request.Url.Scheme);
+
+            tw.WriteLine("A profile's interview feedback form has been added to " + toapply.Title  + " by " + User.Identity.Name + "." +
+                            " Please visit the following URL for more information: " + callbackUrl);
+
+            tw.Write("Recipients: ");
+
+            foreach (ApplicationUser user in UserHelper.GetUsersForNewFeedbackMail())
+            {
+                tw.Write(user.Email + ", ");
+            }
+            tw.Flush();
+            tw.Close();
+            return File(ms.GetBuffer(), "application/octet-stream", "MailExample.txt");
+
+#if DEBUG == false
+
+            string currentUser = User.Identity.Name;
+            SendEmailHelper.SendEmailFeedback(currentUser);
+#endif
+        }
+
+    }
+}
 
         public virtual bool IsStateValid()
         {
             return ModelState.IsValid;
         }
-
-        // GET: Candidate
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         //GET: Edit Candidate
         [Authorize(Roles = "PM, TL")]
-        public ActionResult Edit(int id, PositionModel position)
+        public ActionResult Edit(int id, int positionId)
         {
-            try
-            {
-                EditCandidateViewModel candidate = AutoMapper.Mapper.Map<EditCandidateViewModel>(CandidateHelper.Get(id));
-                if (candidate == null)
-                {
-                    return HttpNotFound();
-                }
+            EditCandidateViewModel candidate = AutoMapper.Mapper.Map<EditCandidateViewModel>(CandidateHelper.Get(id));
+            List<PositionCandidate> positionsCandidates = PositionsCandidatesHelper.GetCandidatesByPositionId(positionId);
 
-                if (position.Status == Status.Closed || position.Status == Status.Cancelled || position.Status == Status.Removed)
+            if (!positionsCandidates.Any(x => x.Candidate.Id.Equals(candidate.Id)))
+            {
+                return HttpNotFound();
+            }
+
+            PositionCandidate item = positionsCandidates[0];
+            {
+                if (item.Position.Status == Status.Cancelled || item.Position.Status == Status.Closed)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
                 }
+            }
 
-                return View(candidate);
-            }
-            catch (InvalidOperationException)
+            if (candidate == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The designated candidate does not have a valid ID");
+                return HttpNotFound();
             }
+
+            return PartialView(candidate);
         }
 
         // POST: Candidate/Edit/5
@@ -75,24 +132,41 @@ namespace Talento.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize(Roles = "PM, TL")]
-        [ValidateAntiForgeryToken]
         public ActionResult Edit(EditCandidateViewModel candidate)
         {
             try
             {
-                if (this.IsStateValid())
+                if (ModelState.IsValid)
                 {
-                    if (CandidateHelper.Edit(AutoMapper.Mapper.Map<Candidate>(candidate)))
+                    List<FileBlob> files = ((List<FileBlob>)Session["files"]);
+
+                    string email = CandidateHelper.Get(candidate.Id).Email;
+
+                    Candidate newCandidate = new Candidate
                     {
-                        return RedirectToAction("Index", "Dashboard");
+                        Id = candidate.Id,
+                        Description = candidate.Description,
+                        Competencies = candidate.Competencies,
+                        Name = candidate.Name,
+                        IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
+                        Status = candidate.Status,
+                        Email = email
+                    };
+
+                    if (files != null)
+                    {
+                        files.ForEach(x => x.Candidate_Id = newCandidate.Id);
                     }
-                    else
+                    int result = CandidateHelper.Edit(newCandidate, files);
+                    switch (result)
                     {
-                        return View(candidate);
+                        case -1:
+                            ModelState.AddModelError("", "The designated Candidate already exists");
+                            break;
                     }
 
                 }
-                return View(candidate);
+                return RedirectToAction("Index", "Dashboard", null);
             }
             catch (Exception)
             {
@@ -108,9 +182,8 @@ namespace Talento.Controllers
         [HttpPost]
         public ActionResult New(CreateCandidateViewModel candidate)
         {
-
             List<FileBlob> files = ((List<FileBlob>)Session["files"]);
-            
+
             ApplicationUser user = UserHelper.GetUserByEmail(User.Identity.Name);
 
             Candidate newCandidate = new Candidate
@@ -126,8 +199,12 @@ namespace Talento.Controllers
                 CreatedBy_Id = user.Id
             };
             Position position = PositionHelper.Get(candidate.Position_Id);
-            PositionsCandidatesHelper.Create(newCandidate,position);
+            PositionsCandidatesHelper.Create(newCandidate, position);
 
+            if (files != null)
+            {
+                files.ForEach(x => x.Candidate = newCandidate);
+            }
             int result = CandidateHelper.Create(newCandidate, files);
             switch (result)
             {
@@ -135,8 +212,8 @@ namespace Talento.Controllers
                     ModelState.AddModelError("", "The designated Candidate already exists");
                     break;
             }
-            
-            return RedirectToAction("Index","Dashboard",null);
+
+            return RedirectToAction("Index", "Dashboard", null);
         }
 
     }

@@ -1,14 +1,6 @@
-﻿@using Talento.Models
+﻿@using Talento.Entities
 <div class="jumbotron">
-    <div id="fileListDiv">
-        @*if (((List<FileBlobViewModel>)Session["files"]) != null)
-        {
-            foreach (FileBlobViewModel f in (List<FileBlobViewModel>)Session["files"])
-            {
-                
-            }
-        }
-         *@
+    <div id="fileListDiv">       
     </div>
     <div>
         <label for="Files">
@@ -16,6 +8,6 @@
                 note_add
             </i>
         </label>
-        <input class="hide" id="Files" name="Files" type="file" value="" accept=".doc,.docx,.txt,.pdf" />
+        <input class="hide" id="Files" name="Files" type="file" value="" accept=".doc,.docx,.txt,.pdf" style="cursor:pointer" />
     </div>
 </div>

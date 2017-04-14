@@ -49,6 +49,7 @@ namespace Talento.App_Start
             container.RegisterType<IPositionLog, PositionLogHelper>();
             container.RegisterType<IPosition, PositionHelper>();
             container.RegisterType<AccountController>(new InjectionConstructor());
+            container.RegisterType<Core.ISendEmail, SendEmailHelper>();
             container.RegisterType<IPosition, PositionHelper>();
             container.RegisterType<ICandidate, CandidateHelper>();
             container.RegisterType<IFileManagerHelper, FileManagerHelper>();
