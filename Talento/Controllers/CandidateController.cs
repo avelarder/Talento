@@ -21,24 +21,25 @@ namespace Talento.Controllers
             UserHelper = userHelper;
         }
 
-        public ActionResult SimulateAttachProfile()
-        {
-            CandidateViewModel model = new CandidateViewModel()
-            {
+        //Charlie: this action was created to simulate the attach profile
+        //public ActionResult SimulateAttachProfile()
+        //{
+        //    CandidateViewModel model = new CandidateViewModel()
+        //    {
 
-            };
+        //    };
 
-            Position toApply = new Position()
-            {
-                Id = 5,
-                Title = "THE TITLE"
-            };
+        //    Position toApply = new Position()
+        //    {
+        //        Id = 5,
+        //        Title = "THE TITLE"
+        //    };
 
-            return InterviewFeedback(model,toApply);
-        }
+        //    return InterviewFeedback(model,toApply);
+        //}
 
 
-
+        //Charli: Call this action when attach profile       
         public ActionResult AttachProfile(CandidateViewModel model, Position toApply)
         {
             MemoryStream ms = new MemoryStream();
@@ -66,7 +67,7 @@ namespace Talento.Controllers
 
         }
 
-
+        //Charlie: call this action when generate a feedback interview
         public ActionResult InterviewFeedback(CandidateViewModel model, Position toapply)
         {
             MemoryStream ms = new MemoryStream();
