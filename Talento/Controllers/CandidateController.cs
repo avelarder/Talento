@@ -30,7 +30,8 @@ namespace Talento.Controllers
                 cfg.CreateMap<Candidate, CandidateModel>()
                     .ForMember(t => t.CreatedBy_Id, opt => opt.MapFrom(s => s.CreatedBy_Id))
                 ;
-                cfg.CreateMap<Candidate, EditCandidateViewModel>();
+                cfg.CreateMap<Candidate, EditCandidateViewModel>();//.ForMember(c => c.IsTcsEmployee, opt => opt.MapFrom(s => s.IsTcsEmployee));
+                
             });
         }
 
@@ -53,7 +54,7 @@ namespace Talento.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
                 }
             }
-            
+
             if (candidate == null)
             {
                 return HttpNotFound();
@@ -67,24 +68,41 @@ namespace Talento.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize(Roles = "PM, TL")]
-        [ValidateAntiForgeryToken]
         public ActionResult Edit(EditCandidateViewModel candidate)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (CandidateHelper.Edit(AutoMapper.Mapper.Map<Candidate>(candidate)))
+                    List<FileBlob> files = ((List<FileBlob>)Session["files"]);
+
+                    string email = CandidateHelper.Get(candidate.Id).Email;
+
+                    Candidate newCandidate = new Candidate
                     {
-                        return RedirectToAction("Index", "Dashboard");
+                        Id = candidate.Id,
+                        Description = candidate.Description,
+                        Competencies = candidate.Competencies,
+                        Name = candidate.Name,
+                        IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
+                        Status = candidate.Status,
+                        Email = email
+                    };
+
+                    if (files != null)
+                    {
+                        files.ForEach(x => x.Candidate_Id = newCandidate.Id);
                     }
-                    else
+                    int result = CandidateHelper.Edit(newCandidate, files);
+                    switch (result)
                     {
-                        return View(candidate);
+                        case -1:
+                            ModelState.AddModelError("", "The designated Candidate already exists");
+                            break;
                     }
 
                 }
-                return View(candidate);
+                return RedirectToAction("Index", "Dashboard", null);
             }
             catch (Exception)
             {
@@ -100,9 +118,8 @@ namespace Talento.Controllers
         [HttpPost]
         public ActionResult New(CreateCandidateViewModel candidate)
         {
-
             List<FileBlob> files = ((List<FileBlob>)Session["files"]);
-            
+
             ApplicationUser user = UserHelper.GetUserByEmail(User.Identity.Name);
 
             Candidate newCandidate = new Candidate
@@ -118,8 +135,12 @@ namespace Talento.Controllers
                 CreatedBy_Id = user.Id
             };
             Position position = PositionHelper.Get(candidate.Position_Id);
-            PositionsCandidatesHelper.Create(newCandidate,position);
-            files.ForEach(x => x.Candidate = newCandidate);
+            PositionsCandidatesHelper.Create(newCandidate, position);
+
+            if (files != null)
+            {
+                files.ForEach(x => x.Candidate = newCandidate);
+            }
             int result = CandidateHelper.Create(newCandidate, files);
             switch (result)
             {
@@ -127,8 +148,8 @@ namespace Talento.Controllers
                     ModelState.AddModelError("", "The designated Candidate already exists");
                     break;
             }
-            
-            return RedirectToAction("Index","Dashboard",null);
+
+            return RedirectToAction("Index", "Dashboard", null);
         }
 
     }

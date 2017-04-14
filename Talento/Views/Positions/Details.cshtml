@@ -88,6 +88,11 @@
                     <th>Created On</th>
                     <th>Created By</th>
                     <th>Status</th>
+                    <th>
+                        <a href="#" data-toggle="modal" alt="Add profile">
+                            <i class="material-icons md-24">note_add</i>
+                        </a>
+                    </th>
                 </tr>
             </thead>
             @foreach (var cP in ViewBag.onePageOfCandidatePositions)
@@ -115,11 +120,6 @@
                             <i class="material-icons md-24">delete</i>
                         </a>
                     </td>
-                    <td>
-                        <a href="#" data-toggle="modal" alt="Add profile">
-                            <i class="material-icons md-24">note_add</i>
-                        </a>
-                    </td>
                 </tr>
             }
         </table>
@@ -142,7 +142,7 @@
                         }).fail(function (err) {
                             var html = '<div class="modal-dialog"> \
                                 < div class="modal-content" > \
-                                    <div class="modal-body" id="edit-position-dialog-body"> Error:'+ err +'</div></div></div>';
+                                    <div class="modal-body" id="edit-position-dialog-body"> Error:'+ err + '</div></div></div>';
                             $target.html(html);
                         }).done(function (result) {
                             console.log("Load trigger");

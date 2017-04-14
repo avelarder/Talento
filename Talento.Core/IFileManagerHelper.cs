@@ -10,7 +10,7 @@ namespace Talento.Core
     public interface IFileManagerHelper
     {
         List<FileBlob> GetAll(Candidate owner);
-        void DeleteAll(Candidate owner);
+        void RemoveAll(Candidate owner);
         void Create(FileBlob file);
         void Delete(FileBlob file);
         void CleanCandidateFiles(Candidate owner);
