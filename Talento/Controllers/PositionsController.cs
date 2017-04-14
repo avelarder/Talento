@@ -12,6 +12,8 @@ using Talento.Core.Data;
 using Talento.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Talento.Core.Helpers;
+using PagedList;
 
 namespace Talento.Controllers
 {
@@ -20,11 +22,14 @@ namespace Talento.Controllers
     {
         Core.IPosition PositionHelper;
         Core.ICustomUser UserHelper;
-        ApplicationUser appUser;
-        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper)
+        Core.IPositionCandidate PositionsCandidatesHelper;
+
+        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.IPositionCandidate positionsCandidatesHelper)
         {
             UserHelper = userHelper;
             PositionHelper = positionHelper;
+            PositionsCandidatesHelper = positionsCandidatesHelper;
+
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Position, PositionModel>()
@@ -32,6 +37,8 @@ namespace Talento.Controllers
                 ;
                 cfg.CreateMap<Position, EditPositionViewModel>();
                 cfg.CreateMap<EditPositionViewModel, Position>();
+                cfg.CreateMap<PositionCandidate, PositionCandidateViewModel>();
+                cfg.CreateMap<Candidate, CandidateModel>();
 
                 /*
                This could be useful in future in case of needing to edit the owner user account. It is not yet requested in the Edit user story 295
@@ -51,8 +58,9 @@ namespace Talento.Controllers
 
         // GET: Positions/Details/5
         [Authorize(Roles = "PM, TL, TAG, RMG")]
-        public async Task<ActionResult> Details(int? id)
+        public ActionResult Details(int? id, int? page)
         {
+            var positionCandidate = AutoMapper.Mapper.Map<List<PositionCandidateViewModel>>(PositionsCandidatesHelper.GetCandidatesByPositionId(id)); //id.Value
 
             if (id == null)
             {
@@ -60,12 +68,19 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
+
             if (position == null || position.Status == Status.Removed)
             {
                 return HttpNotFound();
             }
 
-            return View(position);
+            var tuple = new Tuple<List<PositionCandidateViewModel>, PositionModel>(positionCandidate, position);
+            var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
+            var onePageOfCandidatePositions = positionCandidate.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+            ViewBag.page = pageNumber;
+            ViewBag.onePageOfCandidatePositions = onePageOfCandidatePositions;
+
+            return View(tuple);
         }
 
         // GET: Positions/Create
@@ -90,11 +105,11 @@ namespace Talento.Controllers
             if (pmUser == null)
             {
                 ModelState.AddModelError(string.Empty, "PM is not valid");
-                
+
             }
 
             string user = User.Identity.GetUserId();
-            
+
             if (IsStateValid())
             {
                 Position pos = new Position()
@@ -114,7 +129,7 @@ namespace Talento.Controllers
                     LastOpenedDate = DateTime.Now
                 };
                 PositionHelper.Create(pos);
-                return RedirectToAction("Index","Dashboard");
+                return RedirectToAction("Index", "Dashboard");
             }
 
             return View(position);
@@ -125,7 +140,8 @@ namespace Talento.Controllers
         public ActionResult Edit(int id)
         {
 
-            try {
+            try
+            {
                 EditPositionViewModel position = AutoMapper.Mapper.Map<EditPositionViewModel>(PositionHelper.Get(id));
                 if (position == null)
                 {
@@ -154,7 +170,7 @@ namespace Talento.Controllers
         [HttpPost]
         [Authorize(Roles = "PM, TL")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(EditPositionViewModel position)
+        public ActionResult Edit(EditPositionViewModel position)
         {
 
             if (this.IsStateValid())
@@ -181,7 +197,7 @@ namespace Talento.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
-            if (position == null) 
+            if (position == null)
             {
                 return HttpNotFound();
             }

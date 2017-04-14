@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,10 +12,13 @@ namespace Talento.Core.Helpers
     {
         IPosition PositionHelper;
         ICustomUser UserHelper;
-        public CandidateHelper(Core.Data.ApplicationDbContext db, ICustomUser userHelper, IPosition positionHelper) : base(db)
+        IFileManagerHelper FileManagerHelper;
+
+        public CandidateHelper(Core.Data.ApplicationDbContext db, ICustomUser userHelper, IPosition positionHelper, IFileManagerHelper fileManagerHelper) : base(db)
         {
             PositionHelper = positionHelper;
             UserHelper = userHelper;
+            FileManagerHelper = fileManagerHelper;
         }
 
         public void Create(Position log, string EmailModifier)
@@ -27,19 +31,42 @@ namespace Talento.Core.Helpers
             throw new NotImplementedException();
         }
 
-        public bool Edit(Position log, string EmailModifier)
+        public bool Edit(Candidate log)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var candidate = Db.Candidates.Single(x => x.Id == log.Id);
+
+                candidate.Competencies = log.Competencies;
+                candidate.Description = log.Description;
+                candidate.Name = log.Name;
+                candidate.Status = log.Status;
+
+                Db.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        public Task<Candidate> Get(int Id)
+        public Candidate Get(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var candidate = Db.Candidates.Single(x => x.Id == Id);
+                return candidate;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public Task<List<Candidate>> GetAll()
+        public async Task<List<Candidate>> GetAll()
         {
-            throw new NotImplementedException();
+            return await Db.Candidates.ToListAsync();
         }
     }
 }

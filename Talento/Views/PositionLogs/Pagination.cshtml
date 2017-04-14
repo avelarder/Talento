@@ -1,0 +1,73 @@
+﻿@model Talento.Core.Utilities.Pagination
+<div id="pagination-log">
+    @* Current Page counter. Example : 3/6 [Current/TotalPages] *@
+    <div id="pagination-log-current"> @Model.Current of @Model.Total </div>
+    @{ 
+        // Calculate how many previous items should being displayed: 2 [Current more or equals 3] , 1 [Current is 2], [0 Current is 1]
+        int previousPages = ((Model.Current - 2) > 0) ? 2 : ((Model.Current == 1) ? 0 : 1);
+        // Calculate how many next items should being displayed: 2 [Current less or equals Total - 2] , 1 [Current is Total - 1], [0 Current is Last page]
+        int nextPages = ((Model.Current + 2) <= Model.Total) ? 2 : ((Model.Current == Model.Total) ? 0 : 1);
+    }
+    @if (Model.Total > 1)
+    {
+        <ul class="pagination pagination-sm">
+            
+            @* Go to First Page button is displayed : Current more than 3 [ >= 4] *@
+            @if (Model.Current > 3)
+            {
+                <li class="pagination-first">
+                    <a href="@(Model.Url + "?page=" + 1)">First</a>
+                </li>
+            }
+            @* Previous page button , disabled when doesn't have previous page *@
+            <li class="pagination-prev pagination-arrow @((Model.Prev == 0) ? "disabled" : "" )">
+                <a href="@(Model.Url + "?page=" + Model.Prev)" aria-label="Previous">&laquo;</a>
+            </li>
+            @* Shows [...] indicating there are more previous pages that the ones displayed *@
+            @if (Model.Current > 3)
+            {
+                <li class="">
+                    <a href="#">...</a>
+                </li>
+            }
+            @* Loop and show previous pages links, [2,1,0] *@
+            @for (int i = previousPages; i > 0; i--)
+            {
+                <li>
+                    <a href="@(Model.Url + "?page=" + (Model.Current - i))">@(Model.Current - i)</a>
+                </li>
+            }
+            @* Shows Current disabled and with no link *@
+            <li class="active disabled">
+                <a href="#">@Model.Current</a>
+            </li>
+            @* Loop and show next pages links, [2,1,0] *@
+            @for (int i = 1; i <= nextPages; i++)
+            {
+                <li>
+                    <a href="@(Model.Url + "?page=" + (Model.Current + i))">@(Model.Current + i)</a>
+                </li>
+            }
+            @* Shows [...] indicating there are more next pages that the ones displayed *@
+            @if (Model.Current < (Model.Total - 2))
+            {
+                <li class="">
+                    <a href="#">...</a>
+                </li>
+            }
+            @* Next page button , disabled when doesn't have next page *@
+            <li class="pagination-next pagination-arrow @((Model.Next == 0) ? "disabled" : "")">
+                <a href="@(Model.Url + "?page=" + Model.Next)" aria-label="Next">
+                    &raquo;
+                </a>
+            </li>
+            @* Go to Last Page button is displayed *@
+            @if (Model.Current < (Model.Total -2))
+            {
+                <li class="pagination-last">
+                    <a href="@(Model.Url + "?page=" + Model.Total)">last</a>
+                </li>
+            }
+        </ul>
+    }
+</div>

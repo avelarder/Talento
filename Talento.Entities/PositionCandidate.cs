@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Talento.Entities
 {
-    public class PositionsCandidates
+    public class PositionCandidate
     {
         [Key, Column(Order =0)]
         public int Candidate_Id { get; set; }

@@ -1,0 +1,64 @@
+﻿<div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/Profile/Attach/" method="post">
+                <div class="modal-body">
+                    <h4>Attaching a new Profile to </h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        <input data-val="true" data-val-number="The field Id must be a number." data-val-required="The Id field is required." id="Id" name="Id" type="hidden" />
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Name">Name </label>
+                            <div class="col-md-10">
+                                <input class="form-control text-box single-line" data-val="true" data-val-required="Name is required" id="Name" name="Name" type="text" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Email">Email </label>
+                            <div class="col-md-10">
+                                <input class="form-control text-box single-line" data-val="true" data-val-required="Email is required" id="Email" name="Email" type="text" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Email">Is Tcs Employee? </label>
+                            <div class="col-md-10">
+                                <input class="form-control text-box single-line" data-val="true" id="IsTcsEmployee" name="IsTcsEmployee" type="checkbox" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="IsTcsEmployee" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Competencies">Competencies </label>
+                            <div class="col-md-10">
+                                <input class="form-control text-box single-line" data-val="true" data-val-maxlength="The field Competencies must be a string" data-val-required="Competencies is required" id="Competencies" name="Competencies" type="text" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="Competencies" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Description">Description </label>
+                            <div class="col-md-10">
+                                <input class="form-control text-box single-line" data-val="true" data-val-maxlength="The field Description must be a string" data-val-required="Description is required" id="Description" name="Description" type="text" />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="Description" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="LocalFiles">Local Files </label>
+                            <div class="col-md-10">
+
+                                @Html.Action("Index", "File", null)
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pmd-modal-action pmd-modal-bordered text-right">
+                    <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
+                    <button data-dismiss="modal" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
