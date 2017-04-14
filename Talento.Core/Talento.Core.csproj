@@ -48,6 +48,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,9 +61,11 @@
     <Compile Include="Data\ApplicationDbContext.cs" />
     <Compile Include="Helpers\CandidateHelper.cs" />
     <Compile Include="Helpers\DasboardPagingHelper.cs" />
+    <Compile Include="Helpers\SendEmailHelper.cs" />
+    <Compile Include="ICandidate.cs" />
+    <Compile Include="ISendEmail.cs" />
     <Compile Include="Helpers\FileManagerHelper.cs" />
     <Compile Include="Helpers\PositionCandidateHelper.cs" />
-    <Compile Include="ICandidate.cs" />
     <Compile Include="IFileManagerHelper.cs" />
     <Compile Include="IPositionCandidate.cs" />
     <Compile Include="IUser.cs" />
