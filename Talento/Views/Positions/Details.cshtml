@@ -11,7 +11,7 @@
 <link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
         <h2>Positions</h2>
         <div>
             <div class="col-md-7">
@@ -67,8 +67,11 @@
         </div>
     </div>
 
-    <div class="col-sm-4">
+    <div id="position-log-container">
         @* Partial of Logs *@
+        <a href="#" class="container-close pmd-tooltip" data-toggle="tooltip" data-placement="left" title="Pagination Log">
+            <i class="material-icons">format_list_bulleted</i>
+        </a>
         @Html.Action("List", "PositionLogs", new { id = Model.Item2.Id })
     </div>
 </div>

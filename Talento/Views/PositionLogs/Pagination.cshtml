@@ -1,5 +1,5 @@
 ﻿@model Talento.Core.Utilities.Pagination
-<div id="pagination-log">
+<div id="pagination-log" class="@( (Model.Total > 1) ? "pagination-enabled" : "pagination-disabled" )">
     @* Current Page counter. Example : 3/6 [Current/TotalPages] *@
     <div id="pagination-log-current"> @Model.Current of @Model.Total </div>
     @{ 
