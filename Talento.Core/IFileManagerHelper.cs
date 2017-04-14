@@ -9,9 +9,11 @@ namespace Talento.Core
 {
     public interface IFileManagerHelper
     {
-        Task<FileBlob> Get(int Id);
-        Task<List<FileBlob>> GetAll();
+        List<FileBlob> GetAll(Candidate owner);
+        void RemoveAll(Candidate owner);
         void Create(FileBlob file);
         void Delete(FileBlob file);
+        void CleanCandidateFiles(Candidate owner);
+        void AddNewFile(FileBlob owner);
     }
 }

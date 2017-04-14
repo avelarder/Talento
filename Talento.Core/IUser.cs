@@ -10,6 +10,8 @@ namespace Talento.Core
     public interface ICustomUser
     {
         ApplicationUser SearchPM(string userName);
+        ApplicationUser GetUserById(string id);
+        ApplicationUser GetUserByEmail(string email);
         ApplicationUser GetUser(string user);
         List<ApplicationUser> GetUsersForNewProfileMail();
         List<ApplicationUser> GetUsersForNewFeedbackMail();

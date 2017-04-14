@@ -31,18 +31,33 @@ namespace Talento.Core.Helpers
             return null;
         }
 
-        public ApplicationUser GetUser(string user)
+
+        public ApplicationUser GetUserByEmail(string email)
         {
             try
             {
-                return Db.Users.Single(x => x.Id == user.ToString());
+                return Db.Users.Single(x => x.Email == email.ToString());
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return null;
             }
-            
-            
+
+
+        }
+
+        public ApplicationUser GetUserById(string id)
+        {
+            try
+            {
+                return Db.Users.Single(x => x.Id == id.ToString());
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+
         }
 
         public List<ApplicationUser> GetUsersForNewProfileMail()

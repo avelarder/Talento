@@ -10,5 +10,6 @@ namespace Talento.Core
    public interface IPositionCandidate
     {
         List<PositionCandidate> GetCandidatesByPositionId(int? positionId);
+        bool Create(Candidate candidate, Position position);
     }
 }

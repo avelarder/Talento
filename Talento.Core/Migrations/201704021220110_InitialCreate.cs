@@ -88,7 +88,7 @@ namespace Talento.Core.Migrations
                 "dbo.FileBlobs",
                 c => new
                     {
-                        Id = c.Int(nullable: false),
+                        Id = c.Int(nullable: false, identity: true),
                         Candidate_Id = c.Int(nullable: false),
                         FileName = c.String(nullable: false),
                         Blob = c.Binary(),

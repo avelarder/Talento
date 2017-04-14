@@ -9,18 +9,42 @@ namespace Talento.Core.Helpers
 {
     public class FileManagerHelper : BaseHelper, IFileManagerHelper
     {
-        ICandidate CandidateHelper;
-        public FileManagerHelper(Core.Data.ApplicationDbContext db, ICandidate candidateHelper)
+        public FileManagerHelper(Core.Data.ApplicationDbContext db)
             : base(db)
         {
-            CandidateHelper = candidateHelper;
+        }
+
+        public void AddNewFile(FileBlob file)
+        {
+            try
+            {
+                Db.FileBlobs.Add(file);
+                Db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void CleanCandidateFiles(Candidate owner)
+        {
+            try
+            {
+                Db.FileBlobs.RemoveRange(Db.FileBlobs.Where(x => x.Candidate.Equals(owner)));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public void Create(FileBlob file)
         {
             try
-            {
+            {   
                 Db.FileBlobs.Add(file);
+                Db.SaveChanges();
             }
             catch (Exception)
             {
@@ -33,6 +57,20 @@ namespace Talento.Core.Helpers
             try
             {
                 Db.FileBlobs.Remove(file);
+                Db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        
+        public void RemoveAll(Candidate owner)
+        {
+            try
+            {
+                Db.FileBlobs.RemoveRange(Db.FileBlobs.Where(x => x.Candidate_Id.Equals(owner.Id)));
+                Db.SaveChanges();
             }
             catch (Exception)
             {
@@ -40,14 +78,16 @@ namespace Talento.Core.Helpers
             }
         }
 
-        public Task<FileBlob> Get(int Id)
+        public List<FileBlob> GetAll(Candidate owner)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<FileBlob>> GetAll()
-        {
-            throw new NotImplementedException();
+            try
+            {
+                return Db.FileBlobs.Where(x => x.Candidate_Id.Equals(owner.Id)).ToList();                
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

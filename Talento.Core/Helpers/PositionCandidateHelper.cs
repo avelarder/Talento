@@ -13,6 +13,19 @@ namespace Talento.Core.Helpers
         {
         }
 
+        public bool Create(Candidate candidate, Position position)
+        {
+            try
+            {
+                Db.PositionsCandidates.Add(new PositionCandidate() { Candidate = candidate, Position = position });
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public List<PositionCandidate> GetCandidatesByPositionId(int? positionId)
         {
             var positionCandidates = Db.PositionsCandidates.Where(x => x.Position_Id == positionId).OrderByDescending(t => t.Candidate.CratedOn).ToList();
