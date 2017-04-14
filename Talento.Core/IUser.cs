@@ -11,5 +11,7 @@ namespace Talento.Core
     {
         ApplicationUser SearchPM(string userName);
         ApplicationUser GetUser(string user);
+        List<ApplicationUser> GetUsersForNewProfileMail();
+        List<ApplicationUser> GetUsersForNewFeedbackMail();
     }
 }

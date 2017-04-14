@@ -299,9 +299,13 @@
 
 //            var result = mController.Create(positionViewModel);
 
-//            Assert.IsNotNull(result);
-//            Assert.IsInstanceOfType(result, (typeof(RedirectToRouteResult)));
-//        }
+            mController.ModelState.AddModelError("FirstName", "First Name is Required");
 
-//    }
-//}
+            var result = mController.Create(positionViewModel);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, (typeof(ViewResult)));
+        }
+       
+    }
+}

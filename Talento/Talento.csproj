@@ -328,7 +328,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Candidate\" />
-    <Folder Include="Views\Profile\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controllers\fonts\glyphicons-halflings-regular.woff" />
