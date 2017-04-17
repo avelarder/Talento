@@ -24,9 +24,9 @@ namespace Talento.Core.Helpers
                 Db.PositionLogs.Add(log);
                 Db.SaveChanges();
 
-            } catch ( Exception e)
+            } catch (Exception)
             {
-                throw new Exception(e.Message);
+                throw;
             }
         }
 
@@ -40,9 +40,9 @@ namespace Talento.Core.Helpers
                 return log;
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw new Exception(e.ToString());
+                throw;
             }
                 
         }
@@ -68,8 +68,7 @@ namespace Talento.Core.Helpers
                 int skipLogs = pageSize * (page - 1);
                 // If pagination is necessary 
                 bool paginate = skipLogs < totalCount;
-
-
+                
                 if (paginate)
                 {
                     logs = logs.Skip(skipLogs).Take(pageSize);
@@ -85,12 +84,11 @@ namespace Talento.Core.Helpers
                 };
                 // Populate tuple
                 Tuple<List<PositionLog>, Pagination> retu = new Tuple<List<PositionLog>, Pagination>(logs.ToList(), pagination);
-
                 return retu;
             }
             catch (Exception)
             {
-                return null;
+                throw;
             }
         }
 

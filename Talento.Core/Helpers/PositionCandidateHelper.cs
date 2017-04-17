@@ -28,9 +28,18 @@ namespace Talento.Core.Helpers
 
         public List<PositionCandidate> GetCandidatesByPositionId(int? positionId)
         {
-            var positionCandidates = Db.PositionsCandidates.Where(x => x.Position_Id == positionId).OrderByDescending(t => t.Candidate.CratedOn).ToList();
+            try
+            {
+                var positionCandidates = Db.PositionsCandidates.Where(x => x.Position_Id == positionId).OrderByDescending(t => t.Candidate.CratedOn).ToList();
 
-            return positionCandidates;
+                return positionCandidates;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
     }
 }

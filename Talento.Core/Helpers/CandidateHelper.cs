@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Talento.Entities;
 
@@ -45,7 +44,6 @@ namespace Talento.Core.Helpers
             {
                 throw;
             }
-
         }
 
         public void Delete(int Id, string uId)
@@ -57,7 +55,6 @@ namespace Talento.Core.Helpers
         {
             try
             {
-
                 Db.Candidates.Single(x => x.Id == log.Id).Competencies = log.Competencies;
                 Db.Candidates.Single(x => x.Id == log.Id).Description = log.Description;
                 Db.Candidates.Single(x => x.Id == log.Id).Name = log.Name;
@@ -76,7 +73,7 @@ namespace Talento.Core.Helpers
 
                 return 0;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }

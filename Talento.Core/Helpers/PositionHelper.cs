@@ -57,14 +57,13 @@ namespace Talento.Core.Helpers
             Db.SaveChanges();
         }
 
-        public bool Edit(Position log, string EmailModifier)
+        public bool Edit(Position log, ApplicationUser modifier)
         {
             try
             {
                 //Obtaining the position in its original state
                 Position position = Db.Positions.Single(p => p.Id == log.Id);
                 //And obtaining the user that is modifying the Position
-                ApplicationUser User = Db.Users.Single(u => u.Email.Equals(EmailModifier));
                 var previousStatus = position.Status;
                 //Modifying the position info from the edit form
                 position.Area = log.Area;
@@ -82,15 +81,15 @@ namespace Talento.Core.Helpers
                 {
                     case Status.Cancelled:
                         position.LastCancelledDate = DateTime.Now;
-                        position.LastCancelledBy = User;
+                        position.LastCancelledBy = modifier;
                         break;
                     case Status.Open:
                         position.LastOpenedDate = DateTime.Now;
-                        position.LastOpenedBy = User;
+                        position.LastOpenedBy = modifier;
                         break;
                     case Status.Closed:
                         position.LastClosedDate = DateTime.Now;
-                        position.LastClosedBy = User;
+                        position.LastClosedBy = modifier;
                         break;
 
                 }
@@ -104,10 +103,10 @@ namespace Talento.Core.Helpers
                     ActualStatus = log.Status,
                     PreviousStatus = previousStatus,
                     Date = DateTime.Now,
-                    ApplicationUser_Id = User.Id,
+                    ApplicationUser_Id = modifier.Id,
                     Position_Id = position.Id,
                     Position = position,
-                    User = User,
+                    User = modifier,
 
                 };
                 PositionLoghelper.Create(CreateLog);

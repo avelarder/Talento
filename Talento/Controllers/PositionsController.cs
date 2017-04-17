@@ -172,10 +172,10 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(EditPositionViewModel position)
         {
-
+            ApplicationUser currentUser = UserHelper.GetUserByEmail(User.Identity.Name);
             if (this.IsStateValid())
             {
-                if (PositionHelper.Edit(AutoMapper.Mapper.Map<Position>(position), User.Identity.Name))
+                if (PositionHelper.Edit(AutoMapper.Mapper.Map<Position>(position), currentUser))
                 {
                     return RedirectToAction("Index", "Dashboard");
                 }

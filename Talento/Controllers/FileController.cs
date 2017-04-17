@@ -30,10 +30,10 @@ namespace Talento.Controllers
 
         public ActionResult Edit(int candidateId)
         {
-            //Session["files"] = FileManagerHelper.GetAll(CandidateHelper.Get(candidateId));
             return PartialView("~/Views/Shared/File/Index.cshtml");
         }
 
+        [HttpPost]
         public ActionResult Add()
         {
             if (Session["files"] == null)
@@ -86,6 +86,7 @@ namespace Talento.Controllers
             return new EmptyResult();
         }
 
+        [HttpPost]
         public JsonResult ListCurrentFiles()
         {
             List<FileBlobViewModel> result = new List<FileBlobViewModel>();
@@ -97,6 +98,7 @@ namespace Talento.Controllers
             return Json(result);
         }
 
+        [HttpPost]
         public JsonResult ListCandidateFiles(int candidateId)
         {
             List<FileBlobViewModel> result = new List<FileBlobViewModel>();
@@ -111,6 +113,7 @@ namespace Talento.Controllers
             return Json(result);
         }
 
+        [HttpPost]
         public ActionResult Delete(string filename)
         {
             ((List<FileBlob>)Session["files"]).Remove(((List<FileBlob>)Session["files"]).Single(x => x.FileName.Equals(filename)));
@@ -118,6 +121,7 @@ namespace Talento.Controllers
             return new EmptyResult();
         }
 
+        [HttpPost]
         public ActionResult DeleteEdit(string filename, int candidateid)
         {
             if (Session["files"] == null)
@@ -127,12 +131,12 @@ namespace Talento.Controllers
             else
             {
                 ((List<FileBlob>)Session["files"]).Remove(((List<FileBlob>)Session["files"]).Single(x => x.FileName.Equals(filename)));
-            }
-            
+            }           
 
             return new EmptyResult();
         }
 
+        [HttpPost]
         public ActionResult EmptyList()
         {
             Session["files"] = null;

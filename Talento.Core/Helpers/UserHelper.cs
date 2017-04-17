@@ -9,71 +9,71 @@ namespace Talento.Core.Helpers
 {
     public class UserHelper : BaseHelper, ICustomUser
     {
-
         public UserHelper(Core.Data.ApplicationDbContext db): base(db)
         {
 
         }
-
+        
         public ApplicationUser SearchPM(string userName)
         {
-
-            var PM = Db.Roles.Single(r => r.Name == "PM");
-            if (userName != null)
+            try
             {
-                var usuario = Db.Users.Single(x => x.UserName == userName);
-                if (usuario.Roles.Where(x => x.RoleId == PM.Id).Count() > 0)
+                var PM = Db.Roles.Single(r => r.Name == "PM");
+                if (userName != null)
                 {
-                    return usuario;
+                    var usuario = Db.Users.Single(x => x.UserName == userName);
+                    if (usuario.Roles.Where(x => x.RoleId == PM.Id).Count() > 0)
+                    {
+                        return usuario;
+                    }
                 }
+                return null;
             }
-
-            return null;
+            catch (Exception)
+            {
+                throw;
+            }
         }
-
 
         public ApplicationUser GetUserByEmail(string email)
         {
             try
             {
-                return Db.Users.Single(x => x.Email == email.ToString());
+                return Db.Users.SingleOrDefault(user => user.Email.Contains(email));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return null;
+                throw;
             }
-
-
         }
 
         public ApplicationUser GetUserById(string id)
         {
             try
             {
-                return Db.Users.Single(x => x.Id == id.ToString());
+                return Db.Users.Find(id);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return null;
+                throw;
             }
-
-
         }
 
-        public List<ApplicationUser> GetUsersForNewProfileMail()
+        public List<ApplicationUser> GetByRoles(List<string> roles)
         {
-           
-            List<ApplicationUser> recipients = Db.Users.Where(x => x.Roles.Any(p => p.RoleId == "62bd6c0f-cbd2-49f1-ab59-dd5034ea8341"/*TL*/) || x.Roles.Any(p => p.RoleId == "95df772e-9444-4ff3-89a8-d2db9d2cfe66"/*RMG*/) || x.Roles.Any(p => p.RoleId == "65ceda4f-8de4-4b2b-b6ab-2d4934934e9c"/*TAG*/)).ToList();
+            try
+            {
+                List<string> matchingUserIds = new List<string>();
+                roles.ForEach(rol => matchingUserIds.AddRange(Db.Roles.SingleOrDefault(r => r.Name.Equals(rol)).Users.Select(u=>u.UserId)));
+                List<ApplicationUser> matchingUsers = new List<ApplicationUser>();
+                matchingUserIds.ForEach(id => matchingUsers.Add(GetUserById(id)));
 
-            return recipients;
-
-        }
-
-        public List<ApplicationUser> GetUsersForNewFeedbackMail()
-        {
-            List<ApplicationUser> recipients = Db.Users.Where(x => x.Roles.Any(p => p.RoleId == "95df772e-9444-4ff3-89a8-d2db9d2cfe66"/*RMG*/) || x.Roles.Any(p => p.RoleId == "65ceda4f-8de4-4b2b-b6ab-2d4934934e9c"/*TAG*/)).ToList();
-
-            return recipients;
+                return matchingUsers;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
