@@ -80,6 +80,8 @@ namespace Talento.Entities
         public OpenStatus OpenStatus { get; set; }
 
         public virtual ICollection<Candidate> Candidates { get; set; }
+
+        public virtual ICollection<Log> Logs { get; set; }
     }
 
     public enum Status

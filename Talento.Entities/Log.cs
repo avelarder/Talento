@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Talento.Entities
 {
-    public class PositionLog
+    public class Log
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -15,17 +15,14 @@ namespace Talento.Entities
         [Required]
         public DateTime Date { get; set; }
 
+        [Required]
+        public string Description { get; set; }
+
         public string ApplicationUser_Id { get; set; }
 
         [Required]
         [ForeignKey("ApplicationUser_Id")]
         public virtual ApplicationUser User { get; set; }
-
-        public int Position_Id { get; set; }
-
-        [Required]
-        [ForeignKey("Position_Id")]
-        public virtual Position Position { get; set; }
 
         [Required]
         public Action Action { get; set; }

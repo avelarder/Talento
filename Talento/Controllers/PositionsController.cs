@@ -14,6 +14,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Talento.Core.Helpers;
 using PagedList;
+using Talento.Core.Utilities;
+using System.Security;
 
 namespace Talento.Controllers
 {
@@ -33,8 +35,10 @@ namespace Talento.Controllers
                 cfg.CreateMap<Position, PositionModel>()
                     .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id))
                     .ForMember(s => s.Candidates, opt => opt.MapFrom(p => p.Candidates))
+                     .ForMember(s => s.Logs, opt => opt.MapFrom(p => p.Logs))
                 ;
                 cfg.CreateMap<Position, EditPositionViewModel>();
+                cfg.CreateMap<Log, PositionLogViewModel>();
                 cfg.CreateMap<EditPositionViewModel, Position>();
                 cfg.CreateMap<Candidate, CandidateModel>();
 
@@ -64,7 +68,6 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
-
             if (position == null || position.Status == Status.Removed)
             {
                 return HttpNotFound();
@@ -206,6 +209,60 @@ namespace Talento.Controllers
             return RedirectToAction("Index", "Dashboard");
         }
 
+        #region PositionLogs
+        public ActionResult List(int? id, int pagex = 1, int pagesize = 5, string clase = "slide-right")
+        {
+            try
+            {
+                if (!Request.IsLocal)
+                {
+                    throw new SecurityException();
+                }
+                // No ID return 404
+                if (id == null)
+                {
+                    return HttpNotFound();
+                }
+                // Check if it's Ajax request, View check for this viewData
+                ViewData["AjaxTrue"] = false;
+                if (Request.IsAjaxRequest())
+                {
+                    ViewData["AjaxTrue"] = true;
+                }
+                // Url for the pagination Helper
+                string url = Url.Action("List", "Positions");
+                // Get Position With Logs
+                PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
+                var logs = position.Logs.ToList();
+                // Get List of PositionLogs and the Pagination
+                var containerLogs = PositionHelper.PaginateLogs(logs, pagex, pagesize, url);
+                // No logs with the ID return 404
+                if (containerLogs == null)
+                {
+                    return HttpNotFound();
+                }
+                var logx = AutoMapper.Mapper.Map<List<PositionLogViewModel>>(containerLogs.Item1);
+                // Pagination
+                var pagination = containerLogs.Item2;
+                // General ViewData
+                ViewData["AnimationClass"] = clase;
+                ViewData["Count"] = logs.Count;
+                ViewData["Pagination"] = pagination;
+
+                return PartialView(logx);
+            }
+            catch (Exception)
+            {
+                return HttpNotFound();
+            }
+        }
+
+        [ChildActionOnly]
+        public ActionResult Pagination(Pagination pagination)
+        {
+            return PartialView(pagination);
+        }
+        #endregion  
 
     }
 }
