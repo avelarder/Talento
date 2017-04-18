@@ -30,8 +30,8 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
             // Data
-            List<PositionLog> position = new List<PositionLog>() {
-                new PositionLog()
+            List<Log> position = new List<Log>() {
+                new Log()
                 {
                     Id=1,
                 } 
@@ -60,7 +60,7 @@ namespace Talento.Tests.Controllers
 
             // Controller
             Mock<IPositionLog> logsList = new Mock<IPositionLog>();
-            logsList.Setup(x => x.PaginateLogs(1,1,1,"#")).Returns(new Tuple<List<PositionLog>, Pagination>(position,pagination));
+            logsList.Setup(x => x.PaginateLogs(1,1,1,"#")).Returns(new Tuple<List<Log>, Pagination>(position,pagination));
             PositionLogsController controller = new PositionLogsController(logsList.Object);
             // Load Mock request to Controller
             controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);
@@ -94,8 +94,8 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
             // Data
-            List<PositionLog> position = new List<PositionLog>() {
-                new PositionLog()
+            List<Log> position = new List<Log>() {
+                new Log()
                 {
                     Id=1,
                 }
@@ -124,7 +124,7 @@ namespace Talento.Tests.Controllers
 
             // Controller
             Mock<IPositionLog> logsList = new Mock<IPositionLog>();
-            logsList.Setup(x => x.PaginateLogs(1, 1, 1, "#")).Returns(new Tuple<List<PositionLog>, Pagination>(position, pagination));
+            logsList.Setup(x => x.PaginateLogs(1, 1, 1, "#")).Returns(new Tuple<List<Log>, Pagination>(position, pagination));
             PositionLogsController controller = new PositionLogsController(logsList.Object);
 
             // Load Mock request to Controller
@@ -155,8 +155,8 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
             // Data
-            List<PositionLog> position = new List<PositionLog>() {
-                new PositionLog()
+            List<Log> position = new List<Log>() {
+                new Log()
                 {
                     Id=1,
                 }
@@ -185,7 +185,7 @@ namespace Talento.Tests.Controllers
 
             // Controller
             Mock<IPositionLog> logsList = new Mock<IPositionLog>();
-            logsList.Setup(x => x.PaginateLogs(1, 1, 1, "#")).Returns(new Tuple<List<PositionLog>, Pagination>(position, pagination));
+            logsList.Setup(x => x.PaginateLogs(1, 1, 1, "#")).Returns(new Tuple<List<Log>, Pagination>(position, pagination));
             PositionLogsController controller = new PositionLogsController(logsList.Object);
 
             // Load Mock request to Controller
@@ -216,8 +216,8 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
 
             // Data
-            List<PositionLog> position = new List<PositionLog>() {
-                new PositionLog()
+            List<Log> position = new List<Log>() {
+                new Log()
                 {
                     Id=1,
                 }
@@ -246,7 +246,7 @@ namespace Talento.Tests.Controllers
 
             // Controller
             Mock<IPositionLog> logsList = new Mock<IPositionLog>();
-            logsList.Setup(x => x.PaginateLogs(1, 10, 1, "#")).Returns(new Tuple<List<PositionLog>, Pagination>(position, pagination));
+            logsList.Setup(x => x.PaginateLogs(1, 10, 1, "#")).Returns(new Tuple<List<Log>, Pagination>(position, pagination));
             PositionLogsController controller = new PositionLogsController(logsList.Object);
 
             // Load Mock request to Controller

@@ -221,7 +221,6 @@
     <Compile Include="Controllers\CandidateController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FileController.cs" />
-    <Compile Include="Controllers\PositionLogsController.cs" />
     <Compile Include="Controllers\PositionsController.cs" />
     <Compile Include="Controllers\TagsController.cs" />
     <Compile Include="Controllers\WidgetsController.cs" />
@@ -318,13 +317,13 @@
     <Content Include="Views\Widgets\Tables\BasicTable.cshtml" />
     <Content Include="Views\Positions\Edit.cshtml" />
     <Content Include="Views\Positions\Details.cshtml" />
-    <Content Include="Views\PositionLogs\List.cshtml" />
     <Content Include="Views\Positions\Create.cshtml" />
-    <Content Include="Views\PositionLogs\Pagination.cshtml" />
     <Content Include="Views\Dashboard\AppSettings.cshtml" />
     <Content Include="Views\Dashboard\ManageUser.cshtml" />
     <Content Include="Views\Shared\File\Index.cshtml" />
     <Content Include="Views\Candidate\Edit.cshtml" />
+    <Content Include="Views\Positions\Pagination.cshtml" />
+    <Content Include="Views\Positions\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -99,6 +99,8 @@ namespace Talento.Models
 
         public int OpenDays { get; set; }
 
+        public IList<Log> Logs { get; set; }
+
         public IList<Candidate> Candidates { get; set; }
     }
     
