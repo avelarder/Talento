@@ -49,7 +49,7 @@ namespace Talento.Tests.Controllers
             var positionTest = new Position()
             {
                 Id = 1,
-                Title= "aTitle",
+                Title = "aTitle",
             };
             Candidate candidate = new Candidate();
             byte[] blob = new byte[1];
@@ -92,3 +92,4 @@ namespace Talento.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
         }
     }
+}

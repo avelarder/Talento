@@ -6,7 +6,6 @@
 }
 @using (Html.BeginForm("Index", "Dashboard", FormMethod.Get))
 {
-    <p>
         <div class="form-group col-sm-2">
             <label for="FilterBy" class="control-label">Filter By:</label>
             @Html.DropDownList("FilterBy", new List<SelectListItem>
@@ -23,13 +22,12 @@
             <label for="searchString" class="control-label">Filter:</label>
             @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control" })
         </div>
-    </p>
     <div class="form-group">
         <hr />
         <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Search" style="margin-top: 4px" />
     </div>
 }
-<table class="table pmd-table table-hover table-striped display responsive nowrap" cellspacing="0" width="100%">
+<table class="table pmd-table table-hover table-striped display responsive nowrap" cellspacing="0" style="width:100%">
     <tr>
         <th>
             @Html.ActionLink("Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
@@ -236,7 +234,6 @@
                         buildFileList(response);
                     },
                     error: function (error) {
-                        //alert("holi2");
                     }
                 });
                 buildFileList();
@@ -252,12 +249,10 @@
                             buildFileList(response);
                         },
                         error: function (error) {
-                            //alert("holi2");
                         }
                     });
             }
             $(document).ready(function () {
-                //timer();
                 $(".btn-modal").on("click", function () {
                     $("#Position_Id").val(($(this).attr("name")).split("-")[1]);
                 });

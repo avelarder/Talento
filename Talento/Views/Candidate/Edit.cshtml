@@ -3,7 +3,8 @@
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-body" id="edit-position-dialog-body">
-            <form method="post" action="/Candidate/Edit">
+            <form id="EditCandidateForm" method="post" action="/Candidate/Edit">
+                @Html.AntiForgeryToken()
                 <input type="hidden" id="Id" name="Id" value="@Model.Id">
                 <div class="modal-body">
                     <p><strong>Edit Profile</strong></p>
@@ -32,7 +33,7 @@
 
                                 @if (Model.IsTcsEmployee.Equals("True"))
                                 {
-                                    <input class="form-control text-box single-line" data-val="true" id="IsTcsEmployee" name="IsTcsEmployee" type="checkbox" checked/>
+                                    <input class="form-control text-box single-line" data-val="true" id="IsTcsEmployee" name="IsTcsEmployee" type="checkbox" checked />
                                 }
                                 else
                                 {
@@ -49,7 +50,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        @Html.Action("Edit", "File", new{ candidateId = Model.Id })
+                        @Html.Action("Edit", "File", new { candidateId = Model.Id })
                     </div>
                 </div>
                 <div class="pmd-modal-action pmd-modal-bordered text-right">
@@ -134,8 +135,8 @@
             $.ajax({
                 type: "POST",
                 url: '/File/ListCandidateFiles/',
-                data: {candidateId : @Model.Id}, 
-                dataType: 'json', 
+                data: {candidateId : @Model.Id},
+                dataType: 'json',
                 success: function (response) {
                     buildFileList(response);
                 },
@@ -159,5 +160,5 @@
             });
         });
     }(jQuery));
-    
+
 </script>

@@ -71,9 +71,9 @@ namespace Talento.Controllers
                 
                 return PartialView(logs);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return HttpNotFound(e.Message);
+                return HttpNotFound();
             }
         }
 

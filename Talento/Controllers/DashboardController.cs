@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Talento.Models;
-using PagedList;
-using Talento.Core.Data;
 using Talento.Core;
 using Talento.Entities;
-using System.Security.Claims;
-using Microsoft.AspNet.Identity;
-using Talento.Core.Helpers;
 
 namespace Talento.Controllers
 {
@@ -84,6 +78,7 @@ namespace Talento.Controllers
         }
 
         // Dashboard Partials
+        [ChildActionOnly]
         public ActionResult TopNavigation()
         {
             string role = GetRole();
@@ -93,6 +88,7 @@ namespace Talento.Controllers
             return PartialView("~/Views/Shared/Dashboard/_PartialTopNavigation.cshtml");
         }
 
+        [ChildActionOnly]
         public ActionResult SideNavigation()
         {
             string role = GetRole();
@@ -103,7 +99,7 @@ namespace Talento.Controllers
         }
         
         // Helpers
-        public string GetRole()
+        private string GetRole()
         {
             string role = "basic";
             if( Roles.IsUserInRole("Admin"))

@@ -33,11 +33,11 @@ namespace Talento.Controllers
                     .ForMember(t => t.CreatedBy_Id, opt => opt.MapFrom(s => s.CreatedBy_Id))
                 ;
                 cfg.CreateMap<Candidate, EditCandidateViewModel>();//.ForMember(c => c.IsTcsEmployee, opt => opt.MapFrom(s => s.IsTcsEmployee));
-                
+
             });
         }
 
-        public ActionResult AttachProfile(CandidateViewModel model, Position toApply)
+        private ActionResult AttachProfile(CreateCandidateViewModel model, Position toApply, List<ApplicationUser> recipients)
         {
             MemoryStream ms = new MemoryStream();
             TextWriter tw = new StreamWriter(ms);
@@ -47,7 +47,7 @@ namespace Talento.Controllers
                             "Please visit the following URL for more information: " + callbackUrl);
             tw.Write("Recipients: ");
 
-            foreach (ApplicationUser user in UserHelper.GetUsersForNewProfileMail())
+            foreach (ApplicationUser user in recipients)
             {
                 tw.Write(user.Email + ", ");
             }
@@ -65,19 +65,19 @@ namespace Talento.Controllers
         }
 
         //Charlie: call this action when generate a feedback interview
-        public ActionResult InterviewFeedback(CandidateViewModel model, Position toapply)
+        private ActionResult InterviewFeedback(CandidateModel model, Position toapply, List<ApplicationUser> recipients)
         {
             MemoryStream ms = new MemoryStream();
             TextWriter tw = new StreamWriter(ms);
 
             var callbackUrl = Url.Action("Details", "Positions", new { toapply.Id }, protocol: Request.Url.Scheme);
 
-            tw.WriteLine("A profile's interview feedback form has been added to " + toapply.Title  + " by " + User.Identity.Name + "." +
+            tw.WriteLine("A profile's interview feedback form has been added to " + toapply.Title + " by " + User.Identity.Name + "." +
                             " Please visit the following URL for more information: " + callbackUrl);
 
             tw.Write("Recipients: ");
 
-            foreach (ApplicationUser user in UserHelper.GetUsersForNewFeedbackMail())
+            foreach (ApplicationUser user in recipients)
             {
                 tw.Write(user.Email + ", ");
             }
@@ -92,8 +92,6 @@ namespace Talento.Controllers
 #endif
         }
 
-    }
-}
 
         public virtual bool IsStateValid()
         {
@@ -132,6 +130,7 @@ namespace Talento.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize(Roles = "PM, TL")]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(EditCandidateViewModel candidate)
         {
             try
@@ -180,6 +179,7 @@ namespace Talento.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult New(CreateCandidateViewModel candidate)
         {
             List<FileBlob> files = ((List<FileBlob>)Session["files"]);
@@ -213,7 +213,8 @@ namespace Talento.Controllers
                     break;
             }
 
-            return RedirectToAction("Index", "Dashboard", null);
+            return AttachProfile(candidate,position,UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG","RMG"}));
+            
         }
 
     }
