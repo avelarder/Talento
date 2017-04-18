@@ -78,6 +78,8 @@ namespace Talento.Entities
         [Required(ErrorMessage = "OpenStatus is required")]
         [DefaultValue("Open")]
         public OpenStatus OpenStatus { get; set; }
+
+        public virtual ICollection<Candidate> Candidates { get; set; }
     }
 
     public enum Status

@@ -98,6 +98,8 @@ namespace Talento.Models
         public DateTime LastClosedDate { get; set; }
 
         public int OpenDays { get; set; }
+
+        public IList<Candidate> Candidates { get; set; }
     }
     
     public class EditPositionViewModel

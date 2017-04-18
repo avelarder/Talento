@@ -737,63 +737,25 @@ namespace Talento.Core.Migrations
 
             #endregion tcscandidates
 
-            #region PositionCandidates
+            #region Candidates in positions
+            Position position1 = context.Positions.Find(1);
+            List<int> listId = new List<int> { 1, 2, 3, 4, 5 };
+            List<Candidate> candidatesPosition1 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
 
-            var positionsCandidates = new List<PositionCandidate>
-            {
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(1),
-                    Position = context.Positions.Find(4)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(2),
-                    Position = context.Positions.Find(5)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(3),
-                    Position = context.Positions.Find(5)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(4),
-                    Position = context.Positions.Find(6)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(5),
-                    Position = context.Positions.Find(5)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(6),
-                    Position = context.Positions.Find(5)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(7),
-                    Position = context.Positions.Find(5)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(8),
-                    Position = context.Positions.Find(5)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(9),
-                    Position = context.Positions.Find(6)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(1),
-                    Position = context.Positions.Find(5)
-                }
-            };
+            position1.Candidates = candidatesPosition1;
 
-            positionsCandidates.ForEach(r => context.PositionsCandidates.AddOrUpdate(p => p.Candidate_Id, r));
+            Position position6 = context.Positions.Find(6);
+            listId = new List<int> { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            List<Candidate> candidatesPosition6 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
+
+            position6.Candidates = candidatesPosition6;
+            context.SaveChanges();
+
+            Position position5 = context.Positions.Find(5);
+            listId = new List<int> { 16,17,18,19,20 };
+            List<Candidate> candidatesPosition5 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
+
+            position5.Candidates = candidatesPosition5;
             context.SaveChanges();
             #endregion
         }

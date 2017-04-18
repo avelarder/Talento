@@ -22,22 +22,20 @@ namespace Talento.Controllers
     {
         Core.IPosition PositionHelper;
         Core.ICustomUser UserHelper;
-        Core.IPositionCandidate PositionsCandidatesHelper;
 
-        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.IPositionCandidate positionsCandidatesHelper)
+        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper)
         {
             UserHelper = userHelper;
             PositionHelper = positionHelper;
-            PositionsCandidatesHelper = positionsCandidatesHelper;
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Position, PositionModel>()
                     .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id))
+                    .ForMember(s => s.Candidates, opt => opt.MapFrom(p => p.Candidates))
                 ;
                 cfg.CreateMap<Position, EditPositionViewModel>();
                 cfg.CreateMap<EditPositionViewModel, Position>();
-                cfg.CreateMap<PositionCandidate, PositionCandidateViewModel>();
                 cfg.CreateMap<Candidate, CandidateModel>();
 
                 /*
@@ -60,8 +58,6 @@ namespace Talento.Controllers
         [Authorize(Roles = "PM, TL, TAG, RMG")]
         public ActionResult Details(int? id, int? page)
         {
-            var positionCandidate = AutoMapper.Mapper.Map<List<PositionCandidateViewModel>>(PositionsCandidatesHelper.GetCandidatesByPositionId(id)); //id.Value
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -74,13 +70,12 @@ namespace Talento.Controllers
                 return HttpNotFound();
             }
 
-            var tuple = new Tuple<List<PositionCandidateViewModel>, PositionModel>(positionCandidate, position);
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
-            var onePageOfCandidatePositions = positionCandidate.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+            var onePageOfCandidatePositions = position.Candidates.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
             ViewBag.page = pageNumber;
             ViewBag.onePageOfCandidatePositions = onePageOfCandidatePositions;
 
-            return View(tuple);
+            return View(position);
         }
 
         // GET: Positions/Create

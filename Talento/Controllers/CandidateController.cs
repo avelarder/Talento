@@ -17,14 +17,12 @@ namespace Talento.Controllers
         ICandidate CandidateHelper;
         IPosition PositionHelper;
         ICustomUser UserHelper;
-        IPositionCandidate PositionsCandidatesHelper;
         IFileManagerHelper FileManagerHelper;
 
-        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPositionCandidate positionsCandidatesHelper, IFileManagerHelper fileManagerHelper, IPosition positionHelper)
+        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IFileManagerHelper fileManagerHelper, IPosition positionHelper)
         {
             CandidateHelper = candidateHelper;
             UserHelper = userHelper;
-            PositionsCandidatesHelper = positionsCandidatesHelper;
             FileManagerHelper = fileManagerHelper;
             PositionHelper = positionHelper;
             AutoMapper.Mapper.Initialize(cfg =>
@@ -102,19 +100,16 @@ namespace Talento.Controllers
         public ActionResult Edit(int id, int positionId)
         {
             EditCandidateViewModel candidate = AutoMapper.Mapper.Map<EditCandidateViewModel>(CandidateHelper.Get(id));
-            List<PositionCandidate> positionsCandidates = PositionsCandidatesHelper.GetCandidatesByPositionId(positionId);
+            Position currentPosition = PositionHelper.Get(positionId);
 
-            if (!positionsCandidates.Any(x => x.Candidate.Id.Equals(candidate.Id)))
+            if (!currentPosition.Candidates.Any(x => x.Id.Equals(candidate.Id)))
             {
                 return HttpNotFound();
             }
 
-            PositionCandidate item = positionsCandidates[0];
+            if (currentPosition.Status == Status.Cancelled || currentPosition.Status == Status.Closed)
             {
-                if (item.Position.Status == Status.Cancelled || item.Position.Status == Status.Closed)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
-                }
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
             }
 
             if (candidate == null)
@@ -186,6 +181,8 @@ namespace Talento.Controllers
 
             ApplicationUser user = UserHelper.GetUserByEmail(User.Identity.Name);
 
+            List<Position> position = new List<Position> { PositionHelper.Get(candidate.Position_Id) };
+
             Candidate newCandidate = new Candidate
             {
                 Competencies = candidate.Competencies,
@@ -196,16 +193,17 @@ namespace Talento.Controllers
                 Name = candidate.Name,
                 IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
                 Status = candidate.Status,
-                CreatedBy_Id = user.Id
+                CreatedBy_Id = user.Id,
+                Positions = position
             };
-            Position position = PositionHelper.Get(candidate.Position_Id);
-            PositionsCandidatesHelper.Create(newCandidate, position);
 
             if (files != null)
             {
                 files.ForEach(x => x.Candidate = newCandidate);
             }
+
             int result = CandidateHelper.Create(newCandidate, files);
+
             switch (result)
             {
                 case -1:
@@ -213,8 +211,7 @@ namespace Talento.Controllers
                     break;
             }
 
-            return AttachProfile(candidate,position,UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG","RMG"}));
-            
+            return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
         }
 
     }

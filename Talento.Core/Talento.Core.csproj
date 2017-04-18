@@ -64,9 +64,7 @@
     <Compile Include="ICandidate.cs" />
     <Compile Include="ISendEmail.cs" />
     <Compile Include="Helpers\FileManagerHelper.cs" />
-    <Compile Include="Helpers\PositionCandidateHelper.cs" />
     <Compile Include="IFileManagerHelper.cs" />
-    <Compile Include="IPositionCandidate.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="Helpers\PositionHelper.cs" />
     <Compile Include="Helpers\PositionLogHelper.cs" />

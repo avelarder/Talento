@@ -62,8 +62,6 @@ namespace Talento.Core.Data
 
         public virtual System.Data.Entity.DbSet<Candidate> Candidates { get; set; }
         
-        public virtual System.Data.Entity.DbSet<PositionCandidate> PositionsCandidates { get; set; }
-
         public virtual System.Data.Entity.DbSet<FileBlob> FileBlobs { get; set; }
 
     }
