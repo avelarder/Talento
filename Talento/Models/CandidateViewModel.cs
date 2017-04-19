@@ -57,6 +57,8 @@ namespace Talento.Models
     {
         public int Id { get; set; }
 
+        public int Position_Id { get; set; }
+
         [StringLength(50, ErrorMessage = "Name must have 50 characters maximum")]
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }

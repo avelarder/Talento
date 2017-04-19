@@ -6,6 +6,7 @@
             <form id="EditCandidateForm" method="post" action="/Candidate/Edit">
                 @Html.AntiForgeryToken()
                 <input type="hidden" id="Id" name="Id" value="@Model.Id">
+                <input type="hidden" id="Position_Id" name="Position_Id" value="@Model.Position_Id">
                 <div class="modal-body">
                     <p><strong>Edit Profile</strong></p>
                     <div class="form-group row">
