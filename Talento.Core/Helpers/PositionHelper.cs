@@ -99,6 +99,7 @@ namespace Talento.Core.Helpers
                     Action = Entities.Action.Edit,
                     ActualStatus = log.Status,
                     PreviousStatus = previousStatus,
+                    Description = description,
                     Date = DateTime.Now,
                     ApplicationUser_Id = modifier.Id,
                     User = modifier,
