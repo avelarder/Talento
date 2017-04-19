@@ -179,9 +179,13 @@
             function addFile() {
                 var formData = new FormData();
                 formData.append('image', $('input[type=file]')[0].files[0]);
+                var token = $('input[name="__RequestVerificationToken"]').val();
+                var headers = {};
+                headers['__RequestVerificationToken'] = token;
                 $.ajax({
                     type: "POST",
                     url: '/File/Add',
+                    headers: headers,
                     data: formData,
                     dataType: 'json',
                     contentType: false,
