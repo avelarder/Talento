@@ -97,17 +97,6 @@ namespace Talento.Controllers
 
             return PartialView("~/Views/Shared/Dashboard/_PartialSidebarNavigation.cshtml");
         }
-        
-        // Helpers
-        private string GetRole()
-        {
-            string role = "basic";
-            if( Roles.IsUserInRole("Admin"))
-            {
-                role = "admin";
-            }
-            return role;
-        }
 
         [Authorize(Roles = "Admin")]
         public ActionResult ManageUser()
@@ -119,6 +108,17 @@ namespace Talento.Controllers
         public ActionResult AppSettings()
         {
             return View();
+        }
+
+        // Helpers
+        private string GetRole()
+        {
+            string role = "basic";
+            if( Roles.IsUserInRole("Admin"))
+            {
+                role = "admin";
+            }
+            return role;
         }
     }
 }

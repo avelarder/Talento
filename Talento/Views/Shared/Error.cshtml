@@ -3,7 +3,19 @@
 @{
     ViewBag.Title = "Error";
 }
-<p>Lorem</p>
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<style>
+    #error-page {
+        height:100vh;
+        width:100%;
+    }
+    #error-page .error-page-container{
+
+    }
+</style>
+<div id="error-page">
+    <div class="error-page-container">
+        <h1 class="text-danger text-center">Howdy! looks like we have a problem</h1>
+        <h2 class="text-danger text-center">Error code : <i>@ViewData["ErrorMessage"]</i></h2>
+    </div>
+</div>
 
