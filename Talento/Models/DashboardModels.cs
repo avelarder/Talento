@@ -98,6 +98,10 @@ namespace Talento.Models
         public DateTime LastClosedDate { get; set; }
 
         public int OpenDays { get; set; }
+
+        public IList<Log> Logs { get; set; }
+
+        public IList<Candidate> Candidates { get; set; }
     }
     
     public class EditPositionViewModel
@@ -174,6 +178,9 @@ namespace Talento.Models
 
         [Required(ErrorMessage = "Previous Status is required")]
         public Status PreviousStatus { get; set; }
+
+        [Required]
+        public string Description { get; set; }
 
         [Required(ErrorMessage = "Actual Status is required")]
         public Status ActualStatus { get; set; }

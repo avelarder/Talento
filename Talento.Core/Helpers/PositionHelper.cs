@@ -7,52 +7,52 @@ using Talento.Entities;
 using System.Data;
 using System.Data.Entity;
 using Talento.Core.Data;
+using Talento.Core.Utilities;
 
 namespace Talento.Core.Helpers
 {
     public class PositionHelper : BaseHelper, IPosition
     {
-        IPositionLog PositionLoghelper;
-        public PositionHelper(Core.Data.ApplicationDbContext db, IPositionLog positionLoghelper) : base(db)
+        public PositionHelper(Core.Data.ApplicationDbContext db) : base(db)
         {
-            PositionLoghelper = positionLoghelper;
         }
 
         public void Create(Position position)
         {
-            Db.Positions.Add(position);
-            Db.SaveChanges();
-
-            PositionLog CreateLog = new PositionLog()
+            string description = string.Format("Position Created by {0} at {1}", position.Owner.Email, DateTime.Now.ToShortDateString());
+            Log CreateLog = new Log()
             {
                 Action = Entities.Action.Create,
                 ActualStatus = position.Status,
                 PreviousStatus = 0,
+                Description = description,
                 Date = DateTime.Now,
-                ApplicationUser_Id = position.ApplicationUser_Id,
-                Position_Id = position.Id,
-                Position = position,
+                ApplicationUser_Id = position.ApplicationUser_Id
             };
-            PositionLoghelper.Create(CreateLog);
+            position.Logs = new List<Log>();
+            position.Logs.Add(CreateLog);
 
+            Db.Positions.Add(position);
+            Db.SaveChanges();
         }
 
         public void Delete(int Id, string uId)
         {
             ApplicationUser cu = Db.Users.Single(u => u.Id.Equals(uId)); //Get Current User
             var p = Db.Positions.Where(x => x.Id == Id).Single();
-            PositionLog log = new PositionLog()
+            // Add Log to Position
+            string description = string.Format("Position Deleted by {0} at {1}", cu.Email , DateTime.Now.ToShortDateString());
+            Log log = new Log()
             {
                 Date = DateTime.Now,
-                User = cu,
-                Position = p,
+                User = cu,               
                 Action = Entities.Action.Delete,
                 PreviousStatus = p.Status,
+                Description = description,
                 ActualStatus = Status.Removed,
-                ApplicationUser_Id = cu.Id,
-                Position_Id = p.Id,
+                ApplicationUser_Id = cu.Id                
             };
-            PositionLoghelper.Create(log);
+            p.Logs.Add(log);
             p.Status = Status.Removed;
             Db.SaveChanges();
         }
@@ -93,24 +93,19 @@ namespace Talento.Core.Helpers
                         break;
 
                 }
-
-                Db.SaveChanges();
-
-                //I create the log containing the pertinent information
-                PositionLog CreateLog = new PositionLog()
+                string description = string.Format("Position Edited by {0} at {1}", modifier.Email, DateTime.Now.ToShortDateString());
+                Log CreateLog = new Log()
                 {
                     Action = Entities.Action.Edit,
                     ActualStatus = log.Status,
                     PreviousStatus = previousStatus,
                     Date = DateTime.Now,
                     ApplicationUser_Id = modifier.Id,
-                    Position_Id = position.Id,
-                    Position = position,
                     User = modifier,
 
                 };
-                PositionLoghelper.Create(CreateLog);
-
+                position.Logs.Add(CreateLog);
+                Db.SaveChanges();
             }
             catch (Exception)
             {
@@ -152,5 +147,48 @@ namespace Talento.Core.Helpers
         {
            return Db.Users.Single(x => x.Id == user.ToString());
         }
+
+        #region PositionLogs
+        public Tuple<List<Log>, Pagination> PaginateLogs(List<Log> logs, int page = 1, int pageSize = 5, string url = "#")
+        {
+            try
+            {
+                // Count of PositionsLogs
+                int totalCount = logs.Count();
+                // Count of Pages
+                int totalPages = (totalCount - 1) / pageSize + 1;
+                // Null if page requested doesnt exist
+                if (page > totalPages || page < 1)
+                {
+                    return null;
+                }
+                // PositionsLogs to Skip : [PageSize] 12 * ([CurrentPage] 2  - [SkipPreviousPageAlways] 1)
+                int skipLogs = pageSize * (page - 1);
+                // If pagination is necessary 
+                bool paginate = skipLogs < totalCount;
+
+                if (paginate)
+                {
+                    logs = logs.Skip(skipLogs).Take(pageSize).ToList();
+                }
+                // Create Pagination for the List of PositionsLogs
+                Pagination pagination = new Pagination()
+                {
+                    Prev = (page > 1) ? (page - 1) : 0,
+                    Next = (page < totalPages) ? (page + 1) : 0,
+                    Current = page,
+                    Total = totalPages,
+                    Url = url
+                };
+                // Populate tuple
+                Tuple<List<Log>, Pagination> retu = new Tuple<List<Log>, Pagination>(logs.ToList(), pagination);
+                return retu;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        #endregion
     }
 }

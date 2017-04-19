@@ -47,6 +47,8 @@ namespace Talento.Entities
         [Required]
         [DefaultValue(true)]
         public bool IsTcsEmployee { get; set; }
+
+        public virtual ICollection<Position> Positions { get; set; }
     }
 
     public enum CandidateStatus

@@ -58,12 +58,10 @@ namespace Talento.Core.Data
 
         public virtual System.Data.Entity.DbSet<Position> Positions { get; set; }
 
-        public virtual System.Data.Entity.DbSet<PositionLog> PositionLogs { get; set; }
+        public virtual System.Data.Entity.DbSet<Log> PositionLogs { get; set; }
 
         public virtual System.Data.Entity.DbSet<Candidate> Candidates { get; set; }
         
-        public virtual System.Data.Entity.DbSet<PositionCandidate> PositionsCandidates { get; set; }
-
         public virtual System.Data.Entity.DbSet<FileBlob> FileBlobs { get; set; }
 
     }

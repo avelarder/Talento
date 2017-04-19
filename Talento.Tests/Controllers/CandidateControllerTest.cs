@@ -29,7 +29,6 @@ namespace Talento.Tests.Controllers
             Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
             Mock<IPosition> mockPositionHelper = mocks.Create<IPosition>();
             Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
-            Mock<IPositionCandidate> mockPositionCandidateHelper = mocks.Create<IPositionCandidate>();
             Mock<IFileManagerHelper> mockFileManagerHelper = mocks.Create<IFileManagerHelper>();
             var mockContext = new Mock<ControllerContext>();
             Mock<ApplicationUser> mockUser = mocks.Create<ApplicationUser>();
@@ -77,7 +76,7 @@ namespace Talento.Tests.Controllers
             mockUserHelper.Setup(p => p.GetUserByEmail("pablo@example.com")).Returns(userTest);
             mockPositionHelper.Setup(p => p.Get(1)).Returns(positionTest);
             CandidateController controller = new CandidateController(mockCandidateHelper.Object, mockUserHelper.Object,
-                                                mockPositionCandidateHelper.Object, mockFileManagerHelper.Object,
+                                                mockFileManagerHelper.Object,
                                                 mockPositionHelper.Object)
             {
                 ControllerContext = mockContext.Object

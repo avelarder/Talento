@@ -64,16 +64,12 @@
     <Compile Include="ICandidate.cs" />
     <Compile Include="ISendEmail.cs" />
     <Compile Include="Helpers\FileManagerHelper.cs" />
-    <Compile Include="Helpers\PositionCandidateHelper.cs" />
     <Compile Include="IFileManagerHelper.cs" />
-    <Compile Include="IPositionCandidate.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="Helpers\PositionHelper.cs" />
-    <Compile Include="Helpers\PositionLogHelper.cs" />
     <Compile Include="Helpers\TagHelper.cs" />
     <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="ICustomPagingList.cs" />
-    <Compile Include="IPositionLog.cs" />
     <Compile Include="IPosition.cs" />
     <Compile Include="ITag.cs" />
     <Compile Include="Migrations\201704021220110_InitialCreate.cs" />
