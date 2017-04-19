@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using Talento.Core;
 using Talento.Entities;
@@ -9,6 +10,7 @@ using Talento.Models;
 
 namespace Talento.Controllers
 {
+    [Authorize]
     public class FileController : Controller
     {
         IFileManagerHelper FileManagerHelper;
@@ -34,6 +36,7 @@ namespace Talento.Controllers
         }
 
         [HttpPost]
+        [ValidateJsonAntiForgeryToken]
         public ActionResult Add()
         {
             if (Session["files"] == null)
@@ -43,20 +46,16 @@ namespace Talento.Controllers
             HttpPostedFileBase file = Request.Files.Get(0);
             byte[] uploadFile = new byte[file.InputStream.Length];
             file.InputStream.Read(uploadFile, 0, uploadFile.Length);
-
-            bool isValid = true;
+            bool isValid = (new List<string> { "doc", "docx", "zip", "pdf"}).Contains(file.FileName.Split('.')[1]);
             if (Request.Params.Get("candidateId") != null)
             {
                 int candidateid = int.Parse(Request.Params.Get("candidateId"));
                 List<FileBlob> current = FileManagerHelper.GetAll(CandidateHelper.Get(candidateid));
-
-                current.ForEach(x =>
-                {
+                current.ForEach(x =>{
                     if (x.FileName.Equals(file.FileName))
                     {
                         isValid = false;
-                    }
-                });
+                    }});
             }
             if (isValid)
             {
@@ -83,10 +82,12 @@ namespace Talento.Controllers
                     });
                 }
             }
+
             return new EmptyResult();
         }
 
         [HttpPost]
+        [ValidateJsonAntiForgeryToken]
         public JsonResult ListCurrentFiles()
         {
             List<FileBlobViewModel> result = new List<FileBlobViewModel>();
@@ -99,6 +100,7 @@ namespace Talento.Controllers
         }
 
         [HttpPost]
+        [ValidateJsonAntiForgeryToken]
         public JsonResult ListCandidateFiles(int candidateId)
         {
             List<FileBlobViewModel> result = new List<FileBlobViewModel>();
@@ -114,6 +116,7 @@ namespace Talento.Controllers
         }
 
         [HttpPost]
+        [ValidateJsonAntiForgeryToken]
         public ActionResult Delete(string filename)
         {
             ((List<FileBlob>)Session["files"]).Remove(((List<FileBlob>)Session["files"]).Single(x => x.FileName.Equals(filename)));
@@ -122,25 +125,49 @@ namespace Talento.Controllers
         }
 
         [HttpPost]
+        [ValidateJsonAntiForgeryToken]
         public ActionResult DeleteEdit(string filename, int candidateid)
         {
             if (Session["files"] == null)
             {
-                FileManagerHelper.Delete(FileManagerHelper.GetAll(CandidateHelper.Get(candidateid)).Single(x=>x.FileName.Equals(filename)));
+                FileManagerHelper.Delete(FileManagerHelper.GetAll(CandidateHelper.Get(candidateid)).Single(x => x.FileName.Equals(filename)));
             }
             else
             {
                 ((List<FileBlob>)Session["files"]).Remove(((List<FileBlob>)Session["files"]).Single(x => x.FileName.Equals(filename)));
-            }           
+            }
 
             return new EmptyResult();
         }
 
         [HttpPost]
+        [ValidateJsonAntiForgeryToken]
         public ActionResult EmptyList()
         {
             Session["files"] = null;
             return new EmptyResult();
         }
+
+        [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+        protected class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
+        {
+            public void OnAuthorization(AuthorizationContext filterContext)
+            {
+                try
+                {
+                    if (filterContext == null)
+                    {
+                        throw new ArgumentNullException("filterContext");
+                    }
+                    var httpContext = filterContext.HttpContext;
+                    var cookie = httpContext.Request.Cookies[AntiForgeryConfig.CookieName];
+                    AntiForgery.Validate(cookie != null ? cookie.Value : null, httpContext.Request.Params["__RequestVerificationToken"]);
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
     }
 }

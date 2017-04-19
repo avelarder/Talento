@@ -23,7 +23,6 @@ namespace Talento.Core.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.CreatedBy_Id)
-                .Index(t => t.Email, unique: true)
                 .Index(t => t.CreatedBy_Id);
             
             CreateTable(
@@ -224,7 +223,6 @@ namespace Talento.Core.Migrations
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.Candidates", new[] { "CreatedBy_Id" });
-            DropIndex("dbo.Candidates", new[] { "Email" });
             DropTable("dbo.PositionCandidates");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.FileBlobs");

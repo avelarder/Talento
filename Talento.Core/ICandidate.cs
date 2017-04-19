@@ -12,7 +12,7 @@ namespace Talento.Core
         Candidate Get(int Id);
         Task<List<Candidate>> GetAll();
         int Create(Candidate log, List<FileBlob> files);
-        int Edit(Candidate log, List<FileBlob> files);
+        int Edit(Candidate log, List<FileBlob> files, ApplicationUser currentUser);
         void Delete(int Id, string uId);
     }
 }

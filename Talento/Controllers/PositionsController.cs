@@ -74,7 +74,7 @@ namespace Talento.Controllers
             }
 
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
-            var onePageOfCandidatePositions = position.Candidates.ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+            var onePageOfCandidatePositions = position.Candidates.OrderByDescending(x=>x.CratedOn).ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
             ViewBag.page = pageNumber;
             ViewBag.onePageOfCandidatePositions = onePageOfCandidatePositions;
 
