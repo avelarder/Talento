@@ -20,6 +20,21 @@ namespace Talento.Core.Helpers
             FileManagerHelper = fileManagerHelper;
         }
 
+        public int CandidateToPosition(Candidate candidate, Position position)
+        {
+            try
+            {
+                Db.Candidates.SingleOrDefault(x=>x.Id.Equals(candidate.Id)).Positions.Add(position);
+                Db.SaveChanges();
+                return 0;
+            }
+            catch (Exception)
+            {
+                //Candidate already exists in specified position
+                return -2;
+            }
+        }
+
         public int Create(Candidate newCandidate, List<FileBlob> files)
         {
             try

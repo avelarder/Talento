@@ -177,41 +177,54 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult New(CreateCandidateViewModel candidate)
         {
-            List<FileBlob> files = ((List<FileBlob>)Session["files"]);
-
-            ApplicationUser user = UserHelper.GetUserByEmail(User.Identity.Name);
-
-            List<Position> position = new List<Position> { PositionHelper.Get(candidate.Position_Id) };
-
-            Candidate newCandidate = new Candidate
+            if(ModelState.IsValid)
             {
-                Competencies = candidate.Competencies,
-                CratedOn = DateTime.Now,
-                CreatedBy = user,
-                Description = candidate.Description,
-                Email = candidate.Email,
-                Name = candidate.Name,
-                IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
-                Status = candidate.Status,
-                CreatedBy_Id = user.Id,
-                Positions = position
-            };
-
-            if (files != null)
-            {
-                files.ForEach(x => x.Candidate = newCandidate);
+                List<FileBlob> files = ((List<FileBlob>)Session["files"]);
+                ApplicationUser user = UserHelper.GetUserByEmail(User.Identity.Name);
+                List<Position> position = new List<Position> { PositionHelper.Get(candidate.Position_Id) };
+                if (position[0].Status == Status.Open)
+                {
+                    Candidate newCandidate = new Candidate
+                    {
+                        Competencies = candidate.Competencies,
+                        CratedOn = DateTime.Now,
+                        CreatedBy = user,
+                        Description = candidate.Description,
+                        Email = candidate.Email,
+                        Name = candidate.Name,
+                        IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
+                        Status = candidate.Status,
+                        CreatedBy_Id = user.Id,
+                        Positions = position
+                    };
+                    if (files != null)
+                    {
+                        files.ForEach(x => x.Candidate = newCandidate);
+                    }
+                    int result = CandidateHelper.Create(newCandidate, files);
+                    position[0].OpenStatus = OpenStatus.Screening;
+                    result = CandidateHelper.CandidateToPosition(newCandidate, position[0]);
+                    switch (result)
+                    {
+                        case 0: return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
+                            break;
+                        case -1: ModelState.AddModelError("", "The designated Candidate already exists");
+                            break;
+                        case -2: ModelState.AddModelError("", "The desired Candidate already exists in selected position");
+                            break;
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "The position is not opened");
+                }
+                return RedirectToAction("Index", "Dashboard", null);
             }
-
-            int result = CandidateHelper.Create(newCandidate, files);
-
-            switch (result)
+            else
             {
-                case -1:
-                    ModelState.AddModelError("", "The designated Candidate already exists");
-                    break;
+                ModelState.AddModelError("", "The designated Candidate already exists");
+                return RedirectToAction("Index", "Dashboard", null);
             }
-
-            return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
         }
 
     }

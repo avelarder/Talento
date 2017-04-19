@@ -46,20 +46,16 @@ namespace Talento.Controllers
             HttpPostedFileBase file = Request.Files.Get(0);
             byte[] uploadFile = new byte[file.InputStream.Length];
             file.InputStream.Read(uploadFile, 0, uploadFile.Length);
-
-            bool isValid = true;
+            bool isValid = (new List<string> { "doc", "docx", "zip", "pdf"}).Contains(file.FileName.Split('.')[1]);
             if (Request.Params.Get("candidateId") != null)
             {
                 int candidateid = int.Parse(Request.Params.Get("candidateId"));
                 List<FileBlob> current = FileManagerHelper.GetAll(CandidateHelper.Get(candidateid));
-
-                current.ForEach(x =>
-                {
+                current.ForEach(x =>{
                     if (x.FileName.Equals(file.FileName))
                     {
                         isValid = false;
-                    }
-                });
+                    }});
             }
             if (isValid)
             {
@@ -86,6 +82,7 @@ namespace Talento.Controllers
                     });
                 }
             }
+
             return new EmptyResult();
         }
 
