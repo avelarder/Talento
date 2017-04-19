@@ -22,7 +22,6 @@ namespace Talento.Entities
         [StringLength(50, ErrorMessage = "Email must have 50 characters maximum")]
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
-        [Index(IsUnique = true)]
         public string Email { get; set; }
 
         [StringLength(300, ErrorMessage = "Competencies must have 300 characters maximum")]

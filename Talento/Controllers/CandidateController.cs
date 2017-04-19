@@ -139,7 +139,7 @@ namespace Talento.Controllers
 
                     string email = CandidateHelper.Get(candidate.Id).Email;
 
-                    
+
 
                     Candidate newCandidate = new Candidate
                     {
@@ -182,7 +182,7 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult New(CreateCandidateViewModel candidate)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 List<FileBlob> files = ((List<FileBlob>)Session["files"]);
                 ApplicationUser user = UserHelper.GetUserByEmail(User.Identity.Name);
@@ -207,14 +207,12 @@ namespace Talento.Controllers
                         files.ForEach(x => x.Candidate = newCandidate);
                     }
                     int result = CandidateHelper.Create(newCandidate, files);
-                    
+
                     switch (result)
                     {
                         case 0: return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
-                            break;
-                        case -1: ModelState.AddModelError("", "The designated Candidate already exists");
-                            break;
-                        case -2: ModelState.AddModelError("", "The desired Candidate already exists in selected position");
+                        case -1:
+                            ModelState.AddModelError("", "The designated Candidate already exists in the current position.");
                             break;
                     }
                 }

@@ -24,7 +24,7 @@ namespace Talento.Core.Helpers
         {
             try
             {
-                Db.Candidates.SingleOrDefault(x=>x.Id.Equals(candidate.Id)).Positions.Add(position);
+                Db.Candidates.SingleOrDefault(x => x.Id.Equals(candidate.Id)).Positions.Add(position);
                 Db.SaveChanges();
                 return 0;
             }
@@ -39,37 +39,41 @@ namespace Talento.Core.Helpers
         {
             try
             {
-                if (Db.Candidates.Any(x => x.Email.Equals(newCandidate.Email)))
+                Position positionToLog = newCandidate.Positions.Last();
+                Position currentPosition = PositionHelper.Get(newCandidate.Positions.First().Id);
+
+                foreach (Candidate c in currentPosition.Candidates)
                 {
-                    return -1;
-                }
-                else
-                {
-                    Db.Candidates.Add(newCandidate);
-                    if (files != null)
+                    //If Email is already in the position return -1
+                    if (c.Email.Contains(newCandidate.Email))
                     {
-                        files.ForEach(f =>
-                        {
-                            FileManagerHelper.AddNewFile(f);
-                        });
+                        return -1;
                     }
-
-                    Position positionToLog = newCandidate.Positions.Last();
-
-                    Log log = new Log
-                    {
-                        Action = Entities.Action.Edit,
-                        ActualStatus = positionToLog.Status,
-                        User = newCandidate.CreatedBy,
-                        Date = DateTime.Now,
-                        Description = String.Format("Candidate {0} was attached to the position", newCandidate.Email),
-                        PreviousStatus = positionToLog.Status
-                    };
-
-                    PositionHelper.Get(positionToLog.Id).Logs.Add(log);
-
-                    return Db.SaveChanges();
                 }
+
+                Db.Candidates.Add(newCandidate);
+                if (files != null)
+                {
+                    files.ForEach(f =>
+                    {
+                        FileManagerHelper.AddNewFile(f);
+                    });
+                }
+
+                Log log = new Log
+                {
+                    Action = Entities.Action.Edit,
+                    ActualStatus = positionToLog.Status,
+                    User = newCandidate.CreatedBy,
+                    Date = DateTime.Now,
+                    Description = String.Format("Candidate {0} was attached to the position", newCandidate.Email),
+                    PreviousStatus = positionToLog.Status
+                };
+
+                PositionHelper.Get(positionToLog.Id).Logs.Add(log);
+
+                return Db.SaveChanges();
+
             }
             catch (Exception)
             {
