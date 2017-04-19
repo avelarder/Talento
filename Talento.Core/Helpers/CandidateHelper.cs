@@ -24,7 +24,7 @@ namespace Talento.Core.Helpers
         {
             try
             {
-                if (Db.Candidates.Any(x=>x.Email.Equals(newCandidate.Email)))
+                if (Db.Candidates.Any(x => x.Email.Equals(newCandidate.Email)))
                 {
                     return -1;
                 }
@@ -33,10 +33,26 @@ namespace Talento.Core.Helpers
                     Db.Candidates.Add(newCandidate);
                     if (files != null)
                     {
-                        files.ForEach(f => {
+                        files.ForEach(f =>
+                        {
                             FileManagerHelper.AddNewFile(f);
                         });
                     }
+
+                    Position positionToLog = newCandidate.Positions.Last();
+
+                    Log log = new Log
+                    {
+                        Action = Entities.Action.Edit,
+                        ActualStatus = positionToLog.Status,
+                        User = newCandidate.CreatedBy,
+                        Date = DateTime.Now,
+                        Description = String.Format("Candidate {0} was attached to the position", newCandidate.Email),
+                        PreviousStatus = positionToLog.Status
+                    };
+
+                    PositionHelper.Get(positionToLog.Id).Logs.Add(log);
+
                     return Db.SaveChanges();
                 }
             }
@@ -51,25 +67,41 @@ namespace Talento.Core.Helpers
             throw new NotImplementedException();
         }
 
-        public int Edit(Candidate log, List<FileBlob> files)
+        public int Edit(Candidate editCandidate, List<FileBlob> files, ApplicationUser currentUser)
         {
             try
             {
-                Db.Candidates.Single(x => x.Id == log.Id).Competencies = log.Competencies;
-                Db.Candidates.Single(x => x.Id == log.Id).Description = log.Description;
-                Db.Candidates.Single(x => x.Id == log.Id).Name = log.Name;
-                Db.Candidates.Single(x => x.Id == log.Id).Status = log.Status;
-                Db.Candidates.Single(x => x.Id == log.Id).IsTcsEmployee = log.IsTcsEmployee;
+                Db.Candidates.Single(x => x.Id == editCandidate.Id).Competencies = editCandidate.Competencies;
+                Db.Candidates.Single(x => x.Id == editCandidate.Id).Description = editCandidate.Description;
+                Db.Candidates.Single(x => x.Id == editCandidate.Id).Name = editCandidate.Name;
+                Db.Candidates.Single(x => x.Id == editCandidate.Id).Status = editCandidate.Status;
+                Db.Candidates.Single(x => x.Id == editCandidate.Id).IsTcsEmployee = editCandidate.IsTcsEmployee;
 
                 Db.SaveChanges();
 
-                Candidate candidate = Db.Candidates.Single(x => x.Id == log.Id);
+                Candidate candidate = Db.Candidates.Single(x => x.Id == editCandidate.Id);
 
                 FileManagerHelper.RemoveAll(candidate);
                 if (files != null)
                 {
                     files.ForEach(x => FileManagerHelper.AddNewFile(x));
                 }
+
+                Position positionToLog = editCandidate.Positions.Last();
+
+                Log log = new Log
+                {
+                    Action = Entities.Action.Edit,
+                    ActualStatus = positionToLog.Status,
+                    User = currentUser,
+                    Date = DateTime.Now,
+                    Description = String.Format("Candidate {0} has been updated.", editCandidate.Email),
+                    PreviousStatus = positionToLog.Status
+                };
+
+                PositionHelper.Get(positionToLog.Id).Logs.Add(log);
+
+                Db.SaveChanges();
 
                 return 0;
             }

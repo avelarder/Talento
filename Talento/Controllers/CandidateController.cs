@@ -30,7 +30,9 @@ namespace Talento.Controllers
                 cfg.CreateMap<Candidate, CandidateModel>()
                     .ForMember(t => t.CreatedBy_Id, opt => opt.MapFrom(s => s.CreatedBy_Id))
                 ;
-                cfg.CreateMap<Candidate, EditCandidateViewModel>();//.ForMember(c => c.IsTcsEmployee, opt => opt.MapFrom(s => s.IsTcsEmployee));
+                cfg.CreateMap<Candidate, EditCandidateViewModel>()
+                    .ForMember(s => s.Positions, opt => opt.MapFrom(p => p.Positions))
+                ;
 
             });
         }
@@ -100,6 +102,7 @@ namespace Talento.Controllers
         public ActionResult Edit(int id, int positionId)
         {
             EditCandidateViewModel candidate = AutoMapper.Mapper.Map<EditCandidateViewModel>(CandidateHelper.Get(id));
+            candidate.Position_Id = positionId;
             Position currentPosition = PositionHelper.Get(positionId);
 
             if (!currentPosition.Candidates.Any(x => x.Id.Equals(candidate.Id)))
@@ -136,6 +139,8 @@ namespace Talento.Controllers
 
                     string email = CandidateHelper.Get(candidate.Id).Email;
 
+                    
+
                     Candidate newCandidate = new Candidate
                     {
                         Id = candidate.Id,
@@ -144,21 +149,21 @@ namespace Talento.Controllers
                         Name = candidate.Name,
                         IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
                         Status = candidate.Status,
-                        Email = email
+                        Email = email,
+                        Positions = new List<Position> { PositionHelper.Get(candidate.Position_Id) }
                     };
 
                     if (files != null)
                     {
                         files.ForEach(x => x.Candidate_Id = newCandidate.Id);
                     }
-                    int result = CandidateHelper.Edit(newCandidate, files);
+                    int result = CandidateHelper.Edit(newCandidate, files, UserHelper.GetUserByEmail(User.Identity.Name));
                     switch (result)
                     {
                         case -1:
                             ModelState.AddModelError("", "The designated Candidate already exists");
                             break;
                     }
-
                 }
                 return RedirectToAction("Index", "Dashboard", null);
             }
