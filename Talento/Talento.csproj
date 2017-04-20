@@ -195,6 +195,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AsyncVerificable.cs" />
     <Compile Include="Controllers\CandidateController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FileController.cs" />
@@ -221,6 +222,7 @@
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\propeller.min.css" />
     <Content Include="Content\styles.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Controllers\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -271,6 +273,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\_dev\app.js" />
     <Content Include="Scripts\_dev\candidate\editCandidate.js" />
     <Content Include="Scripts\_dev\login\login.js" />

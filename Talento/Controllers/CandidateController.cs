@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using Talento.Core;
 using Talento.Entities;
@@ -13,17 +14,14 @@ namespace Talento.Controllers
 {
     public class CandidateController : Controller
     {
-
         ICandidate CandidateHelper;
         IPosition PositionHelper;
         ICustomUser UserHelper;
-        IFileManagerHelper FileManagerHelper;
 
-        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IFileManagerHelper fileManagerHelper, IPosition positionHelper)
+        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPosition positionHelper)
         {
             CandidateHelper = candidateHelper;
             UserHelper = userHelper;
-            FileManagerHelper = fileManagerHelper;
             PositionHelper = positionHelper;
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -135,7 +133,7 @@ namespace Talento.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    List<FileBlob> files = ((List<FileBlob>)Session["files"]);
+                    HashSet<FileBlob> files = ((HashSet<FileBlob>)Session["files"]);
 
                     string email = CandidateHelper.Get(candidate.Id).Email;
 
@@ -153,10 +151,6 @@ namespace Talento.Controllers
                         Positions = new List<Position> { PositionHelper.Get(candidate.Position_Id) }
                     };
 
-                    if (files != null)
-                    {
-                        files.ForEach(x => x.Candidate_Id = newCandidate.Id);
-                    }
                     int result = CandidateHelper.Edit(newCandidate, files, UserHelper.GetUserByEmail(User.Identity.Name));
                     switch (result)
                     {
@@ -179,12 +173,12 @@ namespace Talento.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateJsonAntiForgeryToken]
         public ActionResult New(CreateCandidateViewModel candidate)
         {
             if (ModelState.IsValid)
             {
-                List<FileBlob> files = ((List<FileBlob>)Session["files"]);
+                HashSet<FileBlob> files = ((HashSet<FileBlob>)Session["files"]);
                 ApplicationUser user = UserHelper.GetUserByEmail(User.Identity.Name);
                 List<Position> position = new List<Position> { PositionHelper.Get(candidate.Position_Id) };
                 if (position.First().Status == Status.Open)
@@ -200,17 +194,15 @@ namespace Talento.Controllers
                         IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
                         Status = candidate.Status,
                         CreatedBy_Id = user.Id,
-                        Positions = position
+                        Positions = position,
+                        FileBlobs = files
                     };
-                    if (files != null)
-                    {
-                        files.ForEach(x => x.Candidate = newCandidate);
-                    }
-                    int result = CandidateHelper.Create(newCandidate, files);
+
+                    int result = CandidateHelper.Create(newCandidate);
 
                     switch (result)
                     {
-                        case 0: return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
+                        case 4: return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
                         case -1:
                             ModelState.AddModelError("", "The designated Candidate already exists in the current position.");
                             break;
@@ -229,5 +221,25 @@ namespace Talento.Controllers
             }
         }
 
+        [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+        protected class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
+        {
+            public void OnAuthorization(AuthorizationContext filterContext)
+            {
+                try
+                {
+                    if (filterContext == null)
+                    {
+                        throw new ArgumentNullException("filterContext");
+                    }
+                    var httpContext = filterContext.HttpContext;
+                    var cookie = httpContext.Request.Cookies[AntiForgeryConfig.CookieName];
+                    AntiForgery.Validate(cookie != null ? cookie.Value : null, httpContext.Request.Params["__RequestVerificationToken"]);
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
     }
 }

@@ -63,8 +63,6 @@
     <Compile Include="Helpers\DasboardPagingHelper.cs" />
     <Compile Include="ICandidate.cs" />
     <Compile Include="ISendEmail.cs" />
-    <Compile Include="Helpers\FileManagerHelper.cs" />
-    <Compile Include="IFileManagerHelper.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="Helpers\PositionHelper.cs" />
     <Compile Include="Helpers\TagHelper.cs" />

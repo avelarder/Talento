@@ -13,11 +13,9 @@ namespace Talento.Controllers
     [Authorize]
     public class FileController : Controller
     {
-        IFileManagerHelper FileManagerHelper;
         ICandidate CandidateHelper;
-        public FileController(IFileManagerHelper fileManagerHelper, ICandidate candidateHelper)
+        public FileController(ICandidate candidateHelper)
         {
-            FileManagerHelper = fileManagerHelper;
             CandidateHelper = candidateHelper;
         }
 
@@ -25,15 +23,14 @@ namespace Talento.Controllers
         {
             if (Session["files"] != null)
             {
-                Session["files"] = new List<FileBlob>();
+                Session["files"] = new HashSet<FileBlob>();
             }
             return PartialView("~/Views/Shared/File/Index.cshtml");
         }
 
         public ActionResult Edit(int candidateId)
         {
-            Session["files"] = FileManagerHelper.GetAll(CandidateHelper.Get(candidateId));
-            List<FileBlob> test = (List<FileBlob>)Session["files"];
+            Session["files"] = CandidateHelper.Get(candidateId).FileBlobs;
             return PartialView("~/Views/Shared/File/Index.cshtml");
         }
 
@@ -43,15 +40,15 @@ namespace Talento.Controllers
         {
             if (Session["files"] == null)
             {
-                Session["files"] = new List<FileBlob>();
+                Session["files"] = new HashSet<FileBlob>();
             }
             HttpPostedFileBase file = Request.Files.Get(0);
             byte[] uploadFile = new byte[file.InputStream.Length];
-            file.InputStream.Read(uploadFile, 0, uploadFile.Length);            
+            file.InputStream.Read(uploadFile, 0, uploadFile.Length);
             if ((new List<string> { "doc", "docx", "zip", "pdf" }).Contains(file.FileName.Split('.')[1])) //is valid extension?
             {
-               bool isValidFile = true;
-                ((List<FileBlob>)Session["files"]).ForEach(x =>
+                bool isValidFile = true;
+                ((IEnumerable<FileBlob>)Session["files"]).ToList().ForEach(x =>
                 {
                     if (x.FileName.Equals(file.FileName))
                     {
@@ -60,11 +57,11 @@ namespace Talento.Controllers
                 });
                 if (isValidFile)
                 {
-                    ((List<FileBlob>)Session["files"]).Add(new FileBlob
+                    ((HashSet<FileBlob>)Session["files"]).Add(new FileBlob
                     {
                         FileName = file.FileName,
                         Blob = uploadFile,
-                        
+
                     });
                 }
             }
@@ -79,29 +76,10 @@ namespace Talento.Controllers
             List<FileBlobViewModel> result = new List<FileBlobViewModel>();
             if (Session["files"] == null)
             {
-                Session["files"] = new List<FileBlob>();
+                Session["files"] = new HashSet<FileBlob>();
             }
 
-            ((List<FileBlob>)Session["files"]).ForEach(x => result.Add(new FileBlobViewModel() { FileName = x.FileName }));
-            
-            return Json(result);
-        }
-
-        /*
-         */
-
-        [HttpPost]
-        [ValidateJsonAntiForgeryToken]
-        public JsonResult ListCandidateFiles(int candidateId)
-        {
-            List<FileBlobViewModel> result = new List<FileBlobViewModel>();
-            if (Session["files"] != null)
-            {
-                ((List<FileBlob>)Session["files"]).ForEach(x => result.Add(new FileBlobViewModel() { FileName = x.FileName }));
-            }
-
-            //List<FileBlob> current = FileManagerHelper.GetAll(CandidateHelper.Get(candidateId));
-            //current.ForEach(x => result.Add(new FileBlobViewModel() { FileName = x.FileName }));
+            ((IEnumerable<FileBlob>)Session["files"]).ToList().ForEach(x => result.Add(new FileBlobViewModel() { FileName = x.FileName }));
 
             return Json(result);
         }
@@ -110,7 +88,7 @@ namespace Talento.Controllers
         [ValidateJsonAntiForgeryToken]
         public ActionResult Delete(string filename)
         {
-            ((List<FileBlob>)Session["files"]).Remove(((List<FileBlob>)Session["files"]).Single(x => x.FileName.Equals(filename)));
+            ((HashSet<FileBlob>)Session["files"]).Remove(((HashSet<FileBlob>)Session["files"]).Single(x => x.FileName.Equals(filename)));
 
             return new EmptyResult();
         }
@@ -119,15 +97,7 @@ namespace Talento.Controllers
         [ValidateJsonAntiForgeryToken]
         public ActionResult DeleteEdit(string filename, int candidateid)
         {
-            if (Session["files"] == null)
-            {
-                FileManagerHelper.Delete(FileManagerHelper.GetAll(CandidateHelper.Get(candidateid)).Single(x => x.FileName.Equals(filename)));
-            }
-            else
-            {
-                ((List<FileBlob>)Session["files"]).Remove(((List<FileBlob>)Session["files"]).Single(x => x.FileName.Equals(filename)));
-            }
-
+            ((HashSet<FileBlob>)Session["files"]).Remove(((HashSet<FileBlob>)Session["files"]).Single(x => x.FileName.Equals(filename)));
             return new EmptyResult();
         }
 

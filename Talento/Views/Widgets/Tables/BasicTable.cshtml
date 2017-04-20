@@ -134,7 +134,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-2" for="Email">Is Tcs Employee? </label>
+                            <label class="control-label col-md-2" for="IsTcsEmployee">Is Tcs Employee? </label>
                             <div class="col-md-10">
                                 <input class="form-control text-box single-line" data-val="true" id="IsTcsEmployee" name="IsTcsEmployee" type="checkbox" />
                                 <span class="field-validation-valid text-danger" data-valmsg-for="IsTcsEmployee" data-valmsg-replace="true"></span>
@@ -166,7 +166,7 @@
                 </div>
                 <div class="pmd-modal-action pmd-modal-bordered text-right">
                     <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                    <input type="submit" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm"/>
+                    <input id="buttonnewprofile" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm"/>
                 </div>
             </form>
         </div>
@@ -226,7 +226,7 @@
                     $("#fileListDiv").append("<p id='file_" + filelist[i] + "'>" +
                         "<i class='material-icons'>insert_drive_file</i>" +
                         "<span>" + filelist[i].FileName + "</span>" +
-                        "<i class='delete-file material-icons' data-file='" + filelist[i].FileName + "'>delete</i>" +
+                        "<i class='delete-file material-icons' style='cursor:pointer' data-file='" + filelist[i].FileName + "'>delete</i>" +
                         "</p>");
                 }
             }
@@ -261,10 +261,22 @@
             }
             $(document).ready(function () {
                 $(".btn-modal").on("click", function () {
+                    alert("aqui hago show");
                     $("#Position_Id").val(($(this).attr("name")).split("-")[1]);
                     $("#formnewprofile")[0].reset();
+                    $(".field-validation-error").hide();
                 });
-
+                $("#buttonnewprofile").click(function (evt) {
+                    evt.preventDefault();
+                    var $form = $('#formnewprofile');
+                    if ($form.valid()) {
+                        $form.submit();
+                        $("#complete-dialog").modal("hide");
+                        toastr.info("exito");
+                    } else {
+                        return;
+                    }
+                });
                 $("#Files").on("change", function () {
                     addFile();
                 });

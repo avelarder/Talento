@@ -11,17 +11,10 @@ namespace Talento.Entities
 {
     public class FileBlob
     {
-        [Key, Column(Order = 0)]
+        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
-        [Key, Column(Order = 1)]
-        public int Candidate_Id { get; set; }
-
-        [Required]
-        [ForeignKey("Candidate_Id")]
-        public virtual Candidate Candidate { get; set; }
-        
+                
         [Required]
         public string FileName { get; set; }
 

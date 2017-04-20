@@ -11,13 +11,11 @@ namespace Talento.Core.Helpers
     {
         IPosition PositionHelper;
         ICustomUser UserHelper;
-        IFileManagerHelper FileManagerHelper;
 
-        public CandidateHelper(Core.Data.ApplicationDbContext db, ICustomUser userHelper, IPosition positionHelper, IFileManagerHelper fileManagerHelper) : base(db)
+        public CandidateHelper(Core.Data.ApplicationDbContext db, ICustomUser userHelper, IPosition positionHelper) : base(db)
         {
             PositionHelper = positionHelper;
             UserHelper = userHelper;
-            FileManagerHelper = fileManagerHelper;
         }
 
         private int CandidateToPosition(Candidate candidate, Position position)
@@ -35,7 +33,7 @@ namespace Talento.Core.Helpers
             }
         }
 
-        public int Create(Candidate newCandidate, List<FileBlob> files)
+        public int Create(Candidate newCandidate)
         {
             try
             {
@@ -50,15 +48,7 @@ namespace Talento.Core.Helpers
                         return -1;
                     }
                 }
-
                 Db.Candidates.Add(newCandidate);
-                if (files != null)
-                {
-                    files.ForEach(f =>
-                    {
-                        FileManagerHelper.AddNewFile(f);
-                    });
-                }
 
                 Log log = new Log
                 {
@@ -86,7 +76,7 @@ namespace Talento.Core.Helpers
             throw new NotImplementedException();
         }
 
-        public int Edit(Candidate editCandidate, List<FileBlob> files, ApplicationUser currentUser)
+        public int Edit(Candidate editCandidate, HashSet<FileBlob> files, ApplicationUser currentUser)
         {
             try
             {
@@ -95,17 +85,11 @@ namespace Talento.Core.Helpers
                 Db.Candidates.Single(x => x.Id == editCandidate.Id).Name = editCandidate.Name;
                 Db.Candidates.Single(x => x.Id == editCandidate.Id).Status = editCandidate.Status;
                 Db.Candidates.Single(x => x.Id == editCandidate.Id).IsTcsEmployee = editCandidate.IsTcsEmployee;
+                Db.Candidates.Single(x => x.Id == editCandidate.Id).FileBlobs.Clear();
+                Db.Candidates.Single(x => x.Id == editCandidate.Id).FileBlobs = files;
 
                 Db.SaveChanges();
-
-                Candidate candidate = Db.Candidates.Single(x => x.Id == editCandidate.Id);
-
-                FileManagerHelper.RemoveAll(candidate);
-                if (files != null)
-                {
-                    files.ForEach(x => FileManagerHelper.AddNewFile(x));
-                }
-
+                
                 Position positionToLog = editCandidate.Positions.Last();
 
                 Log log = new Log

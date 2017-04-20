@@ -48,8 +48,7 @@ function buildFileList(filelist) {
 function updatelist() {
     $.ajax({
         type: "POST",
-        url: '/File/ListCandidateFiles/',
-        data: {candidateId : @Model.Id}, 
+        url: '/File/ListCurrentFiles/',
         dataType: 'json', 
         success: function (response) {
             buildFileList(response);

@@ -48,6 +48,8 @@ namespace Talento.Entities
         public bool IsTcsEmployee { get; set; }
 
         public virtual ICollection<Position> Positions { get; set; }
+
+        public virtual ICollection<FileBlob> FileBlobs { get; set; }
     }
 
     public enum CandidateStatus
