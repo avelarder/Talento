@@ -96,7 +96,7 @@
                             </a>
                         </th>
                     }
-                    
+
                 </tr>
             </thead>
             @foreach (var cP in ViewBag.onePageOfCandidatePositions)
@@ -115,7 +115,7 @@
                         @cP.Status
                     </td>
                     <td>
-                        <a href="@Url.Action("Edit", "Candidate",new { id = cP.Id, positionId = Model.Id } )" class="material-icons md-24 edit-candidate" data-toggle="modal" data-target="#edit-position-dialog" alt="Edit candidate">
+                        <a href="@Url.Action("Edit", "Candidate",new { id = cP.Id, positionId = Model.Id } )" class="material-icons md-24 edit-candidate" data-target="#edit-position-dialog" alt="Edit candidate">
                             mode_edit
                         </a>
                     </td>
@@ -134,25 +134,34 @@
                     var $parent = $('#candidates-list');
                     console.log("first trigger");
                     $parent.on("click", '.edit-candidate', function (event) {
-                        console.log("candidate trigger");
-                        event.preventDefault();
-                        // vars
-                        var $this = $(this);
-                        var $target = $($this.attr('data-target'));
-                        var $url = $this.attr('href');
-                        $target.html('');
-                        $.ajax({
-                            url: $url
-                        }).fail(function (err) {
-                            var html = '<div class="modal-dialog"> \
+                        var status = "@Html.Raw(Model.Status.ToString()).ToString()";
+                        // data-toggle="modal" data-target="#edit-position-dialog" 
+                        if (status == "Closed" || status == "Cancelled") {
+                            event.preventDefault();
+                            alert("The information you are looking for is not available");
+                        }
+                        else {
+                            event.preventDefault();
+                            console.log("candidate trigger");
+                            var $this = $(this);
+                            var $target = $($this.attr('data-target'));
+                            $target.modal('show');
+
+                            var $url = $this.attr('href');
+                            $target.html('');
+                            $.ajax({
+                                url: $url
+                            }).fail(function (err) {
+                                var html = '<div class="modal-dialog"> \
                                 < div class="modal-content" > \
                                     <div class="modal-body" id="edit-position-dialog-body"> Error:'+ err + '</div></div></div>';
-                            $target.html(html);
-                        }).done(function (result) {
-                            console.log("Load trigger");
-                            $target.html(result);
-                            $target.modal()
-                        });
+                                $target.html(html);
+                            }).done(function (result) {
+                                console.log("Load trigger");
+                                $target.html(result);
+                                $target.modal()
+                            });
+                        }
                     });
                 }(jQuery));
             }

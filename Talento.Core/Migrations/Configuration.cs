@@ -741,9 +741,17 @@ namespace Talento.Core.Migrations
             List<Candidate> candidatesPosition1 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
 
             position1.Candidates = candidatesPosition1;
+            context.SaveChanges();
+
+            Position position2 = context.Positions.Find(2);
+            listId = new List<int> { 6 };
+            List<Candidate> candidatesPosition2 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
+
+            position2.Candidates = candidatesPosition2;
+            context.SaveChanges();
 
             Position position6 = context.Positions.Find(6);
-            listId = new List<int> { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            listId = new List<int> {7, 8, 9, 10, 11, 12, 13, 14, 15 };
             List<Candidate> candidatesPosition6 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
 
             position6.Candidates = candidatesPosition6;
