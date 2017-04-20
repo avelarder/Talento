@@ -41,16 +41,16 @@ namespace Talento.Core.Helpers
             ApplicationUser cu = Db.Users.Single(u => u.Id.Equals(uId)); //Get Current User
             var p = Db.Positions.Where(x => x.Id == Id).Single();
             // Add Log to Position
-            string description = string.Format("Position Deleted by {0} at {1}", cu.Email , DateTime.Now.ToShortDateString());
+            string description = string.Format("Position Deleted by {0} at {1}", cu.Email, DateTime.Now.ToShortDateString());
             Log log = new Log()
             {
                 Date = DateTime.Now,
-                User = cu,               
+                User = cu,
                 Action = Entities.Action.Delete,
                 PreviousStatus = p.Status,
                 Description = description,
                 ActualStatus = Status.Removed,
-                ApplicationUser_Id = cu.Id                
+                ApplicationUser_Id = cu.Id
             };
             p.Logs.Add(log);
             p.Status = Status.Removed;
@@ -126,6 +126,34 @@ namespace Talento.Core.Helpers
         public async Task<List<Position>> GetAll()
         {
             return await Db.Positions.ToListAsync();
+        }
+
+        public bool DeleteCandidate(Position position, Candidate candidate, ApplicationUser modifier)
+        {
+            try
+            {
+                Position currentPosition = Db.Positions.Find(position.Id);
+                currentPosition.Candidates.Remove(candidate);
+
+                Log log = new Log()
+                {
+                    Action = Entities.Action.Edit,
+                    ActualStatus = currentPosition.Status,
+                    PreviousStatus = currentPosition.Status,
+                    Description = String.Format("Candidate {0} has been removed from position.", candidate.Email),
+                    Date = DateTime.Now,
+                    ApplicationUser_Id = modifier.Id,
+                    User = modifier,
+                };
+                currentPosition.Logs.Add(log);
+
+                Db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return true;
         }
 
         #region PositionLogs
