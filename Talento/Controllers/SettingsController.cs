@@ -39,7 +39,7 @@ namespace Talento.Controllers
                     ApplicationParameter = cAppSettingsVM.ApplicationParameter
                 };
 
-                settingsHelper.Create(aS);
+                SettingsHelper.Create(aS);
                 return RedirectToAction("Dashboard", "AppSettings");
             }
             return RedirectToAction("Dashboard", "AppSettings");
