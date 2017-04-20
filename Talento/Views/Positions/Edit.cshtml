@@ -71,12 +71,8 @@
     <div class="form-group">
         <label class="control-label col-md-2" for="Status">Status</label>
         <div class="col-md-10">
-            <select class="form-control" data-val="true" data-val-required="Status is required" id="Status" name="Status">
-                <option value="3">Cancelled</option>
-                <option selected="selected" value="2">Open</option>
-                <option value="4">Closed</option>
-            </select>
-            <span class="field-validation-valid text-danger" data-valmsg-for="Status" data-valmsg-replace="true"></span>
+          @Html.DropDownListFor(model => model.Status, EnumHelper.GetSelectList(typeof(Talento.Entities.Status)).Where(e => e.Text != "Removed"), new { @class = "form-control" })
+          @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })  
         </div>
     </div>
          

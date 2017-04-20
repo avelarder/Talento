@@ -216,6 +216,7 @@ namespace Talento.Controllers
         }
 
         #region PositionLogs
+        [ChildAndAjaxActionOnly]
         public ActionResult List(int? id, int pagex = 1, int pagesize = 5, string clase = "slide-right")
         {
             try
@@ -239,7 +240,7 @@ namespace Talento.Controllers
                 string url = Url.Action("List", "Positions");
                 // Get Position With Logs
                 PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
-                var logs = position.Logs.ToList();
+                var logs = position.Logs.OrderByDescending(x => x.Date).ToList();
                 // Get List of PositionLogs and the Pagination
                 var containerLogs = PositionHelper.PaginateLogs(logs, pagex, pagesize, url);
                 // No logs with the ID return 404
