@@ -11,5 +11,6 @@ namespace Talento.Core
     {
         List<ApplicationSetting> GetAll();
         ApplicationSetting Get(int id);
+        List<ApplicationSetting> GetParameters(string prefix);
     }
 }
