@@ -61,7 +61,6 @@
     <Compile Include="Data\ApplicationDbContext.cs" />
     <Compile Include="Helpers\CandidateHelper.cs" />
     <Compile Include="Helpers\DasboardPagingHelper.cs" />
-    <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="IApplicationSetting.cs" />
     <Compile Include="ICandidate.cs" />

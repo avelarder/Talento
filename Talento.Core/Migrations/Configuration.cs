@@ -807,7 +807,7 @@ namespace Talento.Core.Migrations
                     }
                 }
             };
-            appSettings.ForEach(r => context.ApplicationSetting.AddOrUpdate(p => p.ApplicationSettingId, r));
+            appSettings.ForEach(r => context.ApplicationSettings.AddOrUpdate(p => p.ApplicationSettingId, r));
             context.SaveChanges();
             #endregion
         }

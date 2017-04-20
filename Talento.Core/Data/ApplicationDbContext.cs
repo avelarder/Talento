@@ -66,7 +66,7 @@ namespace Talento.Core.Data
         
         public virtual DbSet<FileBlob> FileBlobs { get; set; }
 
-        public virtual DbSet<ApplicationSetting> ApplicationSetting { get; set; }
+        public virtual DbSet<ApplicationSetting> ApplicationSettings { get; set; }
 
     }
 }

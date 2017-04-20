@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,8 @@ namespace Talento.Core.Helpers
 
         public List<ApplicationSetting> GetAll()
         {
-            throw new NotImplementedException();
+            var settings = Db.ApplicationSettings.ToList();
+            return settings;
         }
     }
 }

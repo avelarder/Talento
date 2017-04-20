@@ -23,7 +23,6 @@ namespace Talento.Controllers
                 ;
             });
         }
-    
 
         // POST: Settings/New
         [HttpPost]
@@ -32,6 +31,8 @@ namespace Talento.Controllers
             try
             {
                 // TODO: Add insert logic here
+
+
 
                 return RedirectToAction("Index");
             }
