@@ -10,6 +10,7 @@ namespace Talento.Core
     public interface IApplicationSetting
     {
         List<ApplicationSetting> GetAll();
-        ApplicationSetting Get(int id);
+        ApplicationSetting Get(string id);
+        void Create(ApplicationSetting aS);
     }
 }

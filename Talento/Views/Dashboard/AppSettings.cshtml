@@ -1,4 +1,4 @@
-﻿
+﻿@model Talento.Models.CreateApplicationSettingsViewModel
 @{
     ViewBag.Title = "AppSettings";
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
@@ -17,34 +17,35 @@
         <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form id="formnewparameter" action="/Settings/New/" method="post">
+                    <form id="formnewparameter" action="/Settings/Create/" method="post">
                         <div class="modal-body">
                             <h2>New Parameter</h2>
                             <hr />
                             <div class="form-horizontal">
                                 <div class="form-group">
-                                    <label class="control-label" for="KeyGroup">Key Group</label>
+                                    <label class="control-label" for="SettingName">Key Group</label>
                                     <div class="col-md-10">
-                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Key Group is required" id="KeyGroup" name="KeyGroup" type="text" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="KeyGroup" data-valmsg-replace="true"></span>
+                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Key Group is required" id="SettingName" name="SettingName" type="text" />
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="SettingName" data-valmsg-replace="true"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-horizontal">
                                 <div class="form-group">
-                                    <label class="control-label" for="KeyName">Key Name</label>
+                                    <label class="control-label" for="ParameterName">Key Name</label>
                                     <div class="col-md-10">
-                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Key Name is required" id="KeyName" name="KeyName" type="text" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="KeyName" data-valmsg-replace="true"></span>
+                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Key Name is required" id="ParameterName" name="ParameterName" type="text" />
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="ParameterName" data-valmsg-replace="true"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-horizontal">
                                 <div class="form-group">
-                                    <label class="control-label" for="KeyValues">Values</label>
+                                    @*<label class="control-label" for="ParameterName">Values</label>*@
+                                    <label class="control-label" for="ParameterName">Values</label>
                                     <div class="col-md-10">
-                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Values are required" id="KeyValues" name="KeyValues" type="text" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="KeyValues" data-valmsg-replace="true"></span>
+                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Values are required" id="ParameterName" name="ParameterName" type="text" />
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="ParameterName" data-valmsg-replace="true"></span>
                                     </div>
                                 </div>
                             </div>

@@ -101,7 +101,6 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreatePositionViewModel position)
         {
-
             //Search EmailPM in SearchPM Helper
             ApplicationUser pmUser = UserHelper.SearchPM(position.EmailPM);
 
@@ -109,7 +108,6 @@ namespace Talento.Controllers
             if (pmUser == null)
             {
                 ModelState.AddModelError(string.Empty, "PM is not valid");
-
             }
 
             string user = User.Identity.GetUserId();
@@ -205,6 +203,7 @@ namespace Talento.Controllers
             {
                 return HttpNotFound();
             }
+
             if (position.Status == Status.Removed)
             {
                 return RedirectToAction("Index", "Dashboard");

@@ -34,4 +34,10 @@ namespace Talento.Models
 
         public virtual ApplicationUser CreatedBy { get; set; }
     }
+
+    //crear viewmodel para ApplicationParameters para bindear a la vista
+    public class CreateApplicationParametersViewModel
+    {
+        public IList<ApplicationParameter> ApplicationParameter { get; set; }
+    }
 }

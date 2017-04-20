@@ -19,27 +19,35 @@ namespace Talento.Controllers
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<ApplicationSetting, ApplicationSettingModels>()
-                    .ForMember(s => s.ApplicationSettingId , opt => opt.MapFrom(o => o.ApplicationSettingId))
+                    .ForMember(s => s.ApplicationSettingId, opt => opt.MapFrom(o => o.ApplicationSettingId))
                 ;
             });
         }
 
         // POST: Settings/New
         [HttpPost]
-        public ActionResult New(FormCollection collection)
+        public ActionResult Create(CreateApplicationSettingsViewModel cAppSettingsVM) //FormCollection collection
         {
-            try
+            //var listData = _appFunctions.GetAllCategory();
+            //model.CategoryList = new SelectList(listData, "CategoryTypeID ", "CategoryTitle");
+
+            if (IsStateValid())
             {
-                // TODO: Add insert logic here
+                ApplicationSetting aS = new ApplicationSetting
+                {
+                    SettingName = cAppSettingsVM.SettingName,
+                    ApplicationParameter = cAppSettingsVM.ApplicationParameter
+                };
 
-
-
-                return RedirectToAction("Index");
+                settingsHelper.Create(aS);
+                return RedirectToAction("Dashboard", "AppSettings");
             }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Dashboard", "AppSettings");
+        }
+
+        public virtual bool IsStateValid()
+        {
+            return ModelState.IsValid;
         }
 
         // GET: Settings/Edit/5
