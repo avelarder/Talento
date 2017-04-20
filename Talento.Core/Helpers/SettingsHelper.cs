@@ -10,7 +10,7 @@ namespace Talento.Core.Helpers
 {
     public class SettingsHelper : BaseHelper, IApplicationSetting
     {
-        public SettingsHelper(Core.Data.ApplicationDbContext db) : base(db)
+        public SettingsHelper(Data.ApplicationDbContext db): base(db)
         {
 
         }
@@ -36,6 +36,11 @@ namespace Talento.Core.Helpers
                 Db.ApplicationSettings.Add(aS);
             }
             Db.SaveChanges();
+        }
+
+        public List<ApplicationSetting> GetParameters(string prefix)
+        {
+            return Db.ApplicationSettings.Where(s => s.SettingName.StartsWith(prefix)).ToList();
         }
     }
 }

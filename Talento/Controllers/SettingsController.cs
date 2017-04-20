@@ -11,11 +11,11 @@ namespace Talento.Controllers
 {
     public class SettingsController : Controller
     {
-        IApplicationSetting settingsHelper;
+        IApplicationSetting SettingsHelper;
 
-        public SettingsController(IApplicationSetting SettingsHelper)
+        public SettingsController(IApplicationSetting settingsHelper)
         {
-            settingsHelper = SettingsHelper;
+            SettingsHelper = settingsHelper;
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<ApplicationSetting, ApplicationSettingModels>()
@@ -92,6 +92,12 @@ namespace Talento.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult Modal(string prefix)
+        {
+            var retu = SettingsHelper.GetParameters(prefix);
+            return Json(retu, JsonRequestBehavior.AllowGet);  
         }
     }
 }
