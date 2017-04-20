@@ -112,7 +112,7 @@ namespace Talento.Controllers
 
             if (currentPosition.Status == Status.Cancelled || currentPosition.Status == Status.Closed)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
             }
 
             if (candidate == null)
