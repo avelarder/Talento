@@ -137,8 +137,6 @@ namespace Talento.Controllers
 
                     string email = CandidateHelper.Get(candidate.Id).Email;
 
-
-
                     Candidate newCandidate = new Candidate
                     {
                         Id = candidate.Id,
