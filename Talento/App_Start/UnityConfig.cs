@@ -53,6 +53,7 @@ namespace Talento.App_Start
             container.RegisterType<IFileManagerHelper, FileManagerHelper>();
             container.RegisterType<ITag, TagHelper>();
             container.RegisterType<ICustomUser, UserHelper>();
+            container.RegisterType<IApplicationSetting, SettingsHelper>();
         }
     }
 }

@@ -9,7 +9,6 @@ namespace Talento.Models
 {
     public class ApplicationSettingModels
     {
-
         public int ApplicationSettingId { get; set; }
 
         [Required]
@@ -17,5 +16,22 @@ namespace Talento.Models
         public string SettingName { get; set; }
 
         public IList<ApplicationParameter> ApplicationParameter { get; set; }
+    }
+
+    public class CreateApplicationSettingsViewModel
+    {
+        public int ApplicationSettingId { get; set; }
+
+        [Required]
+        [StringLength(60, ErrorMessage = "Setting Name is required")]
+        public string SettingName { get; set; }
+
+        public IList<ApplicationParameter> ApplicationParameter { get; set; }
+
+        public DateTime? CratedOn { get; set; }
+
+        public string CreatedBy_Id { get; set; }
+
+        public virtual ApplicationUser CreatedBy { get; set; }
     }
 }
