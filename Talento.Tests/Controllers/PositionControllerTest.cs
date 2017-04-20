@@ -65,7 +65,8 @@ namespace Talento.Tests.Controllers
 
             });
 
-            PositionsController controller = new PositionsController(position.Object, mUser.Object);
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            PositionsController controller = new PositionsController(position.Object, mUser.Object, mCandidate.Object);
 
             var result = controller.Details(5, 1);
             var viewModel = (List<PositionModel>)(((ViewResult)result).Model);
@@ -112,7 +113,8 @@ namespace Talento.Tests.Controllers
             };
 
             // create controller
-            PositionsController posController = new PositionsController(position.Object, user.Object);
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object);
 
             var result = posController.Details(-1, 1);
             var httpStatusCodeResult = ((HttpStatusCodeResult)(((ActionResult)result)));
@@ -155,7 +157,8 @@ namespace Talento.Tests.Controllers
             };
 
             // create controller
-            PositionsController posController = new PositionsController(position.Object, user.Object);
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object);
 
             var result = posController.Details(null, null);
             var httpStatusCodeResult = ((HttpStatusCodeResult)(((ActionResult)result))); // .Result
@@ -198,7 +201,8 @@ namespace Talento.Tests.Controllers
             };
 
             // create controller
-            PositionsController posController = new PositionsController(position.Object, user.Object);
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object);
 
             var result = posController.Details(5, 1);
             var httpStatusCodeResult = ((HttpStatusCodeResult)(((ActionResult)result))); // .Result
@@ -222,7 +226,8 @@ namespace Talento.Tests.Controllers
             Mock<ICustomUser> userhelper = new Mock<ICustomUser>();
             var mockContext = Mock.Of<ControllerContext>(c => c.HttpContext.User == mockPrincipal.Object);
 
-            PositionsController controller = new PositionsController(positionhelper.Object, userhelper.Object)
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            PositionsController controller = new PositionsController(positionhelper.Object, userhelper.Object, mCandidate.Object)
             {
                 ControllerContext = mockContext
             };
@@ -311,8 +316,8 @@ namespace Talento.Tests.Controllers
 
             position.Setup(x => x.Create(positionCreate));
 
-
-            var mController = new PositionsController(position.Object, mUser.Object);
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            var mController = new PositionsController(position.Object, mUser.Object, mCandidate.Object);
             mController.ControllerContext = mockContext.Object;
 
             //mController.IsStateValid = () => { return true; };
@@ -381,8 +386,8 @@ namespace Talento.Tests.Controllers
                 UserName = "test@test.com"
             });
 
-
-            PositionsController controller = new PositionsController(position.Object, mUser.Object);
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            PositionsController controller = new PositionsController(position.Object, mUser.Object, mCandidate.Object);
 
             var result = controller.Details(5, 1);
 

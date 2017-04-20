@@ -16,5 +16,6 @@ namespace Talento.Core
         bool Edit(Position log, ApplicationUser modifier);
         void Delete(int Id, string uId);
         Tuple<List<Log>, Pagination> PaginateLogs(List<Log> logs, int page, int pageSize, string url);
+        bool DeleteCandidate(Position log, Candidate candidate, ApplicationUser modifier);
     }
 }

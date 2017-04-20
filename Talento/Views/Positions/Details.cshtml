@@ -120,7 +120,7 @@
                         </a>
                     </td>
                     <td>
-                        <a href="#" data-toggle="modal" data-target="#delete-position-dialog" alt="Delete candidate">
+                        <a href="#" class="delete-candidate" data-target="#delete-position-dialog" data-candidate="@cP.Id" alt="Delete candidate">
                             <i class="material-icons md-24">delete</i>
                         </a>
                     </td>
@@ -130,12 +130,43 @@
         <script>
             window.onload = function () {
                 (function ($) {
+                    // Delte Candidate
+                    var $delete = $(".delete-candidate");
+
+                    var $buttonDelete = $("#delete-candidate-button");
+                    var url = $buttonDelete.attr("data-url");
+                    var dataCandidate = ""; 
+                    var positionId = "@Model.Id";
+
+                    $buttonDelete.on("click", function (event) {
+
+                        event.preventDefault();
+                        $.ajax({
+                            url: url,
+                            data: { idPosition: positionId, idCandidate: dataCandidate }
+                        }).done(function (response) {
+                        location.reload();    
+                        }).fail(function () {
+                            location.reload();  
+                        });
+                    });
+
+                    $delete.on("click", function (event) {
+
+                        event.preventDefault();
+                        var $self = $(this);
+                        var $modalTarget = $("#delete-position-dialog");
+                        dataCandidate = $self.attr("data-candidate");
+                        
+                        $modalTarget.modal('show');
+
+                    });
                     // start dude
                     var $parent = $('#candidates-list');
                     console.log("first trigger");
                     $parent.on("click", '.edit-candidate', function (event) {
                         var status = "@Html.Raw(Model.Status.ToString()).ToString()";
-                        // data-toggle="modal" data-target="#edit-position-dialog" 
+                        // data-toggle="modal" data-target="#edit-position-dialog"
                         if (status == "Closed" || status == "Cancelled") {
                             event.preventDefault();
                             alert("The information you are looking for is not available");
@@ -180,7 +211,7 @@
                     </div>
                     <div class="pmd-modal-action pmd-modal-bordered text-right">
                         <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                        <button data-dismiss="modal" type="button" onclick="@("window.location.href='" + @Url.Action(null, null, new { id = Model.Id }) + "'");" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
+                        <button id="delete-candidate-button" data-candidate="" data-position="@Model.Id" data-url="@Url.Action("DeleteCandidate", "Positions")" data-dismiss="modal" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
                     </div>
                 </div>
             </div>
