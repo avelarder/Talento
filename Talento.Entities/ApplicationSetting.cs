@@ -22,7 +22,7 @@ namespace Talento.Entities
     }
 
     public class ApplicationParameter
-    {
+    { 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ApplicationParameterId { get; set; }
 
