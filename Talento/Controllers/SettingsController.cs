@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Talento.Core;
 
 namespace Talento.Controllers
 {
     public class SettingsController : Controller
     {
+        IApplicationSetting settingsHelper;
+
+        public SettingsController(IApplicationSetting SettingsHelper)
+        {
+            settingsHelper = SettingsHelper;
+        }
 
         // POST: Settings/New
         [HttpPost]
