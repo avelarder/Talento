@@ -16,10 +16,11 @@ using Talento.Core.Helpers;
 using PagedList;
 using Talento.Core.Utilities;
 using System.Security;
+using System.Web.Security;
 
 namespace Talento.Controllers
 {
-    [Authorize(Roles = "PM, TAG, RMG, TL")]
+    [Authorize(Roles = "Admin, PM, TAG, RMG, TL")]
     public class PositionsController : Controller
     {
         Core.IPosition PositionHelper;
@@ -59,9 +60,14 @@ namespace Talento.Controllers
         }
 
         // GET: Positions/Details/5
-        [Authorize(Roles = "PM, TL, TAG, RMG")]
+        [Authorize(Roles = "Admin, PM, TL, TAG, RMG")]
         public ActionResult Details(int? id, int? page)
         {
+            ViewBag.userRole = "";
+            if (Roles.IsUserInRole("Admin")) {
+                ViewBag.userRole = "Admin";
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

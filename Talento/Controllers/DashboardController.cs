@@ -102,7 +102,7 @@ namespace Talento.Controllers
         private string GetRole()
         {
             string role = "basic";
-            if( Roles.IsUserInRole("Admin"))
+            if(Roles.IsUserInRole("Admin"))
             {
                 role = "admin";
             }
