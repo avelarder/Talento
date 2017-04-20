@@ -18,10 +18,15 @@ namespace Talento.Controllers
             SettingsHelper = settingsHelper;
             AutoMapper.Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<ApplicationSetting, ApplicationSettingModels>()
-                    .ForMember(s => s.ApplicationSettingId, opt => opt.MapFrom(o => o.ApplicationSettingId))
-                ;
+                cfg.CreateMap<ApplicationSetting, ApplicationSettingModels>();
             });
+        }
+
+        // List All Settings
+        public ActionResult List()
+        {
+            var settings = AutoMapper.Mapper.Map<ApplicationSettingModels>( SettingsHelper.GetAll() );
+            return PartialView(settings);
         }
 
         // POST: Settings/New

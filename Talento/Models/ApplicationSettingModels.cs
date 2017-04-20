@@ -15,7 +15,7 @@ namespace Talento.Models
         [StringLength(60, ErrorMessage = "Setting Name is required")]
         public string SettingName { get; set; }
 
-        public IList<ApplicationParameter> ApplicationParameter { get; set; }
+        public List<ApplicationParameter> ApplicationParameter { get; set; }
     }
 
     public class CreateApplicationSettingsViewModel
