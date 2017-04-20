@@ -21,7 +21,7 @@ namespace Talento.Core.Helpers
                 Db.FileBlobs.Add(file);
                 Db.SaveChanges();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw;
             }
