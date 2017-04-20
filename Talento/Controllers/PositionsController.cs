@@ -25,11 +25,13 @@ namespace Talento.Controllers
     {
         Core.IPosition PositionHelper;
         Core.ICustomUser UserHelper;
+        Core.ICandidate CandidateHelper;
 
-        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper)
+        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.ICandidate candidateHelper)
         {
             UserHelper = userHelper;
             PositionHelper = positionHelper;
+            CandidateHelper = candidateHelper;
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -64,7 +66,8 @@ namespace Talento.Controllers
         public ActionResult Details(int? id, int? page)
         {
             ViewBag.userRole = "";
-            if (Roles.IsUserInRole("Admin")) {
+            if (Roles.IsUserInRole("Admin"))
+            {
                 ViewBag.userRole = "Admin";
             }
 
@@ -80,7 +83,7 @@ namespace Talento.Controllers
             }
 
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
-            var onePageOfCandidatePositions = position.Candidates.OrderByDescending(x=>x.CratedOn).ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+            var onePageOfCandidatePositions = position.Candidates.OrderByDescending(x => x.CratedOn).ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
             ViewBag.page = pageNumber;
             ViewBag.onePageOfCandidatePositions = onePageOfCandidatePositions;
 
@@ -213,6 +216,29 @@ namespace Talento.Controllers
             string uId = User.Identity.GetUserId();
             PositionHelper.Delete(id.Value, uId);
             return RedirectToAction("Index", "Dashboard");
+        }
+
+        [Authorize(Roles = "PM, TL")]
+        public ActionResult DeleteCandidate(int? idPosition, int? idCandidate)
+        {
+            if (idPosition == null || idCandidate == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(idPosition.Value));
+            if (position == null)
+            {
+                return HttpNotFound();
+            }
+            if (position.Status == Status.Removed)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            ApplicationUser currentUser = UserHelper.GetUserByEmail(User.Identity.Name);
+            Candidate candidate = CandidateHelper.Get(idCandidate.Value);
+            PositionHelper.DeleteCandidate(PositionHelper.Get(idPosition.Value), candidate, currentUser);
+            return RedirectToAction("Detail", "Positions", new { id = idPosition, page = 1 });
         }
 
         #region PositionLogs
