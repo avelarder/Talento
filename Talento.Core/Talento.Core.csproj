@@ -61,6 +61,7 @@
     <Compile Include="Data\ApplicationDbContext.cs" />
     <Compile Include="Helpers\CandidateHelper.cs" />
     <Compile Include="Helpers\DasboardPagingHelper.cs" />
+    <Compile Include="IApplicationSetting.cs" />
     <Compile Include="ICandidate.cs" />
     <Compile Include="ISendEmail.cs" />
     <Compile Include="Helpers\FileManagerHelper.cs" />
