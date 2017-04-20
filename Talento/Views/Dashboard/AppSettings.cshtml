@@ -6,6 +6,58 @@
 
 <!DOCTYPE html>
 
-<h1>Application Settings</h1>
-<hr />
-<h2>Wow, you´re drimin´ dude!</h2>
+<div class="pmd-content pmd-content-custom dropdown-component" id="content">
+    <div class="container-fluid">
+        <div class="row">
+            <h1>Application Settings</h1>
+            <hr />
+            <input data-target="#complete-dialog" data-toggle="modal" 
+                   class="btn pmd-ripple-effect btn-primary" 
+                   value="Add Parameter" style="margin-top: 4px" 
+                   name="parameter-"/>
+        </div>
+        <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="formnewparameter" action="/AplicationSettings/New/" method="post">
+                        <div class="modal-body">
+                            <h2>New Parameter</h2>
+                            <hr />
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="control-label" for="KeyGroup">Key Group</label>
+                                    <div class="col-md-10">
+                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Key Group is required" id="KeyGroup" name="KeyGroup" type="text" />
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="KeyGroup" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="control-label" for="KeyName">Key Name</label>
+                                    <div class="col-md-10">
+                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Key Name is required" id="KeyName" name="KeyName" type="text" />
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="KeyName" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="control-label" for="KeyValues">Values</label>
+                                    <div class="col-md-10">
+                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Values are required" id="KeyValues" name="KeyValues" type="text" />
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="KeyValues" data-valmsg-replace="true"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="pmd-modal-action pmd-modal-bordered text-right">
+                            <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
+                            <input type="submit" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm" />
+                        </div>
+                       </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
