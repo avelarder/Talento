@@ -756,6 +756,60 @@ namespace Talento.Core.Migrations
             position5.Candidates = candidatesPosition5;
             context.SaveChanges();
             #endregion
+
+            #region ApplicationSettings
+
+            var appSettings = new List<ApplicationSetting>
+            {
+                new ApplicationSetting {
+                    ApplicationSettingId = 1,
+                    SettingName = "Pagination",
+                    ApplicationParameter = new List<ApplicationParameter>()
+                    {
+                        new ApplicationParameter
+                        {
+                            ApplicationSettingId = 1,
+                            ParameterName = "Status",
+                            ParameterValue = "Enabled",
+                            CreationDate = DateTime.Now,
+                            CreatedBy = manager.FindByEmail("Admin@example.com")
+                        }
+                    }
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 2,
+                    SettingName = "Sorting",
+                    ApplicationParameter = new List<ApplicationParameter>()
+                    {
+                        new ApplicationParameter
+                        {
+                            ApplicationSettingId = 2,
+                            ParameterName = "Status",
+                            ParameterValue = "Enabled",
+                            CreationDate = DateTime.Now,
+                            CreatedBy = manager.FindByEmail("Admin@example.com")
+                        }
+                    }
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 3,
+                    SettingName = "Filtering",
+                    ApplicationParameter = new List<ApplicationParameter>()
+                    {
+                        new ApplicationParameter
+                        {
+                            ApplicationSettingId = 3,
+                            ParameterName = "Status",
+                            ParameterValue = "Enabled",
+                            CreationDate = DateTime.Now,
+                            CreatedBy = manager.FindByEmail("Admin@example.com")
+                        }
+                    }
+                }
+            };
+            appSettings.ForEach(r => context.ApplicationSetting.AddOrUpdate(p => p.ApplicationSettingId, r));
+            context.SaveChanges();
+            #endregion
         }
     }
 }

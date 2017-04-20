@@ -52,17 +52,21 @@ namespace Talento.Core.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            // ApplicationSetting and Parameter Name must be unique
+            modelBuilder.Entity<ApplicationParameter>().HasKey(x => new { x.ParameterName, x.ApplicationSettingId});
         }
 
-        public virtual System.Data.Entity.DbSet<Tag> Tags { get; set; }
+        public virtual DbSet<Tag> Tags { get; set; }
 
-        public virtual System.Data.Entity.DbSet<Position> Positions { get; set; }
+        public virtual DbSet<Position> Positions { get; set; }
 
-        public virtual System.Data.Entity.DbSet<Log> PositionLogs { get; set; }
+        public virtual DbSet<Log> PositionLogs { get; set; }
 
-        public virtual System.Data.Entity.DbSet<Candidate> Candidates { get; set; }
+        public virtual DbSet<Candidate> Candidates { get; set; }
         
-        public virtual System.Data.Entity.DbSet<FileBlob> FileBlobs { get; set; }
+        public virtual DbSet<FileBlob> FileBlobs { get; set; }
+
+        public virtual DbSet<ApplicationSetting> ApplicationSetting { get; set; }
 
     }
 }
