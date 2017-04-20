@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Talento.Core;
+using Talento.Entities;
+using Talento.Models;
 
 namespace Talento.Controllers
 {
@@ -14,7 +16,14 @@ namespace Talento.Controllers
         public SettingsController(IApplicationSetting SettingsHelper)
         {
             settingsHelper = SettingsHelper;
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<ApplicationSetting, ApplicationSettingModels>()
+                    .ForMember(s => s.ApplicationSettingId , opt => opt.MapFrom(o => o.ApplicationSettingId))
+                ;
+            });
         }
+    
 
         // POST: Settings/New
         [HttpPost]
