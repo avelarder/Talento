@@ -96,7 +96,7 @@ namespace Talento.Controllers
             return ModelState.IsValid;
         }
         //GET: Edit Candidate
-        [Authorize(Roles = "PM, TL")]
+        [Authorize]
         public ActionResult Edit(int id, int positionId)
         {
             EditCandidateViewModel candidate = AutoMapper.Mapper.Map<EditCandidateViewModel>(CandidateHelper.Get(id));
@@ -125,7 +125,7 @@ namespace Talento.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [Authorize(Roles = "PM, TL")]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(EditCandidateViewModel candidate)
         {
@@ -197,8 +197,8 @@ namespace Talento.Controllers
                     switch (result)
                     {
                         case 4: return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
+                        case 6: return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
                         case -1:
-                            ModelState.AddModelError("", "The designated Candidate already exists in the current position.");
                             break;
                     }
                 }
@@ -210,7 +210,6 @@ namespace Talento.Controllers
             }
             else
             {
-                ModelState.AddModelError("", "The designated Candidate already exists");
                 return actionError;
             }
         }

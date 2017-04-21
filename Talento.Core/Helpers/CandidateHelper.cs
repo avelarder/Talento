@@ -43,7 +43,7 @@ namespace Talento.Core.Helpers
                 foreach (Candidate c in currentPosition.Candidates)
                 {
                     //If Email is already in the position return -1
-                    if (c.Email.Contains(newCandidate.Email))
+                    if (c.Email.Trim().ToLower().Contains(newCandidate.Email.Trim().ToLower()))
                     {
                         return -1;
                     }

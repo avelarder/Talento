@@ -91,9 +91,12 @@
                     @if (ViewBag.userRole != "Admin")
                     {
                         <th>
-                            <a href="#" data-toggle="modal" alt="Add profile" data-target="#new-complete-dialog">
-                                <i class="material-icons md-24">note_add</i>
-                            </a>
+                            @if (Model.Status == Talento.Entities.Status.Open)
+                            {
+                                <a href="#" data-toggle="modal" alt="Add profile" id="buttonaddprofile" data-target="#new-complete-dialog">
+                                    <i class="material-icons md-24">note_add</i>
+                                </a>
+                            }
                         </th>
                     }
 
@@ -127,7 +130,8 @@
                 </tr>
             }
         </table>
-        <script>            
+        <script>
+
             window.onload = function ()
             {
                 (function ($) {
@@ -135,7 +139,7 @@
                     var $delete = $(".delete-candidate");
                     var $buttonDelete = $("#delete-candidate-button");
                     var url = $buttonDelete.attr("data-url");
-                    var dataCandidate = ""; 
+                    var dataCandidate = "";
                     var positionId = "@Model.Id";
                     $buttonDelete.on("click", function (event) {
                         event.preventDefault();
@@ -143,19 +147,19 @@
                             url: url,
                             data: { idPosition: positionId, idCandidate: dataCandidate }
                         }).done(function (response) {
-                        location.reload();    
+                            location.reload();
                         }).fail(function () {
-                            location.reload();  
+                            location.reload();
                         });
                     });
                     $delete.on("click", function (event) {
                         event.preventDefault();
                         var $self = $(this);
                         var $modalTarget = $("#delete-position-dialog");
-                        dataCandidate = $self.attr("data-candidate");                        
+                        dataCandidate = $self.attr("data-candidate");
                         $modalTarget.modal('show');
                     });
-                    // start 
+                    // start
                     var $parent = $('#candidates-list');
                     console.log("first trigger");
                     $parent.on("click", '.edit-candidate', function (event) {
@@ -171,7 +175,6 @@
                             var $this = $(this);
                             var $target = $($this.attr('data-target'));
                             $target.modal('show');
-
                             var $url = $this.attr('href');
                             $target.html('');
                             $.ajax({
@@ -182,7 +185,7 @@
                                     <div class="modal-body" id="edit-position-dialog-body"> Error:'+ err + '</div></div></div>';
                                 $target.html(html);
                             }).done(function (result) {
-                                console.log("Load trigger");
+                    console.log("Load trigger");
                                 $target.html(result);
                                 $target.modal()
                             });
@@ -194,43 +197,51 @@
                             $("#Position_Id").val(($(this).attr("name")).split("-")[1]);
                             $("#formnewprofile")[0].reset();
                             $(".field-validation-error").hide();
-                        });
-                        $("#buttonnewprofile").click(function (evt) {
-                            evt.preventDefault();
-                            var $form = $('#formnewprofile');
-                            if ($form.valid()) {
-                                $form.submit();
-                                $("#complete-dialog").modal("hide");
-                                toastr.options = {
-                                    "debug": false,
-                                    "positionClass": "toast-top-center",
-                                    "onclick": null,
-                                    "fadeIn": 500,
-                                    "fadeOut": 2000,
-                                    "timeOut": 6000,
-                                    "extendedTimeOut": 2000
-                                }
-                                $('.modal').modal('hide');
-                                clearForm();
-                                setTimeout(function () { toastr.success("Profile has been added."); }, 2500)
-                            } else {
-                                clearForm();
-                                return;
-                            }
-                        });
-                        $("#Files").on("change", function () {
-                            addFile();
-                        });
-                        $("#fileListDiv").on("click", ".delete-file", function () {
-                            deleteFile($(this).attr('data-file'));
-                        });
                     });
+
+                        $(".modal").on('shown', function () {
+                        clearForm();
+                    });
+
+                        $("#buttonaddprofile").click(function () {
+                            clearForm();
+                        });
+
+                        $("#buttonnewprofile").click(function (evt) {
+                        evt.preventDefault();
+                        var $form = $('#formnewprofile');
+                        toastr.options = {
+                            "debug": false,
+                                "positionClass": "toast-top-center",
+                                "onclick": null,
+                                "fadeIn": 500,
+                                "fadeOut": 6000,
+                                "timeOut": 6000,
+                                "extendedTimeOut": 6000
+                            }
+                        if ($form.valid()) {
+                            var ea = ($form.submit());
+                                $("#complete-dialog").modal("hide");
+                                $('.modal').modal('hide');
+                            setTimeout(function () { toastr.success("Profile has been added."); }, 2500);
+                            setTimeout(function () { location.reload(); }, 5500);
+                            clearForm();
+                        } else {
+                            return;
+                        }
+                    });
+                        $("#Files").on("change", function () {
+                        addFile();
+                    });
+                        $("#fileListDiv").on("click", ".delete-file", function () {
+                        deleteFile($(this).attr('data-file'));
+                    });
+                });
 
                 }(jQuery));
 
                 function clearForm() {
-                    $("#formnewprofile")[0].reset();
-                    $(".field-validation-error").hide();
+                    document.getElementById("formnewprofile").reset();
                 }
 
                 function addFile() {
@@ -344,12 +355,12 @@
                 <div class="modal-content">
                     <form id="formnewprofile" action="/Candidate/CreateDetails/" method="post">
                         <div class="modal-body">
-                            <h4>Attaching a new Profile to </h4>
+                            <h4>Attaching a new Profile to @Model.Title</h4>
                             <hr />
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             @Html.AntiForgeryToken()
                             <div class="form-horizontal">
-                                <input data-val="true" data-val-number="The field Id must be a number." data-val-required="The Id field is required." id="Position_Id" name="Position_Id" type="hidden" value="@Model.Id"/>
+                                <input data-val="true" data-val-number="The field Id must be a number." data-val-required="The Id field is required." id="Position_Id" name="Position_Id" type="hidden" value="@Model.Id" />
                                 <div class="form-group">
                                     <label class="control-label col-md-2" for="Name">Name </label>
                                     <div class="col-md-10">
@@ -360,7 +371,8 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-2" for="Email">Email </label>
                                     <div class="col-md-10">
-                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Email is required" id="Email" name="Email" type="text" />
+                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Email is required" id="Email" name="Email" type="email"
+                                               data-val-maxlength="The field Email Address must be a string or array type with a maximum length of '50'." data-val-maxlength-max="50"/>
                                         <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true"></span>
                                     </div>
                                 </div>
