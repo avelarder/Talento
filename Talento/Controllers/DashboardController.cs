@@ -31,6 +31,8 @@ namespace Talento.Controllers
         {
             string Dashboard = "_PartialContent.cshtml";
 
+            string test = ModelState.IsValid.ToString();
+
             List<Position> rawData;
             if (Roles.IsUserInRole("Admin"))
             {

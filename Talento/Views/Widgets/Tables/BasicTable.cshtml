@@ -111,7 +111,7 @@
 <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="formnewprofile" action="/Candidate/New/" method="post">
+            <form id="formnewprofile" action="/Candidate/Create/" method="post">
                 <div class="modal-body">
                     <h4>Attaching a new Profile to </h4>
                     <hr />
@@ -166,7 +166,7 @@
                 </div>
                 <div class="pmd-modal-action pmd-modal-bordered text-right">
                     <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                    <input id="buttonnewprofile" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm"/>
+                    <input  data-dismiss="modal" id="buttonnewprofile" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm"/>
                 </div>
             </form>
         </div>
@@ -261,7 +261,6 @@
             }
             $(document).ready(function () {
                 $(".btn-modal").on("click", function () {
-                    alert("aqui hago show");
                     $("#Position_Id").val(($(this).attr("name")).split("-")[1]);
                     $("#formnewprofile")[0].reset();
                     $(".field-validation-error").hide();
@@ -272,7 +271,16 @@
                     if ($form.valid()) {
                         $form.submit();
                         $("#complete-dialog").modal("hide");
-                        toastr.info("exito");
+                        toastr.options = {
+                            "debug": false,
+                            "positionClass": "toast-top-center",
+                            "onclick": null,
+                            "fadeIn": 500,
+                            "fadeOut": 2000,
+                            "timeOut": 6000,
+                            "extendedTimeOut": 2000
+                        }
+                        toastr.success("Profile has been added.");
                     } else {
                         return;
                     }

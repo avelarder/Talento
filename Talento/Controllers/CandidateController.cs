@@ -172,9 +172,7 @@ namespace Talento.Controllers
             return PartialView();
         }
 
-        [HttpPost]
-        [ValidateJsonAntiForgeryToken]
-        public ActionResult New(CreateCandidateViewModel candidate)
+        private ActionResult New(CreateCandidateViewModel candidate, ActionResult actionError)
         {
             if (ModelState.IsValid)
             {
@@ -197,9 +195,7 @@ namespace Talento.Controllers
                         Positions = position,
                         FileBlobs = files
                     };
-
                     int result = CandidateHelper.Create(newCandidate);
-
                     switch (result)
                     {
                         case 4: return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
@@ -212,13 +208,29 @@ namespace Talento.Controllers
                 {
                     ModelState.AddModelError("", "The position is not opened");
                 }
-                return RedirectToAction("Index", "Dashboard", null);
+                return actionError;
             }
             else
             {
                 ModelState.AddModelError("", "The designated Candidate already exists");
-                return RedirectToAction("Index", "Dashboard", null);
+                return actionError;
             }
+        }
+
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public ActionResult Create(CreateCandidateViewModel candidate)
+        {
+            return New(candidate, RedirectToAction("Index", "Dashboard", null));
+        }
+
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public ActionResult CreateDetails(CreateCandidateViewModel candidate)
+        {
+            return New(candidate, RedirectToAction("Details", "Positions", new { id = candidate.Position_Id }));
         }
 
         [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]

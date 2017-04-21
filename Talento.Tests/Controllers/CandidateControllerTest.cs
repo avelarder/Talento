@@ -94,7 +94,6 @@ namespace Talento.Tests.Controllers
             Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
             Mock<IPosition> mockPositionHelper = mocks.Create<IPosition>();
             Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
-            Mock<IFileManagerHelper> mockFileManagerHelper = mocks.Create<IFileManagerHelper>();
             var mockContext = new Mock<ControllerContext>();
             Mock<ApplicationUser> mockUser = mocks.Create<ApplicationUser>();
 
@@ -118,13 +117,6 @@ namespace Talento.Tests.Controllers
             Candidate candidate = new Candidate {
                 Email = "Candidate00@Example.com"
             };
-            byte[] blob = new byte[1];
-            List<FileBlob> files = new List<FileBlob>()
-            {
-                new FileBlob { Id = 1, Candidate_Id = 1, FileName = "aFile", Candidate = candidate, Blob = blob },
-                new FileBlob { Id = 2, Candidate_Id = 1, FileName = "aFile1", Candidate = candidate, Blob = blob },
-                new FileBlob { Id = 3, Candidate_Id = 1, FileName = "aFile2", Candidate = candidate, Blob = blob }
-            };
             EditCandidateViewModel candidateViewModel = new EditCandidateViewModel
             {
                 Id = 1,
@@ -144,13 +136,11 @@ namespace Talento.Tests.Controllers
             mockUserHelper.Setup(p => p.GetUserByEmail("pablo@example.com")).Returns(userTest);
             mockPositionHelper.Setup(p => p.Get(1)).Returns(positionTest);
             mockCandidateHelper.Setup(p => p.Get(1)).Returns(candidate);
-            CandidateController controller = new CandidateController(mockCandidateHelper.Object, mockUserHelper.Object,
-                                                mockFileManagerHelper.Object,
+            CandidateController controller = new CandidateController(mockCandidateHelper.Object, mockUserHelper.Object,                                      
                                                 mockPositionHelper.Object)
             {
                 ControllerContext = mockContext.Object
             };
-            mockContext.SetupGet(c => c.HttpContext.Session["files"]).Returns(files);
 
             //Act
             var result = controller.Edit(candidateViewModel);
