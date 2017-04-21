@@ -57,7 +57,6 @@ namespace Talento.Controllers
                         }
                     }
                 };
-
                 SettingsHelper.Create(aS);
                 return new HttpStatusCodeResult(200);
             }

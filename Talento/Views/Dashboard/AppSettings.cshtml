@@ -24,12 +24,15 @@
                     });
             });
 
+            var $form = $("#formnewparameter");
+            // On Form Cancel Reset Form
+            $("#appSettingCancel").on("click", function (event) {
+                $form[0].reset();
+            })
             // On Form Submit
-            $("#formnewparameter").on("submit", function (event) {
+            $form.on("submit", function (event) {
                 event.preventDefault();
-               
                 var $self = $(this);
-                
                 $.post({
                     url: $self.attr("action"),
                     data: $self.serialize()
@@ -90,7 +93,7 @@
                                 </div>
                             </div>
                         <div class="pmd-modal-action pmd-modal-bordered text-right">
-                            <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
+                            <button id="appSettingCancel" data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
                             <input type="submit" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm" />
                         </div>
                        </div>
