@@ -63,6 +63,7 @@ namespace Talento.Models
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
 
+        [EmailAddress(ErrorMessage = "The email must be a valid email address")]
         public string Email { get; set; }
 
         [StringLength(300, ErrorMessage = "Competencies must have 300 characters maximum")]
@@ -99,7 +100,7 @@ namespace Talento.Models
 
         [StringLength(50, ErrorMessage = "Email must have 50 characters maximum")]
         [Required(ErrorMessage = "Email is required")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "The email must be a valid email address")]
         public string Email { get; set; }
 
         [StringLength(300, ErrorMessage = "Competencies must have 300 characters maximum")]
