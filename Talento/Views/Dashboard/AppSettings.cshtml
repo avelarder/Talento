@@ -95,8 +95,12 @@
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
                             $form[0].reset();
+
+                            $("#results").append("Parameter is added");
+
                         }).fail(function (error) {
                             //alert("Error");
+                            $("#results").append("Error adding new parameter");
                         });
                     });
 
