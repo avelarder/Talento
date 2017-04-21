@@ -7,7 +7,7 @@
     var self = this;
 
     this.watch = function () {
-        $(document).on("click", self.parent, function (event) {
+        self.innerChild.on("click", self.parent, function (event) {
             event.preventDefault();
             // Get Child
             var $child = event.target;

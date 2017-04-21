@@ -46,15 +46,12 @@ namespace Talento.App_Start
             container.RegisterType<UserManager<ApplicationUser>>();
             container.RegisterType<ApplicationUserManager>();
             container.RegisterType<ICustomPagingList, DashboardPagingHelper>();
-            container.RegisterType<IPositionLog, PositionLogHelper>();
             container.RegisterType<IPosition, PositionHelper>();
             container.RegisterType<AccountController>(new InjectionConstructor());
             container.RegisterType<IPosition, PositionHelper>();
             container.RegisterType<ICandidate, CandidateHelper>();
-            container.RegisterType<IFileManagerHelper, FileManagerHelper>();
             container.RegisterType<ITag, TagHelper>();
             container.RegisterType<ICustomUser, UserHelper>();
-            container.RegisterType<IPositionCandidate, PositionCandidateHelper>();
         }
     }
 }

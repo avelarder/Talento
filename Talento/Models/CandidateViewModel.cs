@@ -40,6 +40,8 @@ namespace Talento.Models
 
         [Required]
         public bool IsTcsEmployee { get; set; }
+
+        public IList<Position> Positions { get; set; }
     }
 
     public class FileBlobViewModel
@@ -51,24 +53,11 @@ namespace Talento.Models
 
     }
 
-    public class PositionCandidateViewModel
-    {
-        //(Email, CreatedOn, CreatedBy, Status (New, Technical Interview, Conditional Offer, Customer Interview, Accepted, Rejected, Canceled))
-
-        public int Candidate_Id { get; set; }
-
-        [Required]
-        public virtual Candidate Candidate { get; set; }
-
-        public int Position_Id { get; set; }
-
-        [Required]
-        public virtual Position Position { get; set; }
-    }
-
     public class EditCandidateViewModel
     {
         public int Id { get; set; }
+
+        public int Position_Id { get; set; }
 
         [StringLength(50, ErrorMessage = "Name must have 50 characters maximum")]
         [Required(ErrorMessage = "Name is required")]
@@ -96,6 +85,8 @@ namespace Talento.Models
 
         [Required]
         public string IsTcsEmployee { get; set; }
+
+        public IList<Position> Positions { get; set; }
     }
 
     public class CreateCandidateViewModel
@@ -131,5 +122,7 @@ namespace Talento.Models
 
         [Required]
         public string IsTcsEmployee { get; set; }
+
+        public IList<Position> Positions { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using Talento.Core;
 using Talento.Entities;
@@ -13,26 +14,23 @@ namespace Talento.Controllers
 {
     public class CandidateController : Controller
     {
-
         ICandidate CandidateHelper;
         IPosition PositionHelper;
         ICustomUser UserHelper;
-        IPositionCandidate PositionsCandidatesHelper;
-        IFileManagerHelper FileManagerHelper;
 
-        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPositionCandidate positionsCandidatesHelper, IFileManagerHelper fileManagerHelper, IPosition positionHelper)
+        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPosition positionHelper)
         {
             CandidateHelper = candidateHelper;
             UserHelper = userHelper;
-            PositionsCandidatesHelper = positionsCandidatesHelper;
-            FileManagerHelper = fileManagerHelper;
             PositionHelper = positionHelper;
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Candidate, CandidateModel>()
                     .ForMember(t => t.CreatedBy_Id, opt => opt.MapFrom(s => s.CreatedBy_Id))
                 ;
-                cfg.CreateMap<Candidate, EditCandidateViewModel>();//.ForMember(c => c.IsTcsEmployee, opt => opt.MapFrom(s => s.IsTcsEmployee));
+                cfg.CreateMap<Candidate, EditCandidateViewModel>()
+                    .ForMember(s => s.Positions, opt => opt.MapFrom(p => p.Positions))
+                ;
 
             });
         }
@@ -102,19 +100,17 @@ namespace Talento.Controllers
         public ActionResult Edit(int id, int positionId)
         {
             EditCandidateViewModel candidate = AutoMapper.Mapper.Map<EditCandidateViewModel>(CandidateHelper.Get(id));
-            List<PositionCandidate> positionsCandidates = PositionsCandidatesHelper.GetCandidatesByPositionId(positionId);
+            candidate.Position_Id = positionId;
+            Position currentPosition = PositionHelper.Get(positionId);
 
-            if (!positionsCandidates.Any(x => x.Candidate.Id.Equals(candidate.Id)))
+            if (!currentPosition.Candidates.Any(x => x.Id.Equals(candidate.Id)))
             {
                 return HttpNotFound();
             }
 
-            PositionCandidate item = positionsCandidates[0];
+            if (currentPosition.Status == Status.Cancelled || currentPosition.Status == Status.Closed)
             {
-                if (item.Position.Status == Status.Cancelled || item.Position.Status == Status.Closed)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
-                }
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
             }
 
             if (candidate == null)
@@ -137,7 +133,7 @@ namespace Talento.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    List<FileBlob> files = ((List<FileBlob>)Session["files"]);
+                    HashSet<FileBlob> files = ((HashSet<FileBlob>)Session["files"]);
 
                     string email = CandidateHelper.Get(candidate.Id).Email;
 
@@ -149,21 +145,17 @@ namespace Talento.Controllers
                         Name = candidate.Name,
                         IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
                         Status = candidate.Status,
-                        Email = email
+                        Email = email,
+                        Positions = new List<Position> { PositionHelper.Get(candidate.Position_Id) }
                     };
 
-                    if (files != null)
-                    {
-                        files.ForEach(x => x.Candidate_Id = newCandidate.Id);
-                    }
-                    int result = CandidateHelper.Edit(newCandidate, files);
+                    int result = CandidateHelper.Edit(newCandidate, files, UserHelper.GetUserByEmail(User.Identity.Name));
                     switch (result)
                     {
                         case -1:
                             ModelState.AddModelError("", "The designated Candidate already exists");
                             break;
                     }
-
                 }
                 return RedirectToAction("Index", "Dashboard", null);
             }
@@ -178,44 +170,86 @@ namespace Talento.Controllers
             return PartialView();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult New(CreateCandidateViewModel candidate)
+        private ActionResult New(CreateCandidateViewModel candidate, ActionResult actionError)
         {
-            List<FileBlob> files = ((List<FileBlob>)Session["files"]);
-
-            ApplicationUser user = UserHelper.GetUserByEmail(User.Identity.Name);
-
-            Candidate newCandidate = new Candidate
+            if (ModelState.IsValid)
             {
-                Competencies = candidate.Competencies,
-                CratedOn = DateTime.Now,
-                CreatedBy = user,
-                Description = candidate.Description,
-                Email = candidate.Email,
-                Name = candidate.Name,
-                IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
-                Status = candidate.Status,
-                CreatedBy_Id = user.Id
-            };
-            Position position = PositionHelper.Get(candidate.Position_Id);
-            PositionsCandidatesHelper.Create(newCandidate, position);
-
-            if (files != null)
-            {
-                files.ForEach(x => x.Candidate = newCandidate);
+                HashSet<FileBlob> files = ((HashSet<FileBlob>)Session["files"]);
+                ApplicationUser user = UserHelper.GetUserByEmail(User.Identity.Name);
+                List<Position> position = new List<Position> { PositionHelper.Get(candidate.Position_Id) };
+                if (position.First().Status == Status.Open)
+                {
+                    Candidate newCandidate = new Candidate
+                    {
+                        Competencies = candidate.Competencies,
+                        CratedOn = DateTime.Now,
+                        CreatedBy = user,
+                        Description = candidate.Description,
+                        Email = candidate.Email,
+                        Name = candidate.Name,
+                        IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
+                        Status = candidate.Status,
+                        CreatedBy_Id = user.Id,
+                        Positions = position,
+                        FileBlobs = files
+                    };
+                    int result = CandidateHelper.Create(newCandidate);
+                    switch (result)
+                    {
+                        case 4: return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
+                        case -1:
+                            ModelState.AddModelError("", "The designated Candidate already exists in the current position.");
+                            break;
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "The position is not opened");
+                }
+                return actionError;
             }
-            int result = CandidateHelper.Create(newCandidate, files);
-            switch (result)
+            else
             {
-                case -1:
-                    ModelState.AddModelError("", "The designated Candidate already exists");
-                    break;
+                ModelState.AddModelError("", "The designated Candidate already exists");
+                return actionError;
             }
-
-            return AttachProfile(candidate,position,UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG","RMG"}));
-            
         }
 
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public ActionResult Create(CreateCandidateViewModel candidate)
+        {
+            return New(candidate, RedirectToAction("Index", "Dashboard", null));
+        }
+
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public ActionResult CreateDetails(CreateCandidateViewModel candidate)
+        {
+            return New(candidate, RedirectToAction("Details", "Positions", new { id = candidate.Position_Id }));
+        }
+
+        [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+        protected class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
+        {
+            public void OnAuthorization(AuthorizationContext filterContext)
+            {
+                try
+                {
+                    if (filterContext == null)
+                    {
+                        throw new ArgumentNullException("filterContext");
+                    }
+                    var httpContext = filterContext.HttpContext;
+                    var cookie = httpContext.Request.Cookies[AntiForgeryConfig.CookieName];
+                    AntiForgery.Validate(cookie != null ? cookie.Value : null, httpContext.Request.Params["__RequestVerificationToken"]);
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
     }
 }

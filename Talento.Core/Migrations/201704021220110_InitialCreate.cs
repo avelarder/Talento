@@ -23,7 +23,6 @@ namespace Talento.Core.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.CreatedBy_Id)
-                .Index(t => t.Email, unique: true)
                 .Index(t => t.CreatedBy_Id);
             
             CreateTable(
@@ -89,31 +88,13 @@ namespace Talento.Core.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Candidate_Id = c.Int(nullable: false),
                         FileName = c.String(nullable: false),
                         Blob = c.Binary(),
-                    })
-                .PrimaryKey(t => new { t.Id, t.Candidate_Id })
-                .ForeignKey("dbo.Candidates", t => t.Candidate_Id)
-                .Index(t => t.Candidate_Id);
-            
-            CreateTable(
-                "dbo.PositionLogs",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Date = c.DateTime(nullable: false),
-                        ApplicationUser_Id = c.String(nullable: false, maxLength: 128),
-                        Position_Id = c.Int(nullable: false),
-                        Action = c.Int(nullable: false),
-                        PreviousStatus = c.Int(nullable: false),
-                        ActualStatus = c.Int(nullable: false),
+                        Candidate_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Positions", t => t.Position_Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
-                .Index(t => t.ApplicationUser_Id)
-                .Index(t => t.Position_Id);
+                .ForeignKey("dbo.Candidates", t => t.Candidate_Id)
+                .Index(t => t.Candidate_Id);
             
             CreateTable(
                 "dbo.Positions",
@@ -150,6 +131,25 @@ namespace Talento.Core.Migrations
                 .Index(t => t.LastClosedBy_Id);
             
             CreateTable(
+                "dbo.Logs",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Date = c.DateTime(nullable: false),
+                        Description = c.String(nullable: false),
+                        ApplicationUser_Id = c.String(nullable: false, maxLength: 128),
+                        Action = c.Int(nullable: false),
+                        PreviousStatus = c.Int(nullable: false),
+                        ActualStatus = c.Int(nullable: false),
+                        Position_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
+                .ForeignKey("dbo.Positions", t => t.Position_Id)
+                .Index(t => t.ApplicationUser_Id)
+                .Index(t => t.Position_Id);
+            
+            CreateTable(
                 "dbo.Tags",
                 c => new
                     {
@@ -158,19 +158,6 @@ namespace Talento.Core.Migrations
                     })
                 .PrimaryKey(t => t.Name)
                 .ForeignKey("dbo.Positions", t => t.Position_Id)
-                .Index(t => t.Position_Id);
-            
-            CreateTable(
-                "dbo.PositionCandidates",
-                c => new
-                    {
-                        Candidate_Id = c.Int(nullable: false),
-                        Position_Id = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => new { t.Candidate_Id, t.Position_Id })
-                .ForeignKey("dbo.Candidates", t => t.Candidate_Id)
-                .ForeignKey("dbo.Positions", t => t.Position_Id)
-                .Index(t => t.Candidate_Id)
                 .Index(t => t.Position_Id);
             
             CreateTable(
@@ -185,37 +172,50 @@ namespace Talento.Core.Migrations
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.Name, unique: true, name: "RoleNameIndex");
             
+            CreateTable(
+                "dbo.PositionCandidates",
+                c => new
+                    {
+                        Position_Id = c.Int(nullable: false),
+                        Candidate_Id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.Position_Id, t.Candidate_Id })
+                .ForeignKey("dbo.Positions", t => t.Position_Id, cascadeDelete: true)
+                .ForeignKey("dbo.Candidates", t => t.Candidate_Id, cascadeDelete: true)
+                .Index(t => t.Position_Id)
+                .Index(t => t.Candidate_Id);
+            
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropForeignKey("dbo.PositionCandidates", "Position_Id", "dbo.Positions");
-            DropForeignKey("dbo.PositionCandidates", "Candidate_Id", "dbo.Candidates");
-            DropForeignKey("dbo.PositionLogs", "ApplicationUser_Id", "dbo.AspNetUsers");
-            DropForeignKey("dbo.PositionLogs", "Position_Id", "dbo.Positions");
             DropForeignKey("dbo.Tags", "Position_Id", "dbo.Positions");
             DropForeignKey("dbo.Positions", "PortfolioManager_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Positions", "ApplicationUser_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Logs", "Position_Id", "dbo.Positions");
+            DropForeignKey("dbo.Logs", "ApplicationUser_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Positions", "LastOpenedBy_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Positions", "LastClosedBy_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Positions", "LastCancelledBy_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.PositionCandidates", "Candidate_Id", "dbo.Candidates");
+            DropForeignKey("dbo.PositionCandidates", "Position_Id", "dbo.Positions");
             DropForeignKey("dbo.FileBlobs", "Candidate_Id", "dbo.Candidates");
             DropForeignKey("dbo.Candidates", "CreatedBy_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
-            DropIndex("dbo.AspNetRoles", "RoleNameIndex");
-            DropIndex("dbo.PositionCandidates", new[] { "Position_Id" });
             DropIndex("dbo.PositionCandidates", new[] { "Candidate_Id" });
+            DropIndex("dbo.PositionCandidates", new[] { "Position_Id" });
+            DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropIndex("dbo.Tags", new[] { "Position_Id" });
+            DropIndex("dbo.Logs", new[] { "Position_Id" });
+            DropIndex("dbo.Logs", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.Positions", new[] { "LastClosedBy_Id" });
             DropIndex("dbo.Positions", new[] { "LastCancelledBy_Id" });
             DropIndex("dbo.Positions", new[] { "LastOpenedBy_Id" });
             DropIndex("dbo.Positions", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.Positions", new[] { "PortfolioManager_Id" });
-            DropIndex("dbo.PositionLogs", new[] { "Position_Id" });
-            DropIndex("dbo.PositionLogs", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.FileBlobs", new[] { "Candidate_Id" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
@@ -223,12 +223,11 @@ namespace Talento.Core.Migrations
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.Candidates", new[] { "CreatedBy_Id" });
-            DropIndex("dbo.Candidates", new[] { "Email" });
-            DropTable("dbo.AspNetRoles");
             DropTable("dbo.PositionCandidates");
+            DropTable("dbo.AspNetRoles");
             DropTable("dbo.Tags");
+            DropTable("dbo.Logs");
             DropTable("dbo.Positions");
-            DropTable("dbo.PositionLogs");
             DropTable("dbo.FileBlobs");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetUserLogins");

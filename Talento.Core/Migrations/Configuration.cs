@@ -161,7 +161,7 @@ namespace Talento.Core.Migrations
                 new Tag { Name = "PMP"},
                 new Tag { Name = "Haskell"},
                 new Tag { Name = "Lamda Calculus"},
-                new Tag { Name = "Objet Orientated Programming"},
+                new Tag { Name = "Object Orientated Programming"},
                 new Tag { Name = "Madness"},
             };
             tags.ForEach(r => context.Tags.AddOrUpdate(p => p.Name, r));
@@ -185,7 +185,18 @@ namespace Talento.Core.Migrations
                     Description = "Full-stack .Net developer with knowledge in everything.",
                     Tags = new List<Tag>{ context.Tags.Find(".Net") },
                     LastOpenedBy = manager.FindByEmail("Pmuser1@example.com"),
-                    LastOpenedDate = Convert.ToDateTime("2017-03-15T13:45:30")
+                    LastOpenedDate = Convert.ToDateTime("2017-03-15T13:45:30"),
+                    Logs = new List<Log>
+                    {
+                        new Log
+                        {
+                            Action = Entities.Action.Create,
+                            ActualStatus = Status.Open,
+                            User = manager.FindByEmail("Pmuser1@example.com"),
+                            Description = string.Format("Position Created by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-03-15T13:45:30").ToShortDateString()),
+                            Date = Convert.ToDateTime("2017-03-15T13:45:30")
+                        }
+                    }
                 },
                 new Position
                 {
@@ -203,7 +214,18 @@ namespace Talento.Core.Migrations
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-03-22T09:43:30"),
                     LastClosedBy = manager.FindByEmail("Pmuser1@example.com"),
-                    LastClosedDate = Convert.ToDateTime("2017-03-30T18:01:30")
+                    LastClosedDate = Convert.ToDateTime("2017-03-30T18:01:30"),
+                    Logs =  new List<Log>
+                    {
+                        new Log
+                        {
+                            Action = Entities.Action.Create,
+                            ActualStatus = Status.Open,
+                            Description = string.Format("Position Created by {0} at {1}", "Tluser1@example.com", Convert.ToDateTime("2017-03-22T09:43:30").ToShortDateString()),
+                            User = manager.FindByEmail("Tluser1@example.com"),
+                            Date = Convert.ToDateTime("2017-03-22T09:43:30")
+                        }
+                    }
                 },
                 new Position
                 {
@@ -221,7 +243,27 @@ namespace Talento.Core.Migrations
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-02-15T11:13:30"),
                     LastCancelledBy = manager.FindByEmail("Tluser1@example.com"),
-                    LastCancelledDate = Convert.ToDateTime("2017-02-22T13:58:30")
+                    LastCancelledDate = Convert.ToDateTime("2017-02-22T13:58:30"),
+                    Logs = new List<Log>
+                    {
+                          new Log
+                        {
+                            Action = Entities.Action.Create,
+                            ActualStatus = Status.Open,
+                            Description = string.Format("Position Created by {0} at {1}", "Tluser1@example.com", Convert.ToDateTime("2017-02-15T11:13:30").ToShortDateString()),
+                            User = manager.FindByEmail("Tluser1@example.com"),
+                            Date = Convert.ToDateTime("2017-02-15T11:13:30")
+                        },
+                        new Log
+                        {
+                            Action = Entities.Action.Edit,
+                            PreviousStatus = Status.Open,
+                            ActualStatus = Status.Closed,
+                            Description = string.Format("Position Edited by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-03-30T18:01:30").ToShortDateString()),
+                            User = manager.FindByEmail("Pmuser1@example.com"),
+                            Date = Convert.ToDateTime("2017-03-30T18:01:30")
+                        }
+                    }
                 },
                 new Position
                 {
@@ -238,8 +280,19 @@ namespace Talento.Core.Migrations
                     Tags = new List<Tag>{},
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-01-03T11:13:30"),
+                    Logs = new List<Log>
+                    {
+                        new Log
+                        {
+                            Action = Entities.Action.Create,
+                            ActualStatus = Status.Open,
+                            Description = string.Format("Position Created by {0} at {1}", "Tluser1@example.com", Convert.ToDateTime("2017-01-03T11:13:30").ToShortDateString()),
+                            User = manager.FindByEmail("Tluser1@example.com"),
+                            Date = Convert.ToDateTime("2017-01-03T11:13:30")
+                        }
+                    }
                 },
-                  new Position
+                new Position
                 {
                     Id = 5,
                     Title = "Haskell Programmer",
@@ -254,8 +307,19 @@ namespace Talento.Core.Migrations
                     Tags = new List<Tag>{ context.Tags.Find("Haskell"),context.Tags.Find("Madness"), },
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-04-03T12:13:30"),
+                    Logs = new List<Log>
+                    {
+                        new Log
+                        {
+                            Action = Entities.Action.Create,
+                            ActualStatus = Status.Open,
+                            Description = string.Format("Position Created by {0} at {1}", "Tluser1@example.com", Convert.ToDateTime("2017-04-03T12:13:30").ToShortDateString()),
+                            User = manager.FindByEmail("Tluser1@example.com"),
+                            Date = Convert.ToDateTime("2017-04-03T12:13:30")
+                        }
+                    }
                 },
-                    new Position
+                new Position
                 {
                     Id = 6,
                     Title = "Crazy Dev",
@@ -270,8 +334,18 @@ namespace Talento.Core.Migrations
                     Tags = new List<Tag>{ context.Tags.Find("Madness") },
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-03-15T11:13:30"),
+                    Logs = new List<Log>
+                    {
+                       new Log
+                        {
+                            Action = Entities.Action.Create,
+                            ActualStatus = Status.Open,
+                            Description = string.Format("Position Created by {0} at {1}", "Tluser1@example.com", Convert.ToDateTime("2017-03-15T11:13:30").ToShortDateString()),
+                            User = manager.FindByEmail("Tluser1@example.com"),
+                            Date = Convert.ToDateTime("2017-03-15T11:13:30")
+                        }
+                    }
                 },
-
                 new Position
                 {
                     Id = 7,
@@ -287,6 +361,18 @@ namespace Talento.Core.Migrations
                     Tags = new List<Tag>{ context.Tags.Find("Objet Orientated Programming") },
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-02-19T11:13:30"),
+                    Logs = new List<Log>
+                    {
+                        new Log
+                        {
+                            Action = Entities.Action.Edit,
+                            PreviousStatus = Status.Open,
+                            ActualStatus = Status.Closed,
+                            Description = string.Format("Position Closed by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-03-30T18:01:30").ToShortDateString()),
+                            User = manager.FindByEmail("Pmuser1@example.com"),
+                            Date = Convert.ToDateTime("2017-03-30T18:01:30")
+                        }
+                    }
                 },
 
                 new Position
@@ -305,7 +391,19 @@ namespace Talento.Core.Migrations
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-02-09T11:13:30"),
                     LastClosedBy = manager.FindByEmail("Tluser1@example.com"),
-                    LastClosedDate = Convert.ToDateTime("2017-03-01T14:08:12")
+                    LastClosedDate = Convert.ToDateTime("2017-03-01T14:08:12"),
+                    Logs = new List<Log>
+                    {
+                        new Log
+                        {
+                            Action = Entities.Action.Edit,
+                            PreviousStatus = Status.Open,
+                            ActualStatus = Status.Closed,
+                            User = manager.FindByEmail("Pmuser1@example.com"),
+                            Description = string.Format("Position Closed by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-03-30T18:01:30").ToShortDateString()),
+                            Date = Convert.ToDateTime("2017-03-30T18:01:30")
+                        }
+                    }
                 },
                 new Position
                 {
@@ -323,183 +421,83 @@ namespace Talento.Core.Migrations
                     LastOpenedBy = manager.FindByEmail("Pmuser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-07-22T13:58:30"),
                     LastClosedBy = manager.FindByEmail("Pmuser1@example.com"),
-                    LastClosedDate = Convert.ToDateTime("2017-05-22T08:58:30")
+                    LastClosedDate = Convert.ToDateTime("2017-05-22T08:58:30"),
+                    Logs = new List<Log>() {
+                        new Log
+                        {
+                            Action = Entities.Action.Create,
+                            ActualStatus = Status.Open,
+                            User = manager.FindByEmail("Tluser1@example.com"),
+                            Description = string.Format("Position Opened by {0} at {1}", "Tluser1@example.com", Convert.ToDateTime("2017-02-15T11:13:30").ToShortDateString()),
+                            Date = Convert.ToDateTime("2017-02-15T11:13:30")
+                        },
+                        new Log
+                        {
+                            Action = Entities.Action.Edit,
+                            PreviousStatus = Status.Open,
+                            ActualStatus = Status.Closed,
+                            User = manager.FindByEmail("Pmuser1@example.com"),
+                            Description = string.Format("Position Opened by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-03-22T13:58:30").ToShortDateString()),
+                            Date = Convert.ToDateTime("2017-03-22T13:58:30")
+                        },
+                        new Log
+                        {
+                            Action = Entities.Action.Edit,
+                            PreviousStatus = Status.Closed,
+                            ActualStatus = Status.Open,
+                            User = manager.FindByEmail("Pmuser1@example.com"),
+                            Description = string.Format("Position Opened by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-04-22T11:58:30").ToShortDateString()),
+                            Date = Convert.ToDateTime("2017-04-22T11:58:30")
+                        },
+                        new Log
+                        {
+                            Action = Entities.Action.Edit,
+                            PreviousStatus = Status.Open,
+                            ActualStatus = Status.Open,
+                            User = manager.FindByEmail("Pmuser2@example.com"),
+                            Description = string.Format("Position Opened by {0} at {1}", "Pmuser2@example.com", Convert.ToDateTime("2017-04-22T12:50:00").ToShortDateString()),
+                            Date = Convert.ToDateTime("2017-04-22T12:50:00")
+                        },
+                        new Log
+                        {
+                            Action = Entities.Action.Edit,
+                            PreviousStatus = Status.Open,
+                            ActualStatus = Status.Open,
+                            User = manager.FindByEmail("Pmuser1@example.com"),
+                            Description = string.Format("Position Opened by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-04-22T12:52:00").ToShortDateString()),
+                            Date = Convert.ToDateTime("2017-04-22T12:52:00")
+                        },
+                        new Log
+                        {
+                            Action = Entities.Action.Edit,
+                            PreviousStatus = Status.Open,
+                            ActualStatus = Status.Closed,
+                            User = manager.FindByEmail("Pmuser1@example.com"),
+                            Description = string.Format("Position Closed by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-05-22T08:58:30").ToShortDateString()),
+                            Date = Convert.ToDateTime("2017-05-22T08:58:30")
+                        },
+                        new Log
+                        {
+                            Action = Entities.Action.Edit,
+                            PreviousStatus = Status.Closed,
+                            ActualStatus = Status.Open,
+                            User = manager.FindByEmail("Pmuser1@example.com"),
+                            Description = string.Format("Position Opened by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-07-22T13:58:30").ToShortDateString()),
+                            Date = Convert.ToDateTime("2017-07-22T13:58:30")
+                        },
+                        new Log
+                        {
+                            Action = Entities.Action.Edit,
+                            PreviousStatus = Status.Open,
+                            ActualStatus = Status.Open,
+                            Description = string.Format("Position Opened by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-07-22T14:00:30").ToShortDateString()),
+                            User = manager.FindByEmail("Pmuser1@example.com"),
+                            Date = Convert.ToDateTime("2017-07-22T14:00:30")
+                        }
+                    }
                 },
             };
             positions.ForEach(r => context.Positions.AddOrUpdate(p => p.Id, r));
-            context.SaveChanges();
-
-            #endregion
-
-            #region PositionLogsSeed
-
-            var positionLogs = new List<PositionLog>
-            {
-                new PositionLog
-                {
-                    Action = Entities.Action.Create,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(1),
-                    Date = Convert.ToDateTime("2017-03-15T13:45:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Create,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Tluser1@example.com"),
-                    Position = context.Positions.Find(2),
-                    Date = Convert.ToDateTime("2017-03-22T09:43:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Edit,
-                    PreviousStatus = Status.Open,
-                    ActualStatus = Status.Closed,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(2),
-                    Date = Convert.ToDateTime("2017-03-30T18:01:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Create,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Tluser1@example.com"),
-                    Position = context.Positions.Find(3),
-                    Date = Convert.ToDateTime("2017-02-15T11:13:30"),
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Edit,
-                    PreviousStatus = Status.Open,
-                    ActualStatus = Status.Cancelled,
-                    User = manager.FindByEmail("Tluser1@example.com"),
-                    Position = context.Positions.Find(3),
-                    Date = Convert.ToDateTime("2017-02-22T13:58:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Create,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(4),
-                    Date = Convert.ToDateTime("2017-01-03T11:13:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Create,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(5),
-                    Date = Convert.ToDateTime("2017-04-03T12:13:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Create,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(6),
-                    Date = Convert.ToDateTime("2017-03-15T11:13:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Create,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(7),
-                    Date = Convert.ToDateTime("2017-02-09T11:13:30")
-                },
-                  new PositionLog
-                {
-                    Action = Entities.Action.Create,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Tluser1@example.com"),
-                    Position = context.Positions.Find(8),
-                    Date = Convert.ToDateTime("2017-03-22T09:43:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Edit,
-                    PreviousStatus = Status.Open,
-                    ActualStatus = Status.Closed,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(8),
-                    Date = Convert.ToDateTime("2017-03-01T14:08:12")
-                },
-                  new PositionLog
-                {
-                    Action = Entities.Action.Create,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Tluser1@example.com"),
-                    Position = context.Positions.Find(9),
-                    Date = Convert.ToDateTime("2017-02-15T11:13:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Edit,
-                    PreviousStatus = Status.Open,
-                    ActualStatus = Status.Closed,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(9),
-                    Date = Convert.ToDateTime("2017-03-22T13:58:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Edit,
-                    PreviousStatus = Status.Closed,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(9),
-                    Date = Convert.ToDateTime("2017-04-22T11:58:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Edit,
-                    PreviousStatus = Status.Open,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser2@example.com"),
-                    Position = context.Positions.Find(9),
-                    Date = Convert.ToDateTime("2017-04-22T12:50:00")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Edit,
-                    PreviousStatus = Status.Open,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(9),
-                    Date = Convert.ToDateTime("2017-04-22T12:52:00")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Edit,
-                    PreviousStatus = Status.Open,
-                    ActualStatus = Status.Closed,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(9),
-                    Date = Convert.ToDateTime("2017-05-22T08:58:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Edit,
-                    PreviousStatus = Status.Closed,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(9),
-                    Date = Convert.ToDateTime("2017-07-22T13:58:30")
-                },
-                new PositionLog
-                {
-                    Action = Entities.Action.Edit,
-                    PreviousStatus = Status.Open,
-                    ActualStatus = Status.Open,
-                    User = manager.FindByEmail("Pmuser1@example.com"),
-                    Position = context.Positions.Find(9),
-                    Date = Convert.ToDateTime("2017-07-22T14:00:30")
-                }
-            };
-
-            positionLogs.ForEach(r => context.PositionLogs.AddOrUpdate(p => p.Id, r));
             context.SaveChanges();
 
             #endregion
@@ -737,63 +735,33 @@ namespace Talento.Core.Migrations
 
             #endregion tcscandidates
 
-            #region PositionCandidates
+            #region Candidates in positions
+            Position position1 = context.Positions.Find(1);
+            List<int> listId = new List<int> { 1, 2, 3, 4, 5 };
+            List<Candidate> candidatesPosition1 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
 
-            var positionsCandidates = new List<PositionCandidate>
-            {
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(1),
-                    Position = context.Positions.Find(4)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(2),
-                    Position = context.Positions.Find(5)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(3),
-                    Position = context.Positions.Find(5)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(4),
-                    Position = context.Positions.Find(6)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(5),
-                    Position = context.Positions.Find(5)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(6),
-                    Position = context.Positions.Find(5)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(7),
-                    Position = context.Positions.Find(5)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(8),
-                    Position = context.Positions.Find(5)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(9),
-                    Position = context.Positions.Find(6)
-                },
-                new PositionCandidate
-                {
-                    Candidate = context.Candidates.Find(1),
-                    Position = context.Positions.Find(5)
-                }
-            };
+            position1.Candidates = candidatesPosition1;
+            context.SaveChanges();
 
-            positionsCandidates.ForEach(r => context.PositionsCandidates.AddOrUpdate(p => p.Candidate_Id, r));
+            Position position2 = context.Positions.Find(2);
+            listId = new List<int> { 6 };
+            List<Candidate> candidatesPosition2 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
+
+            position2.Candidates = candidatesPosition2;
+            context.SaveChanges();
+
+            Position position6 = context.Positions.Find(6);
+            listId = new List<int> {7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            List<Candidate> candidatesPosition6 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
+
+            position6.Candidates = candidatesPosition6;
+            context.SaveChanges();
+
+            Position position5 = context.Positions.Find(5);
+            listId = new List<int> { 16, 17, 18, 19, 20 };
+            List<Candidate> candidatesPosition5 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
+
+            position5.Candidates = candidatesPosition5;
             context.SaveChanges();
             #endregion
         }

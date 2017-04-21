@@ -65,24 +65,17 @@ namespace Talento.Tests.Controllers
 
             });
 
-            Mock<IPositionCandidate> positionCandidate = new Mock<IPositionCandidate>();
-            positionCandidate.Setup(p => p.GetCandidatesByPositionId(5)).Returns(new List<PositionCandidate> {
-                 new PositionCandidate {
-                     Candidate = new Candidate(),
-                     Position = new Position()
-                    }
-            });
-
-            PositionsController controller = new PositionsController(position.Object, mUser.Object, positionCandidate.Object);
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            PositionsController controller = new PositionsController(position.Object, mUser.Object, mCandidate.Object);
 
             var result = controller.Details(5, 1);
-            var viewModel = (Tuple<List<PositionCandidateViewModel>, PositionModel>)(((ViewResult)result).Model);
+            var viewModel = (List<PositionModel>)(((ViewResult)result).Model);
 
-            var pos = viewModel.Item1;
+            var pos = viewModel;
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(viewModel);
-            Assert.IsInstanceOfType(pos, typeof(List<PositionCandidateViewModel>));
+            Assert.IsInstanceOfType(pos, typeof(List<PositionModel>));
             Assert.IsTrue(pos.Count > 0);
         }
 
@@ -119,10 +112,9 @@ namespace Talento.Tests.Controllers
                 Title = "Need a Developer to do stuff"
             };
 
-            Mock<IPositionCandidate> positionCandidate = new Mock<IPositionCandidate>();
-
             // create controller
-            PositionsController posController = new PositionsController(position.Object, user.Object, positionCandidate.Object);
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object);
 
             var result = posController.Details(-1, 1);
             var httpStatusCodeResult = ((HttpStatusCodeResult)(((ActionResult)result)));
@@ -164,10 +156,9 @@ namespace Talento.Tests.Controllers
                 Title = "Need a Developer to do stuff"
             };
 
-            Mock<IPositionCandidate> positionCandidate = new Mock<IPositionCandidate>();
-
             // create controller
-            PositionsController posController = new PositionsController(position.Object, user.Object, positionCandidate.Object);
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object);
 
             var result = posController.Details(null, null);
             var httpStatusCodeResult = ((HttpStatusCodeResult)(((ActionResult)result))); // .Result
@@ -209,10 +200,9 @@ namespace Talento.Tests.Controllers
                 Title = "Need a Developer to do stuff"
             };
 
-            Mock<IPositionCandidate> positionCandidate = new Mock<IPositionCandidate>();
-
             // create controller
-            PositionsController posController = new PositionsController(position.Object, user.Object, positionCandidate.Object);
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object);
 
             var result = posController.Details(5, 1);
             var httpStatusCodeResult = ((HttpStatusCodeResult)(((ActionResult)result))); // .Result
@@ -236,9 +226,8 @@ namespace Talento.Tests.Controllers
             Mock<ICustomUser> userhelper = new Mock<ICustomUser>();
             var mockContext = Mock.Of<ControllerContext>(c => c.HttpContext.User == mockPrincipal.Object);
 
-            Mock<IPositionCandidate> positionCandidate = new Mock<IPositionCandidate>();
-
-            PositionsController controller = new PositionsController(positionhelper.Object, userhelper.Object, positionCandidate.Object)
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            PositionsController controller = new PositionsController(positionhelper.Object, userhelper.Object, mCandidate.Object)
             {
                 ControllerContext = mockContext
             };
@@ -327,9 +316,8 @@ namespace Talento.Tests.Controllers
 
             position.Setup(x => x.Create(positionCreate));
 
-            Mock<IPositionCandidate> positionCandidate = new Mock<IPositionCandidate>();
-
-            var mController = new PositionsController(position.Object, mUser.Object, positionCandidate.Object);
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            var mController = new PositionsController(position.Object, mUser.Object, mCandidate.Object);
             mController.ControllerContext = mockContext.Object;
 
             //mController.IsStateValid = () => { return true; };
@@ -371,7 +359,15 @@ namespace Talento.Tests.Controllers
                 Owner = appUser,
                 RGS = "Unknown101",
                 Tags = null,
-                Title = "Need a Developer to do stuff"
+                Title = "Need a Developer to do stuff",
+                Candidates = new List<Candidate> {
+                    new Candidate{
+                        Email = "candidate1@tcs.com"
+                    },
+                    new Candidate{
+                        Email = "candidate2@tcs.com"
+                    }
+                }
             };
 
             position.Setup(x => x.Get(5)).Returns((posParam));
@@ -388,37 +384,19 @@ namespace Talento.Tests.Controllers
             {
                 Email = "test@test.com",
                 UserName = "test@test.com"
-
             });
-            // Candidates to Mock
-            List<PositionCandidate> listCandidate = new List<PositionCandidate>()
-            {
-                new PositionCandidate{
-                    Candidate = new Candidate(),
-                    Position = new Position()
-                },
-                new PositionCandidate{
-                    Candidate = new Candidate(),
-                    Position = new Position()
-                }
-            };
 
-            Mock<IPositionCandidate> positionCandidate = new Mock<IPositionCandidate>();
-            positionCandidate.Setup(pC => pC.GetCandidatesByPositionId(5)).Returns(listCandidate);
-
-            PositionsController controller = new PositionsController(position.Object, mUser.Object, positionCandidate.Object);
+            Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            PositionsController controller = new PositionsController(position.Object, mUser.Object, mCandidate.Object);
 
             var result = controller.Details(5, 1);
 
             Assert.IsNotNull(result);
-            var limpio = (Tuple<List<PositionCandidateViewModel>, PositionModel>)(((ViewResult)result).Model);
-            var positionCandidates = limpio.Item1;
-            var posicion = limpio.Item2;
+            var viewmodel = (PositionModel)(((ViewResult)result).Model);
 
-            Assert.IsNotNull(positionCandidate);
-            Assert.IsNotNull(posicion);
-            Assert.IsInstanceOfType(posicion, typeof(PositionModel));
-            Assert.AreEqual(posicion.Id, posParam.Id);
+            Assert.IsNotNull(viewmodel);
+            Assert.IsInstanceOfType(viewmodel, typeof(PositionModel));
+            Assert.AreEqual(viewmodel.Id, posParam.Id);
         }
     }
 }
