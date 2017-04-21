@@ -32,7 +32,7 @@ namespace Talento.Models
         [StringLength(60, ErrorMessage = "Parameter value is required")]
         public string ParameterValue { get; set; }
 
-        public DateTime? CratedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
         public string CreatedBy_Id { get; set; }
 
