@@ -4,12 +4,13 @@
 {
     @Html.AntiForgeryToken()
 
-    @*<form id="formnewparameter" action="/Settings/Create/" method="post">*@
     <div class="modal-body">
         <h2>New Parameter</h2>
         <hr />
+
         <div class="form-horizontal">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @*@Html.HiddenFor(model => model.ParameterName)*@
 
             <div class="form-group">
                 @Html.LabelFor(model => model.SettingName, htmlAttributes: new { @class = "control-label col-md-2" })

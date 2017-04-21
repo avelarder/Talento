@@ -91,6 +91,10 @@
                             data: $self.serialize()
                         }).done(function (response) {
                             //alert("Success");
+                            $('#complete-dialog').modal('hide');
+                            $('body').removeClass('modal-open');
+                            $('.modal-backdrop').remove();
+                            $form[0].reset();
                         }).fail(function (error) {
                             //alert("Error");
                         });

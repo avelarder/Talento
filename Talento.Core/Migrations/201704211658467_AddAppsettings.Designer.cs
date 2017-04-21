@@ -7,13 +7,13 @@ namespace Talento.Core.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class AddAppsettings2 : IMigrationMetadata
+    public sealed partial class AddAppsettings : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddAppsettings2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddAppsettings));
         
         string IMigrationMetadata.Id
         {
-            get { return "201704211322269_AddAppsettings2"; }
+            get { return "201704211658467_AddAppsettings"; }
         }
         
         string IMigrationMetadata.Source
