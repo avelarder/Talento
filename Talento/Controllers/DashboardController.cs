@@ -120,5 +120,11 @@ namespace Talento.Controllers
             }
             return role;
         }
+
+        [ChildAndAjaxActionOnly]
+        public ActionResult AddSettingsForm()
+        {
+            return PartialView();
+        }
     }
 }

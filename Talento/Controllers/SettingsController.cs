@@ -29,8 +29,7 @@ namespace Talento.Controllers
                 cfg.CreateMap<ApplicationParameter, ApplicationParameterModels>();
             });
         }
-        //http://stackoverflow.com/questions/14677889/automapper-missing-type-map-configuration-or-unsupported-mapping
-
+        
         // List All Settings
         [ChildAndAjaxActionOnly]
         public ActionResult List(int pageSize = 2, int page = 1, string orderBy = "CreationDate", string order = "ASC", string filter = "")
@@ -119,5 +118,6 @@ namespace Talento.Controllers
             var retu = SettingsHelper.GetParameters(prefix);
             return Json(retu, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

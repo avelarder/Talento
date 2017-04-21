@@ -3,50 +3,6 @@
     ViewBag.Title = "AppSettings";
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
-
-<script>
-    window.onload = function(){ 
-    (function ($) {
-        console.log("llegue");
-        $(document).ready(function () {
-
-            $("#SettingNameButton").on("click", function () {
-                var $this = $("#SettingName");
-                console.log($this.val());
-                $.ajax(
-                    {
-                        url: "/Settings/Modal",
-                        dataType: "json",
-                        data: { prefix: $this.val() },
-                        success: function (response) {
-                            console.log(response);
-                        }
-                    });
-            });
-
-            var $form = $("#formnewparameter");
-            // On Form Cancel Reset Form
-            $("#appSettingCancel").on("click", function (event) {
-                $form[0].reset();
-            })
-            // On Form Submit
-            $form.on("submit", function (event) {
-                event.preventDefault();
-                var $self = $(this);
-                $.post({
-                    url: $self.attr("action"),
-                    data: $self.serialize()
-                }).done(function (response) {
-                    alert("Success");
-                }).fail(function (error) {
-                    alert("Error");
-                });
-            });
-        })
-        })(jQuery);
-    }
-</script>
-
 <div class="pmd-content pmd-content-custom dropdown-component" id="content">
     <div class="container-fluid">
         <div class="row">
@@ -65,43 +21,7 @@
         <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form id="formnewparameter" action="/Settings/Create/" method="post">
-                        <div class="modal-body">
-                            <h2>New Parameter</h2>
-                            <hr />
-                            <div class="form-horizontal">
-                                <div class="form-group">
-                                    <label class="control-label" for="SettingName">Key Group</label>
-                                    <div class="col-md-10">
-                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Key Group is required" id="SettingName" name="SettingName" type="text" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="SettingName" data-valmsg-replace="true"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-horizontal">
-                                <div class="form-group">
-                                    <label class="control-label" for="ParameterName">Key Name</label>
-                                    <div class="col-md-10">
-                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Key Name is required" id="ParameterName" name="ParameterName" type="text" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="ParameterName" data-valmsg-replace="true"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-horizontal">
-                                <div class="form-group">
-                                    <label class="control-label" for="ParameterValue">Values</label>
-                                    <div class="col-md-10">
-                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Values are required" id="ParameterValue" name="ParameterValue" type="text" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="ParameterValue" data-valmsg-replace="true"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        <div class="pmd-modal-action pmd-modal-bordered text-right">
-                            <button id="appSettingCancel" data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                            <input type="submit" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm" />
-                        </div>
-                       </div>
-                    </form>
+                    @Html.Action("AddSettingsForm", "Dashboard")
                 </div>
             </div>
         </div>
@@ -138,6 +58,44 @@
                             scrollTop: element.offset().top - 80
                         }, duration);
                     }
+
+                    // Fred functions
+                    console.log("llegue");
+
+                    $("#SettingNameButton").on("click", function () {
+                        var $this = $("#SettingName");
+                        console.log($this.val());
+                        $.ajax(
+                            {
+                                url: "/Settings/Modal",
+                                dataType: "json",
+                                data: { prefix: $this.val() },
+                                success: function (response) {
+                                    console.log(response);
+                                }
+                            });
+                    });
+
+                    var $form = $("#formnewparameter");
+                    // On Form Cancel Reset Form
+                    $(document).on("click", "#appSettingCancel", function (event) {
+                         $form[0].reset();
+                    })
+                    // On Form Submit
+                    $form.on("submit", function (event) {
+                        event.preventDefault();
+                        console.log("Submit");
+                        var $self = $(this);
+                        $.post({
+                            url: $self.attr("action"),
+                            data: $self.serialize()
+                        }).done(function (response) {
+                            //alert("Success");
+                        }).fail(function (error) {
+                            //alert("Error");
+                        });
+                    });
+
                 })(jQuery);
             }
         </script>
