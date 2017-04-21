@@ -29,12 +29,21 @@ namespace Talento.Controllers
                 cfg.CreateMap<ApplicationParameter, ApplicationParameterModels>();
             });
         }
-        
+
         // List All Settings
         [ChildAndAjaxActionOnly]
-        public ActionResult List(int pageSize = 2, int page = 1, string orderBy = "CreationDate", string order = "ASC", string filter = "")
+        public ActionResult List(int pageSize = 5, int page = 1, string orderBy = "CreationDate", string filter = "")
         {
-            var parameterSettings = SettingsHelper.GetPagination(pageSize, page, orderBy, order, filter);
+            // Set ViewBag
+            ViewBag.SortCurrent = (orderBy == "CreationDate") ? "CreationDate_asc" : "CreationDate";
+            ViewBag.SortGroup = (orderBy == "SettingName") ? "SettingName_asc" : "SettingName";
+            ViewBag.SortName = (orderBy == "ParameterName") ? "ParameterName_asc" : "ParameterName";
+            ViewBag.SortValue = (orderBy == "ParameterValue") ? "ParameterValue_asc" : "ParameterValue";
+            ViewBag.SortDate = (orderBy == "CreationDate") ? "CreationDate_asc" : "CreationDate";
+            ViewBag.SortUser = (orderBy == "CreatedBy") ? "CreatedBy_asc" : "CreatedBy";
+            ViewBag.CurrentFilter = filter;
+
+            var parameterSettings = SettingsHelper.GetPagination(pageSize, page, orderBy, filter);
             return PartialView(parameterSettings);
         }
 

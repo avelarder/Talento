@@ -1,29 +1,47 @@
-﻿@using PagedList.Mvc; 
+﻿@using PagedList.Mvc;
 @using PagedList;
 
-
+<div class="form-group col-sm-8">
+    <div class="row">
+        <div class="col-sm-6">
+            <input placeholder="Text to search..." id="filter-input" class="form-control" id="filter" name="filter" value="@ViewBag.CurrentFilter" type="text">
+        </div>
+        <div class="col-sm-3">
+            <button style="position: relative;right: 25px;top: 3px;" data-url="@Url.Action("List", "Settings")" id="filter-input-button" class="btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary">
+                Search
+            </button>
+        </div>
+    </div>
+</div>
 <table id="example-checkbox" class="table pmd-table table-hover table-striped display responsive nowrap" cellspacing="0" width="100%">
-    <tr>
+    <tr id="pagination-sort">
         <th>
-            @Html.ActionLink("Name", "List", new { sortOrder = ViewBag.TitleSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Key Group", "List", new { orderBy = ViewBag.SortGroup, filter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Value", "List", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Key Name", "List", new { orderBy = ViewBag.SortName, filter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Date", "List", new { sortOrder = ViewBag.StatusSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Value", "List", new { orderBy = ViewBag.SortValue, filter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Created By", "List", new { sortOrder = ViewBag.EMSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Date", "List", new { orderBy = ViewBag.SortDate, filter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Portfolio Manager", "List", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Created By", "List", new { orderBy = ViewBag.SortUser, filter = ViewBag.CurrentFilter })
         </th>
-        <th></th>
+        <th>
+            <button data-target="#complete-dialog" data-toggle="modal" class="btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary" type="button">
+                <strong>+</strong> Add Parameter
+            </button>
+        </th>
     </tr>
     @foreach (var setting in Model)
     {
         <tr>
+            <td>
+                @setting.ApplicationSetting.SettingName
+            </td>
             <td>
                 @setting.ParameterName
             </td>
@@ -34,11 +52,19 @@
                 @setting.CreationDate
             </td>
             <td>
-                @setting.ApplicationSetting.SettingName 
+                @setting.CreatedBy.Email
+            </td>
+            <td class="">
+                <button class="button-edit btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" type="button">
+                    <i class="material-icons pmd-sm">mode_edit</i>
+                </button>
+                <button class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-danger btn-sm" type="button">
+                    <i class="material-icons pmd-sm">delete</i>
+                </button>
             </td>
         </tr>
     }
 </table>
 
 @* Pagination NavBar *@
-@Html.PagedListPager((IPagedList)Model, page => Url.Action("List", "Settings", new { page }))
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("List", "Settings", new { page, filter = ViewBag.CurrentFilter }))

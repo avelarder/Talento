@@ -9,12 +9,6 @@
             <div class="col-sm-6">
                 <h1>Application Settings</h1>
             </div>
-            <div class="col-sm-6">
-                <input data-target="#complete-dialog" data-toggle="modal"
-                       class="btn pmd-ripple-effect btn-primary"
-                       value="Add Parameter" style="margin-top: 4px"
-                       name="parameter-" />
-            </div>
             <div class="clearfix"></div>
             <hr />
         </div>
@@ -35,6 +29,7 @@
                 (function ($) {
                     var $appContainer = $("#applicationSettingContainer");
 
+                    // Click Pagination
                     $appContainer.on("click", ".pagination a", function (e) {
                         e.preventDefault();
                         var $self = $(this);
@@ -50,6 +45,40 @@
                                 console.log("Error");
                             });
                         }
+                    });
+                    // Click Sort
+                    $appContainer.on("click", "#pagination-sort a", function (e) {
+                        e.preventDefault();
+                        var $self = $(this);
+
+                        var href = $self.attr("href");
+                        $.ajax({
+                            url: href
+                        }).done(function (response) {
+                            $appContainer.html(response);
+                            ScrollTo($appContainer);
+                        }).fail(function (error) {
+                            console.log("Error");
+                        });
+                    });
+
+                    // Click Filter
+                    $appContainer.on("click", "#filter-input-button", function (e) {
+                        e.preventDefault();
+                        console.log("asdasd");
+                        var $self = $(this);
+                        var $value = $("#filter-input").val();
+                        var href = $self.attr("data-url");
+                        console.log($("#filter-input").val());
+                        $.ajax({
+                            url: href,
+                            data: { filter: $("#filter-input").val() }
+                        }).done(function (response) {
+                            $appContainer.html(response);
+                            ScrollTo($appContainer);
+                        }).fail(function (error) {
+                            console.log("Error");
+                        });
                     });
 
                     function ScrollTo(element, duration) {
