@@ -166,7 +166,7 @@
                 </div>
                 <div class="pmd-modal-action pmd-modal-bordered text-right">
                     <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                    <input  data-dismiss="modal" id="buttonnewprofile" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm"/>
+                    <input  id="buttonnewprofile" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm"/>
                 </div>
             </form>
         </div>
@@ -280,9 +280,10 @@
                             "timeOut": 6000,
                             "extendedTimeOut": 2000
                         }
-                        toastr.success("Profile has been added.");
+                        setTimeout(function () { toastr.success("Profile has been added."); }, 2500)
                     } else {
                         return;
+
                     }
                 });
                 $("#Files").on("change", function () {
