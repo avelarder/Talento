@@ -48,7 +48,7 @@ namespace Talento.Models
         public string ParameterName { get; set; }
 
         [Required]
-        [StringLength(160, ErrorMessage = "Setting Value is required")]
+        [StringLength(160, ErrorMessage = "Parameter Value is required")]
         public string ParameterValue { get; set; }
 
         [Required]
@@ -57,6 +57,9 @@ namespace Talento.Models
         public string ApplicationUser_Id { get; set; }
         [Required]
         public ApplicationUser CreatedBy { get; set; }
+
+        [StringLength(160, ErrorMessage = "Setting Name is required")]
+        string SettingName { get; set; }
 
         [Required]
         public int ApplicationSettingId { get; set; }

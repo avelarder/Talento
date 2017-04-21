@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,10 +32,11 @@ namespace Talento.Controllers
         //http://stackoverflow.com/questions/14677889/automapper-missing-type-map-configuration-or-unsupported-mapping
 
         // List All Settings
-        public ActionResult List()
+        [ChildAndAjaxActionOnly]
+        public ActionResult List(int pageSize = 2, int page = 1, string orderBy = "CreationDate", string order = "ASC", string filter = "")
         {
-            var settings = AutoMapper.Mapper.Map<List<ApplicationSettingModels>>(SettingsHelper.GetAll());
-            return PartialView(settings.ToList());
+            var parameterSettings = SettingsHelper.GetPagination(pageSize, page, orderBy, order, filter);
+            return PartialView(parameterSettings);
         }
 
         // POST: Settings/New

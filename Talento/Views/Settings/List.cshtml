@@ -1,11 +1,44 @@
-﻿@foreach (var setting in Model)
-{
-    <h1>@setting.SettingName</h1>
-    foreach (var parameter in setting.ApplicationParameter)
+﻿@using PagedList.Mvc; 
+@using PagedList;
+
+
+<table id="example-checkbox" class="table pmd-table table-hover table-striped display responsive nowrap" cellspacing="0" width="100%">
+    <tr>
+        <th>
+            @Html.ActionLink("Name", "List", new { sortOrder = ViewBag.TitleSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Value", "List", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Date", "List", new { sortOrder = ViewBag.StatusSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Created By", "List", new { sortOrder = ViewBag.EMSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Portfolio Manager", "List", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var setting in Model)
     {
-        <p>
-            @parameter.ParameterName
-            <span>@parameter.ParameterValue</span>
-        </p>
+        <tr>
+            <td>
+                @setting.ParameterName
+            </td>
+            <td>
+                @setting.ParameterValue
+            </td>
+            <td>
+                @setting.CreationDate
+            </td>
+            <td>
+                @setting.ApplicationSetting.SettingName 
+            </td>
+        </tr>
     }
-}
+</table>
+
+@* Pagination NavBar *@
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("List", "Settings", new { page }))

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,9 @@ namespace Talento.Core
 {
     public interface IApplicationSetting
     {
-        List<ApplicationSetting> GetAll();
+        List<ApplicationParameter> GetAll();
         List<ApplicationSetting> GetParameters(string prefix);
+        IPagedList<ApplicationParameter> GetPagination(int pageSize, int page, string orderBy, string order, string filter);
         ApplicationSetting Get(string id);
         void Create(ApplicationSetting aS);
     }

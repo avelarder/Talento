@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -23,9 +24,16 @@ namespace Talento.Core.Helpers
             return aS;
         }
 
-        public List<ApplicationSetting> GetAll()
+        public List<ApplicationParameter> GetAll()
         {
-            var settings = Db.ApplicationSettings.ToList();
+            var settings = Db.ApplicationParameter.ToList();
+            return settings;
+        }
+
+        public IPagedList<ApplicationParameter> GetPagination(int pageSize = 5, int page = 1, string orderBy = "CreationDate", string order = "ASC", string filter = "")
+        {
+            var settings = Db.ApplicationParameter.ToList().OrderByDescending(x => x.CreationDate).ToPagedList(page, pageSize); ;
+        
             return settings;
         }
 

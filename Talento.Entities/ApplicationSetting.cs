@@ -45,6 +45,10 @@ namespace Talento.Entities
         public virtual ApplicationUser CreatedBy { get; set; }
 
         [Required]
+        [StringLength(60, ErrorMessage = "Setting Name is required")]
+        public string SettingName { get; set; }
+
+        [Required]
         public int ApplicationSettingId { get; set; }
         [ForeignKey("ApplicationSettingId")]
         public virtual ApplicationSetting ApplicationSetting { get; set; }

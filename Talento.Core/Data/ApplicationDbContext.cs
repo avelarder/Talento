@@ -68,5 +68,7 @@ namespace Talento.Core.Data
 
         public virtual DbSet<ApplicationSetting> ApplicationSettings { get; set; }
 
+        public virtual DbSet<ApplicationParameter> ApplicationParameter { get; set; }
+
     }
 }
