@@ -10,14 +10,16 @@ namespace Talento.Core.Helpers
 {
     public class SettingsHelper : BaseHelper, IApplicationSetting
     {
-        public SettingsHelper(Data.ApplicationDbContext db): base(db)
+        public SettingsHelper(Data.ApplicationDbContext db) : base(db)
         {
 
         }
 
         public ApplicationSetting Get(string name)
         {
-            var aS = Db.ApplicationSettings.Find(name);
+            var aS = Db.ApplicationSettings.FirstOrDefault(p => p.SettingName == name);
+
+
             return aS;
         }
 
@@ -29,13 +31,27 @@ namespace Talento.Core.Helpers
 
         public void Create(ApplicationSetting aS)
         {
-            ApplicationSetting appS = this.Get(aS.SettingName);
-
-            if (appS != null)
+            try
             {
-                Db.ApplicationSettings.Add(aS);
+                ApplicationSetting applicationSetting = this.Get(aS.SettingName);
+
+                if (applicationSetting == null)
+                {
+                    Db.ApplicationSettings.Add(aS);
+                }
+                else
+                {
+                    foreach (var p in aS.ApplicationParameter)
+                    {
+                        applicationSetting.ApplicationParameter.Add(p);
+                    }
+                }
+                Db.SaveChanges();
             }
-            Db.SaveChanges();
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public List<ApplicationSetting> GetParameters(string prefix)

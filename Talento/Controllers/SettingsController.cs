@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,42 +13,55 @@ namespace Talento.Controllers
     public class SettingsController : Controller
     {
         IApplicationSetting SettingsHelper;
+        ICustomUser UserHelper;
 
-        public SettingsController(IApplicationSetting settingsHelper)
+        public SettingsController(IApplicationSetting settingsHelper, ICustomUser userHelper)
         {
             SettingsHelper = settingsHelper;
+            UserHelper = userHelper;
+
             AutoMapper.Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<ApplicationSetting, ApplicationSettingModels>();
+                cfg.CreateMap<ApplicationSetting, ApplicationSettingModels>()
+                    .ForMember(apsm => apsm.ApplicationSettingId, aps => aps.MapFrom(s => s.ApplicationSettingId))
+                    .ForMember(apsm => apsm.ApplicationParameter, aps => aps.MapFrom(s => s.ApplicationParameter));
+                cfg.CreateMap<ApplicationParameter, ApplicationParameterModels>();
             });
         }
+        //http://stackoverflow.com/questions/14677889/automapper-missing-type-map-configuration-or-unsupported-mapping
 
         // List All Settings
         public ActionResult List()
         {
-            var settings = AutoMapper.Mapper.Map<ApplicationSettingModels>( SettingsHelper.GetAll() );
-            return PartialView(settings);
+            var settings = AutoMapper.Mapper.Map<List<ApplicationSettingModels>>(SettingsHelper.GetAll());
+            return PartialView(settings.ToList());
         }
 
         // POST: Settings/New
         [HttpPost]
-        public ActionResult Create(CreateApplicationSettingsViewModel cAppSettingsVM) //FormCollection collection
+        public ActionResult Create(CreateApplicationSettingsViewModel applicationSetting) 
         {
-            //var listData = _appFunctions.GetAllCategory();
-            //model.CategoryList = new SelectList(listData, "CategoryTypeID ", "CategoryTitle");
-
             if (IsStateValid())
             {
+                string user = User.Identity.GetUserId();
+
                 ApplicationSetting aS = new ApplicationSetting
                 {
-                    SettingName = cAppSettingsVM.SettingName,
-                    ApplicationParameter = cAppSettingsVM.ApplicationParameter
+                    SettingName = applicationSetting.SettingName,
+                    ApplicationParameter = new List<ApplicationParameter> {
+                        new ApplicationParameter {
+                            ParameterName = applicationSetting.ParameterName,
+                            ParameterValue = applicationSetting.ParameterValue,
+                            CreationDate = DateTime.Now,
+                            CreatedBy = UserHelper.GetUserById(user)
+                        }
+                    }
                 };
 
                 SettingsHelper.Create(aS);
-                return RedirectToAction("Dashboard", "AppSettings");
+                return new HttpStatusCodeResult(200);
             }
-            return RedirectToAction("Dashboard", "AppSettings");
+            return new HttpStatusCodeResult(500);
         }
 
         public virtual bool IsStateValid()
@@ -102,7 +116,7 @@ namespace Talento.Controllers
         public ActionResult Modal(string prefix)
         {
             var retu = SettingsHelper.GetParameters(prefix);
-            return Json(retu, JsonRequestBehavior.AllowGet);  
+            return Json(retu, JsonRequestBehavior.AllowGet);
         }
     }
 }

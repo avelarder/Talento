@@ -15,6 +15,11 @@ namespace Talento.Entities
         [Index(IsUnique = true)]
         public string SettingName { get; set; }
 
+        public object FirstOrDefault()
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual ICollection<ApplicationParameter> ApplicationParameter { get; set; }
     }
 

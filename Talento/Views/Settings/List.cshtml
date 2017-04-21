@@ -1,6 +1,11 @@
-﻿@model Talento.Models.ApplicationSettingModels
-
-@foreach (var setting in Model)
+﻿@foreach (var setting in Model)
 {
     <h1>@setting.SettingName</h1>
+    foreach (var parameter in setting.ApplicationParameter)
+    {
+        <p>
+            @parameter.ParameterName
+            <span>@parameter.ParameterValue</span>
+        </p>
+    }
 }
