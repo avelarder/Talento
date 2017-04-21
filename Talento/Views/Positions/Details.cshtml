@@ -210,9 +210,11 @@
                                     "timeOut": 6000,
                                     "extendedTimeOut": 2000
                                 }
-
+                                $('.modal').modal('hide');
+                                clearForm();
                                 setTimeout(function () { toastr.success("Profile has been added."); }, 2500)
                             } else {
+                                clearForm();
                                 return;
                             }
                         });
@@ -225,6 +227,11 @@
                     });
 
                 }(jQuery));
+
+                function clearForm() {
+                    $("#formnewprofile")[0].reset();
+                    $(".field-validation-error").hide();
+                }
 
                 function addFile() {
                     var formData = new FormData();
