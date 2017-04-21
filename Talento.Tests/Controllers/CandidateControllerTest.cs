@@ -114,8 +114,17 @@ namespace Talento.Tests.Controllers
                 Id = 1,
                 Title = "aTitle",
             };
-            Candidate candidate = new Candidate {
-                Email = "Candidate00@Example.com"
+            byte[] blob = new byte[1];
+            HashSet<FileBlob> files = new HashSet<FileBlob>
+            {
+                new FileBlob { Id = 1, FileName = "aFile", Blob = blob },
+                new FileBlob { Id = 2, FileName = "aFile1", Blob = blob },
+                new FileBlob { Id = 3, FileName = "aFile2", Blob = blob }
+            };
+            Candidate candidate = new Candidate
+            {
+                Email = "Candidate00@Example.com",
+                FileBlobs = files
             };
             EditCandidateViewModel candidateViewModel = new EditCandidateViewModel
             {
@@ -136,7 +145,7 @@ namespace Talento.Tests.Controllers
             mockUserHelper.Setup(p => p.GetUserByEmail("pablo@example.com")).Returns(userTest);
             mockPositionHelper.Setup(p => p.Get(1)).Returns(positionTest);
             mockCandidateHelper.Setup(p => p.Get(1)).Returns(candidate);
-            CandidateController controller = new CandidateController(mockCandidateHelper.Object, mockUserHelper.Object,                                      
+            CandidateController controller = new CandidateController(mockCandidateHelper.Object, mockUserHelper.Object,
                                                 mockPositionHelper.Object)
             {
                 ControllerContext = mockContext.Object
