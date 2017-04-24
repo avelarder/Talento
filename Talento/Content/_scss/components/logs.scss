@@ -1,8 +1,68 @@
-﻿#position-log {
+﻿#position-log-container {
+    right: 0;
+    min-width: 360px;
+    width: 360px;
+    transform: translate3d(360px, 0, 0);
+    transition:all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+    overflow:visible;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 999;
+    top: 70px;
+    background: $color-10;
+    &.container-open{
+        transform: translate3d(0, 0, 0);
+    }
+    .container-close {
+        position: absolute;
+        left: -43px;
+        padding: 10px;
+        line-height: 10px;
+        cursor: pointer;
+        background-color: $color-9;
+        color: #FFF;
+        border-radius: 10px 0 0 10px;
+    }
+}
+#position-content {
+    position:relative;
+    overflow-y: scroll;
+    height: calc(100vh - 210px);
+    padding: 10px 0 20px 0;
+}
+#pagination-log {
+    position:relative;
+    text-align:center;
+}
+#pagination-log-current {
+    font-size: .9em;
+    width: 100%;
+    top: 0;
+    text-align: center;
+    background-color: $color-9;
+    color: #FFF;
+    
+    .pagination {
+        margin:10px 0;
+    }
+}
+#position-log {
+    overflow: hidden;
+
+    h3 {
+        margin: 0;
+        padding: 10px 5px;
+        background: $color-10;
+        text-align: center;
+        color: #FFF;
+    }
 
     .log-item {
         margin-bottom: 20px;
         background: #FFF;
+        margin-left:5px;
+        margin-right:5px;
     }
 
     .log-user {
@@ -63,7 +123,7 @@
             }
 
             .log-previous {
-                display:none;
+                display: none;
             }
         }
     }

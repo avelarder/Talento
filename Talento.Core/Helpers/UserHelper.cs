@@ -9,31 +9,71 @@ namespace Talento.Core.Helpers
 {
     public class UserHelper : BaseHelper, ICustomUser
     {
-
         public UserHelper(Core.Data.ApplicationDbContext db): base(db)
         {
 
         }
-
+        
         public ApplicationUser SearchPM(string userName)
         {
-
-            var PM = Db.Roles.Single(r => r.Name == "PM");
-            if (userName != null)
+            try
             {
-                var usuario = Db.Users.Single(x => x.UserName == userName);
-                if (usuario.Roles.Where(x => x.RoleId == PM.Id).Count() > 0)
+                var PM = Db.Roles.Single(r => r.Name == "PM");
+                if (userName != null)
                 {
-                    return usuario;
+                    var usuario = Db.Users.Single(x => x.UserName == userName);
+                    if (usuario.Roles.Where(x => x.RoleId == PM.Id).Count() > 0)
+                    {
+                        return usuario;
+                    }
                 }
+                return null;
             }
-
-            return null;
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public ApplicationUser GetUser(string user)
+        public ApplicationUser GetUserByEmail(string email)
         {
-            return Db.Users.Single(x => x.Id == user.ToString());
+            try
+            {
+                return Db.Users.SingleOrDefault(user => user.Email.Contains(email));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public ApplicationUser GetUserById(string id)
+        {
+            try
+            {
+                return Db.Users.Find(id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<ApplicationUser> GetByRoles(List<string> roles)
+        {
+            try
+            {
+                List<string> matchingUserIds = new List<string>();
+                roles.ForEach(rol => matchingUserIds.AddRange(Db.Roles.SingleOrDefault(r => r.Name.Equals(rol)).Users.Select(u=>u.UserId)));
+                List<ApplicationUser> matchingUsers = new List<ApplicationUser>();
+                matchingUserIds.ForEach(id => matchingUsers.Add(GetUserById(id)));
+
+                return matchingUsers;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

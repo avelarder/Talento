@@ -55,8 +55,10 @@
   <ItemGroup>
     <Compile Include="ApplicationRole.cs" />
     <Compile Include="ApplicationUser.cs" />
+    <Compile Include="Candidate.cs" />
+    <Compile Include="FileBlob.cs" />
     <Compile Include="Position.cs" />
-    <Compile Include="PositionLog.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tag.cs" />
   </ItemGroup>

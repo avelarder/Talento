@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Talento.Models;
-using PagedList;
-using Talento.Core.Data;
 using Talento.Core;
 using Talento.Entities;
-using System.Security.Claims;
-using Microsoft.AspNet.Identity;
-using Talento.Core.Helpers;
 
 namespace Talento.Controllers
 {
@@ -19,10 +13,12 @@ namespace Talento.Controllers
     public class DashboardController : Controller
     {
         ICustomPagingList DashboardPagingHelper;
+        //ISendEmail SendEmail;
 
-        public DashboardController(ICustomPagingList dashboardPagingHelper)
+        public DashboardController(ICustomPagingList dashboardPagingHelper/*, ISendEmail sendemail*/)
         {
             DashboardPagingHelper = dashboardPagingHelper;
+            //SendEmail = sendemail;
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -34,6 +30,8 @@ namespace Talento.Controllers
         public ActionResult Index(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page = 1)
         {
             string Dashboard = "_PartialContent.cshtml";
+
+            string test = ModelState.IsValid.ToString();
 
             List<Position> rawData;
             if (Roles.IsUserInRole("Admin"))
@@ -69,7 +67,7 @@ namespace Talento.Controllers
                     case Status.Closed:
                         item.OpenDays = (item.LastClosedDate - item.LastOpenedDate).Days;
                         break;
-                    case Status.Canceled:
+                    case Status.Cancelled:
                         item.OpenDays = (item.LastCancelledDate - item.LastOpenedDate).Days;
                         break;
                 }
@@ -82,6 +80,7 @@ namespace Talento.Controllers
         }
 
         // Dashboard Partials
+        [ChildActionOnly]
         public ActionResult TopNavigation()
         {
             string role = GetRole();
@@ -91,6 +90,7 @@ namespace Talento.Controllers
             return PartialView("~/Views/Shared/Dashboard/_PartialTopNavigation.cshtml");
         }
 
+        [ChildActionOnly]
         public ActionResult SideNavigation()
         {
             string role = GetRole();
@@ -99,9 +99,21 @@ namespace Talento.Controllers
 
             return PartialView("~/Views/Shared/Dashboard/_PartialSidebarNavigation.cshtml");
         }
-        
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult ManageUser()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult AppSettings()
+        {
+            return View();
+        }
+
         // Helpers
-        public string GetRole()
+        private string GetRole()
         {
             string role = "basic";
             if( Roles.IsUserInRole("Admin"))
@@ -110,6 +122,5 @@ namespace Talento.Controllers
             }
             return role;
         }
-
     }
 }
