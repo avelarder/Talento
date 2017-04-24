@@ -89,8 +89,6 @@
                     }
 
                     // Fred functions
-                    console.log("llegue");
-
                     $("#SettingNameButton").on("click", function () {
                         var $this = $("#SettingName");
                         console.log($this.val());
@@ -125,13 +123,33 @@
                             $('.modal-backdrop').remove();
                             $form[0].reset();
 
-                            $("#results").append("Parameter is added");
+                            //$("#results").append("Parameter is added");
 
                         }).fail(function (error) {
                             //alert("Error");
-                            $("#error-result").append("Error adding new parameter");
+                            //$("#error-result").append("Error adding new parameter");
                         });
                     });
+
+                    // Autocomplete SettingsName field
+                    $form.on('keyup', "#SettingName", function () {
+                        console.log("keydown");
+                        clearTimeout($(this).data('timer'));
+                        var search = this.value;
+                        if (search.length >= 3) {
+                            $(this).data('timer', setTimeout(function () {
+                                $.ajax({
+                                    type: "post",
+                                    url: "/Settings/GetApplicationParameters",
+                                    data: { prefix : search }
+                                }).done(function (msg) {
+                                    console.log(msg);
+                                    $('#SettingName').val(msg);
+                                });
+                            }, 400));
+                        }
+                    });
+
                 })(jQuery);
             }
         </script>

@@ -145,9 +145,9 @@ namespace Talento.Core.Helpers
             }
         }
 
-        public List<ApplicationSetting> GetParameters(string prefix)
+        public List<string> GetParameters(string prefix)
         {
-            return Db.ApplicationSettings.Where(s => s.SettingName.StartsWith(prefix)).ToList();
+            return Db.ApplicationSettings.Where(s => s.SettingName.StartsWith(prefix)).Select(x=> x.SettingName).ToList();
         }
     }
 }

@@ -122,9 +122,11 @@ namespace Talento.Controllers
             }
         }
 
-        public ActionResult Modal(string prefix)
+        //Modal
+        public JsonResult GetApplicationParameters(string prefix)
         {
             var retu = SettingsHelper.GetParameters(prefix);
+
             return Json(retu, JsonRequestBehavior.AllowGet);
         }
 
