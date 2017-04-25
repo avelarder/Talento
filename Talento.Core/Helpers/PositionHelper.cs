@@ -197,6 +197,13 @@ namespace Talento.Core.Helpers
                 throw;
             }
         }
+
+        public void BeginScreening(Position position)
+        {
+            Position somePosition = Db.Positions.Single(x => x.Id.Equals(position.Id));
+            somePosition.OpenStatus = OpenStatus.Screening;
+            Db.SaveChanges();
+        }
         #endregion
     }
 }

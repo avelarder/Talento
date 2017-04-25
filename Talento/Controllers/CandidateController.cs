@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using Talento.Core;
@@ -157,7 +156,7 @@ namespace Talento.Controllers
                             break;
                     }
                 }
-                return RedirectToAction("Index", "Dashboard", null);
+                return RedirectToAction("Details", "Positions", new { id=candidate.Position_Id});
             }
             catch (Exception)
             {
@@ -194,12 +193,14 @@ namespace Talento.Controllers
                         FileBlobs = files
                     };
                     int result = CandidateHelper.Create(newCandidate);
-                    switch (result)
+                    if (result==-1)
                     {
-                        case 4: return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
-                        case 6: return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
-                        case -1:
-                            break;
+                        return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "An error ocurred. Please contact system administrator.");
+                    }
+                    else
+                    {
+                        PositionHelper.BeginScreening(position[0]);
+                        return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
                     }
                 }
                 else
@@ -221,8 +222,7 @@ namespace Talento.Controllers
         {
             return New(candidate, RedirectToAction("Index", "Dashboard", null));
         }
-
-
+        
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         public ActionResult CreateDetails(CreateCandidateViewModel candidate)

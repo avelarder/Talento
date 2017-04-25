@@ -45,7 +45,7 @@ namespace Talento.Controllers
             HttpPostedFileBase file = Request.Files.Get(0);
             byte[] uploadFile = new byte[file.InputStream.Length];
             file.InputStream.Read(uploadFile, 0, uploadFile.Length);
-            if ((new List<string> { "doc", "docx", "zip", "pdf" }).Contains(file.FileName.Split('.')[1]) && file.FileName.Split('.').Length == 2) //is valid extension?
+            if ((new List<string> { "doc", "docx", "zip", "pdf" }).Contains(file.FileName.Split('.')[file.FileName.Split('.').Length-1])) //is valid extension?
             {
                 bool isValidFile = true;
                 ((IEnumerable<FileBlob>)Session["files"]).ToList().ForEach(x =>
