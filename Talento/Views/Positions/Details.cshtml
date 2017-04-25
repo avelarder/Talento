@@ -198,7 +198,6 @@
                             $("#formnewprofile")[0].reset();
                             $(".field-validation-error").hide();
                     });
-
                         $(".modal").on('shown', function () {
                         clearForm();
                     });
@@ -208,27 +207,40 @@
                         });
 
                         $("#buttonnewprofile").click(function (evt) {
-                        evt.preventDefault();
-                        var $form = $('#formnewprofile');
-                        toastr.options = {
-                            "debug": false,
+                            toastr.options = {
+                                "debug": false,
                                 "positionClass": "toast-top-center",
                                 "onclick": null,
                                 "fadeIn": 500,
-                                "fadeOut": 6000,
+                                "fadeOut": 2000,
                                 "timeOut": 6000,
-                                "extendedTimeOut": 6000
+                                "extendedTimeOut": 2000
                             }
-                        if ($form.valid()) {
-                            var ea = ($form.submit());
-                                $("#complete-dialog").modal("hide");
-                                $('.modal').modal('hide');
-                            setTimeout(function () { toastr.success("Profile has been added."); }, 2500);
-                            setTimeout(function () { location.reload(); }, 5500);
-                            clearForm();
-                        } else {
-                            return;
-                        }
+                            var emailCandidate = $("#Email").val();
+                            var positionId = $("#Position_Id").val();
+                            $.ajax({
+                                type: "POST",
+                                url: '/Candidate/ValidEmail',
+                                dataType: 'json',
+                                data: {
+                                    emailCandidate: emailCandidate,
+                                    positionId: positionId
+                                },
+                                success: function (response) {
+                                    evt.preventDefault();
+                                    var $form = $('#formnewprofile');
+                                    if ($form.valid()) {
+                                        $form.submit();
+                                        $("#complete-dialog").modal("hide");
+                                        setTimeout(function () { toastr.success("Profile has been added."); }, 2500)
+                                    } else {
+                                        return;
+                                    }
+                                },
+                                error: function (error) {
+                                    toastr.error("A profile with the specified email address cannot be registered.")
+                                }
+                            });    
                     });
                         $("#Files").on("change", function () {
                         addFile();
@@ -365,7 +377,7 @@
                                     <label class="control-label col-md-2" for="Name">Name </label>
                                     <div class="col-md-10">
                                         <input class="form-control text-box single-line" data-val="true" data-val-required="Name is required" id="Name" name="Name" type="text" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true" maxlength="50"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -373,7 +385,7 @@
                                     <div class="col-md-10">
                                         <input class="form-control text-box single-line" data-val="true" data-val-required="Email is required" id="Email" name="Email" type="email"
                                                data-val-maxlength="The field Email Address must be a string or array type with a maximum length of '50'." data-val-maxlength-max="50"/>
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true" maxlength="50"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -387,14 +399,14 @@
                                     <label class="control-label col-md-2" for="Competencies">Competencies </label>
                                     <div class="col-md-10">
                                         <input class="form-control text-box single-line" data-val="true" data-val-maxlength="The field Competencies must be a string" data-val-required="Competencies is required" id="Competencies" name="Competencies" type="text" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="Competencies" data-valmsg-replace="true"></span>
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="Competencies" data-valmsg-replace="true" maxlength="300"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-md-2" for="Description">Description </label>
                                     <div class="col-md-10">
                                         <input class="form-control text-box single-line" data-val="true" data-val-maxlength="The field Description must be a string" data-val-required="Description is required" id="Description" name="Description" type="text" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="Description" data-valmsg-replace="true"></span>
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="Description" data-valmsg-replace="true" maxlength="300"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">

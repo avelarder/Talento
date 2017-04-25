@@ -175,7 +175,7 @@ namespace Talento.Controllers
         {
             try {
                 int id = int.Parse(positionId);
-                if (PositionHelper.Get(id).Candidates.Where(x => x.Email.Trim().Equals(emailCandidate.Trim())).Count() > 0)
+                if (PositionHelper.Get(id).Candidates.Where(x => x.Email.Trim().ToLower().Equals(emailCandidate.Trim().ToLower())).Count() > 0)
                 {
                     return null;
                 }

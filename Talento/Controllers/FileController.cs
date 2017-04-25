@@ -61,7 +61,6 @@ namespace Talento.Controllers
                     {
                         FileName = file.FileName,
                         Blob = uploadFile,
-
                     });
                 }
             }
