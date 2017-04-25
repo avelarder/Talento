@@ -98,6 +98,7 @@ namespace Talento.Controllers
         [Authorize]
         public ActionResult Edit(int id, int positionId)
         {
+            Session["files"] = null;
             EditCandidateViewModel candidate = AutoMapper.Mapper.Map<EditCandidateViewModel>(CandidateHelper.Get(id));
             candidate.Position_Id = positionId;
             Position currentPosition = PositionHelper.Get(positionId);
@@ -169,6 +170,27 @@ namespace Talento.Controllers
             return PartialView();
         }
 
+        [Authorize(Roles = "Admin, PM, TL, TAG, RMG")]
+        public JsonResult ValidEmail(string emailCandidate, string positionId)
+        {
+            try {
+                int id = int.Parse(positionId);
+                if (PositionHelper.Get(id).Candidates.Where(x => x.Email.Trim().Equals(emailCandidate.Trim())).Count() > 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return Json(new { valid = true });
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            
+        }
+
         private ActionResult New(CreateCandidateViewModel candidate, ActionResult actionError)
         {
             if (ModelState.IsValid)
@@ -193,11 +215,7 @@ namespace Talento.Controllers
                         FileBlobs = files
                     };
                     int result = CandidateHelper.Create(newCandidate);
-                    if (result==-1)
-                    {
-                        return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "An error ocurred. Please contact system administrator.");
-                    }
-                    else
+                    if (result!=-1)
                     {
                         PositionHelper.BeginScreening(position[0]);
                         return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));

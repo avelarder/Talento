@@ -78,7 +78,7 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(c => c.HttpContext.Session["files"]).Returns(files);
 
             //Act
-            var result = controller.New(candidateViewModel);
+            var result = controller.Create(candidateViewModel);
 
             //Asserts
             Assert.IsNotNull(result);
