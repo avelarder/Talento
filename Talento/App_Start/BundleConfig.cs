@@ -23,7 +23,8 @@ namespace Talento
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js",
                       "~/Scripts/propeller.min.js",
-                      "~/Scripts/toastr.min.js"));
+                      "~/Scripts/toastr.min.js",
+                      "~/Scripts/typeahead.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                       "~/Scripts/app.js"));

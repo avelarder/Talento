@@ -277,6 +277,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\toastr.min.js" />
+    <Content Include="Scripts\typeahead.js" />
     <Content Include="Scripts\_dev\app.js" />
     <Content Include="Scripts\_dev\candidate\editCandidate.js" />
     <Content Include="Scripts\_dev\login\login.js" />

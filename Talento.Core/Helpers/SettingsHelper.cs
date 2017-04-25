@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -138,6 +140,10 @@ namespace Talento.Core.Helpers
                     }
                 }
                 Db.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {

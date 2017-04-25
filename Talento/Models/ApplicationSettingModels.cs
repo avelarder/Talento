@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -22,14 +23,17 @@ namespace Talento.Models
     {
         [Required]
         [StringLength(60, ErrorMessage = "Setting name is required")]
+        [DisplayName("Setting name")]
         public string SettingName { get; set; }
 
         [Required]
         [StringLength(60, ErrorMessage = "Parameter name is required")]
+        [DisplayName("Parameter name")]
         public string ParameterName { get; set; }
 
         [Required]
         [StringLength(60, ErrorMessage = "Parameter value is required")]
+        [DisplayName("Parameter Value")]
         public string ParameterValue { get; set; }
 
         public DateTime? CreatedOn { get; set; }
