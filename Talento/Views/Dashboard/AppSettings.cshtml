@@ -65,7 +65,10 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6">
-                <h1>Application Settings</h1>
+                <h1>Application Settings</h1> 
+            </div>
+            <div class="col-sm-6">
+                @*<h3 id="result"></h3>*@
             </div>
             <div class="clearfix"></div>
             <hr />
@@ -147,20 +150,6 @@
                     }
 
                     // Fred functions
-                    $("#SettingNameButton").on("click", function () {
-                        var $this = $("#SettingName");
-                        console.log($this.val());
-                        $.ajax(
-                            {
-                                url: "/Settings/Modal",
-                                dataType: "json",
-                                data: { prefix: $this.val() },
-                                success: function (response) {
-                                    console.log(response);
-                                }
-                            });
-                    });
-
                     var $form = $("#formnewparameter");
                     // On Form Cancel Reset Form
                     $(document).on("click", "#appSettingCancel", function (event) {
@@ -169,7 +158,6 @@
                     // On Form Submit
                     $form.on("submit", function (event) {
                         event.preventDefault();
-                        console.log("Submit");
                         var $self = $(this);
                         $.post({
                             url: $self.attr("action"),
@@ -179,6 +167,9 @@
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
                             $form[0].reset();
+                            alertify.set('notifier', 'position', 'bottom-left');
+                            alertify.success('<b>Parameter is added</b>');
+
                             // Reload List
                             $.ajax({
                                 url: "/Settings/List"
@@ -187,7 +178,8 @@
                             });
 
                         }).fail(function (error) {
-                            alert("Setting Name already has the Parameter: " + $("#ParameterName").val());
+                            alertify.set('notifier', 'position', 'bottom-left');
+                            alertify.error("Error: <b>Setting Name</b> already has parameter: " + "<b>" + $("#ParameterName").val() + "<b/>");
                         });
                     });
 
