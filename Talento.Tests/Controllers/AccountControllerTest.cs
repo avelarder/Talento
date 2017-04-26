@@ -2,6 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Talento.Controllers;
 using System.Web.Mvc;
+using Moq;
+using System.Web.Security;
 
 namespace Talento.Tests.Controllers
 {
@@ -11,7 +13,13 @@ namespace Talento.Tests.Controllers
         [TestMethod]
         public void Login()
         {
-            AccountController controller = new AccountController();
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<ControllerContext> mockContext = mocks.Create<ControllerContext>();
+            mockContext.Setup(s => s.HttpContext.Request.IsAuthenticated).Returns(false);
+            AccountController controller = new AccountController()
+            {
+                ControllerContext = mockContext.Object
+            };
 
             // Act
             var result = controller.Login("Google.com");
@@ -24,14 +32,22 @@ namespace Talento.Tests.Controllers
         [TestMethod]
         public void Register()
         {
-            AccountController controller = new AccountController();
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<ControllerContext> mockContext = mocks.Create<ControllerContext>();
+            mockContext.Setup(s => s.HttpContext.Request.IsAuthenticated).Returns(true);
+
+            AccountController controller = new AccountController()
+            {
+                ControllerContext = mockContext.Object
+            };
+
 
             // Act
             var result = controller.Register();
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(ViewResult));
+            Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
         }
 
         [TestMethod]

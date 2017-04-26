@@ -69,14 +69,10 @@ namespace Talento.Tests.Controllers
             PositionsController controller = new PositionsController(position.Object, mUser.Object, mCandidate.Object);
 
             var result = controller.Details(5, 1);
-            var viewModel = (List<PositionModel>)(((ViewResult)result).Model);
-
-            var pos = viewModel;
+            var viewModel = (PositionModel)(((ViewResult)result).Model);
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(viewModel);
-            Assert.IsInstanceOfType(pos, typeof(List<PositionModel>));
-            Assert.IsTrue(pos.Count > 0);
         }
 
         [TestMethod]
