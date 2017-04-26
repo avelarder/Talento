@@ -1,4 +1,4 @@
-﻿@model Talento.Models.CreateApplicationSettingsViewModel
+﻿@model Talento.Models.ApplicationSettingsViewModel
 @{
     ViewBag.Title = "AppSettings";
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
@@ -65,7 +65,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6">
-                <h1>Application Settings</h1> 
+                <h1>Application Settings</h1>
             </div>
             <div class="col-sm-6">
                 @*<h3 id="result"></h3>*@
@@ -81,6 +81,15 @@
             </div>
         </div>
 
+        <!--Edit Settings Container-->
+        <div id="edit-dialog" tabindex="-1" class="modal fade" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" id="edit-modal-content">
+                    @*@Html.Action("EditSettingsForm", "Settings", @Model)*@
+                </div>
+            </div>
+        </div>
+        <!--Edit Settings Container-->
         <!-- List of Settings -->
         <div id="applicationSettingContainer">
             @Html.Action("List", "Settings")
@@ -196,6 +205,27 @@
                                     return process(data);
                                 });
                         }
+                    });
+
+
+                    // On Edit button click
+
+                    $('.button-edit').click(function () {
+                        $.post({
+                            url: "/Settings/EditSettingsForm/",
+                            data: {
+                                id: $(this).attr("data-id")
+                            }
+                        }).done(function (response) {
+                            //$('#complete-dialog').modal('hide');
+                            //$('body').removeClass('modal-open');
+                            //$('.modal-backdrop').remove();
+                            //$form[0].reset();
+
+                            alert("huawi");
+                            $("#edit-modal-content").html(response);
+                            //db.database.exectu
+                        })
                     });
 
                 })(jQuery);

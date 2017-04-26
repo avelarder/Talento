@@ -3,6 +3,7 @@ using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Talento.Core;
@@ -26,7 +27,8 @@ namespace Talento.Controllers
                 cfg.CreateMap<ApplicationSetting, ApplicationSettingModels>()
                     .ForMember(apsm => apsm.ApplicationSettingId, aps => aps.MapFrom(s => s.ApplicationSettingId))
                     .ForMember(apsm => apsm.ApplicationParameter, aps => aps.MapFrom(s => s.ApplicationParameter));
-                cfg.CreateMap<ApplicationParameter, ApplicationParameterModels>();
+                cfg.CreateMap<ApplicationParameter, ApplicationParameterModel>();
+                cfg.CreateMap<ApplicationSetting, ApplicationSettingsViewModel>();
             });
         }
 
@@ -49,7 +51,7 @@ namespace Talento.Controllers
 
         // POST: Settings/New
         [HttpPost]
-        public ActionResult Create(CreateApplicationSettingsViewModel applicationSetting)
+        public ActionResult Create(ApplicationSettingsViewModel applicationSetting)
         {
             try
             {
@@ -73,7 +75,7 @@ namespace Talento.Controllers
                     return new HttpStatusCodeResult(200);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new HttpStatusCodeResult(500);
             }
@@ -86,24 +88,31 @@ namespace Talento.Controllers
         }
 
         // GET: Settings/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult EditSettingsForm(int id)
         {
-            return View();
+            ApplicationParameterModel editApplicationSettingsVM = AutoMapper.Mapper.Map<ApplicationParameterModel>(SettingsHelper.GetById(id));
+
+            return PartialView(editApplicationSettingsVM);
         }
 
         // POST: Settings/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ChildAndAjaxActionOnly]
+        public ActionResult Edit(string id, ApplicationSettingsViewModel applicationSetting)
         {
             try
             {
-                // TODO: Add update logic here
+                ApplicationSettingsViewModel editApplicationSettingsVM = AutoMapper.Mapper.Map<ApplicationSettingsViewModel>(SettingsHelper.GetByName(id));
+                if (editApplicationSettingsVM == null)
+                {
+                    return HttpNotFound();
+                }
 
-                return RedirectToAction("Index");
+                return PartialView(editApplicationSettingsVM);
             }
-            catch
+            catch (InvalidOperationException)
             {
-                return View();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The designated Application Setting does not have a valid ID");
             }
         }
 

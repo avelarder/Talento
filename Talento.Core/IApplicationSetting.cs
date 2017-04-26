@@ -13,7 +13,9 @@ namespace Talento.Core
         List<ApplicationParameter> GetAll();
         List<string> GetParameters(string prefix);
         IPagedList<ApplicationParameter> GetPagination(int pageSize, int page, string orderBy, string filter);
-        ApplicationSetting Get(string id);
+        ApplicationSetting GetByName(string name);
+        ApplicationParameter GetById(int id);
         void Create(ApplicationSetting aS);
+        void Edit(ApplicationSetting aS);
     }
 }
