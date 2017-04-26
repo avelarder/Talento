@@ -12,7 +12,7 @@ namespace Talento.Core
     {
         List<ApplicationParameter> GetAll();
         List<string> GetParameters(string prefix);
-        IPagedList<ApplicationParameter> GetPagination(int pageSize, int page, string orderBy, string filter);
+        List<ApplicationParameter> GetPagination(string orderBy, string filter);
         ApplicationSetting Get(string id);
         void Create(ApplicationSetting aS);
     }
