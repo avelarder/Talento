@@ -59,6 +59,10 @@
         .tt-suggestion p {
             margin: 0;
         }
+    .alertify-notifier {
+        color:#FFF;
+    }
+    
 </style>
 
 <div class="pmd-content pmd-content-custom dropdown-component" id="content">
@@ -148,36 +152,53 @@
 
                     // Fred functions
                     var $form = $("#formnewparameter");
+                    var $modal = $("#complete-dialog");
+
                     // On Form Cancel Reset Form
-                    $(document).on("click", "#appSettingCancel", function (event) {
-                        $form[0].reset();
-                    })
+                    $modal.on("hidden.bs.modal", function () {
+                        $form[0].reset(); // Reset Form
+                        clearValidation($form);
+                    });
+
+                    // Clear validation Custom Function
+                    function clearValidation(form) {
+                        form.find("[data-valmsg-summary=true]")
+                            .removeClass("validation-summary-errors")
+                            .addClass("validation-summary-valid")
+                            .find("ul").empty();
+                        form.find("[data-valmsg-replace]")
+                            .removeClass("field-validation-error")
+                            .addClass("field-validation-valid")
+                            .empty();
+                    }
+
                     // On Form Submit
                     $form.on("submit", function (event) {
                         event.preventDefault();
                         var $self = $(this);
-                        $.post({
-                            url: $self.attr("action"),
-                            data: $self.serialize()
-                        }).done(function (response) {
-                            $('#complete-dialog').modal('hide');
-                            $('body').removeClass('modal-open');
-                            $('.modal-backdrop').remove();
-                            $form[0].reset();
-                            alertify.set('notifier', 'position', 'bottom-left');
-                            alertify.success('<b>Parameter is added</b>');
+                        if( $form.valid() ){
+                            $.post({
+                                url: $self.attr("action"),
+                                data: $self.serialize()
+                            }).done(function (response) {
+                                $('#complete-dialog').modal('hide');
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                $form[0].reset();
+                                alertify.set('notifier', 'position', 'bottom-left');
+                                alertify.success('<b>Parameter is Added</b>');
+                                // Reload List
+                                $.ajax({
+                                    url: "/Settings/List"
+                                }).done(function (data) {
+                                    $appContainer.html(data);
+                                });
 
-                            // Reload List
-                            $.ajax({
-                                url: "/Settings/List"
-                            }).done(function (data) {
-                                $appContainer.html(data);
+                            }).fail(function (error) {
+                                alertify.set('notifier', 'position', 'bottom-left');
+                                alertify.error("Error: <b>" + $("#SettingName").val() +"</b> already has parameter: " + "<b>" + $("#ParameterName").val() + "<b/>");
                             });
-
-                        }).fail(function (error) {
-                            alertify.set('notifier', 'position', 'bottom-left');
-                            alertify.error("Error: <b>Setting Name</b> already has parameter: " + "<b>" + $("#ParameterName").val() + "<b/>");
-                        });
+                        }
                     });
 
                     // Autocomplete

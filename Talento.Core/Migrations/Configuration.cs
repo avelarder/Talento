@@ -794,7 +794,7 @@ namespace Talento.Core.Migrations
                             ApplicationSettingId = 2,
                             ParameterName = "Status",
                             ParameterValue = "Enabled",
-                            CreationDate = DateTime.Now,
+                            CreationDate = DateTime.Now.AddHours(1),
                             CreatedBy = manager.FindByEmail("Admin@example.com")
                         }
                     }
@@ -809,7 +809,7 @@ namespace Talento.Core.Migrations
                             ApplicationSettingId = 3,
                             ParameterName = "Status",
                             ParameterValue = "Enabled",
-                            CreationDate = DateTime.Now,
+                            CreationDate = DateTime.Now.AddHours(2),
                             CreatedBy = manager.FindByEmail("Admin@example.com")
                         }
                     }
