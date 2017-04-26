@@ -55,10 +55,10 @@
                 @setting.CreatedBy.Email
             </td>
             <td class="">
-                <button class="button-edit btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" type="button">
+                <button data-id="@setting.ApplicationSettingId" data-target="#edit-dialog" data-toggle="modal" class="button-edit btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" type="button">
                     <i class="material-icons pmd-sm">mode_edit</i>
                 </button>
-                <button class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-danger btn-sm" type="button">
+                <button data-id="@setting.ApplicationSettingId" data-toggle="modal" class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-danger btn-sm" type="button">
                     <i class="material-icons pmd-sm">delete</i>
                 </button>
             </td>
