@@ -3,11 +3,72 @@
     ViewBag.Title = "AppSettings";
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
+
+<style>
+    .twitter-typeahead {
+        width: 100%;
+    }
+
+        .twitter-typeahead .tt-query,
+        .twitter-typeahead .tt-hint {
+            margin-bottom: 0;
+        }
+
+    .tt-dropdown-menu {
+        min-width: 160px;
+        margin-top: 2px;
+        padding: 5px 0;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border: 1px solid rgba(0,0,0,.2);
+        *border-right-width: 2px;
+        *border-bottom-width: 2px;
+        -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+        border-radius: 6px;
+        -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+        -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+        box-shadow: 0 5px 10px rgba(0,0,0,.2);
+        -webkit-background-clip: padding-box;
+        -moz-background-clip: padding;
+        background-clip: padding-box;
+        width: 100%;
+    }
+
+    .tt-suggestion {
+        display: block;
+        padding: 3px 20px;
+    }
+
+        .tt-suggestion.tt-is-under-cursor {
+            color: #fff;
+            background-color: #0081c2;
+            background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+            background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+            background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+            background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+            background-repeat: repeat-x;
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
+        }
+
+            .tt-suggestion.tt-is-under-cursor a {
+                color: #fff;
+            }
+
+        .tt-suggestion p {
+            margin: 0;
+        }
+</style>
+
 <div class="pmd-content pmd-content-custom dropdown-component" id="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6">
-                <h1>Application Settings</h1>
+                <h1>Application Settings</h1> 
+            </div>
+            <div class="col-sm-6">
+                @*<h3 id="result"></h3>*@
             </div>
             <div class="clearfix"></div>
             <hr />
@@ -89,70 +150,57 @@
                     }
 
                     // Fred functions
-                    $("#SettingNameButton").on("click", function () {
-                        var $this = $("#SettingName");
-                        console.log($this.val());
-                        $.ajax(
-                            {
-                                url: "/Settings/Modal",
-                                dataType: "json",
-                                data: { prefix: $this.val() },
-                                success: function (response) {
-                                    console.log(response);
-                                }
-                            });
-                    });
-
                     var $form = $("#formnewparameter");
                     // On Form Cancel Reset Form
                     $(document).on("click", "#appSettingCancel", function (event) {
-                         $form[0].reset();
+                        $form[0].reset();
                     })
                     // On Form Submit
                     $form.on("submit", function (event) {
                         event.preventDefault();
-                        console.log("Submit");
                         var $self = $(this);
                         $.post({
                             url: $self.attr("action"),
                             data: $self.serialize()
                         }).done(function (response) {
-                            //alert("Success");
                             $('#complete-dialog').modal('hide');
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
                             $form[0].reset();
+                            alertify.set('notifier', 'position', 'bottom-left');
+                            alertify.success('<b>Parameter is added</b>');
 
-                            //$("#results").append("Parameter is added");
+                            // Reload List
+                            $.ajax({
+                                url: "/Settings/List"
+                            }).done(function (data) {
+                                $appContainer.html(data);
+                            });
 
                         }).fail(function (error) {
-                            //alert("Error");
-                            //$("#error-result").append("Error adding new parameter");
+                            alertify.set('notifier', 'position', 'bottom-left');
+                            alertify.error("Error: <b>Setting Name</b> already has parameter: " + "<b>" + $("#ParameterName").val() + "<b/>");
                         });
                     });
 
-                    // Autocomplete SettingsName field
-                    $form.on('keyup', "#SettingName", function () {
-                        console.log("keydown");
-                        clearTimeout($(this).data('timer'));
-                        var search = this.value;
-                        if (search.length >= 3) {
-                            $(this).data('timer', setTimeout(function () {
-                                $.ajax({
-                                    type: "post",
-                                    url: "/Settings/GetApplicationParameters",
-                                    data: { prefix : search }
-                                }).done(function (msg) {
-                                    console.log(msg);
-                                    $('#SettingName').val(msg);
+                    // Autocomplete
+                    $('#SettingName').typeahead({
+                        hint: true,
+                        highlight: true,
+                        minLength: 3,
+                        delay: 400,
+                        source: function (query, process) {
+                            return $.post(
+                                '/Settings/GetApplicationParameters',
+                                { prefix: $("#SettingName").val() }).done(function (data) {
+                                    return process(data);
                                 });
-                            }, 400));
                         }
                     });
 
                 })(jQuery);
             }
+
         </script>
     </div>
 </div>
-

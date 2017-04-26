@@ -59,16 +59,18 @@ namespace Talento.Controllers
 
         // POST: Settings/New
         [HttpPost]
-        public ActionResult Create(CreateApplicationSettingsViewModel applicationSetting) 
+        public ActionResult Create(CreateApplicationSettingsViewModel applicationSetting)
         {
-            if (IsStateValid())
+            try
             {
-                string user = User.Identity.GetUserId();
-
-                ApplicationSetting aS = new ApplicationSetting
+                if (IsStateValid())
                 {
-                    SettingName = applicationSetting.SettingName,
-                    ApplicationParameter = new List<ApplicationParameter> {
+                    string user = User.Identity.GetUserId();
+
+                    ApplicationSetting aS = new ApplicationSetting
+                    {
+                        SettingName = applicationSetting.SettingName,
+                        ApplicationParameter = new List<ApplicationParameter> {
                         new ApplicationParameter {
                             ParameterName = applicationSetting.ParameterName,
                             ParameterValue = applicationSetting.ParameterValue,
@@ -76,9 +78,14 @@ namespace Talento.Controllers
                             CreatedBy = UserHelper.GetUserById(user)
                         }
                     }
-                };
-                SettingsHelper.Create(aS);
-                return new HttpStatusCodeResult(200);
+                    };
+                    SettingsHelper.Create(aS);
+                    return new HttpStatusCodeResult(200);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(500);
             }
             return new HttpStatusCodeResult(500);
         }
