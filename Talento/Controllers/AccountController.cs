@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -9,14 +7,12 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Talento.Models;
-using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Mail;
-using System.Diagnostics;
 using Talento.Entities;
-using Talento.Providers;
 using System.Web.Security;
+using Talento.EmailManager;
 
 namespace Talento.Controllers
 {
@@ -25,15 +21,17 @@ namespace Talento.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private IMessenger _emailManager;
 
         public AccountController()
         {
         }
         
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IMessenger emailManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            _emailManager = emailManager;
         }
 
         public ApplicationSignInManager SignInManager
@@ -77,11 +75,9 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RequestToken(string Email)
         {
-#if DEBUG
             try
             {
                 MailAddress email = new MailAddress(Email);
-
             }
             catch (Exception)
             {
@@ -89,24 +85,22 @@ namespace Talento.Controllers
                 return View("RequestToken");
             }
             var user = UserManager.FindByEmail(Email);
+            string code = UserManager.GenerateEmailConfirmationToken(user.Id);
+            //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+            //_emailManager.SendConfirmationEmail(Email, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+            //ModelState.AddModelError("", "Your token has been sent to the email address.");
             if (user != null)
             {
                 string iduser = user.Id;
                 string token = UserManager.GenerateEmailConfirmationToken(iduser);
                 return RegistrationFileDownload(iduser, token);
+                //return View("Login");
             }
             else
             {
                 ModelState.AddModelError("", "An email has been sent with the url for the account activation.");
                 return View("Login");
             }
-#else
-var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-            ModelState.AddModelError("","Your token has been sent to the email address.");
-            return View("Login");
-#endif
-
         }
 
 
@@ -230,18 +224,17 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-#if DEBUG == false
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-#endif
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    //_emailManager.SendConfirmationEmail(model.Email, "Confirm your account", "Talento account confirmation", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
                     ViewData["RegisterCode"] = HttpUtility.UrlEncode(code);
                     ViewData["UserId"] = user.Id;
-#if DEBUG
+
                     return View("RegisterConfirmation");
-#else
-                    ModelState.AddModelError("", "A link has been sent to your registered mail address. Check for it in order to activate the account before being able to login.");
-                    return View("Login");
-#endif
+
+                    //ModelState.AddModelError("", "A link has been sent to your registered mail address. Check for it in order to activate the account before being able to login.");
+                    //return View("Login");
+
                     //return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
@@ -328,8 +321,8 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                //var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                //await _emailManager.SendConfirmationEmail(model.Email, "Talento Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
@@ -439,20 +432,10 @@ await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confir
                 ViewData["link"] = callbackUrl;
                 ViewData["code"] = code;
                 return View("MailSent");
-#if DEBUG == false
-                SmtpClient SmtpServer = new SmtpClient("smtp.sendgrid.net");
-                SmtpServer.Port = 465;
-                SmtpServer.Credentials = new System.Net.NetworkCredential("apikey", "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");
-                SmtpServer.UseDefaultCredentials = false;
-                SmtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
-                MailMessage mail = new MailMessage();
-                mail.From = new MailAddress("pablorcarmona@hotmail.com");
-                mail.To.Add(user.Email);
-                mail.Subject = "Reset Password";
-                mail.Body = "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>";
-                SmtpServer.EnableSsl = true;
-                SmtpServer.Send(mail);
-#endif
+
+                //string body = "Reset Password. Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>";
+               // _emailManager.SendConfirmationEmail(model.Email, "talento forgot password confirmation email", body);
+
             }
             ModelState.Clear();
             ModelState.AddModelError("", "The email does not have valid format of email address.");

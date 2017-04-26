@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talento.Core", "Talento.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talento.Entities", "Talento.Entities\Talento.Entities.csproj", "{B516CE38-2555-46B2-8B6E-1F1F324B0803}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talento.EmailManager", "Talento.EmailService\Talento.EmailManager.csproj", "{431F2EB0-52BE-4EF5-92EA-A67417834404}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{B516CE38-2555-46B2-8B6E-1F1F324B0803}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B516CE38-2555-46B2-8B6E-1F1F324B0803}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B516CE38-2555-46B2-8B6E-1F1F324B0803}.Release|Any CPU.Build.0 = Release|Any CPU
+		{431F2EB0-52BE-4EF5-92EA-A67417834404}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{431F2EB0-52BE-4EF5-92EA-A67417834404}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{431F2EB0-52BE-4EF5-92EA-A67417834404}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{431F2EB0-52BE-4EF5-92EA-A67417834404}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
