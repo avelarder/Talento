@@ -61,6 +61,8 @@
     <Compile Include="Data\ApplicationDbContext.cs" />
     <Compile Include="Helpers\CandidateHelper.cs" />
     <Compile Include="Helpers\DasboardPagingHelper.cs" />
+    <Compile Include="Helpers\SettingsHelper.cs" />
+    <Compile Include="IApplicationSetting.cs" />
     <Compile Include="ICandidate.cs" />
     <Compile Include="ISendEmail.cs" />
     <Compile Include="IUser.cs" />
@@ -70,9 +72,9 @@
     <Compile Include="ICustomPagingList.cs" />
     <Compile Include="IPosition.cs" />
     <Compile Include="ITag.cs" />
-    <Compile Include="Migrations\201704021220110_InitialCreate.cs" />
-    <Compile Include="Migrations\201704021220110_InitialCreate.Designer.cs">
-      <DependentUpon>201704021220110_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201704211855311_dev-and-495.cs" />
+    <Compile Include="Migrations\201704211855311_dev-and-495.Designer.cs">
+      <DependentUpon>201704211855311_dev-and-495.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,15 +87,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704021220110_InitialCreate.resx">
-      <DependentUpon>201704021220110_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Talento.Entities\Talento.Entities.csproj">
       <Project>{b516ce38-2555-46b2-8b6e-1f1f324b0803}</Project>
       <Name>Talento.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201704211855311_dev-and-495.resx">
+      <DependentUpon>201704211855311_dev-and-495.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
