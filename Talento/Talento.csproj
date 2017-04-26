@@ -356,6 +356,10 @@
       <Project>{e6f9ad82-4a13-4ca8-b78c-0f825fd8463d}</Project>
       <Name>Talento.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Talento.EmailService\Talento.EmailManager.csproj">
+      <Project>{431f2eb0-52be-4ef5-92ea-a67417834404}</Project>
+      <Name>Talento.EmailManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Talento.Entities\Talento.Entities.csproj">
       <Project>{b516ce38-2555-46b2-8b6e-1f1f324b0803}</Project>
       <Name>Talento.Entities</Name>
