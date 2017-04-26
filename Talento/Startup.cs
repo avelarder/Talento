@@ -10,5 +10,7 @@ namespace Talento
         {
             ConfigureAuth(app);
         }
+
+
     }
 }

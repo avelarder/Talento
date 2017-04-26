@@ -17,6 +17,7 @@ using System.Net.Http.Headers;
 using Talento.Entities;
 using Talento.Core.Data;
 using Microsoft.Practices.Unity;
+using Talento.Core;
 
 namespace Talento
 {
@@ -111,6 +112,14 @@ namespace Talento
         public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
         {
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
+        }
+    }
+
+    // Configure Global Application Settings
+    public class ApplicationSettingsManager
+    {
+        public ApplicationSettingsManager(IApplicationSetting settingsHelper)
+        {
         }
     }
 

@@ -46,7 +46,7 @@ namespace Talento.Controllers
             var parameterSettings = SettingsHelper.GetPagination(orderBy, filter);
             // Pagination
             var paginated = parameterSettings.ToPagedList(page, pageSize);
-            int total = paginated.Count;
+            int total = parameterSettings.Count();
             int totalPages = (total - 1) / pageSize + 1;
             
             // Check for valid page
@@ -83,7 +83,7 @@ namespace Talento.Controllers
                     return new HttpStatusCodeResult(200);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new HttpStatusCodeResult(500);
             }
@@ -146,6 +146,17 @@ namespace Talento.Controllers
 
             return Json(retu, JsonRequestBehavior.AllowGet);
         }
+
+        // Test Action
+        public ActionResult Test()
+        {
+            var retu = System.Web.HttpContext.Current.Session["AppSettings"] as String;
+            return Content(retu);
+        }
+
+        // Helpers
+
+
 
     }
 }
