@@ -38,7 +38,7 @@ namespace Talento.Tests.Controllers
                 Id = "pablo@example.com",
                 Email = "pablo@example.com"
             };
-            CreateApplicationSettingsViewModel aS = new CreateApplicationSettingsViewModel
+            ApplicationSettingsViewModel aS = new ApplicationSettingsViewModel
             {
                 SettingName = "aName",
                 ParameterName = "aParameterName",

@@ -18,11 +18,15 @@ namespace Talento.Core.Helpers
 
         }
 
-        public ApplicationSetting Get(string name)
+        public ApplicationSetting GetByName(string name)
         {
             var aS = Db.ApplicationSettings.FirstOrDefault(p => p.SettingName == name);
+            return aS;
+        }
 
-
+        public ApplicationParameter GetById(int id)
+        {
+            var aS = Db.ApplicationParameter.FirstOrDefault(p => p.ApplicationSettingId == id);
             return aS;
         }
 
@@ -119,7 +123,7 @@ namespace Talento.Core.Helpers
         {
             try
             {
-                ApplicationSetting applicationSetting = this.Get(aS.SettingName);
+                ApplicationSetting applicationSetting = this.GetByName(aS.SettingName);
 
                 if (applicationSetting == null)
                 {
@@ -147,6 +151,11 @@ namespace Talento.Core.Helpers
         public List<string> GetParameters(string prefix)
         {
             return Db.ApplicationSettings.Where(s => s.SettingName.StartsWith(prefix)).Select(x=> x.SettingName).ToList();
+        }
+
+        public void Edit(ApplicationSetting aS)
+        {
+            throw new NotImplementedException();
         }
     }
 }
