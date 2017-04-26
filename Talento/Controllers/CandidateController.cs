@@ -108,11 +108,6 @@ namespace Talento.Controllers
                 return HttpNotFound();
             }
 
-            if (currentPosition.Status == Status.Cancelled || currentPosition.Status == Status.Closed)
-            {
-                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
-            }
-
             if (candidate == null)
             {
                 return HttpNotFound();
@@ -217,7 +212,6 @@ namespace Talento.Controllers
                     int result = CandidateHelper.Create(newCandidate);
                     if (result!=-1)
                     {
-                        PositionHelper.BeginScreening(position[0]);
                         return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
                     }
                 }
