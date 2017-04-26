@@ -41,7 +41,7 @@ namespace Talento.Controllers
                 rawData = DashboardPagingHelper.GetAdminTable(sortOrder, FilterBy, currentFilter, searchString, page);
 
             }
-            if (User.IsInRole("Basic"))
+            if (!User.IsInRole("Admin"))
             {
                 rawData = DashboardPagingHelper.GetBasicTable(sortOrder, FilterBy, currentFilter, searchString, page);
             }
