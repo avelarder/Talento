@@ -36,7 +36,7 @@ namespace Talento.Core.Helpers
             return settings;
         }
 
-        public IPagedList<ApplicationParameter> GetPagination(int pageSize = 5, int page = 1, string orderBy = "CreationDate_desc", string filter = "")
+        public List<ApplicationParameter> GetPagination(string orderBy = "CreationDate_desc", string filter = "")
         {
             try
             {
@@ -109,15 +109,8 @@ namespace Talento.Core.Helpers
                 }
 
                 var paginated = settings.ToList();
-                int total = paginated.Count;
-                int totalPages = (total - 1) / pageSize + 1;
-
-                if (page > totalPages || page < 1)
-                {
-                    return null;
-                }
-
-                return paginated.ToPagedList(page, pageSize);
+                
+                return settings.ToList();
 
             }
             catch (Exception)

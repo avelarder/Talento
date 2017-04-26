@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Talento.Core;
 using Talento.Entities;
 using Talento.Models;
+using Talento.EmailManager;
 
 namespace Talento.Controllers
 {
@@ -17,9 +18,11 @@ namespace Talento.Controllers
         ICandidate CandidateHelper;
         IPosition PositionHelper;
         ICustomUser UserHelper;
+        IMessenger emailManager;
 
-        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPosition positionHelper)
+        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPosition positionHelper, IMessenger EmailManager)
         {
+            EmailManager = emailManager;
             CandidateHelper = candidateHelper;
             UserHelper = userHelper;
             PositionHelper = positionHelper;
@@ -40,26 +43,20 @@ namespace Talento.Controllers
             MemoryStream ms = new MemoryStream();
             TextWriter tw = new StreamWriter(ms);
             var callbackUrl = Url.Action("Details", "Positions", new { toApply.Id }, protocol: Request.Url.Scheme);
-
-            tw.WriteLine("A profile has been added to " + toApply.Title + " by " + User.Identity.Name + " . " +
-                            "Please visit the following URL for more information: " + callbackUrl);
+            string body = "A profile has been added to " + toApply.Title + " by " + User.Identity.Name + " . " +
+                            "Please visit the following URL for more information: " + callbackUrl;
+            tw.WriteLine(body);
             tw.Write("Recipients: ");
-
+            List<string> cc = new List<string>();
             foreach (ApplicationUser user in recipients)
             {
                 tw.Write(user.Email + ", ");
+                cc.Add(user.Email + ", ");
             }
-
             tw.Flush();
             tw.Close();
+            //emailManager.SendEmail(toApply.Owner.Email , "talento@tcs.com", cc.ToString(), cc.ToString(), "Talento notification messenger", body);
             return File(ms.GetBuffer(), "application/octet-stream", "MailNotification.txt");
-
-#if DEBUG == false
-
-            string currentUser = User.Identity.Name;
-            SendEmailHelper.SendEmailProfile(currentUser);
-#endif
-
         }
 
         //Charlie: call this action when generate a feedback interview
@@ -67,27 +64,22 @@ namespace Talento.Controllers
         {
             MemoryStream ms = new MemoryStream();
             TextWriter tw = new StreamWriter(ms);
-
             var callbackUrl = Url.Action("Details", "Positions", new { toapply.Id }, protocol: Request.Url.Scheme);
-
-            tw.WriteLine("A profile's interview feedback form has been added to " + toapply.Title + " by " + User.Identity.Name + "." +
-                            " Please visit the following URL for more information: " + callbackUrl);
+            string body = "A profile's interview feedback form has been added to " + toapply.Title + " by " + User.Identity.Name + "." +
+                            " Please visit the following URL for more information: " + callbackUrl;
+            tw.WriteLine(body);
 
             tw.Write("Recipients: ");
-
+            List<string> cc = new List<string>();
             foreach (ApplicationUser user in recipients)
             {
                 tw.Write(user.Email + ", ");
+                cc.Add(user.Email + ", ");
             }
             tw.Flush();
             tw.Close();
+            //emailManager.SendEmail(toapply.Owner.Email, "talento@tcs.com", cc.ToString(), cc.ToString(), "Talento notification messenger", body);
             return File(ms.GetBuffer(), "application/octet-stream", "MailExample.txt");
-
-#if DEBUG == false
-
-            string currentUser = User.Identity.Name;
-            SendEmailHelper.SendEmailFeedback(currentUser);
-#endif
         }
 
 

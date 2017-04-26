@@ -45,8 +45,18 @@ namespace Talento.Controllers
             ViewBag.SortUser = (orderBy == "CreatedBy") ? "CreatedBy_asc" : "CreatedBy";
             ViewBag.CurrentFilter = filter;
 
-            var parameterSettings = SettingsHelper.GetPagination(pageSize, page, orderBy, filter);
-            return PartialView(parameterSettings);
+            var parameterSettings = SettingsHelper.GetPagination(orderBy, filter);
+            // Pagination
+            var paginated = parameterSettings.ToPagedList(page, pageSize);
+            int total = parameterSettings.Count();
+            int totalPages = (total - 1) / pageSize + 1;
+            
+            // Check for valid page
+            if (page > totalPages || page < 1)
+            {
+                return new HttpStatusCodeResult(405);
+            }
+            return PartialView(paginated);
         }
 
         // POST: Settings/New
@@ -145,6 +155,17 @@ namespace Talento.Controllers
 
             return Json(retu, JsonRequestBehavior.AllowGet);
         }
+
+        // Test Action
+        public ActionResult Test()
+        {
+            var retu = System.Web.HttpContext.Current.Session["AppSettings"] as String;
+            return Content(retu);
+        }
+
+        // Helpers
+
+
 
     }
 }
