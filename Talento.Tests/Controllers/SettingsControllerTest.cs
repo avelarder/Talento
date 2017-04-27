@@ -75,23 +75,29 @@ namespace Talento.Tests.Controllers
 
             // Mock User
             Mock<ICustomUser> mUser = new Mock<ICustomUser>();
+
             //Mock Request HTTP
             var request = new Mock<HttpRequestBase>();
+
             // Set isAjax Request
             request.SetupGet(x => x.Headers).Returns(
                 new System.Net.WebHeaderCollection {
                                 {"X-Requested-With", "XMLHttpRequest"}
                 });
+
             // Set isLocal
             request.SetupGet(x => x.IsLocal).Returns(true);
 
             // Mock Context
+
             var context = new Mock<HttpContextBase>();
             context.SetupGet(x => x.Request).Returns(request.Object);
+
             // Controller
             Mock<IApplicationSetting> appSettings = new Mock<IApplicationSetting>();
             appSettings.Setup(x => x.GetPagination("", "")).Returns(GetApplicationParameters().ToList());
             SettingsController controller = new SettingsController(appSettings.Object, mUser.Object);
+
             // Load Mock request to Controller
             controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);
 
