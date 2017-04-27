@@ -8,7 +8,7 @@ namespace Talento.EmailManager
 {
     public interface IMessenger
     {
-        void SendEmail(string toEmail, string fromEmail, string bcc, string cc, string subject, string body);
+        void SendEmail(List<string> toEmail, string fromEmail, List<string> bcc, List<string> cc, string subject, string body);
         void SendConfirmationEmail(string toEmail, string subject, string body);
     }
 }

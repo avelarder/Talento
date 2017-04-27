@@ -17,9 +17,9 @@ namespace Talento.Controllers
         ICandidate CandidateHelper;
         IPosition PositionHelper;
         ICustomUser UserHelper;
-        IMessenger emailManager;
+        IMessenger EmailManager;
 
-        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPosition positionHelper, IMessenger EmailManager)
+        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPosition positionHelper, IMessenger emailManager)
         {
             EmailManager = emailManager;
             CandidateHelper = candidateHelper;
@@ -46,15 +46,18 @@ namespace Talento.Controllers
                             "Please visit the following URL for more information: " + callbackUrl;
             tw.WriteLine(body);
             tw.Write("Recipients: ");
+            List<string> recip = new List<string>();
             List<string> cc = new List<string>();
+            cc.Add(toApply.Owner.Email);
+            List<string> bcc = new List<string>();
             foreach (ApplicationUser user in recipients)
             {
                 tw.Write(user.Email + ", ");
-                cc.Add(user.Email + ", ");
+                recip.Add(user.Email);
             }
             tw.Flush();
             tw.Close();
-            //emailManager.SendEmail(toApply.Owner.Email , "talento@tcs.com", cc.ToString(), cc.ToString(), "Talento notification messenger", body);
+            //emailManager.SendEmail( recip, "talento@tcs.com", bcc, cc, "Talento notification messenger", body);
             return File(ms.GetBuffer(), "application/octet-stream", "MailNotification.txt");
         }
 
@@ -69,15 +72,18 @@ namespace Talento.Controllers
             tw.WriteLine(body);
 
             tw.Write("Recipients: ");
+            List<string> recip = new List<string>();
             List<string> cc = new List<string>();
+            cc.Add(toapply.Owner.Email);
+            List<string> bcc = new List<string>();
             foreach (ApplicationUser user in recipients)
             {
                 tw.Write(user.Email + ", ");
-                cc.Add(user.Email + ", ");
+                recip.Add(user.Email);
             }
             tw.Flush();
             tw.Close();
-            //emailManager.SendEmail(toapply.Owner.Email, "talento@tcs.com", cc.ToString(), cc.ToString(), "Talento notification messenger", body);
+            //emailManager.SendEmail(recip, "talento@tcs.com", bcc, cc, "Talento notification messenger", body);
             return File(ms.GetBuffer(), "application/octet-stream", "MailExample.txt");
         }
 

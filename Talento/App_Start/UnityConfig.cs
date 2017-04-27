@@ -10,6 +10,7 @@ using Talento.Core;
 using Talento.Entities;
 using Talento.Core.Data;
 using Talento.Core.Helpers;
+using Talento.EmailManager;
 
 namespace Talento.App_Start
 {
@@ -54,6 +55,7 @@ namespace Talento.App_Start
             container.RegisterType<ITag, TagHelper>(new PerRequestLifetimeManager());
             container.RegisterType<ICustomUser, UserHelper>(new PerRequestLifetimeManager());
             container.RegisterType<IApplicationSetting, SettingsHelper>(new PerRequestLifetimeManager());
+            container.RegisterType<IMessenger, Messenger>(new PerRequestLifetimeManager());
         }
     }
 }
