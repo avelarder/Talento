@@ -8,22 +8,31 @@ namespace Talento.Core.Migrations
         public override void Up()
         {
             CreateTable(
-                "dbo.Candidates",
+                "dbo.ApplicationParameters",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false, maxLength: 50),
-                        Email = c.String(nullable: false, maxLength: 50),
-                        Competencies = c.String(nullable: false, maxLength: 300),
-                        Description = c.String(nullable: false, maxLength: 300),
-                        CratedOn = c.DateTime(),
-                        CreatedBy_Id = c.String(maxLength: 128),
-                        Status = c.Int(nullable: false),
-                        IsTcsEmployee = c.Boolean(nullable: false),
+                        ParameterName = c.String(nullable: false, maxLength: 60),
+                        ApplicationSettingId = c.Int(nullable: false),
+                        ApplicationParameterId = c.Int(nullable: false, identity: true),
+                        ParameterValue = c.String(nullable: false, maxLength: 160),
+                        CreationDate = c.DateTime(nullable: false),
+                        ApplicationUser_Id = c.String(nullable: false, maxLength: 128),
                     })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.CreatedBy_Id)
-                .Index(t => t.CreatedBy_Id);
+                .PrimaryKey(t => new { t.ParameterName, t.ApplicationSettingId })
+                .ForeignKey("dbo.ApplicationSettings", t => t.ApplicationSettingId)
+                .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
+                .Index(t => t.ApplicationSettingId)
+                .Index(t => t.ApplicationUser_Id);
+            
+            CreateTable(
+                "dbo.ApplicationSettings",
+                c => new
+                    {
+                        ApplicationSettingId = c.Int(nullable: false, identity: true),
+                        SettingName = c.String(nullable: false, maxLength: 60),
+                    })
+                .PrimaryKey(t => t.ApplicationSettingId)
+                .Index(t => t.SettingName, unique: true);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -82,6 +91,24 @@ namespace Talento.Core.Migrations
                 .ForeignKey("dbo.AspNetRoles", t => t.RoleId)
                 .Index(t => t.UserId)
                 .Index(t => t.RoleId);
+            
+            CreateTable(
+                "dbo.Candidates",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(nullable: false, maxLength: 50),
+                        Email = c.String(nullable: false, maxLength: 50),
+                        Competencies = c.String(nullable: false, maxLength: 300),
+                        Description = c.String(nullable: false, maxLength: 300),
+                        CratedOn = c.DateTime(),
+                        CreatedBy_Id = c.String(maxLength: 128),
+                        Status = c.Int(nullable: false),
+                        IsTcsEmployee = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.AspNetUsers", t => t.CreatedBy_Id)
+                .Index(t => t.CreatedBy_Id);
             
             CreateTable(
                 "dbo.FileBlobs",
@@ -202,9 +229,11 @@ namespace Talento.Core.Migrations
             DropForeignKey("dbo.PositionCandidates", "Position_Id", "dbo.Positions");
             DropForeignKey("dbo.FileBlobs", "Candidate_Id", "dbo.Candidates");
             DropForeignKey("dbo.Candidates", "CreatedBy_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.ApplicationParameters", "ApplicationUser_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.ApplicationParameters", "ApplicationSettingId", "dbo.ApplicationSettings");
             DropIndex("dbo.PositionCandidates", new[] { "Candidate_Id" });
             DropIndex("dbo.PositionCandidates", new[] { "Position_Id" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
@@ -217,23 +246,28 @@ namespace Talento.Core.Migrations
             DropIndex("dbo.Positions", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.Positions", new[] { "PortfolioManager_Id" });
             DropIndex("dbo.FileBlobs", new[] { "Candidate_Id" });
+            DropIndex("dbo.Candidates", new[] { "CreatedBy_Id" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
-            DropIndex("dbo.Candidates", new[] { "CreatedBy_Id" });
+            DropIndex("dbo.ApplicationSettings", new[] { "SettingName" });
+            DropIndex("dbo.ApplicationParameters", new[] { "ApplicationUser_Id" });
+            DropIndex("dbo.ApplicationParameters", new[] { "ApplicationSettingId" });
             DropTable("dbo.PositionCandidates");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.Tags");
             DropTable("dbo.Logs");
             DropTable("dbo.Positions");
             DropTable("dbo.FileBlobs");
+            DropTable("dbo.Candidates");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
-            DropTable("dbo.Candidates");
+            DropTable("dbo.ApplicationSettings");
+            DropTable("dbo.ApplicationParameters");
         }
     }
 }
