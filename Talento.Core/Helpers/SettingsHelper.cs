@@ -153,9 +153,18 @@ namespace Talento.Core.Helpers
             return Db.ApplicationSettings.Where(s => s.SettingName.StartsWith(prefix)).Select(x=> x.SettingName).ToList();
         }
 
-        public void Edit(ApplicationSetting aS)
+        public void Edit(ApplicationParameter aS)
         {
-            throw new NotImplementedException();
+            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).ApplicationSettingId = aS.ApplicationSetting.ApplicationSettingId; //
+            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).ParameterName = aS.ParameterName;//
+            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).ParameterValue = aS.ParameterValue;//
+            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).CreatedBy = aS.CreatedBy;//
+            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).ApplicationParameterId = aS.ApplicationParameterId; //
+            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).ApplicationUser_Id = aS.ApplicationUser_Id; //
+            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).ApplicationSetting.SettingName = aS.ApplicationSetting.SettingName;
+            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).CreationDate = aS.CreationDate; //
+            
+            Db.SaveChanges();
         }
     }
 }

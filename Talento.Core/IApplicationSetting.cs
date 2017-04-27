@@ -16,6 +16,6 @@ namespace Talento.Core
         ApplicationSetting GetByName(string name);
         ApplicationParameter GetById(int id);
         void Create(ApplicationSetting aS);
-        void Edit(ApplicationSetting aS);
+        void Edit(ApplicationParameter aS);
     }
 }

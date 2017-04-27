@@ -181,7 +181,7 @@
                             .empty();
                     }
 
-                    // On Form Submit
+                    // On Form Submit Add-Parameter
                     $form.on("submit", function (event) {
                         event.preventDefault();
                         var $self = $(this);
@@ -200,7 +200,8 @@
                                 $.ajax({
                                     url: "/Settings/List"
                                 }).done(function (data) {
-                                    $appContainer.html(data);
+                                    //$appContainer.html(data);
+                                    alert("ja");
                                 });
 
                             }).fail(function (error) {
@@ -226,7 +227,7 @@
                     });
 
 
-                    // On Edit button click
+                    // On Edit button click open modal
 
                     $('.button-edit').click(function () {
                         $.post({
@@ -235,16 +236,58 @@
                                 id: $(this).attr("data-id")
                             }
                         }).done(function (response) {
+                            $("#edit-modal-content").html(response);
+                        })
+                    });
+
+                    //Submit edit form
+                    $("#EditSettingsForm").on("submit", function (event) {
+                        event.preventDefault();
+                        var $self = $(this);
+                        if ($form.valid()) {
+                            $.post({
+                                url: $self.attr("action"),
+                                data: $self.serialize()
+                            }).done(function (response) {
+                                $('#complete-dialog').modal('hide');
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                $form[0].reset();
+
+                                alertify.set('notifier', 'position', 'bottom-left');
+                                alertify.success('<b>Parameter was Edited</b>');
+                                // Reload List
+                                $.ajax({
+                                    //url: "/Settings/Edit"
+                                }).done(function (data) {
+                                    $appContainer.html(data);
+                                });
+
+                            }).fail(function (error) {
+                                alertify.set('notifier', 'position', 'bottom-left');
+                                alertify.error("Error: <b>" + $("#SettingName").val() + "</b> already has parameter: " + "<b>" + $("#ParameterName").val() + "<b/>");
+                            });
+                        }
+                    });
+
+
+                    @*$("#submit-edit-setting").click(function () {
+                        $.post({
+                            url: "/Settings/Edit/",
+                            data: {
+                                appParamVM: new { @Model }
+                            }
+                        }).done(function (response) {
                             //$('#complete-dialog').modal('hide');
                             //$('body').removeClass('modal-open');
                             //$('.modal-backdrop').remove();
                             //$form[0].reset();
 
                             alert("huawi");
+
                             $("#edit-modal-content").html(response);
-                            //db.database.exectu
                         })
-                    });
+                    });*@
 
                 })(jQuery);
             }

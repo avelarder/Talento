@@ -43,7 +43,7 @@ namespace Talento.Models
         public ApplicationUser CreatedBy { get; set; }
     }
 
-    public class ApplicationParameterModel
+    public class ApplicationParameterViewModel
     {
         public int ApplicationParameterId { get; set; }
 
@@ -61,9 +61,6 @@ namespace Talento.Models
         public string ApplicationUser_Id { get; set; }
         [Required]
         public ApplicationUser CreatedBy { get; set; }
-
-        [StringLength(160, ErrorMessage = "Setting Name is required")]
-        public string SettingName { get; set; }
 
         [Required]
         public int ApplicationSettingId { get; set; }

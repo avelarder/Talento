@@ -27,7 +27,7 @@ namespace Talento.Controllers
                 cfg.CreateMap<ApplicationSetting, ApplicationSettingModels>()
                     .ForMember(apsm => apsm.ApplicationSettingId, aps => aps.MapFrom(s => s.ApplicationSettingId))
                     .ForMember(apsm => apsm.ApplicationParameter, aps => aps.MapFrom(s => s.ApplicationParameter));
-                cfg.CreateMap<ApplicationParameter, ApplicationParameterModel>();
+                cfg.CreateMap<ApplicationParameter, ApplicationParameterViewModel>();
                 cfg.CreateMap<ApplicationSetting, ApplicationSettingsViewModel>();
             });
         }
@@ -100,7 +100,7 @@ namespace Talento.Controllers
         // GET: Settings/Edit/5
         public ActionResult EditSettingsForm(int id)
         {
-            ApplicationParameterModel editApplicationSettingsVM = AutoMapper.Mapper.Map<ApplicationParameterModel>(SettingsHelper.GetById(id));
+            ApplicationParameterViewModel editApplicationSettingsVM = AutoMapper.Mapper.Map<ApplicationParameterViewModel>(SettingsHelper.GetById(id));
 
             return PartialView(editApplicationSettingsVM);
         }
@@ -108,17 +108,31 @@ namespace Talento.Controllers
         // POST: Settings/Edit/5
         [HttpPost]
         [ChildAndAjaxActionOnly]
-        public ActionResult Edit(string id, ApplicationSettingsViewModel applicationSetting)
+        public ActionResult Edit(ApplicationParameterViewModel appParamVM)
         {
             try
             {
-                ApplicationSettingsViewModel editApplicationSettingsVM = AutoMapper.Mapper.Map<ApplicationSettingsViewModel>(SettingsHelper.GetByName(id));
-                if (editApplicationSettingsVM == null)
-                {
-                    return HttpNotFound();
-                }
+                //ApplicationParameterViewModel ApplicationParameter = AutoMapper.Mapper.Map<ApplicationParameterViewModel>(SettingsHelper.GetById(applicationParameterVM.ApplicationParameterId));
 
-                return PartialView(editApplicationSettingsVM);
+                //if (ApplicationParameter == null)
+                //{
+                //    return HttpNotFound();
+                //}
+
+                ApplicationParameter aP = new ApplicationParameter {
+                    ApplicationSetting = appParamVM.ApplicationSetting,
+                    ApplicationSettingId = appParamVM.ApplicationSettingId,
+                    ParameterName = appParamVM.ParameterName,
+                    ParameterValue = appParamVM.ParameterValue,
+                    CreatedBy = appParamVM.CreatedBy,
+                    ApplicationParameterId = appParamVM.ApplicationParameterId,
+                    ApplicationUser_Id = appParamVM.ApplicationUser_Id,
+                    CreationDate = appParamVM.CreationDate
+                };
+
+                SettingsHelper.Edit(aP);
+
+                return PartialView(aP);
             }
             catch (InvalidOperationException)
             {
@@ -162,10 +176,6 @@ namespace Talento.Controllers
             var retu = System.Web.HttpContext.Current.Session["AppSettings"] as String;
             return Content(retu);
         }
-
-        // Helpers
-
-
 
     }
 }
