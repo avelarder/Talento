@@ -65,8 +65,7 @@ namespace Talento.Core.Helpers
                         PreviousStatus = currentPosition.Status,
                     };
 
-                    LogHelper.Add(log);
-
+                    currentPosition.Logs.Add(log);
                     currentPosition.OpenStatus = OpenStatus.Screening;
                     int result = Db.SaveChanges();
                     tx.Complete();

@@ -152,7 +152,7 @@ namespace Talento.Controllers
                             break;
                     }
                 }
-                return RedirectToAction("Details", "Positions", new { id=candidate.Position_Id});
+                return RedirectToAction("Details", "Positions", new { id = candidate.Position_Id });
             }
             catch (Exception)
             {
@@ -168,7 +168,8 @@ namespace Talento.Controllers
         [Authorize(Roles = "Admin, PM, TL, TAG, RMG")]
         public JsonResult ValidEmail(string emailCandidate, string positionId)
         {
-            try {
+            try
+            {
                 int id = int.Parse(positionId);
                 if (PositionHelper.Get(id).Candidates.Where(x => x.Email.Trim().ToLower().Equals(emailCandidate.Trim().ToLower())).Count() > 0)
                 {
@@ -183,7 +184,7 @@ namespace Talento.Controllers
             {
                 return null;
             }
-            
+
         }
 
         private ActionResult New(CreateCandidateViewModel candidate, ActionResult actionError)
@@ -209,8 +210,9 @@ namespace Talento.Controllers
                         Positions = position,
                         FileBlobs = files
                     };
+
                     int result = CandidateHelper.Create(newCandidate);
-                    if (result!=-1)
+                    if (result != -1)
                     {
                         return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
                     }
@@ -234,7 +236,7 @@ namespace Talento.Controllers
         {
             return New(candidate, RedirectToAction("Index", "Dashboard", null));
         }
-        
+
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         public ActionResult CreateDetails(CreateCandidateViewModel candidate)

@@ -231,7 +231,7 @@
                                     var $form = $('#formnewprofile');
                                     if ($form.valid()) {
                                         $form.submit();
-                                        $("#complete-dialog").modal("hide");
+                                        $("#new-complete-dialog").modal("hide");
                                         setTimeout(function () { toastr.success("Profile has been added."); }, 2500)
                                     } else {
                                         return;
@@ -240,7 +240,7 @@
                                 error: function (error) {
                                     toastr.error("A profile with the specified email address cannot be registered.")
                                 }
-                            });    
+                            });
                     });
                         $("#Files").on("change", function () {
                         addFile();
@@ -308,7 +308,7 @@
                     }
                 }
 
-                $('#complete-dialog').on('hidden.bs.modal', function () {
+                $('#new-complete-dialog').on('hidden.bs.modal', function () {
                     $("body").removeClass("modal-open");
                     $.ajax({
                         type: "POST",
@@ -320,6 +320,7 @@
                         error: function (error) {
                         }
                     });
+                    clearFormValidation($("#new-complete-dialog").find("form"));
                     buildFileList();
                     setTimeout(stopUpdate, 2000);
                 });
@@ -337,6 +338,17 @@
                     });
                 }
 
+                // Clear Form from Validations -.-
+                function clearFormValidation(form) {
+                    form.find("[data-valmsg-summary=true]")
+                        .removeClass("validation-summary-errors")
+                        .addClass("validation-summary-valid")
+                        .find("ul").empty();
+                    form.find("[data-valmsg-replace]")
+                        .removeClass("field-validation-error")
+                        .addClass("field-validation-valid")
+                        .empty();
+                }
             }
 
         </script>
@@ -384,7 +396,7 @@
                                     <label class="control-label col-md-2" for="Email">Email </label>
                                     <div class="col-md-10">
                                         <input class="form-control text-box single-line" data-val="true" data-val-required="Email is required" id="Email" name="Email" type="email"
-                                               data-val-maxlength="The field Email Address must be a string or array type with a maximum length of '50'." data-val-maxlength-max="50"/>
+                                               data-val-maxlength="The field Email Address must be a string or array type with a maximum length of '50'." data-val-maxlength-max="50" />
                                         <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true" maxlength="50"></span>
                                     </div>
                                 </div>
