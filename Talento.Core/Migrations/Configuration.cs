@@ -793,7 +793,7 @@ namespace Talento.Core.Migrations
                         new ApplicationParameter
                         {
                             ApplicationSettingId = 1,
-                            ParameterName = "PageSize",
+                            ParameterName = "PageSize2",
                             ParameterValue = "10",
                             CreationDate = DateTime.Now.AddMinutes(5),
                             CreatedBy = manager.FindByEmail("Admin@example.com")
