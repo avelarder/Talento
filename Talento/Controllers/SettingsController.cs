@@ -107,28 +107,35 @@ namespace Talento.Controllers
 
         // POST: Settings/Edit/5
         [HttpPost]
-        [ChildAndAjaxActionOnly]
-        public ActionResult Edit(ApplicationParameterViewModel appParamVM)
+        public ActionResult Edit(ApplicationParameterViewModel appParameterVM)
         {
             try
             {
-                //ApplicationParameterViewModel ApplicationParameter = AutoMapper.Mapper.Map<ApplicationParameterViewModel>(SettingsHelper.GetById(applicationParameterVM.ApplicationParameterId));
+                ApplicationParameterViewModel ApplicationParameter = AutoMapper.Mapper.Map<ApplicationParameterViewModel>(SettingsHelper.GetById(appParameterVM.ApplicationSetting.ApplicationSettingId));
 
                 //if (ApplicationParameter == null)
                 //{
                 //    return HttpNotFound();
                 //}
+                string userId = User.Identity.GetUserId();
 
-                ApplicationParameter aP = new ApplicationParameter {
-                    ApplicationSetting = appParamVM.ApplicationSetting,
-                    ApplicationSettingId = appParamVM.ApplicationSettingId,
-                    ParameterName = appParamVM.ParameterName,
-                    ParameterValue = appParamVM.ParameterValue,
-                    CreatedBy = appParamVM.CreatedBy,
-                    ApplicationParameterId = appParamVM.ApplicationParameterId,
-                    ApplicationUser_Id = appParamVM.ApplicationUser_Id,
-                    CreationDate = appParamVM.CreationDate
+                //si no existe el SettingName lo agrego con el KeyName y el KeyValue (Create)
+                //si existe el SettingName llamo al helper Edit y agrego el KeyName y el KeyValue
+
+                ApplicationParameter aP = new ApplicationParameter
+                {
+                    ApplicationParameterId = ApplicationParameter.ApplicationParameterId,
+                    ApplicationSettingId = ApplicationParameter.ApplicationSettingId,
+                    ApplicationUser_Id = ApplicationParameter.ApplicationUser_Id,
+                    ApplicationSetting = ApplicationParameter.ApplicationSetting,
+                    
+                    ParameterName = appParameterVM.ParameterName,
+                    ParameterValue = appParameterVM.ParameterValue,
+                    CreationDate = DateTime.Now,
+                    CreatedBy = UserHelper.GetUserById(userId)
                 };
+
+                aP.ApplicationSetting.SettingName = appParameterVM.ApplicationSetting.SettingName;
 
                 SettingsHelper.Edit(aP);
 
@@ -136,7 +143,7 @@ namespace Talento.Controllers
             }
             catch (InvalidOperationException)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The designated Application Setting does not have a valid ID");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "LINQ...");
             }
         }
 

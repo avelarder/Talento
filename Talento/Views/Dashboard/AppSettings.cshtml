@@ -181,7 +181,7 @@
                             .empty();
                     }
 
-                    // On Form Submit Add-Parameter
+                    // On form submit Add-Parameter
                     $form.on("submit", function (event) {
                         event.preventDefault();
                         var $self = $(this);
@@ -200,8 +200,7 @@
                                 $.ajax({
                                     url: "/Settings/List"
                                 }).done(function (data) {
-                                    //$appContainer.html(data);
-                                    alert("ja");
+                                    $appContainer.html(data);
                                 });
 
                             }).fail(function (error) {
@@ -246,7 +245,7 @@
                         var $self = $(this);
                         if ($form.valid()) {
                             $.post({
-                                url: $self.attr("action"),
+                                url: "/Settings/Edit/", //$self.attr("action")
                                 data: $self.serialize()
                             }).done(function (response) {
                                 $('#complete-dialog').modal('hide');
@@ -258,7 +257,10 @@
                                 alertify.success('<b>Parameter was Edited</b>');
                                 // Reload List
                                 $.ajax({
-                                    //url: "/Settings/Edit"
+                                    url: "/Settings/EditSettingsForm/",
+                                    data: {
+                                        id: $(this).attr("data-id")
+                                    }
                                 }).done(function (data) {
                                     $appContainer.html(data);
                                 });

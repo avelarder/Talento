@@ -47,7 +47,8 @@ namespace Talento.Core.Helpers
                 // Filter
                 if (filter != "")
                 {
-                    var settingSearch = settings.Select(x => new {
+                    var settingSearch = settings.Select(x => new
+                    {
                         SettingName = x.ApplicationSetting.SettingName,
                         ParameterName = x.ParameterName,
                         ParameterValue = x.ParameterValue,
@@ -109,7 +110,7 @@ namespace Talento.Core.Helpers
                 }
 
                 var paginated = settings.ToList();
-                
+
                 return settings.ToList();
 
             }
@@ -150,21 +151,73 @@ namespace Talento.Core.Helpers
 
         public List<string> GetParameters(string prefix)
         {
-            return Db.ApplicationSettings.Where(s => s.SettingName.StartsWith(prefix)).Select(x=> x.SettingName).ToList();
+            return Db.ApplicationSettings.Where(s => s.SettingName.StartsWith(prefix)).Select(x => x.SettingName).ToList();
         }
 
-        public void Edit(ApplicationParameter aS)
+        public void Edit(ApplicationParameter aP)
         {
-            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).ApplicationSettingId = aS.ApplicationSetting.ApplicationSettingId; //
-            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).ParameterName = aS.ParameterName;//
-            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).ParameterValue = aS.ParameterValue;//
-            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).CreatedBy = aS.CreatedBy;//
-            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).ApplicationParameterId = aS.ApplicationParameterId; //
-            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).ApplicationUser_Id = aS.ApplicationUser_Id; //
-            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).ApplicationSetting.SettingName = aS.ApplicationSetting.SettingName;
-            Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aS.ApplicationParameterId).CreationDate = aS.CreationDate; //
-            
-            Db.SaveChanges();
+
+            ApplicationSetting asToChange = this.GetByName(aP.ApplicationSetting.SettingName); //SettingName nuevo
+            ApplicationParameter apToChange = this.GetById(aP.ApplicationParameterId); //Db.ApplicationSettings.Find(s => s....
+
+            if (asToChange.ApplicationParameter.Count() == 1)
+            {
+                if (aP.ApplicationSetting.SettingName != apToChange.ApplicationSetting.SettingName)
+                {
+                    asToChange.SettingName = apToChange.ApplicationSetting.SettingName;
+                }
+                apToChange.CreatedBy = aP.CreatedBy;
+                apToChange.CreationDate = aP.CreationDate;
+                apToChange.ParameterName = aP.ParameterName;
+                apToChange.ParameterValue = aP.ParameterValue;
+            }
+            else
+            {
+                if (aP.ApplicationSetting.SettingName != apToChange.ApplicationSetting.SettingName)
+                {
+                    if (apToChange != null)
+                    {
+                        Db.ApplicationParameter.Remove(apToChange);
+                        var appSettingDefault = aP.ApplicationSetting;
+                        var appSetting = new ApplicationSetting() {
+                            ApplicationParameter = new List<ApplicationParameter>(),
+                            SettingName = aP.ApplicationSetting.SettingName
+                        };
+                        appSetting.ApplicationParameter.Add(aP);
+                    }
+                }
+            }
+                apToChange.CreatedBy = aP.CreatedBy;
+                apToChange.CreationDate = aP.CreationDate;
+                apToChange.ParameterName = aP.ParameterName;
+                apToChange.ParameterValue = aP.ParameterValue;
+
+                var apDb = asToChange.ApplicationParameter.First(x => x.ApplicationParameterId == apToChange.ApplicationParameterId);
+                apDb = apToChange;
+                
+                Db.ApplicationSettings.Where(a => a.ApplicationSettingId == aP.ApplicationSettingId).
+                // Save DB
+                Db.SaveChanges();
+            }
+
+        //if (aP.ParameterName != apToChange.ParameterName) {
+        //    apToChange.ParameterName = aP.ParameterName;
+        //}
+        //if (aP.ParameterValue != apToChange.ParameterValue)
+        //{
+        //    apToChange.ParameterValue = aP.ParameterValue;
+        //}
+        //if (aP.ApplicationSetting.SettingName != aP.ApplicationSetting.SettingName)
+        //{
+        //    asToChange.SettingName = aP.ApplicationSetting.SettingName;
+        //}
+
+        //Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aP.ApplicationParameterId).ApplicationSetting.SettingName = aP.ApplicationSetting.SettingName;
+        //    Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aP.ApplicationParameterId).ParameterName = aP.ParameterName;
+        //    Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aP.ApplicationParameterId).ParameterValue = aP.ParameterValue;
+        //    Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aP.ApplicationParameterId).CreationDate = aP.CreationDate;
+        //    Db.ApplicationParameter.Single(x => x.ApplicationParameterId == aP.ApplicationParameterId).CreatedBy = aP.CreatedBy;
+
         }
     }
 }
