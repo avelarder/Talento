@@ -68,7 +68,6 @@ namespace Talento.Core.Helpers
                     LogHelper.Add(log);
 
                     currentPosition.OpenStatus = OpenStatus.Screening;
-
                     int result = Db.SaveChanges();
                     tx.Complete();
                     return result;
