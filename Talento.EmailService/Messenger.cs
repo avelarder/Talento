@@ -1,4 +1,5 @@
-﻿using System.Net.Mail;
+﻿using System.Collections.Generic;
+using System.Net.Mail;
 
 namespace Talento.EmailManager
 {
@@ -7,7 +8,7 @@ namespace Talento.EmailManager
         SmtpClient smtpServer = new SmtpClient("smtp.sendgrid.net", 465);
         string key = "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";
 
-        public void SendEmail(string toEmail, string fromEmail, string bcc, string cc, string subject, string body)
+        public void SendEmail(List<string> toEmail, string fromEmail, List<string> bcc,List<string> cc, string subject, string body)
         {
             MailMessage mMailMessage = new MailMessage();
 
@@ -15,19 +16,21 @@ namespace Talento.EmailManager
             {
                 mMailMessage.From = new MailAddress(fromEmail);
             }
-
-            mMailMessage.To.Add(new MailAddress(toEmail));
-
-            if (!string.IsNullOrEmpty(bcc))
+            foreach (string s in toEmail)
             {
-                mMailMessage.Bcc.Add(new MailAddress(bcc));
+                mMailMessage.To.Add(new MailAddress(s));
             }
-
-            if (!string.IsNullOrEmpty(cc))
+            
+            foreach (string s in bcc)
             {
-                mMailMessage.CC.Add(new MailAddress(cc));
+                mMailMessage.Bcc.Add(new MailAddress(s));
             }
-
+            
+            foreach (string s in cc)
+            {
+                mMailMessage.CC.Add(new MailAddress(s));
+            }
+            
             if (!string.IsNullOrEmpty(subject))
             {
                 mMailMessage.Subject = "Talento Web Application Notification";

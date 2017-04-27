@@ -3,7 +3,7 @@ namespace Talento.Core.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class devand495 : DbMigration
+    public partial class InitialCreate : DbMigration
     {
         public override void Up()
         {
