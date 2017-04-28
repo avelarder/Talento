@@ -104,11 +104,6 @@ namespace Talento.Core.Helpers
                         break;
                 }
                 // Pagination
-                if (!settings.Any())
-                {
-                    return null;
-                }
-
                 var paginated = settings.ToList();
 
                 return settings.ToList();
