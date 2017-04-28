@@ -751,7 +751,7 @@ namespace Talento.Core.Migrations
             context.SaveChanges();
 
             Position position6 = context.Positions.Find(6);
-            listId = new List<int> {7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            listId = new List<int> { 7, 8, 9, 10, 11, 12, 13, 14, 15 };
             List<Candidate> candidatesPosition6 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
 
             position6.Candidates = candidatesPosition6;
@@ -801,7 +801,7 @@ namespace Talento.Core.Migrations
                     CreationDate = DateTime.Now.AddHours(-1),
                     CreatedBy = manager.FindByEmail("Admin@example.com")
                 },
-           
+
                 new ApplicationSetting {
                     ApplicationSettingId = 5,
                     SettingName = "Sorting",
