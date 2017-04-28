@@ -128,15 +128,15 @@ namespace Talento.Core.Helpers
             //row to edit
             var appSettingToEdit = Db.ApplicationSetting.First(x => x.ApplicationSettingId == pApplicationSetting.ApplicationSettingId);
 
-            // Si ya existe la PK, eliminar la vieja y agregar una nueva
-            if (appSettingToEdit.SettingName != pApplicationSetting.SettingName || appSettingToEdit.ParameterName != pApplicationSetting.ParameterName)
-            {
-                if (appSettingToEdit != null)
-                {
-                    Db.ApplicationSetting.Remove(appSettingToEdit);
-                    Db.SaveChanges();
-                }
-            }
+            //// Si ya existe la PK, eliminar la vieja y agregar una nueva
+            //if (appSettingToEdit.SettingName != pApplicationSetting.SettingName || appSettingToEdit.ParameterName != pApplicationSetting.ParameterName)
+            //{
+            //    if (appSettingToEdit != null)
+            //    {
+            Db.ApplicationSetting.Remove(appSettingToEdit);
+            Db.SaveChanges();
+            //    }
+            //}
             
             //si no existe la PK se agrega
             appSettingToEdit.ApplicationUser_Id = pApplicationSetting.ApplicationUser_Id;

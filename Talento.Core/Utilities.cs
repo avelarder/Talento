@@ -17,6 +17,7 @@ namespace Talento.Core.Utilities
     {
         public static string GetSetting(string settingName, string parameterName)
         {
+            var current = HttpContext.Current;
             List<ApplicationSetting> settings = HttpContext.Current.Application["AppSettings"] as List<ApplicationSetting>;
             var retu = settings.Find(x => x.SettingName.ToLower() == settingName.ToLower() && x.ParameterName.ToLower() == parameterName);
             if (retu != null)
