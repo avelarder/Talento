@@ -7,13 +7,13 @@ namespace Talento.Core.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class devand495 : IMigrationMetadata
+    public sealed partial class InitialCreate : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(devand495));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
         
         string IMigrationMetadata.Id
         {
-            get { return "201704211855311_dev-and-495"; }
+            get { return "201704211855311_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

@@ -3,36 +3,24 @@ namespace Talento.Core.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class devand495 : DbMigration
+    public partial class InitialCreate : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "dbo.ApplicationParameters",
+                "dbo.ApplicationSettings",
                 c => new
                     {
                         ParameterName = c.String(nullable: false, maxLength: 60),
-                        ApplicationSettingId = c.Int(nullable: false),
-                        ApplicationParameterId = c.Int(nullable: false, identity: true),
+                        SettingName = c.String(nullable: false, maxLength: 60),
+                        ApplicationSettingId = c.Int(nullable: false, identity: true),
                         ParameterValue = c.String(nullable: false, maxLength: 160),
                         CreationDate = c.DateTime(nullable: false),
                         ApplicationUser_Id = c.String(nullable: false, maxLength: 128),
                     })
-                .PrimaryKey(t => new { t.ParameterName, t.ApplicationSettingId })
-                .ForeignKey("dbo.ApplicationSettings", t => t.ApplicationSettingId)
+                .PrimaryKey(t => new { t.ParameterName, t.SettingName })
                 .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
-                .Index(t => t.ApplicationSettingId)
                 .Index(t => t.ApplicationUser_Id);
-            
-            CreateTable(
-                "dbo.ApplicationSettings",
-                c => new
-                    {
-                        ApplicationSettingId = c.Int(nullable: false, identity: true),
-                        SettingName = c.String(nullable: false, maxLength: 60),
-                    })
-                .PrimaryKey(t => t.ApplicationSettingId)
-                .Index(t => t.SettingName, unique: true);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -229,11 +217,10 @@ namespace Talento.Core.Migrations
             DropForeignKey("dbo.PositionCandidates", "Position_Id", "dbo.Positions");
             DropForeignKey("dbo.FileBlobs", "Candidate_Id", "dbo.Candidates");
             DropForeignKey("dbo.Candidates", "CreatedBy_Id", "dbo.AspNetUsers");
-            DropForeignKey("dbo.ApplicationParameters", "ApplicationUser_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.ApplicationSettings", "ApplicationUser_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.ApplicationParameters", "ApplicationSettingId", "dbo.ApplicationSettings");
             DropIndex("dbo.PositionCandidates", new[] { "Candidate_Id" });
             DropIndex("dbo.PositionCandidates", new[] { "Position_Id" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
@@ -252,9 +239,7 @@ namespace Talento.Core.Migrations
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
-            DropIndex("dbo.ApplicationSettings", new[] { "SettingName" });
-            DropIndex("dbo.ApplicationParameters", new[] { "ApplicationUser_Id" });
-            DropIndex("dbo.ApplicationParameters", new[] { "ApplicationSettingId" });
+            DropIndex("dbo.ApplicationSettings", new[] { "ApplicationUser_Id" });
             DropTable("dbo.PositionCandidates");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.Tags");
@@ -267,7 +252,6 @@ namespace Talento.Core.Migrations
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.ApplicationSettings");
-            DropTable("dbo.ApplicationParameters");
         }
     }
 }

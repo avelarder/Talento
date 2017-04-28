@@ -40,7 +40,7 @@
     {
         <tr>
             <td>
-                @setting.ApplicationSetting.SettingName
+                @setting.SettingName
             </td>
             <td>
                 @setting.ParameterName
@@ -67,4 +67,4 @@
 </table>
 
 @* Pagination NavBar *@
-@Html.PagedListPager((IPagedList)Model, page => Url.Action("List", "Settings", new { page, filter = ViewBag.CurrentFilter }))
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("List", "Settings", new { page, filter = ViewBag.CurrentFilter, orderBy = ViewBag.CurrentSort }))
