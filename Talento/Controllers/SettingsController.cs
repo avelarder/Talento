@@ -140,6 +140,11 @@ namespace Talento.Controllers
             }
         }
 
+        public FileResult DownloadTiff()
+        {
+            return new FilePathResult("", "");
+        }
+
         // GET: Settings/Delete/5
         public ActionResult Delete(int id)
         {

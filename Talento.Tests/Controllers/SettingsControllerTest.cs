@@ -102,6 +102,66 @@ namespace Talento.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(ActionResult));
         }
 
+        [TestMethod]
+        public void EditSettingTest()
+        {
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
+            Mock<IApplicationSetting> mockSettingsHelper = mocks.Create<IApplicationSetting>();
+            Mock<ApplicationSetting> mockAppSetting = mocks.Create<ApplicationSetting>();
+            mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
+            Mock<ControllerContext> mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+            var request = new Mock<HttpRequestBase>();
+
+            ApplicationParameterViewModel appParamVM = new ApplicationParameterViewModel
+            {
+                ParameterName = "aName",
+                ParameterValue = "someValues",
+                CreationDate = DateTime.Now,
+                ApplicationUser_Id = "1",
+                ApplicationParameterId = 1,
+                ApplicationSettingId = 1,
+                ApplicationSetting = mockAppSetting.Object,
+                CreatedBy = (ApplicationUser)mockContext.Object.HttpContext.User
+            };
+
+            SettingsController controller = new SettingsController(mockSettingsHelper.Object, mockUserHelper.Object)
+            {
+                ControllerContext = mockContext.Object
+            };
+
+            var result = controller.Edit(appParamVM);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(PartialViewResult));
+        }
+
+        [TestMethod]
+        public void DownloadTiff()
+        {
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
+            Mock<IApplicationSetting> mockSettingsHelper = mocks.Create<IApplicationSetting>();
+            Mock<ControllerContext> mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+
+            SettingsController controller = new SettingsController(mockSettingsHelper.Object, mockUserHelper.Object)
+            {
+                ControllerContext = mockContext.Object
+            };
+
+            var result = controller.DownloadTiff();
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(FilePathResult));
+            Assert.IsTrue(((FilePathResult)result).ContentType == "");
+            Assert.IsTrue(((FilePathResult)result).FileName == "");
+        }
+
         // Dummy Data for ApplicationSettings
         private List<ApplicationParameter> GetApplicationParameters()
         {
