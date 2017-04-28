@@ -115,14 +115,6 @@ namespace Talento
         }
     }
 
-    // Configure Global Application Settings
-    public class ApplicationSettingsManager
-    {
-        public ApplicationSettingsManager(IApplicationSetting settingsHelper)
-        {
-        }
-    }
-
     //public class ApplicationRoleManager : RoleManager<ApplicationRole>
     //{
     //    public ApplicationRoleManager(IRoleStore<ApplicationRole, string> roleStore)

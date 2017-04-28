@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Talento.Core;
+using Talento.Core.Utilities;
 using Talento.Entities;
 using Talento.Models;
 
@@ -45,7 +46,14 @@ namespace Talento.Controllers
 
             var parameterSettings = SettingsHelper.GetPagination(orderBy, filter);
             // Pagination
+            var pageSizeValue = UtilityApplicationSettings.GetSetting("pagination", "pagesize"); // Setting Parameter
             var paginated = parameterSettings.ToPagedList(page, pageSize);
+
+            if ( pageSizeValue != null)
+            {
+                paginated = parameterSettings.ToPagedList(page, Int32.Parse(pageSizeValue));
+            } 
+            
             int total = parameterSettings.Count();
             int totalPages = (total - 1) / pageSize + 1;
             
@@ -172,13 +180,5 @@ namespace Talento.Controllers
 
             return Json(retu, JsonRequestBehavior.AllowGet);
         }
-
-        // Test Action
-        public ActionResult Test()
-        {
-            var retu = System.Web.HttpContext.Current.Session["AppSettings"] as String;
-            return Content(retu);
-        }
-
     }
 }
