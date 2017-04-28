@@ -13,7 +13,7 @@
             <div id="parameter-name" class="form-group">
                 @Html.LabelFor(model => model.SettingName, htmlAttributes: new { @class = "control-label col-md-4" })
                 <div class="col-md-8">
-                    @Html.EditorFor(model => model.SettingName, new { htmlAttributes = new { @class = "form-control typeahead", placeholder = "Add new setting", autocomplete = "off" } }) 
+                    @Html.EditorFor(model => model.SettingName, new { htmlAttributes = new { @class = "form-control typeahead add-setting-name", placeholder = "Add new setting", autocomplete = "off" } }) 
                     @Html.ValidationMessageFor(model => model.SettingName, "", new { @class = "text-danger" })
                 </div>
             </div>
