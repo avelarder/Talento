@@ -116,15 +116,14 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
             var request = new Mock<HttpRequestBase>();
 
-            ApplicationParameterViewModel appParamVM = new ApplicationParameterViewModel
+            ApplicationSettingModel appParamVM = new ApplicationSettingModel
             {
+                SettingName = "aSettingName",
                 ParameterName = "aName",
                 ParameterValue = "someValues",
-                CreationDate = DateTime.Now,
-                ApplicationUser_Id = "1",
-                ApplicationParameterId = 1,
+                CreatedOn = DateTime.Now,
+                CreatedBy_Id = "1",
                 ApplicationSettingId = 1,
-                ApplicationSetting = mockAppSetting.Object,
                 CreatedBy = (ApplicationUser)mockContext.Object.HttpContext.User
             };
 
