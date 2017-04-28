@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using Talento.Entities;
 
 namespace Talento.Core.Helpers
@@ -11,11 +12,13 @@ namespace Talento.Core.Helpers
     {
         IPosition PositionHelper;
         ICustomUser UserHelper;
+        IPositionLog LogHelper;
 
-        public CandidateHelper(Core.Data.ApplicationDbContext db, ICustomUser userHelper, IPosition positionHelper) : base(db)
+        public CandidateHelper(Core.Data.ApplicationDbContext db, IPositionLog logHelper, ICustomUser userHelper, IPosition positionHelper) : base(db)
         {
             PositionHelper = positionHelper;
             UserHelper = userHelper;
+            LogHelper = logHelper;
         }
 
         private int CandidateToPosition(Candidate candidate, Position position)
@@ -37,37 +40,42 @@ namespace Talento.Core.Helpers
         {
             try
             {
-                Position positionToLog = newCandidate.Positions.Last();
-                Position currentPosition = PositionHelper.Get(newCandidate.Positions.First().Id);
-
-                foreach (Candidate c in currentPosition.Candidates)
+                using (var tx = new TransactionScope(TransactionScopeOption.Required))
                 {
-                    //If Email is already in the position return -1
-                    if (c.Email.Trim().ToLower().Contains(newCandidate.Email.Trim().ToLower()))
+                    Position currentPosition = PositionHelper.Get(newCandidate.Positions.First().Id);
+
+                    foreach (Candidate c in currentPosition.Candidates)
                     {
-                        return -1;
+                        //If Email is already in the position return -1
+                        if (c.Email.Trim().ToLower().Contains(newCandidate.Email.Trim().ToLower()))
+                        {
+                            return -1;
+                        }
                     }
+
+                    Db.Candidates.Add(newCandidate);
+
+                    Log log = new Log
+                    {
+                        Action = Entities.Action.Edit,
+                        ActualStatus = currentPosition.Status,
+                        User = newCandidate.CreatedBy,
+                        Date = DateTime.Now,
+                        Description = String.Format("Candidate {0} was attached to the position", newCandidate.Email),
+                        PreviousStatus = currentPosition.Status,
+                    };
+
+                    currentPosition.Logs.Add(log);
+                    currentPosition.OpenStatus = OpenStatus.Screening;
+                    int result = Db.SaveChanges();
+                    tx.Complete();
+                    return result;
                 }
-                Db.Candidates.Add(newCandidate);
-
-                Log log = new Log
-                {
-                    Action = Entities.Action.Edit,
-                    ActualStatus = positionToLog.Status,
-                    User = newCandidate.CreatedBy,
-                    Date = DateTime.Now,
-                    Description = String.Format("Candidate {0} was attached to the position", newCandidate.Email),
-                    PreviousStatus = positionToLog.Status
-                };
-
-                PositionHelper.Get(positionToLog.Id).Logs.Add(log);
-
-                return Db.SaveChanges();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
@@ -89,7 +97,7 @@ namespace Talento.Core.Helpers
                 Db.Candidates.Single(x => x.Id == editCandidate.Id).FileBlobs = files;
 
                 Db.SaveChanges();
-                
+
                 Position positionToLog = editCandidate.Positions.Last();
 
                 Log log = new Log

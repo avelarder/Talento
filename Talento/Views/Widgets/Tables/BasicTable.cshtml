@@ -6,9 +6,9 @@
 }
 @using (Html.BeginForm("Index", "Dashboard", FormMethod.Get))
 {
-        <div class="form-group col-sm-2">
-            <label for="FilterBy" class="control-label">Filter By:</label>
-            @Html.DropDownList("FilterBy", new List<SelectListItem>
+    <div class="form-group col-sm-2">
+        <label for="FilterBy" class="control-label">Filter By:</label>
+        @Html.DropDownList("FilterBy", new List<SelectListItem>
                 {
                         new SelectListItem() {Text = "Status", Value="Status"},
                         new SelectListItem() {Text = "Title", Value="Title"},
@@ -16,16 +16,16 @@
                         new SelectListItem() {Text = "EM", Value="EM"},
                         new SelectListItem() {Text = "PM", Value="PM"},
                 }, new { @class = "form-control" })
-        </div>
+    </div>
 
         <div class="form-group col-sm-4">
             <label for="searchString" class="control-label">Filter:</label>
             @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control" })
         </div>
-    <div class="form-group">
-        <hr />
-        <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Search" style="margin-top: 4px" />
-    </div>
+        <div class="form-group">
+            <hr />
+            <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Search" style="margin-top: 4px" />
+        </div>
 }
 <table class="table pmd-table table-hover table-striped display responsive nowrap" cellspacing="0" style="width:100%">
     <tr>
@@ -122,14 +122,15 @@
                         <div class="form-group">
                             <label class="control-label col-md-2" for="Name">Name </label>
                             <div class="col-md-10">
-                                <input class="form-control text-box single-line" data-val="true" data-val-required="Name is required" id="Name" name="Name" type="text" />
+                                <input class="form-control text-box single-line" data-val="true" data-val-required="Name is required" id="Name" name="Name" type="text" maxlength="50"
+                                       data-val-maxlength="The field Email Address must be a string or array type with a maximum length of '50'." data-val-maxlength-max="50" />
                                 <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-2" for="Email">Email </label>
                             <div class="col-md-10">
-                                <input class="form-control text-box single-line" data-val="true" data-val-required="Email is required" id="Email" name="Email" type="email"
+                                <input class="form-control text-box single-line" data-val="true" data-val-required="Email is required" id="Email" name="Email" type="email" maxlength="50"
                                        data-val-maxlength="The field Email Address must be a string or array type with a maximum length of '50'." data-val-maxlength-max="50" />
                                 <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true"></span>
                             </div>
@@ -144,14 +145,14 @@
                         <div class="form-group">
                             <label class="control-label col-md-2" for="Competencies">Competencies </label>
                             <div class="col-md-10">
-                                <input class="form-control text-box single-line" data-val="true" data-val-maxlength="The field Competencies must be a string" data-val-required="Competencies is required" id="Competencies" name="Competencies" type="text" />
+                                <input class="form-control text-box single-line" data-val="true" data-val-maxlength="The field Competencies must be a string" data-val-required="Competencies is required" id="Competencies" name="Competencies" type="text" maxlength="300" />
                                 <span class="field-validation-valid text-danger" data-valmsg-for="Competencies" data-valmsg-replace="true"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-2" for="Description">Description </label>
                             <div class="col-md-10">
-                                <input class="form-control text-box single-line" data-val="true" data-val-maxlength="The field Description must be a string" data-val-required="Description is required" id="Description" name="Description" type="text" />
+                                <input class="form-control text-box single-line" data-val="true" data-val-maxlength="The field Description must be a string" data-val-required="Description is required" id="Description" name="Description" type="text" maxlength="300" />
                                 <span class="field-validation-valid text-danger" data-valmsg-for="Description" data-valmsg-replace="true"></span>
                             </div>
                         </div>
@@ -167,7 +168,7 @@
                 </div>
                 <div class="pmd-modal-action pmd-modal-bordered text-right">
                     <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                    <input  id="buttonnewprofile" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm"/>
+                    <input id="buttonnewprofile" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm" />
                 </div>
             </form>
         </div>
@@ -179,7 +180,7 @@
 <script>
     window.onload = function () {
         (function ($) {
-           
+
             function addFile() {
                 var formData = new FormData();
                 formData.append('image', $('input[type=file]')[0].files[0]);
@@ -216,7 +217,7 @@
                     error: function (error) {
                         updatelist();
                     }
-                    
+
                 });
             }
 
@@ -267,25 +268,40 @@
                     $(".field-validation-error").hide();
                 });
                 $("#buttonnewprofile").click(function (evt) {
-                    evt.preventDefault();
-                    var $form = $('#formnewprofile');
-                    if ($form.valid()) {
-                        $form.submit();
-                        $("#complete-dialog").modal("hide");
-                        toastr.options = {
-                            "debug": false,
-                            "positionClass": "toast-top-center",
-                            "onclick": null,
-                            "fadeIn": 500,
-                            "fadeOut": 2000,
-                            "timeOut": 6000,
-                            "extendedTimeOut": 2000
-                        }
-                        setTimeout(function () { toastr.success("Profile has been added."); }, 2500)
-                    } else {
-                        return;
-
+                    toastr.options = {
+                        "debug": false,
+                        "positionClass": "toast-top-center",
+                        "onclick": null,
+                        "fadeIn": 500,
+                        "fadeOut": 2000,
+                        "timeOut": 6000,
+                        "extendedTimeOut": 2000
                     }
+                    var emailCandidate = $("#Email").val();
+                    var positionId = $("#Position_Id").val();
+                    $.ajax({
+                        type: "POST",
+                        url: '/Candidate/ValidEmail',
+                        dataType: 'json',
+                        data: {
+                            emailCandidate: emailCandidate,
+                            positionId: positionId
+                        },
+                        success: function (response) {
+                            evt.preventDefault();
+                            var $form = $('#formnewprofile');
+                            if ($form.valid()) {
+                                $form.submit();
+                                $("#complete-dialog").modal("hide");
+                                setTimeout(function () { toastr.success("Profile has been added."); }, 2500)
+                            } else {
+                                return;
+                            }
+                        },
+                        error: function (error) {
+                            toastr.error("A profile with the specified email address cannot be registered.")
+                        }
+                    });
                 });
                 $("#Files").on("change", function () {
                     addFile();
