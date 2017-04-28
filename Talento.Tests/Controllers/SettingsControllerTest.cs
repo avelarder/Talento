@@ -38,15 +38,15 @@ namespace Talento.Tests.Controllers
                 Id = "pablo@example.com",
                 Email = "pablo@example.com"
             };
-            ApplicationSettingsViewModel aS = new ApplicationSettingsViewModel
+            ApplicationSettingCreateModel aS = new ApplicationSettingCreateModel
             {
                 SettingName = "aName",
                 ParameterName = "aParameterName",
-                ParameterValue = "Some parameters values",
-                CreatedOn = DateTime.Now,
-                CreatedBy = userTest
+                ParameterValue = "Some parameters values"
             };
 
+            ApplicationSetting appSetting = new ApplicationSetting();
+            mockSettingsHelper.Setup(x => x.Create(appSetting));
             mockUserHelper.Setup(p => p.GetUserByEmail("pablo@example.com")).Returns(userTest);
             SettingsController controller = new SettingsController(mockSettingsHelper.Object, mockUserHelper.Object)
             {
@@ -108,40 +108,103 @@ namespace Talento.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(ActionResult));
         }
 
+        [TestMethod]
+        public void EditSettingTest()
+        {
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
+            Mock<IApplicationSetting> mockSettingsHelper = mocks.Create<IApplicationSetting>();
+            Mock<ApplicationSetting> mockAppSetting = mocks.Create<ApplicationSetting>();
+            mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
+            Mock<ControllerContext> mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+            var request = new Mock<HttpRequestBase>();
+
+            ApplicationSettingModel appParamVM = new ApplicationSettingModel
+            {
+                SettingName = "aSettingName",
+                ParameterName = "aName",
+                ParameterValue = "someValues",
+                CreatedOn = DateTime.Now,
+                CreatedBy_Id = "1",
+                ApplicationSettingId = 1,
+                CreatedBy = (ApplicationUser)mockContext.Object.HttpContext.User
+            };
+
+            SettingsController controller = new SettingsController(mockSettingsHelper.Object, mockUserHelper.Object)
+            {
+                ControllerContext = mockContext.Object
+            };
+
+            var result = controller.Edit(appParamVM);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(PartialViewResult));
+        }
+
+        [TestMethod]
+        public void DownloadTiffTest()
+        {
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
+            Mock<IApplicationSetting> mockSettingsHelper = mocks.Create<IApplicationSetting>();
+            Mock<ControllerContext> mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+
+            SettingsController controller = new SettingsController(mockSettingsHelper.Object, mockUserHelper.Object)
+            {
+                ControllerContext = mockContext.Object
+            };
+
+            var result = controller.DownloadTiff();
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(FilePathResult));
+            Assert.IsTrue(((FilePathResult)result).ContentType == "");
+            Assert.IsTrue(((FilePathResult)result).FileName == "");
+        }
+
         // Dummy Data for ApplicationSettings
-        private List<ApplicationParameter> GetApplicationParameters()
+        private List<ApplicationSetting> GetApplicationParameters()
         {
             ApplicationUser user = new ApplicationUser { Email = "admin@example.com", UserName = "admin@example.com" };
 
             // ApplicationSetting Pagination 
-            var listParam = new List<ApplicationParameter> {
-                    new ApplicationParameter {
+            var listParam = new List<ApplicationSetting> {
+                    new ApplicationSetting {
                         ApplicationSettingId = 1,
                         CreatedBy = user,
                         CreationDate = DateTime.Now.AddHours(1),
                         ParameterName = "PageSize",
-                        ParameterValue = "10"
+                        ParameterValue = "10",
+                        SettingName = "Pagination"
                     },
-                    new ApplicationParameter {
+                    new ApplicationSetting {
                         ApplicationSettingId = 1,
                         CreatedBy = user,
                         CreationDate = DateTime.Now.AddHours(2),
                         ParameterName = "Status",
-                        ParameterValue = "enabled"
+                        ParameterValue = "enabled",
+                        SettingName = "Pagination"
                     },
-                    new ApplicationParameter {
+                    new ApplicationSetting {
                         ApplicationSettingId = 2,
                         CreatedBy = user,
                         CreationDate = DateTime.Now.AddHours(1),
                         ParameterName = "DefaultFilterBy",
-                        ParameterValue = "CreationTime"
+                        ParameterValue = "CreationTime",
+                        SettingName = "Filtering"
                     },
-                    new ApplicationParameter {
+                    new ApplicationSetting {
                         ApplicationSettingId = 2,
                         CreatedBy = user,
                         CreationDate = DateTime.Now.AddHours(2),
                         ParameterName = "Status",
-                        ParameterValue = "enabled"
+                        ParameterValue = "enabled",
+                        SettingName = "Filtering"
                     }
                 };
             return listParam;

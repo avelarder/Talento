@@ -1,32 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Talento.Entities
 {
     public class ApplicationSetting
-    {       
+    {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ApplicationSettingId { get; set; }
 
         [Required]
         [StringLength(60, ErrorMessage = "Setting Name is required")]
-        [Index(IsUnique = true)]
         public string SettingName { get; set; }
-
-        public object FirstOrDefault()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual ICollection<ApplicationParameter> ApplicationParameter { get; set; }
-    }
-
-    public class ApplicationParameter
-    { 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ApplicationParameterId { get; set; }
 
         [Required]
         [StringLength(60, ErrorMessage = "Parameter Name is required")]
@@ -43,10 +28,5 @@ namespace Talento.Entities
         [Required]
         [ForeignKey("ApplicationUser_Id")]
         public virtual ApplicationUser CreatedBy { get; set; }
-
-        [Required]
-        public int ApplicationSettingId { get; set; }
-        [ForeignKey("ApplicationSettingId")]
-        public virtual ApplicationSetting ApplicationSetting { get; set; }
     }
 }
