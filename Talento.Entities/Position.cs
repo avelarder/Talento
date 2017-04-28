@@ -76,7 +76,7 @@ namespace Talento.Entities
         public DateTime? LastClosedDate { get; set; }
         
         [Required(ErrorMessage = "OpenStatus is required")]
-        [DefaultValue("Open")]
+        [DefaultValue("New")]
         public OpenStatus OpenStatus { get; set; }
 
         public virtual ICollection<Candidate> Candidates { get; set; }
@@ -94,6 +94,7 @@ namespace Talento.Entities
 
     public enum OpenStatus
     {
+        New = 0,
         Screening = 1,
         Interviewing = 2,
         Offered = 3   

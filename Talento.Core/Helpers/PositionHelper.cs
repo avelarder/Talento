@@ -117,8 +117,10 @@ namespace Talento.Core.Helpers
 
         public Position Get(int Id)
         {
-            var position = Db.Positions.Single(x => x.Id == Id);
-            //position.Tags = Tags.GetByPositionId(position.Id);
+            var position = Db.Positions
+                .Include("Owner")
+                .Include("PortfolioManager")
+                .Single(x => x.Id == Id);
 
             return position;
         }

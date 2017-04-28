@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using Talento.Core;
@@ -18,9 +17,9 @@ namespace Talento.Controllers
         ICandidate CandidateHelper;
         IPosition PositionHelper;
         ICustomUser UserHelper;
-        IMessenger emailManager;
+        IMessenger EmailManager;
 
-        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPosition positionHelper, IMessenger EmailManager)
+        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPosition positionHelper, IMessenger emailManager)
         {
             EmailManager = emailManager;
             CandidateHelper = candidateHelper;
@@ -97,6 +96,7 @@ namespace Talento.Controllers
         [Authorize]
         public ActionResult Edit(int id, int positionId)
         {
+            Session["files"] = null;
             EditCandidateViewModel candidate = AutoMapper.Mapper.Map<EditCandidateViewModel>(CandidateHelper.Get(id));
             candidate.Position_Id = positionId;
             Position currentPosition = PositionHelper.Get(positionId);
@@ -104,11 +104,6 @@ namespace Talento.Controllers
             if (!currentPosition.Candidates.Any(x => x.Id.Equals(candidate.Id)))
             {
                 return HttpNotFound();
-            }
-
-            if (currentPosition.Status == Status.Cancelled || currentPosition.Status == Status.Closed)
-            {
-                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The information you are looking for is not available");
             }
 
             if (candidate == null)
@@ -155,7 +150,7 @@ namespace Talento.Controllers
                             break;
                     }
                 }
-                return RedirectToAction("Index", "Dashboard", null);
+                return RedirectToAction("Details", "Positions", new { id = candidate.Position_Id });
             }
             catch (Exception)
             {
@@ -166,6 +161,28 @@ namespace Talento.Controllers
         public ActionResult Manage()
         {
             return PartialView();
+        }
+
+        [Authorize(Roles = "Admin, PM, TL, TAG, RMG")]
+        public JsonResult ValidEmail(string emailCandidate, string positionId)
+        {
+            try
+            {
+                int id = int.Parse(positionId);
+                if (PositionHelper.Get(id).Candidates.Where(x => x.Email.Trim().ToLower().Equals(emailCandidate.Trim().ToLower())).Count() > 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return Json(new { valid = true });
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
         }
 
         private ActionResult New(CreateCandidateViewModel candidate, ActionResult actionError)
@@ -191,13 +208,11 @@ namespace Talento.Controllers
                         Positions = position,
                         FileBlobs = files
                     };
+
                     int result = CandidateHelper.Create(newCandidate);
-                    switch (result)
+                    if (result != -1)
                     {
-                        case 4: return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
-                        case 6: return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
-                        case -1:
-                            break;
+                        return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
                     }
                 }
                 else
@@ -219,7 +234,6 @@ namespace Talento.Controllers
         {
             return New(candidate, RedirectToAction("Index", "Dashboard", null));
         }
-
 
         [HttpPost]
         [ValidateJsonAntiForgeryToken]

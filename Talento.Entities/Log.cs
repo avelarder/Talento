@@ -31,6 +31,8 @@ namespace Talento.Entities
 
         [Required]
         public Status ActualStatus { get; set; }
+
+        public virtual Position Position { get; set; }
     }
 
     public enum Action
