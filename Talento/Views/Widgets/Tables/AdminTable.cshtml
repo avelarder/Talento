@@ -4,6 +4,11 @@
     ViewBag.Title = "Widgets";
     ViewBag.BodyClass = "dashboard-home";
 }
+
+<form method="get" action="/Dashboard/DownloadTiffTemplate">
+    <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Download TIFF" style="margin-top: 4px" />
+</form>
+
 @using (Html.BeginForm("Index", "Dashboard", FormMethod.Get))
 {
     <p>
@@ -24,7 +29,7 @@
     </p>
     <div class="form-group">
         <hr />
-        <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Search" style="margin-top: 4px"/>
+        <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Search" style="margin-top: 4px" />
     </div>
 }
 

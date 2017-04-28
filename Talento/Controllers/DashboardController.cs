@@ -129,5 +129,12 @@ namespace Talento.Controllers
         {
             return PartialView();
         }
+
+        [Authorize]
+        [HttpGet]
+        public FileResult DownloadTiffTemplate()
+        {
+            return new FilePathResult("~/Content/Files/Template_TIFF.doc", "application/ms-word");
+        }
     }
 }
