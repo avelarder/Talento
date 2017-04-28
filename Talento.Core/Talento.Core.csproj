@@ -72,9 +72,9 @@
     <Compile Include="ICustomPagingList.cs" />
     <Compile Include="IPosition.cs" />
     <Compile Include="ITag.cs" />
-    <Compile Include="Migrations\201704211855311_dev-and-495.cs" />
-    <Compile Include="Migrations\201704211855311_dev-and-495.Designer.cs">
-      <DependentUpon>201704211855311_dev-and-495.cs</DependentUpon>
+    <Compile Include="Migrations\201704211855311_InitialCreate.cs" />
+    <Compile Include="Migrations\201704211855311_InitialCreate.Designer.cs">
+      <DependentUpon>201704211855311_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -93,8 +93,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704211855311_dev-and-495.resx">
-      <DependentUpon>201704211855311_dev-and-495.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704211855311_InitialCreate.resx">
+      <DependentUpon>201704211855311_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

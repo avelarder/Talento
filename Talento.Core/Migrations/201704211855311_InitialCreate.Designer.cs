@@ -13,7 +13,7 @@ namespace Talento.Core.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201704211855311_dev-and-495"; }
+            get { return "201704211855311_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

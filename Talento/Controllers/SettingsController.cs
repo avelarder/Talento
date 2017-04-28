@@ -24,11 +24,8 @@ namespace Talento.Controllers
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<ApplicationSetting, ApplicationSettingModels>()
-                    .ForMember(apsm => apsm.ApplicationSettingId, aps => aps.MapFrom(s => s.ApplicationSettingId))
-                    .ForMember(apsm => apsm.ApplicationParameter, aps => aps.MapFrom(s => s.ApplicationParameter));
-                cfg.CreateMap<ApplicationParameter, ApplicationParameterViewModel>();
-                cfg.CreateMap<ApplicationSetting, ApplicationSettingsViewModel>();
+                cfg.CreateMap<ApplicationSetting, ApplicationSettingModel>()
+                    .ForMember(apsm => apsm.ApplicationSettingId, aps => aps.MapFrom(s => s.ApplicationSettingId));
             });
         }
 
@@ -44,6 +41,7 @@ namespace Talento.Controllers
             ViewBag.SortDate = (orderBy == "CreationDate") ? "CreationDate_asc" : "CreationDate";
             ViewBag.SortUser = (orderBy == "CreatedBy") ? "CreatedBy_asc" : "CreatedBy";
             ViewBag.CurrentFilter = filter;
+            ViewBag.CurrentSort = orderBy;
 
             var parameterSettings = SettingsHelper.GetPagination(orderBy, filter);
             // Pagination
@@ -61,7 +59,7 @@ namespace Talento.Controllers
 
         // POST: Settings/New
         [HttpPost]
-        public ActionResult Create(ApplicationSettingsViewModel applicationSetting)
+        public ActionResult Create(ApplicationSettingCreateModel applicationSetting)
         {
             try
             {
@@ -72,14 +70,10 @@ namespace Talento.Controllers
                     ApplicationSetting aS = new ApplicationSetting
                     {
                         SettingName = applicationSetting.SettingName,
-                        ApplicationParameter = new List<ApplicationParameter> {
-                        new ApplicationParameter {
-                            ParameterName = applicationSetting.ParameterName,
-                            ParameterValue = applicationSetting.ParameterValue,
-                            CreationDate = DateTime.Now,
-                            CreatedBy = UserHelper.GetUserById(user)
-                        }
-                    }
+                        ParameterName = applicationSetting.ParameterName,
+                        ParameterValue = applicationSetting.ParameterValue,
+                        CreationDate = DateTime.Now,
+                        CreatedBy = UserHelper.GetUserById(user),
                     };
                     SettingsHelper.Create(aS);
                     return new HttpStatusCodeResult(200);
@@ -100,43 +94,44 @@ namespace Talento.Controllers
         // GET: Settings/Edit/5
         public ActionResult EditSettingsForm(int id)
         {
-            ApplicationParameterViewModel editApplicationSettingsVM = AutoMapper.Mapper.Map<ApplicationParameterViewModel>(SettingsHelper.GetById(id));
+            ApplicationSettingModel editApplicationSettingsVM = AutoMapper.Mapper.Map<ApplicationSettingModel>(SettingsHelper.GetById(id));
 
             return PartialView(editApplicationSettingsVM);
         }
 
         // POST: Settings/Edit/5
         [HttpPost]
-        [ChildAndAjaxActionOnly]
-        public ActionResult Edit(ApplicationParameterViewModel appParamVM)
+        public ActionResult Edit(ApplicationSettingModel appParameterVM)
         {
             try
             {
-                //ApplicationParameterViewModel ApplicationParameter = AutoMapper.Mapper.Map<ApplicationParameterViewModel>(SettingsHelper.GetById(applicationParameterVM.ApplicationParameterId));
+                ApplicationSettingModel ApplicationParameter = AutoMapper.Mapper.Map<ApplicationSettingModel>(SettingsHelper.GetById(appParameterVM.ApplicationSettingId));
 
-                //if (ApplicationParameter == null)
-                //{
-                //    return HttpNotFound();
-                //}
+                if (ApplicationParameter == null)
+                {
+                    return HttpNotFound();
+                }
+                string userId = User.Identity.GetUserId();
 
-                ApplicationParameter aP = new ApplicationParameter {
-                    ApplicationSetting = appParamVM.ApplicationSetting,
-                    ApplicationSettingId = appParamVM.ApplicationSettingId,
-                    ParameterName = appParamVM.ParameterName,
-                    ParameterValue = appParamVM.ParameterValue,
-                    CreatedBy = appParamVM.CreatedBy,
-                    ApplicationParameterId = appParamVM.ApplicationParameterId,
-                    ApplicationUser_Id = appParamVM.ApplicationUser_Id,
-                    CreationDate = appParamVM.CreationDate
+                ApplicationSetting aP = new ApplicationSetting
+                {
+                    ApplicationUser_Id = ApplicationParameter.CreatedBy_Id,
+                    ApplicationSettingId = ApplicationParameter.ApplicationSettingId,
+                    SettingName = appParameterVM.SettingName,
+                    ParameterName = appParameterVM.ParameterName,
+                    ParameterValue = appParameterVM.ParameterValue,
+                    CreationDate = DateTime.Now,
+                    CreatedBy = UserHelper.GetUserById(userId)
+                    
                 };
 
                 SettingsHelper.Edit(aP);
-
-                return PartialView(aP);
+                //return null;
+                return new HttpStatusCodeResult(200); 
             }
-            catch (InvalidOperationException)
+            catch (Exception)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "The designated Application Setting does not have a valid ID");
+                return new HttpStatusCodeResult(500);
             }
         }
 
