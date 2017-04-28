@@ -61,7 +61,7 @@ namespace Talento.Controllers
             return File(ms.GetBuffer(), "application/octet-stream", "MailNotification.txt");
         }
 
-        //Charlie: call this action when generate a feedback interview
+        //Call this action when generate a feedback interview
         private ActionResult InterviewFeedback(CandidateModel model, Position toapply, List<ApplicationUser> recipients)
         {
             MemoryStream ms = new MemoryStream();
@@ -85,6 +85,39 @@ namespace Talento.Controllers
             tw.Close();
             //emailManager.SendEmail(recip, "talento@tcs.com", bcc, cc, "Talento notification messenger", body);
             return File(ms.GetBuffer(), "application/octet-stream", "MailExample.txt");
+        }
+
+        //Call this action when a feedback interview change status
+        public ActionResult InterviewFeedbackNewStatus(EditCandidateViewModel model, Position toapply, List<ApplicationUser> recipients)
+        {
+            if (model.Status == CandidateStatus.Accepted)
+            {
+                MemoryStream ms = new MemoryStream();
+                TextWriter tw = new StreamWriter(ms);
+                string callbackUrl = Url.Action("Details", "Positions", new { toapply.Id }, protocol: Request.Url.Scheme);
+                string body = model.Email + "has been accepted for " + toapply.Title + ", reported by " + User.Identity.Name + "." +
+                                " Please visit the following URL for more information: " + callbackUrl;
+                tw.WriteLine(body);
+
+                tw.Write("Recipients: ");
+                List<string> recip = new List<string>();
+                List<string> cc = new List<string>();
+                cc.Add(toapply.Owner.Email);
+                List<string> bcc = new List<string>();
+                foreach (ApplicationUser user in recipients)
+                {
+                    tw.Write(user.Email + ", ");
+                    recip.Add(user.Email);
+                }
+                tw.Flush();
+                tw.Close();
+                //emailManager.SendEmail(recip, "talento@tcs.com", bcc, cc, "Talento notification messenger", body);
+                return File(ms.GetBuffer(), "application/octet-stream", "MailExample.txt");
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
