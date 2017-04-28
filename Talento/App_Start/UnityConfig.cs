@@ -10,6 +10,7 @@ using Talento.Core;
 using Talento.Entities;
 using Talento.Core.Data;
 using Talento.Core.Helpers;
+using Talento.EmailManager;
 
 namespace Talento.App_Start
 {
@@ -42,17 +43,19 @@ namespace Talento.App_Start
         public static void RegisterTypes(IUnityContainer container)
         {
             container.RegisterType<ApplicationDbContext>(new PerRequestLifetimeManager());
-            container.RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>();
-            container.RegisterType<UserManager<ApplicationUser>>();
-            container.RegisterType<ApplicationUserManager>();
-            container.RegisterType<ICustomPagingList, DashboardPagingHelper>();
-            container.RegisterType<IPosition, PositionHelper>();
+            container.RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>(new PerRequestLifetimeManager());
+            container.RegisterType<UserManager<ApplicationUser>>(new PerRequestLifetimeManager());
+            container.RegisterType<ApplicationUserManager>(new PerRequestLifetimeManager());
+            container.RegisterType<ICustomPagingList, DashboardPagingHelper>(new PerRequestLifetimeManager());
+            container.RegisterType<IPosition, PositionHelper>(new PerRequestLifetimeManager());
+            container.RegisterType<IPositionLog, PositionLogHelper>(new PerRequestLifetimeManager());
             container.RegisterType<AccountController>(new InjectionConstructor());
-            container.RegisterType<IPosition, PositionHelper>();
-            container.RegisterType<ICandidate, CandidateHelper>();
-            container.RegisterType<ITag, TagHelper>();
-            container.RegisterType<ICustomUser, UserHelper>();
-            container.RegisterType<IApplicationSetting, SettingsHelper>();
+            container.RegisterType<IPosition, PositionHelper>(new PerRequestLifetimeManager());
+            container.RegisterType<ICandidate, CandidateHelper>(new PerRequestLifetimeManager());
+            container.RegisterType<ITag, TagHelper>(new PerRequestLifetimeManager());
+            container.RegisterType<ICustomUser, UserHelper>(new PerRequestLifetimeManager());
+            container.RegisterType<IApplicationSetting, SettingsHelper>(new PerRequestLifetimeManager());
+            container.RegisterType<IMessenger, Messenger>(new PerRequestLifetimeManager());
         }
     }
 }

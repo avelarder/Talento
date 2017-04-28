@@ -103,14 +103,8 @@ namespace Talento.Core.Helpers
                         settings = settings.OrderByDescending(p => p.CreationDate);
                         break;
                 }
-<<<<<<< HEAD
-                // Pagination
-                var paginated = settings.ToList();
-=======
->>>>>>> 4e5bbfcafd5a84453d8ea74a2e3c8b7d0432588e
 
-                return settings.ToList();
-
+                return settings.ToList<ApplicationSetting>();
             }
             catch (Exception)
             {

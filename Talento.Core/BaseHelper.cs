@@ -13,6 +13,7 @@ namespace Talento.Core
         public BaseHelper(Talento.Core.Data.ApplicationDbContext db )
         {
             Db = db;
+            Db.Database.Log = (msg) => System.Diagnostics.Debug.WriteLine(msg);
         }
     }
 }

@@ -159,8 +159,8 @@ namespace Talento.Core.Migrations
                         Position_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
                 .ForeignKey("dbo.Positions", t => t.Position_Id)
+                .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
                 .Index(t => t.ApplicationUser_Id)
                 .Index(t => t.Position_Id);
             
@@ -208,8 +208,8 @@ namespace Talento.Core.Migrations
             DropForeignKey("dbo.Tags", "Position_Id", "dbo.Positions");
             DropForeignKey("dbo.Positions", "PortfolioManager_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Positions", "ApplicationUser_Id", "dbo.AspNetUsers");
-            DropForeignKey("dbo.Logs", "Position_Id", "dbo.Positions");
             DropForeignKey("dbo.Logs", "ApplicationUser_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Logs", "Position_Id", "dbo.Positions");
             DropForeignKey("dbo.Positions", "LastOpenedBy_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Positions", "LastClosedBy_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Positions", "LastCancelledBy_Id", "dbo.AspNetUsers");
