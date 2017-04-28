@@ -124,9 +124,24 @@ namespace Talento.Core.Helpers
             return Db.ApplicationSetting.Where(s => s.SettingName.StartsWith(prefix)).Select(x => x.SettingName).Distinct().ToList();
         }
 
-        public void Edit(ApplicationSetting aP)
+        public void Edit(ApplicationSetting applicationSetting)
         {
-            // Fred Stufff
+           
+            var pos = Db.ApplicationSetting.First(x => x.ApplicationSettingId == applicationSetting.ApplicationSettingId);
+            
+            // Crear la nueva, si es success eliminar la vieja sino return.
+            //if(pos.SettingName != applicationSetting.SettingName)
+            //{
+            //    var posDel = (from Db.ApplicationSetting )
+            //    pos.Remove();
+            //}
+            pos.ApplicationUser_Id = applicationSetting.ApplicationUser_Id;
+            pos.SettingName = applicationSetting.SettingName;
+            pos.ParameterName = applicationSetting.ParameterName;
+            pos.ParameterValue = applicationSetting.ParameterValue;
+            pos.CreatedBy = applicationSetting.CreatedBy;
+            pos.CreationDate = applicationSetting.CreationDate;
+            Db.SaveChanges();
         }
     }
 }

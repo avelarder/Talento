@@ -101,11 +101,11 @@ namespace Talento.Controllers
 
         // POST: Settings/Edit/5
         [HttpPost]
-        public ActionResult Edit(ApplicationSettingEditModel appParameterVM)
+        public ActionResult Edit(ApplicationSettingModel appParameterVM)
         {
             try
             {
-                ApplicationSettingEditModel ApplicationParameter = AutoMapper.Mapper.Map<ApplicationSettingEditModel>(SettingsHelper.GetById(appParameterVM.ApplicationSettingId));
+                ApplicationSettingModel ApplicationParameter = AutoMapper.Mapper.Map<ApplicationSettingModel>(SettingsHelper.GetById(appParameterVM.ApplicationSettingId));
 
                 if (ApplicationParameter == null)
                 {
@@ -113,29 +113,25 @@ namespace Talento.Controllers
                 }
                 string userId = User.Identity.GetUserId();
 
-                //si no existe el SettingName lo agrego con el KeyName y el KeyValue(Create)
-                //si existe el SettingName llamo al helper Edit y agrego el KeyName y el KeyValue
-
                 ApplicationSetting aP = new ApplicationSetting
                 {
+                    ApplicationUser_Id = ApplicationParameter.CreatedBy_Id,
                     ApplicationSettingId = ApplicationParameter.ApplicationSettingId,
-                   // ApplicationUser_Id = ApplicationParameter.ApplicationUser_Id,
-
+                    SettingName = appParameterVM.SettingName,
                     ParameterName = appParameterVM.ParameterName,
                     ParameterValue = appParameterVM.ParameterValue,
                     CreationDate = DateTime.Now,
                     CreatedBy = UserHelper.GetUserById(userId)
+                    
                 };
 
-                aP.SettingName = appParameterVM.SettingName;
-
                 SettingsHelper.Edit(aP);
-                return null;
-                //return PartialView(aP);
+                //return null;
+                return new HttpStatusCodeResult(200); 
             }
-            catch (InvalidOperationException)
+            catch (Exception)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "LINQ...");
+                return new HttpStatusCodeResult(500);
             }
         }
 

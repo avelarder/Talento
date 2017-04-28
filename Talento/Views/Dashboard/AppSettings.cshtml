@@ -225,22 +225,23 @@
                         }
                     });
 
-
                     // On Edit button click open modal
-
-                    $('.button-edit').click(function () {
+                    $appContainer.on("click", ".button-edit",function () {
+                        console.log($(this).attr("data-id"));
                         $.post({
-                            url: "/Settings/EditSettingsForm/",
+                            url: "/Settings/EditSettingsForm",
                             data: {
                                 id: $(this).attr("data-id")
                             }
                         }).done(function (response) {
                             $("#edit-modal-content").html(response);
+                            cosnole.log(response);
                         })
                     });
 
                     //Submit edit form
-                    $("#EditSettingsForm").on("submit", function (event) {
+                    var $formEdit = $("#EditSettingsForm");
+                    $("#edit-dialog").on("submit", "#EditSettingsForm", function (event) {
                         event.preventDefault();
                         var $self = $(this);
                         if ($form.valid()) {
@@ -248,48 +249,22 @@
                                 url: "/Settings/Edit/", //$self.attr("action")
                                 data: $self.serialize()
                             }).done(function (response) {
-                                $('#complete-dialog').modal('hide');
-                                $('body').removeClass('modal-open');
-                                $('.modal-backdrop').remove();
+                                $('#edit-dialog').modal('hide');
                                 $form[0].reset();
-
                                 alertify.set('notifier', 'position', 'bottom-left');
                                 alertify.success('<b>Parameter was Edited</b>');
-                                // Reload List
+                                // Reload
                                 $.ajax({
-                                    url: "/Settings/EditSettingsForm/",
-                                    data: {
-                                        id: $(this).attr("data-id")
-                                    }
+                                    url: "/Settings/List"
                                 }).done(function (data) {
                                     $appContainer.html(data);
                                 });
-
                             }).fail(function (error) {
                                 alertify.set('notifier', 'position', 'bottom-left');
-                                alertify.error("Error: <b>" + $("#SettingName").val() + "</b> already has parameter: " + "<b>" + $("#ParameterName").val() + "<b/>");
+                                alertify.error("Error: Update can not be done, check you data");
                             });
                         }
                     });
-
-
-                    @*$("#submit-edit-setting").click(function () {
-                        $.post({
-                            url: "/Settings/Edit/",
-                            data: {
-                                appParamVM: new { @Model }
-                            }
-                        }).done(function (response) {
-                            //$('#complete-dialog').modal('hide');
-                            //$('body').removeClass('modal-open');
-                            //$('.modal-backdrop').remove();
-                            //$form[0].reset();
-
-                            alert("huawi");
-
-                            $("#edit-modal-content").html(response);
-                        })
-                    });*@
 
                 })(jQuery);
             }
