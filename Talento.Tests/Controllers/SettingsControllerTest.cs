@@ -140,7 +140,7 @@ namespace Talento.Tests.Controllers
         }
 
         [TestMethod]
-        public void DownloadTiff()
+        public void DownloadTiffTest()
         {
             var mocks = new MockRepository(MockBehavior.Default);
             Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();

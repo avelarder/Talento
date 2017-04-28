@@ -140,6 +140,9 @@ namespace Talento.Controllers
             }
         }
 
+
+        [Authorize]
+        [HttpGet]
         public FileResult DownloadTiff()
         {
             return new FilePathResult("", "");
