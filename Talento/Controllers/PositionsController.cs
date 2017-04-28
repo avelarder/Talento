@@ -139,7 +139,6 @@ namespace Talento.Controllers
         [Authorize(Roles = "PM, TL")]
         public ActionResult Edit(int id)
         {
-
             try
             {
                 EditPositionViewModel position = AutoMapper.Mapper.Map<EditPositionViewModel>(PositionHelper.Get(id));

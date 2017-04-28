@@ -10,11 +10,11 @@ namespace Talento.Core
 {
     public interface IApplicationSetting
     {
-        List<ApplicationParameter> GetAll();
+        List<ApplicationSetting> GetAll();
         List<string> GetParameters(string prefix);
-        List<ApplicationParameter> GetPagination(string orderBy, string filter);
+        List<ApplicationSetting> GetPagination(string orderBy, string filter);
         ApplicationSetting GetByName(string name);
-        ApplicationParameter GetById(int id);
+        ApplicationSetting GetById(int id);
         void Create(ApplicationSetting aS);
         void Edit(ApplicationSetting aS);
     }

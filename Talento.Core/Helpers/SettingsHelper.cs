@@ -20,40 +20,41 @@ namespace Talento.Core.Helpers
 
         public ApplicationSetting GetByName(string name)
         {
-            var aS = Db.ApplicationSettings.FirstOrDefault(p => p.SettingName == name);
+            var aS = Db.ApplicationSetting.FirstOrDefault(p => p.SettingName == name);
             return aS;
         }
 
-        public ApplicationParameter GetById(int id)
+        public ApplicationSetting GetById(int id)
         {
-            var aS = Db.ApplicationParameter.FirstOrDefault(p => p.ApplicationSettingId == id);
+            var aS = Db.ApplicationSetting.FirstOrDefault(p => p.ApplicationSettingId == id);
             return aS;
         }
 
-        public List<ApplicationParameter> GetAll()
+        public List<ApplicationSetting> GetAll()
         {
-            var settings = Db.ApplicationParameter.ToList();
+            var settings = Db.ApplicationSetting.ToList();
             return settings;
         }
 
-        public List<ApplicationParameter> GetPagination(string orderBy = "CreationDate_desc", string filter = "")
+        public List<ApplicationSetting> GetPagination(string orderBy = "CreationDate", string filter = "")
         {
             try
             {
                 // Get All
-                var settings = from p in Db.ApplicationParameter select p;
+                var settings = from p in Db.ApplicationSetting select p;
 
                 filter = filter.Trim();
                 // Filter
                 if (filter != "")
                 {
-                    var settingSearch = settings.Select(x => new {
-                        SettingName = x.ApplicationSetting.SettingName,
+                    var settingSearch = settings.Select(x => new
+                    {
+                        SettingName = x.SettingName,
                         ParameterName = x.ParameterName,
                         ParameterValue = x.ParameterValue,
                         CreationDate = x.CreationDate,
                         CreatedBy = x.CreatedBy.Email,
-                        ApplicationParameterId = x.ApplicationParameterId
+                        ApplicationSettingId = x.ApplicationSettingId
                     });
                     var settingMatch = settingSearch.ToList().Where(x => x.GetType()
                         .GetProperties()
@@ -62,8 +63,8 @@ namespace Talento.Core.Helpers
                             var value = p.GetValue(x).ToString().ToLower();
                             return value != null && value.ToString().ToLower().Contains(filter);
                         }));
-                    var listIds = settingMatch.Select(x => x.ApplicationParameterId).ToList();
-                    settings = settings.Where(x => listIds.Contains(x.ApplicationParameterId));
+                    var listIds = settingMatch.Select(x => x.ApplicationSettingId).ToList();
+                    settings = settings.Where(x => listIds.Contains(x.ApplicationSettingId));
                 }
                 // Order List
                 switch (orderBy)
@@ -93,20 +94,17 @@ namespace Talento.Core.Helpers
                         settings = settings.OrderBy(p => p.ParameterValue);
                         break;
                     case "SettingName":
-                        settings = settings.OrderByDescending(p => p.ApplicationSetting.SettingName);
+                        settings = settings.OrderByDescending(p => p.SettingName);
                         break;
                     case "SettingName_asc":
-                        settings = settings.OrderBy(p => p.ApplicationSetting.SettingName);
+                        settings = settings.OrderBy(p => p.SettingName);
                         break;
                     default:  // Date descending 
                         settings = settings.OrderByDescending(p => p.CreationDate);
                         break;
                 }
-                // Pagination
-                var paginated = settings.ToList();
-                
-                return settings.ToList();
 
+                return settings.ToList<ApplicationSetting>();
             }
             catch (Exception)
             {
@@ -116,41 +114,40 @@ namespace Talento.Core.Helpers
 
         public void Create(ApplicationSetting aS)
         {
-            try
-            {
-                ApplicationSetting applicationSetting = this.GetByName(aS.SettingName);
-
-                if (applicationSetting == null)
-                {
-                    Db.ApplicationSettings.Add(aS);
-                }
-                else
-                {
-                    foreach (var p in aS.ApplicationParameter)
-                    {
-                        applicationSetting.ApplicationParameter.Add(p);
-                    }
-                }
-                Db.SaveChanges();
-            }
-            catch (DbUpdateException ex)
-            {
-                throw ex;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            Db.ApplicationSetting.Add(aS);
+            Db.SaveChanges();
         }
 
         public List<string> GetParameters(string prefix)
         {
-            return Db.ApplicationSettings.Where(s => s.SettingName.StartsWith(prefix)).Select(x=> x.SettingName).ToList();
+            return Db.ApplicationSetting.Where(s => s.SettingName.StartsWith(prefix)).Select(x => x.SettingName).Distinct().ToList();
         }
 
-        public void Edit(ApplicationSetting aS)
+        public void Edit(ApplicationSetting pApplicationSetting)
         {
-            throw new NotImplementedException();
+            //row to edit
+            var appSettingToEdit = Db.ApplicationSetting.First(x => x.ApplicationSettingId == pApplicationSetting.ApplicationSettingId);
+
+            //// Si ya existe la PK, eliminar la vieja y agregar una nueva
+            //if (appSettingToEdit.SettingName != pApplicationSetting.SettingName || appSettingToEdit.ParameterName != pApplicationSetting.ParameterName)
+            //{
+            //    if (appSettingToEdit != null)
+            //    {
+            Db.ApplicationSetting.Remove(appSettingToEdit);
+            Db.SaveChanges();
+            //    }
+            //}
+            
+            //si no existe la PK se agrega
+            appSettingToEdit.ApplicationUser_Id = pApplicationSetting.ApplicationUser_Id;
+            appSettingToEdit.SettingName = pApplicationSetting.SettingName;
+            appSettingToEdit.ParameterName = pApplicationSetting.ParameterName;
+            appSettingToEdit.ParameterValue = pApplicationSetting.ParameterValue;
+            appSettingToEdit.CreatedBy = pApplicationSetting.CreatedBy;
+            appSettingToEdit.CreationDate = pApplicationSetting.CreationDate;
+
+            Db.ApplicationSetting.Add(appSettingToEdit);
+            Db.SaveChanges();
         }
     }
 }

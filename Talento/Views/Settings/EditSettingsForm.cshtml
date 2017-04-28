@@ -1,4 +1,4 @@
-﻿@model Talento.Models.ApplicationParameterModel
+﻿@model Talento.Models.ApplicationSettingModel
 
 @using (Html.BeginForm("Edit", "Settings", FormMethod.Post, new { id = "EditSettingsForm" }))
 {
@@ -14,29 +14,31 @@
             <div id="parameter-name" class="form-group">
                 @Html.LabelFor(model => model.SettingName, htmlAttributes: new { @class = "control-label col-md-4" })
                 <div class="col-md-8">
-                    @Html.EditorFor(model => model.SettingName, new { htmlAttributes = new { @class = "form-control typeahead", placeholder = "Edit new setting", autocomplete = "off" } })
+                    @Html.EditorFor(model => model.SettingName, new { htmlAttributes = new { @class = "form-control typeahead edit-setting-name", placeholder = "Edit new setting", autocomplete = "off", name = "setting-name" } })
                     @Html.ValidationMessageFor(model => model.SettingName, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.ApplicationSetting.ParameterName, htmlAttributes: new { @class = "control-label col-md-4" })
+                @Html.LabelFor(model => model.ParameterName, htmlAttributes: new { @class = "control-label col-md-4" })
                 <div class="col-md-8">
-                    @Html.EditorFor(model => model.ParameterName, new { htmlAttributes = new { @class = "form-control", placeholder = "Edit new parameter", } })
+                    @Html.EditorFor(model => model.ParameterName, new { htmlAttributes = new { @class = "form-control", placeholder = "Edit new parameter", name = "parameter-name" } })
                     @Html.ValidationMessageFor(model => model.ParameterName, "", new { @class = "text-danger" })
                 </div>
             </div>
 
+            @Html.HiddenFor(model => model.ApplicationSettingId)
+
             <div class="form-group">
                 @Html.LabelFor(model => model.ParameterValue, htmlAttributes: new { @class = "control-label col-md-4" })
                 <div class="col-md-8">
-                    @Html.EditorFor(model => model.ParameterValue, new { htmlAttributes = new { @class = "form-control", placeholder = "Edit new value", } })
+                    @Html.EditorFor(model => model.ParameterValue, new { htmlAttributes = new { @class = "form-control", placeholder = "Edit new value", name = "parameter-value" } })
                     @Html.ValidationMessageFor(model => model.ParameterValue, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="pmd-modal-action pmd-modal-bordered text-right">
                 <button id="appSettingCancel" data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                <input id="submit-add-setting" type="submit" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm" />
+                <input id="submit-edit-setting" type="submit" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm" />
             </div>
         </div>
     </div>

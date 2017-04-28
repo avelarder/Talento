@@ -1,4 +1,4 @@
-﻿@model Talento.Models.ApplicationSettingsViewModel
+﻿@model Talento.Models.ApplicationSettingModel
 @{
     ViewBag.Title = "AppSettings";
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
@@ -59,10 +59,10 @@
         .tt-suggestion p {
             margin: 0;
         }
+
     .alertify-notifier {
-        color:#FFF;
+        color: #FFF;
     }
-    
 </style>
 
 <div class="pmd-content pmd-content-custom dropdown-component" id="content">
@@ -117,6 +117,7 @@
                             });
                         }
                     });
+
                     // Click Sort
                     $appContainer.on("click", "#pagination-sort a", function (e) {
                         e.preventDefault();
@@ -181,11 +182,11 @@
                             .empty();
                     }
 
-                    // On Form Submit
+                    // On form submit Add-Parameter
                     $form.on("submit", function (event) {
                         event.preventDefault();
                         var $self = $(this);
-                        if( $form.valid() ){
+                        if ($form.valid()) {
                             $.post({
                                 url: $self.attr("action"),
                                 data: $self.serialize()
@@ -205,13 +206,13 @@
 
                             }).fail(function (error) {
                                 alertify.set('notifier', 'position', 'bottom-left');
-                                alertify.error("Error: <b>" + $("#SettingName").val() +"</b> already has parameter: " + "<b>" + $("#ParameterName").val() + "<b/>");
+                                alertify.error("Error: <b>" + $("#SettingName").val() + "</b> already has parameter: " + "<b>" + $("#ParameterName").val() + "<b/>");
                             });
                         }
                     });
 
                     // Autocomplete
-                    $('#SettingName').typeahead({
+                    $('.add-setting-name').typeahead({
                         hint: true,
                         highlight: true,
                         minLength: 3,
@@ -225,30 +226,63 @@
                         }
                     });
 
+                    $('.edit-setting-name').typeahead({
+                        hint: true,
+                        highlight: true,
+                        minLength: 3,
+                        delay: 400,
+                        source: function (query, process) {
+                            return $.post(
+                                '/Settings/GetApplicationParameters',
+                                { prefix: $(".edit-setting-name").val() }).done(function (data) {
+                                    return process(data);
+                                });
+                        }
+                    });
 
-                    // On Edit button click
-
-                    $('.button-edit').click(function () {
+                    // On Edit button click open modal
+                    $appContainer.on("click", ".button-edit", function () {
+                        console.log($(this).attr("data-id"));
                         $.post({
-                            url: "/Settings/EditSettingsForm/",
+                            url: "/Settings/EditSettingsForm",
                             data: {
                                 id: $(this).attr("data-id")
                             }
                         }).done(function (response) {
-                            //$('#complete-dialog').modal('hide');
-                            //$('body').removeClass('modal-open');
-                            //$('.modal-backdrop').remove();
-                            //$form[0].reset();
-
-                            alert("huawi");
                             $("#edit-modal-content").html(response);
-                            //db.database.exectu
+                            console.log(response);
                         })
+                    });
+
+                    //Submit edit form
+                    var $formEdit = $("#EditSettingsForm");
+                    $("#edit-dialog").on("submit", "#EditSettingsForm", function (event) {
+                        event.preventDefault();
+                        var $self = $(this);
+                        if ($form.valid()) {
+                            $.post({
+                                url: "/Settings/Edit/", //$self.attr("action")
+                                data: $self.serialize()
+                            }).done(function (response) {
+                                $('#edit-dialog').modal('hide');
+                                $form[0].reset();
+                                alertify.set('notifier', 'position', 'bottom-left');
+                                alertify.success('<b>Parameter was Edited</b>');
+                                // Reload
+                                $.ajax({
+                                    url: "/Settings/List"
+                                }).done(function (data) {
+                                    $appContainer.html(data);
+                                });
+                            }).fail(function (error) {
+                                alertify.set('notifier', 'position', 'bottom-left');
+                                alertify.error("Error: Update can not be done, check you data");
+                            });
+                        }
                     });
 
                 })(jQuery);
             }
-
         </script>
     </div>
 </div>
