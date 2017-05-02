@@ -17,11 +17,13 @@ namespace Talento.Controllers
     {
         IApplicationSetting SettingsHelper;
         ICustomUser UserHelper;
+        IUtilityApplicationSettings AppSettings;
 
-        public SettingsController(IApplicationSetting settingsHelper, ICustomUser userHelper)
+        public SettingsController(IApplicationSetting settingsHelper, ICustomUser userHelper, IUtilityApplicationSettings appSettings)
         {
             SettingsHelper = settingsHelper;
             UserHelper = userHelper;
+            AppSettings = appSettings;
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -46,14 +48,14 @@ namespace Talento.Controllers
 
             var parameterSettings = SettingsHelper.GetPagination(orderBy, filter);
             // Pagination
-            var pageSizeValue = UtilityApplicationSettings.GetSetting("pagination", "pagesize"); // Setting Parameter
-            var paginated = parameterSettings.ToPagedList(page, pageSize);
+            var pageSizeValue = AppSettings.GetSetting("pagination", "pagesize"); // Setting Parameter
 
             if ( pageSizeValue != null)
             {
-                paginated = parameterSettings.ToPagedList(page, Int32.Parse(pageSizeValue));
+                pageSize = Convert.ToInt32( pageSizeValue );
             } 
-            
+            var paginated = parameterSettings.ToPagedList(page, pageSize);
+
             int total = parameterSettings.Count();
             int totalPages = (total - 1) / pageSize + 1;
             
