@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationRole.cs" />
+    <Compile Include="ApplicationSetting.cs" />
     <Compile Include="ApplicationUser.cs" />
     <Compile Include="Candidate.cs" />
     <Compile Include="FileBlob.cs" />

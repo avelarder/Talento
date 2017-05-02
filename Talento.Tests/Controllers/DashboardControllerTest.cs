@@ -30,11 +30,15 @@ namespace Talento.Tests.Controllers
             var mockContext = new Mock<ControllerContext>();
             mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+            mockContext.Setup(p => p.HttpContext.User.IsInRole("Admin")).Returns(true);
 
             // create controller
             Mock<ICustomPagingList> mCustomPagingList = new Mock<ICustomPagingList>();
             mCustomPagingList.Setup(x => x.GetAdminTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { Id = 1 } });
-            DashboardController controller = new DashboardController(mCustomPagingList.Object);
+            DashboardController controller = new DashboardController(mCustomPagingList.Object)
+            {
+                ControllerContext = mockContext.Object
+            };
 
             var result = controller.Index("", "Status", "", "", 1);
 
@@ -57,11 +61,15 @@ namespace Talento.Tests.Controllers
             var mockContext = new Mock<ControllerContext>();
             mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+            mockContext.Setup(p => p.HttpContext.User.IsInRole("Basic")).Returns(true);
 
             // create controller
             Mock<ICustomPagingList> mCustomPagingList = new Mock<ICustomPagingList>();
             mCustomPagingList.Setup(x => x.GetBasicTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { Id = 1 } });
-            DashboardController controller = new DashboardController(mCustomPagingList.Object);
+            DashboardController controller = new DashboardController(mCustomPagingList.Object)
+            {
+                ControllerContext = mockContext.Object
+            };
 
             var result = controller.Index("", "Status", "", "", 1);
 
@@ -77,17 +85,21 @@ namespace Talento.Tests.Controllers
         {
             var mocks = new MockRepository(MockBehavior.Default);
             Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
-            mockPrincipal.Setup(p => p.IsInRole("TM")).Returns(true);
+            mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
 
             // create mock controller context
             var mockContext = new Mock<ControllerContext>();
             mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+            mockContext.Setup(p => p.HttpContext.User.IsInRole("Admin")).Returns(true);
 
             // create controller
             Mock<ICustomPagingList> mCustomPagingList = new Mock<ICustomPagingList>();
             mCustomPagingList.Setup(x => x.GetAdminTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { Id = 1 } });
-            DashboardController controller = new DashboardController(mCustomPagingList.Object);
+            DashboardController controller = new DashboardController(mCustomPagingList.Object)
+            {
+                ControllerContext = mockContext.Object
+            };
 
             var result = controller.Index("", "Status", "", "", 1);
 
@@ -121,6 +133,28 @@ namespace Talento.Tests.Controllers
 
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(ViewResult));
+        }
+
+        [TestMethod]
+
+        public void DownloadTiffTest()
+        {
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<ICustomPagingList> mockPagingList = mocks.Create<ICustomPagingList>();
+            Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
+            Mock<IApplicationSetting> mockSettingsHelper = mocks.Create<IApplicationSetting>();
+            Mock<ControllerContext> mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+            DashboardController controller = new DashboardController(mockPagingList.Object)
+            {
+                ControllerContext = mockContext.Object
+            };
+
+            var result = controller.DownloadTiffTemplate();
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(FilePathResult));
+            Assert.IsTrue(((FilePathResult)result).ContentType == "application/ms-word");
+            Assert.IsTrue(((FilePathResult)result).FileName == "~/Content/Files/Template_TIFF.doc");
         }
     }
 }

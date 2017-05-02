@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Talento.Models;
-using Talento.Core.Data;
 using Talento.Entities;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Talento.Core.Helpers;
 using PagedList;
 using Talento.Core.Utilities;
 using System.Security;
@@ -104,7 +99,6 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreatePositionViewModel position)
         {
-
             //Search EmailPM in SearchPM Helper
             ApplicationUser pmUser = UserHelper.SearchPM(position.EmailPM);
 
@@ -112,7 +106,6 @@ namespace Talento.Controllers
             if (pmUser == null)
             {
                 ModelState.AddModelError(string.Empty, "PM is not valid");
-
             }
 
             string user = User.Identity.GetUserId();
@@ -146,7 +139,6 @@ namespace Talento.Controllers
         [Authorize(Roles = "PM, TL")]
         public ActionResult Edit(int id)
         {
-
             try
             {
                 EditPositionViewModel position = AutoMapper.Mapper.Map<EditPositionViewModel>(PositionHelper.Get(id));
@@ -208,6 +200,7 @@ namespace Talento.Controllers
             {
                 return HttpNotFound();
             }
+
             if (position.Status == Status.Removed)
             {
                 return RedirectToAction("Index", "Dashboard");

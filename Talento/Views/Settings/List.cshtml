@@ -1,0 +1,70 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+
+<div class="form-group col-sm-8">
+    <div class="row">
+        <div class="col-sm-6">
+            <input placeholder="Text to search..." id="filter-input" class="form-control" id="filter" name="filter" value="@ViewBag.CurrentFilter" type="text">
+        </div>
+        <div class="col-sm-3">
+            <button style="position: relative;right: 25px;top: 3px;" data-url="@Url.Action("List", "Settings")" id="filter-input-button" class="btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary">
+                Search
+            </button>
+        </div>
+    </div>
+</div>
+<table id="example-checkbox" class="table pmd-table table-hover table-striped display responsive nowrap" cellspacing="0" width="100%">
+    <tr id="pagination-sort">
+        <th>
+            @Html.ActionLink("Key Group", "List", new { orderBy = ViewBag.SortGroup, filter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Key Name", "List", new { orderBy = ViewBag.SortName, filter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Value", "List", new { orderBy = ViewBag.SortValue, filter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Date", "List", new { orderBy = ViewBag.SortDate, filter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Created By", "List", new { orderBy = ViewBag.SortUser, filter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            <button data-target="#complete-dialog" data-toggle="modal" class="btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary" type="button">
+                <strong>+</strong> Add Parameter
+            </button>
+        </th>
+    </tr>
+    @foreach (var setting in Model)
+    {
+        <tr>
+            <td>
+                @setting.SettingName
+            </td>
+            <td>
+                @setting.ParameterName
+            </td>
+            <td>
+                @setting.ParameterValue
+            </td>
+            <td>
+                @setting.CreationDate
+            </td>
+            <td>
+                @setting.CreatedBy.Email
+            </td>
+            <td class="">
+                <button data-id="@setting.ApplicationSettingId" data-target="#edit-dialog" data-toggle="modal" class="button-edit btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" type="button">
+                    <i class="material-icons pmd-sm">mode_edit</i>
+                </button>
+                <button data-id="@setting.ApplicationSettingId" data-toggle="modal" class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-danger btn-sm" type="button">
+                    <i class="material-icons pmd-sm">delete</i>
+                </button>
+            </td>
+        </tr>
+    }
+</table>
+
+@* Pagination NavBar *@
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("List", "Settings", new { page, filter = ViewBag.CurrentFilter, orderBy = ViewBag.CurrentSort }))

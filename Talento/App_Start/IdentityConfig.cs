@@ -17,6 +17,7 @@ using System.Net.Http.Headers;
 using Talento.Entities;
 using Talento.Core.Data;
 using Microsoft.Practices.Unity;
+using Talento.Core;
 
 namespace Talento
 {

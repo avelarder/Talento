@@ -33,14 +33,15 @@ namespace Talento.Controllers
 
             string test = ModelState.IsValid.ToString();
 
-            List<Position> rawData;
-            if (Roles.IsUserInRole("Admin"))
+            List<Position> rawData = new List<Position>();
+
+            if (User.IsInRole("Admin"))
             {
                 Dashboard = "_PartialContentAdmin.cshtml";
                 rawData = DashboardPagingHelper.GetAdminTable(sortOrder, FilterBy, currentFilter, searchString, page);
 
             }
-            else
+            if (!User.IsInRole("Admin"))
             {
                 rawData = DashboardPagingHelper.GetBasicTable(sortOrder, FilterBy, currentFilter, searchString, page);
             }
@@ -121,6 +122,19 @@ namespace Talento.Controllers
                 role = "admin";
             }
             return role;
+        }
+
+        [ChildAndAjaxActionOnly]
+        public ActionResult AddSettingsForm()
+        {
+            return PartialView();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public FileResult DownloadTiffTemplate()
+        {
+            return new FilePathResult("~/Content/Files/Template_TIFF.doc", "application/ms-word");
         }
     }
 }

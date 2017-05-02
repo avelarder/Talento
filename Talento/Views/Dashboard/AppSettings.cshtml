@@ -1,11 +1,288 @@
-﻿
+﻿@model Talento.Models.ApplicationSettingModel
 @{
     ViewBag.Title = "AppSettings";
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
-<!DOCTYPE html>
+<style>
+    .twitter-typeahead {
+        width: 100%;
+    }
 
-<h1>Application Settings</h1>
-<hr />
-<h2>Wow, you´re drimin´ dude!</h2>
+        .twitter-typeahead .tt-query,
+        .twitter-typeahead .tt-hint {
+            margin-bottom: 0;
+        }
+
+    .tt-dropdown-menu {
+        min-width: 160px;
+        margin-top: 2px;
+        padding: 5px 0;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border: 1px solid rgba(0,0,0,.2);
+        *border-right-width: 2px;
+        *border-bottom-width: 2px;
+        -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+        border-radius: 6px;
+        -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+        -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+        box-shadow: 0 5px 10px rgba(0,0,0,.2);
+        -webkit-background-clip: padding-box;
+        -moz-background-clip: padding;
+        background-clip: padding-box;
+        width: 100%;
+    }
+
+    .tt-suggestion {
+        display: block;
+        padding: 3px 20px;
+    }
+
+        .tt-suggestion.tt-is-under-cursor {
+            color: #fff;
+            background-color: #0081c2;
+            background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+            background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+            background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+            background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+            background-repeat: repeat-x;
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
+        }
+
+            .tt-suggestion.tt-is-under-cursor a {
+                color: #fff;
+            }
+
+        .tt-suggestion p {
+            margin: 0;
+        }
+
+    .alertify-notifier {
+        color: #FFF;
+    }
+</style>
+
+<div class="pmd-content pmd-content-custom dropdown-component" id="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1>Application Settings</h1>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+        </div>
+        <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    @Html.Action("AddSettingsForm", "Dashboard")
+                </div>
+            </div>
+        </div>
+
+        <!--Edit Settings Container-->
+        <div id="edit-dialog" tabindex="-1" class="modal fade" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" id="edit-modal-content">
+                    @*@Html.Action("EditSettingsForm", "Settings", @Model)*@
+                </div>
+            </div>
+        </div>
+        <!--Edit Settings Container-->
+        <!-- List of Settings -->
+        <div id="applicationSettingContainer">
+            @Html.Action("List", "Settings")
+        </div>
+        <script type="text/javascript">
+            window.onload = function () {
+                (function ($) {
+                    var $appContainer = $("#applicationSettingContainer");
+
+                    // Click Pagination
+                    $appContainer.on("click", ".pagination a", function (e) {
+                        e.preventDefault();
+                        var $self = $(this);
+
+                        var href = $self.attr("href");
+                        if (!$self.parent("li").hasClass("active")) {
+                            $.ajax({
+                                url: href
+                            }).done(function (response) {
+                                $appContainer.html(response);
+                                ScrollTo($appContainer);
+                            }).fail(function (error) {
+                                console.log("Error");
+                            });
+                        }
+                    });
+
+                    // Click Sort
+                    $appContainer.on("click", "#pagination-sort a", function (e) {
+                        e.preventDefault();
+                        var $self = $(this);
+
+                        var href = $self.attr("href");
+                        $.ajax({
+                            url: href
+                        }).done(function (response) {
+                            $appContainer.html(response);
+                            ScrollTo($appContainer);
+                        }).fail(function (error) {
+                            console.log("Error");
+                        });
+                    });
+
+                    // Click Filter
+                    $appContainer.on("click", "#filter-input-button", function (e) {
+                        e.preventDefault();
+                        console.log("asdasd");
+                        var $self = $(this);
+                        var $value = $("#filter-input").val();
+                        var href = $self.attr("data-url");
+                        console.log($("#filter-input").val());
+                        $.ajax({
+                            url: href,
+                            data: { filter: $("#filter-input").val() }
+                        }).done(function (response) {
+                            $appContainer.html(response);
+                            ScrollTo($appContainer);
+                        }).fail(function (error) {
+                            console.log("Error");
+                        });
+                    });
+
+                    function ScrollTo(element, duration) {
+                        duration = typeof duration !== 'undefined' ? a : 1000;
+                        $('html, body').animate({
+                            scrollTop: element.offset().top - 80
+                        }, duration);
+                    }
+
+                    // Fred functions
+                    var $form = $("#formnewparameter");
+                    var $modal = $("#complete-dialog");
+
+                    // On Form Cancel Reset Form
+                    $modal.on("hidden.bs.modal", function () {
+                        $form[0].reset(); // Reset Form
+                        clearValidation($form);
+                    });
+
+                    // Clear validation Custom Function
+                    function clearValidation(form) {
+                        form.find("[data-valmsg-summary=true]")
+                            .removeClass("validation-summary-errors")
+                            .addClass("validation-summary-valid")
+                            .find("ul").empty();
+                        form.find("[data-valmsg-replace]")
+                            .removeClass("field-validation-error")
+                            .addClass("field-validation-valid")
+                            .empty();
+                    }
+
+                    // On form submit Add-Parameter
+                    $form.on("submit", function (event) {
+                        event.preventDefault();
+                        var $self = $(this);
+                        if ($form.valid()) {
+                            $.post({
+                                url: $self.attr("action"),
+                                data: $self.serialize()
+                            }).done(function (response) {
+                                $('#complete-dialog').modal('hide');
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                $form[0].reset();
+                                alertify.set('notifier', 'position', 'bottom-left');
+                                alertify.success('<b>Parameter is Added</b>');
+                                // Reload List
+                                $.ajax({
+                                    url: "/Settings/List"
+                                }).done(function (data) {
+                                    $appContainer.html(data);
+                                });
+
+                            }).fail(function (error) {
+                                alertify.set('notifier', 'position', 'bottom-left');
+                                alertify.error("Error: <b>" + $("#SettingName").val() + "</b> already has parameter: " + "<b>" + $("#ParameterName").val() + "<b/>");
+                            });
+                        }
+                    });
+
+                    // Autocomplete
+                    $('.add-setting-name').typeahead({
+                        hint: true,
+                        highlight: true,
+                        minLength: 3,
+                        delay: 400,
+                        source: function (query, process) {
+                            return $.post(
+                                '/Settings/GetApplicationParameters',
+                                { prefix: $("#SettingName").val() }).done(function (data) {
+                                    return process(data);
+                                });
+                        }
+                    });
+
+                    $('.edit-setting-name').typeahead({
+                        hint: true,
+                        highlight: true,
+                        minLength: 3,
+                        delay: 400,
+                        source: function (query, process) {
+                            return $.post(
+                                '/Settings/GetApplicationParameters',
+                                { prefix: $(".edit-setting-name").val() }).done(function (data) {
+                                    return process(data);
+                                });
+                        }
+                    });
+
+                    // On Edit button click open modal
+                    $appContainer.on("click", ".button-edit", function () {
+                        console.log($(this).attr("data-id"));
+                        $.post({
+                            url: "/Settings/EditSettingsForm",
+                            data: {
+                                id: $(this).attr("data-id")
+                            }
+                        }).done(function (response) {
+                            $("#edit-modal-content").html(response);
+                            console.log(response);
+                        })
+                    });
+
+                    //Submit edit form
+                    var $formEdit = $("#EditSettingsForm");
+                    $("#edit-dialog").on("submit", "#EditSettingsForm", function (event) {
+                        event.preventDefault();
+                        var $self = $(this);
+                        if ($form.valid()) {
+                            $.post({
+                                url: "/Settings/Edit/", //$self.attr("action")
+                                data: $self.serialize()
+                            }).done(function (response) {
+                                $('#edit-dialog').modal('hide');
+                                $form[0].reset();
+                                alertify.set('notifier', 'position', 'bottom-left');
+                                alertify.success('<b>Parameter was Edited</b>');
+                                // Reload
+                                $.ajax({
+                                    url: "/Settings/List"
+                                }).done(function (data) {
+                                    $appContainer.html(data);
+                                });
+                            }).fail(function (error) {
+                                alertify.set('notifier', 'position', 'bottom-left');
+                                alertify.error("Error: Update can not be done, check you data");
+                            });
+                        }
+                    });
+
+                })(jQuery);
+            }
+        </script>
+    </div>
+</div>

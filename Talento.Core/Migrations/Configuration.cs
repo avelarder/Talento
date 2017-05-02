@@ -751,7 +751,7 @@ namespace Talento.Core.Migrations
             context.SaveChanges();
 
             Position position6 = context.Positions.Find(6);
-            listId = new List<int> {7, 8, 9, 10, 11, 12, 13, 14, 15 };
+            listId = new List<int> { 7, 8, 9, 10, 11, 12, 13, 14, 15 };
             List<Candidate> candidatesPosition6 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
 
             position6.Candidates = candidatesPosition6;
@@ -762,6 +762,88 @@ namespace Talento.Core.Migrations
             List<Candidate> candidatesPosition5 = context.Candidates.Where(candidate => listId.Contains(candidate.Id)).ToList();
 
             position5.Candidates = candidatesPosition5;
+            context.SaveChanges();
+            #endregion
+
+            #region ApplicationSettings
+
+            var appSettings = new List<ApplicationSetting>
+            {
+                new ApplicationSetting {
+                    ApplicationSettingId = 1,
+                    SettingName = "Pagination",
+                    ParameterName = "Status",
+                    ParameterValue = "Enabled",
+                    CreationDate = DateTime.Now,
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 2,
+                    SettingName = "Pagination",
+                    ParameterName = "PageSize",
+                    ParameterValue = "10",
+                    CreationDate = DateTime.Now.AddMinutes(-5),
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 3,
+                    SettingName = "Pagination",
+                    ParameterName = "PageSize1",
+                    ParameterValue = "10",
+                    CreationDate = DateTime.Now.AddMinutes(-7),
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 4,
+                    SettingName = "Sorting",
+                    ParameterName = "Status",
+                    ParameterValue = "Enabled",
+                    CreationDate = DateTime.Now.AddHours(-1),
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+
+                new ApplicationSetting {
+                    ApplicationSettingId = 5,
+                    SettingName = "Sorting",
+                    ParameterName = "SortBy",
+                    ParameterValue = "CreationDate",
+                    CreationDate = DateTime.Now.AddHours(-1).AddMinutes(-5),
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 6,
+                    SettingName = "Filtering",
+                    ParameterName = "DefaultSort",
+                    ParameterValue = "DESC",
+                    CreationDate = DateTime.Now.AddHours(-1).AddMinutes(-20),
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 7,
+                    SettingName = "Filtering",
+                    ParameterName = "Status",
+                    ParameterValue = "Enabled",
+                    CreationDate = DateTime.Now.AddHours(-2),
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 8,
+                    SettingName = "Filtering",
+                    ParameterName = "DefaultFilter",
+                    ParameterValue = "All",
+                    CreationDate = DateTime.Now.AddHours(-2).AddMinutes(-5),
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 9,
+                    SettingName = "Files",
+                    ParameterName = "DefaultName",
+                    ParameterValue = "/[A-z]*_TIFF.(txt|pdf|doc)/g",
+                    CreationDate = DateTime.Now.AddHours(-3),
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                }
+            };
+            appSettings.ForEach(r => context.ApplicationSetting.AddOrUpdate(p => p.ApplicationSettingId, r));
             context.SaveChanges();
             #endregion
         }

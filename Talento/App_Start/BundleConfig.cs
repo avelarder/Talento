@@ -23,7 +23,10 @@ namespace Talento
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js",
                       "~/Scripts/propeller.min.js",
-                      "~/Scripts/toastr.min.js"));
+                      "~/Scripts/toastr.min.js",
+                      "~/Scripts/typeahead.js",
+                      "~/Scripts/alertify.min.js"
+                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                       "~/Scripts/app.js"));
@@ -33,7 +36,9 @@ namespace Talento
                       "~/Content/propeller.min.css",
                       "~/Content/styles.css",
                       "~/Content/PagedList.css",
-                      "~/Content/toastr.min.css"));
+                      "~/Content/toastr.min.css",
+                      "~/Content/alertify.min.css"
+                      ));
         }
     }
 }
