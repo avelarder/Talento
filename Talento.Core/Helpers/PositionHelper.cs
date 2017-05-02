@@ -29,8 +29,11 @@ namespace Talento.Core.Helpers
                 Date = DateTime.Now,
                 ApplicationUser_Id = position.ApplicationUser_Id
             };
-            position.Logs = new List<Log>();
-            position.Logs.Add(CreateLog);
+
+            position.Logs = new List<Log>
+            {
+                CreateLog
+            };
 
             Db.Positions.Add(position);
             Db.SaveChanges();
