@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Mail;
 
 namespace Talento.EmailManager
 {
-    public class Messenger : IMessenger
+    public class Messenger : IMessenger, IDisposable
     {
         SmtpClient smtpServer = new SmtpClient("smtp.sendgrid.net", 465);
         string key = "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";
@@ -70,5 +71,21 @@ namespace Talento.EmailManager
             smtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpServer.Send(mMailMessage);
         }
+
+        #region Dispose
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                smtpServer.Dispose();
+            }
+        }
+        #endregion
     }
 }

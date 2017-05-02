@@ -73,9 +73,9 @@ namespace Talento.Core.Helpers
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
