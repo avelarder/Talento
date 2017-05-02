@@ -47,8 +47,10 @@ namespace Talento.Controllers
             tw.WriteLine(body);
             tw.Write("Recipients: ");
             List<string> recip = new List<string>();
-            List<string> cc = new List<string>();
-            cc.Add(toApply.Owner.Email);
+            List<string> cc = new List<string>
+            {
+                toApply.Owner.Email
+            };
             List<string> bcc = new List<string>();
             foreach (ApplicationUser user in recipients)
             {
@@ -73,8 +75,10 @@ namespace Talento.Controllers
 
             tw.Write("Recipients: ");
             List<string> recip = new List<string>();
-            List<string> cc = new List<string>();
-            cc.Add(toapply.Owner.Email);
+            List<string> cc = new List<string>
+            {
+                toapply.Owner.Email
+            };
             List<string> bcc = new List<string>();
             foreach (ApplicationUser user in recipients)
             {
@@ -101,8 +105,10 @@ namespace Talento.Controllers
 
                 tw.Write("Recipients: ");
                 List<string> recip = new List<string>();
-                List<string> cc = new List<string>();
-                cc.Add(toapply.Owner.Email);
+                List<string> cc = new List<string>
+                {
+                    toapply.Owner.Email
+                };
                 List<string> bcc = new List<string>();
                 foreach (ApplicationUser user in recipients)
                 {
@@ -288,7 +294,7 @@ namespace Talento.Controllers
                     }
                     var httpContext = filterContext.HttpContext;
                     var cookie = httpContext.Request.Cookies[AntiForgeryConfig.CookieName];
-                    AntiForgery.Validate(cookie != null ? cookie.Value : null, httpContext.Request.Params["__RequestVerificationToken"]);
+                    AntiForgery.Validate(cookie?.Value, httpContext.Request.Params["__RequestVerificationToken"]);
                 }
                 catch (Exception)
                 {
