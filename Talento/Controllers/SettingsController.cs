@@ -143,14 +143,6 @@ namespace Talento.Controllers
             }
         }
 
-
-        [Authorize]
-        [HttpGet]
-        public FileResult DownloadTiff()
-        {
-            return new FilePathResult("", "");
-        }
-
         // GET: Settings/Delete/5
         public ActionResult Delete(int id)
         {
@@ -176,9 +168,9 @@ namespace Talento.Controllers
         //Modal
         public JsonResult GetApplicationParameters(string prefix)
         {
-            var retu = SettingsHelper.GetParameters(prefix);
+            var result = SettingsHelper.GetParameters(prefix);
 
-            return Json(retu, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }
