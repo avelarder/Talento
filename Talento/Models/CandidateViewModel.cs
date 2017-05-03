@@ -9,7 +9,7 @@ namespace Talento.Models
 {
     public class CandidateModel
     {
-        public int Id { get; set; }
+        public int CandidateId { get; set; }
 
         [StringLength(50, ErrorMessage = "Name must have 50 characters maximum")]
         [Required(ErrorMessage = "Name is required")]
@@ -34,14 +34,10 @@ namespace Talento.Models
 
         public virtual ApplicationUser CreatedBy { get; set; }
 
-        [Required(ErrorMessage = "Status is required")]
-        [Range(0, 6, ErrorMessage = "Status should be a valid one.")]
-        public CandidateStatus Status { get; set; }
-
         [Required]
         public bool IsTcsEmployee { get; set; }
 
-        public IList<Position> Positions { get; set; }
+        public IList<PositionCandidates> PositionCandidates { get; set; }
     }
 
     public class FileBlobViewModel
@@ -55,7 +51,7 @@ namespace Talento.Models
 
     public class EditCandidateViewModel
     {
-        public int Id { get; set; }
+        public int CandidateId { get; set; }
 
         public int Position_Id { get; set; }
 
@@ -80,14 +76,10 @@ namespace Talento.Models
 
         public virtual ApplicationUser CreatedBy { get; set; }
 
-        [Required(ErrorMessage = "Status is required")]
-        [Range(0, 6, ErrorMessage = "Status should be a valid one.")]
-        public CandidateStatus Status { get; set; }
-
         [Required]
         public string IsTcsEmployee { get; set; }
 
-        public IList<Position> Positions { get; set; }
+        public IList<PositionCandidates> PositionCandidates { get; set; }
     }
 
     public class CreateCandidateViewModel
@@ -116,10 +108,6 @@ namespace Talento.Models
         public string CreatedBy_Id { get; set; }
 
         public virtual ApplicationUser CreatedBy { get; set; }
-
-        [Required(ErrorMessage = "Status is required")]
-        [Range(0, 6, ErrorMessage = "Status should be a valid one.")]
-        public CandidateStatus Status { get; set; }
 
         [Required]
         public string IsTcsEmployee { get; set; }

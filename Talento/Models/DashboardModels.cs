@@ -42,7 +42,7 @@ namespace Talento.Models
 
     public class PositionModel
     {
-        public int Id { get; set; }
+        public int PositionId { get; set; }
 
         [Required(ErrorMessage = "Title is required")]
         public string Title { get; set; }
@@ -101,12 +101,12 @@ namespace Talento.Models
 
         public IList<Log> Logs { get; set; }
 
-        public IList<Candidate> Candidates { get; set; }
+        public IList<PositionCandidates> PositionCandidates { get; set; }
     }
     
     public class EditPositionViewModel
     {
-        public int Id { get; set; }
+        public int PositionId { get; set; }
 
         [Required(ErrorMessage = "Title is required")]
         public string Title { get; set; }

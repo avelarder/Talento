@@ -13,7 +13,7 @@ namespace Talento.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int CandidateId { get; set; }
 
         [StringLength(50, ErrorMessage = "Name must have 50 characters maximum")]
         [Required(ErrorMessage = "Name is required")]
@@ -32,35 +32,19 @@ namespace Talento.Entities
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
 
-        public DateTime? CratedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
         public string CreatedBy_Id { get; set; }
 
         [ForeignKey("CreatedBy_Id")]
         public virtual ApplicationUser CreatedBy { get; set; }
 
-        [Required(ErrorMessage = "Status is required")]
-        [DefaultValue("New")]
-        public CandidateStatus Status { get; set; }
-
         [Required]
         [DefaultValue(true)]
         public bool IsTcsEmployee { get; set; }
 
-        public virtual ICollection<Position> Positions { get; set; }
+        public virtual ICollection<PositionCandidates> PositionCandidates { get; set; }
 
         public virtual ICollection<FileBlob> FileBlobs { get; set; }
     }
-
-    public enum CandidateStatus
-    {
-        New = 0,
-        Technical_Interview = 1,
-        Conditional_Offer = 2,
-        Customer_Interview = 3,
-        Accepted = 4,
-        Rejected = 5,
-        Cancelled = 6
-    }
-
 }

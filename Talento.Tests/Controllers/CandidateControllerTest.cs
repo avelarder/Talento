@@ -45,7 +45,7 @@ namespace Talento.Tests.Controllers
             };
             var positionTest = new Position()
             {
-                Id = 1,
+                PositionId = 1,
                 Title = "aTitle",
             };
             Candidate candidate = new Candidate();
@@ -67,7 +67,6 @@ namespace Talento.Tests.Controllers
                 Email = "aMail@tcs.com",
                 Name = "pepito",
                 IsTcsEmployee = "on",
-                Status = CandidateStatus.New,
                 CreatedBy_Id = "1"
             };
 
@@ -118,7 +117,7 @@ namespace Talento.Tests.Controllers
             };
             var positionTest = new Position()
             {
-                Id = 1,
+                PositionId = 1,
                 Title = "aTitle",
             };
             byte[] blob = new byte[1];
@@ -135,7 +134,7 @@ namespace Talento.Tests.Controllers
             };
             EditCandidateViewModel candidateViewModel = new EditCandidateViewModel
             {
-                Id = 1,
+                CandidateId = 1,
                 Position_Id = 1,
                 Competencies = "someCompetencies",
                 CratedOn = DateTime.Now,
@@ -144,7 +143,6 @@ namespace Talento.Tests.Controllers
                 Email = "aMail@tcs.com",
                 Name = "pepito",
                 IsTcsEmployee = "on",
-                Status = CandidateStatus.New,
                 CreatedBy_Id = "1"
             };
 
@@ -211,11 +209,14 @@ namespace Talento.Tests.Controllers
             };
             var positionTest = new Position()
             {
-                Id = 1,
+                PositionId = 1,
                 Title = "aTitle",
                 Owner = userTest
             };
-            Candidate candidate = new Candidate();
+            Candidate candidate = new Candidate
+            {
+                CandidateId = 1
+            };
             byte[] blob = new byte[1];
             HashSet<FileBlob> files = new HashSet<FileBlob>()
             {
@@ -234,8 +235,16 @@ namespace Talento.Tests.Controllers
                 Email = "aMail@tcs.com",
                 Name = "pepito",
                 IsTcsEmployee = "on",
-                Status = CandidateStatus.Accepted,
-                CreatedBy_Id = "1"
+                CreatedBy_Id = "1",
+                PositionCandidates = new List<PositionCandidates>
+                {
+                    new PositionCandidates{
+                        Candidate = candidate,
+                        Position = positionTest,
+                        Status = PositionCandidatesStatus.Interview_Accepted
+                    }
+                },
+                CandidateId = 1
             };
 
             mockUserHelper.Setup(p => p.GetUserByEmail("pablo@example.com")).Returns(userTest);

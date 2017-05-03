@@ -20,9 +20,10 @@ namespace Talento.Tests.Controllers
         public void GetPositionByIdTest()
         {
             ApplicationUser appUser = new ApplicationUser();
-            Position posPoco = new Position();
-            posPoco.PortfolioManager = appUser;
-
+            Position posPoco = new Position()
+            {
+                PortfolioManager = appUser
+            };
             var mocks = new MockRepository(MockBehavior.Default);
             Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
             mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
@@ -35,7 +36,7 @@ namespace Talento.Tests.Controllers
             Mock<IPosition> position = new Mock<IPosition>();
             Position posParam = new Position()
             {
-                Id = 5,
+                PositionId = 5,
                 Area = "IT",
                 CreationDate = DateTime.MaxValue,
                 Description = ".Net Developer",
@@ -95,7 +96,7 @@ namespace Talento.Tests.Controllers
             Mock<ICustomUser> user = new Mock<ICustomUser>();
             Position posParam = new Position()
             {
-                Id = 1,
+                PositionId = 1,
                 Area = "IT",
                 CreationDate = DateTime.MaxValue,
                 Description = ".Net Developer",
@@ -139,7 +140,7 @@ namespace Talento.Tests.Controllers
             Mock<ICustomUser> user = new Mock<ICustomUser>();
             Position posParam = new Position()
             {
-                Id = 1,
+                PositionId = 1,
                 Area = "IT",
                 CreationDate = DateTime.MaxValue,
                 Description = ".Net Developer",
@@ -183,7 +184,7 @@ namespace Talento.Tests.Controllers
             Mock<ICustomUser> user = new Mock<ICustomUser>();
             Position posParam = new Position()
             {
-                Id = 1,
+                PositionId = 1,
                 Area = "IT",
                 CreationDate = DateTime.MaxValue,
                 Description = ".Net Developer",
@@ -230,7 +231,7 @@ namespace Talento.Tests.Controllers
 
             Position posParam = new Position()
             {
-                Id = 1,
+                PositionId = 1,
                 Area = "IT",
                 CreationDate = DateTime.MaxValue,
                 Description = ".Net Developer",
@@ -244,7 +245,7 @@ namespace Talento.Tests.Controllers
             };
 
             positionhelper.Setup(x => x.Get(1)).Returns(posParam);
-            var result = controller.Delete(posParam.Id);
+            var result = controller.Delete(posParam.PositionId);
 
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
@@ -298,7 +299,7 @@ namespace Talento.Tests.Controllers
             Position positionCreate = new Position()
             {
                 Owner = appUser,
-                Id = 1,
+                PositionId = 1,
                 Area = positionViewModel.Area,
                 CreationDate = DateTime.MaxValue,
                 Description = positionViewModel.Description,
@@ -330,9 +331,10 @@ namespace Talento.Tests.Controllers
         public void GetCandidatesByPositionIdTest()
         {
             ApplicationUser appUser = new ApplicationUser();
-            Position posPoco = new Position();
-            posPoco.PortfolioManager = appUser;
-
+            Position posPoco = new Position()
+            {
+                PortfolioManager = appUser
+            };
             var mocks = new MockRepository(MockBehavior.Default);
             Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
             mockPrincipal.Setup(p => p.IsInRole("Admin")).Returns(true);
@@ -345,7 +347,7 @@ namespace Talento.Tests.Controllers
             Mock<IPosition> position = new Mock<IPosition>();
             Position posParam = new Position()
             {
-                Id = 5,
+                PositionId = 5,
                 Area = "IT",
                 CreationDate = DateTime.MaxValue,
                 Description = ".Net Developer",
@@ -356,13 +358,17 @@ namespace Talento.Tests.Controllers
                 RGS = "Unknown101",
                 Tags = null,
                 Title = "Need a Developer to do stuff",
-                Candidates = new List<Candidate> {
-                    new Candidate{
-                        Email = "candidate1@tcs.com"
+                PositionCandidates = new List<PositionCandidates> {
+                    new PositionCandidates{
+                        Candidate = new Candidate{
+                            Email = "candidate1@tcs.com"
+                        }
                     },
-                    new Candidate{
-                        Email = "candidate2@tcs.com"
-                    }
+                    new PositionCandidates{
+                        Candidate = new Candidate{
+                            Email = "candidate2@tcs.com"
+                        }
+                    },
                 }
             };
 
@@ -392,7 +398,7 @@ namespace Talento.Tests.Controllers
 
             Assert.IsNotNull(viewmodel);
             Assert.IsInstanceOfType(viewmodel, typeof(PositionModel));
-            Assert.AreEqual(viewmodel.Id, posParam.Id);
+            Assert.AreEqual(viewmodel.PositionId, posParam.PositionId);
         }
     }
 }
