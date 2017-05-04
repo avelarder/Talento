@@ -332,6 +332,7 @@
     <Content Include="Views\Settings\List.cshtml" />
     <Content Include="Views\Dashboard\AddSettingsForm.cshtml" />
     <Content Include="Views\Settings\EditSettingsForm.cshtml" />
+    <Content Include="Views\Shared\TIFFDownload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
