@@ -77,10 +77,10 @@
                 @p.CreationDate
             </td>
             <td>
-                @Html.ActionLink(@p.Id.ToString(), "Details", "Positions", new { id = p.Id }, null)
+                @Html.ActionLink(@p.PositionId.ToString(), "Details", "Positions", new { id = p.PositionId }, null)
             </td>
             <td>
-                @Html.ActionLink(@p.Title.ToString(), "Details", "Positions", new { id = p.Id }, null)
+                @Html.ActionLink(@p.Title.ToString(), "Details", "Positions", new { id = p.PositionId }, null)
             </td>
             <td>
                 @p.Status.ToString()
@@ -105,7 +105,7 @@
                 {
                     <input data-target="#complete-dialog" data-toggle="modal"
                            class="btn-modal btn btn-primary pmd-ripple-effect btn-primary pmd-z-depth"
-                           name="position-@p.Id"
+                           name="position-@p.PositionId"
                            style="width:20px" value="Add" />
                 }
             </td>

@@ -6,7 +6,7 @@
             <form id="EditCandidateForm" method="post" action="/Candidate/Edit">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.AntiForgeryToken()
-                <input type="hidden" id="Id" name="Id" value="@Model.Id">
+                <input type="hidden" id="CandidateId" name="CandidateId" value="@Model.CandidateId">
                 <input type="hidden" id="Position_Id" name="Position_Id" value="@Model.Position_Id">
                 <div class="modal-body">
                     <p><strong>Edit Profile</strong></p>
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        @Html.Action("Edit", "File", new { candidateId = Model.Id })
+                        @Html.Action("Edit", "File", new { candidateId = Model.CandidateId })
                     </div>
                 </div>
                 <div class="pmd-modal-action pmd-modal-bordered text-right">
@@ -72,7 +72,7 @@
         function addFile() {
             var formData = new FormData();
             formData.append('image', $('input[type=file]')[0].files[0]);
-            formData.append('candidateId', @Model.Id);
+            formData.append('candidateId', @Model.CandidateId);
             $.ajax({
                 type: "POST",
                 url: '/File/Add',
@@ -95,7 +95,7 @@
             $.ajax({
                 type: "POST",
                 url: '/File/DeleteEdit',
-                data: "filename=" + filename + "&candidateid="+@Model.Id,
+                data: "filename=" + filename + "&candidateid="+@Model.CandidateId,
                 success: function (response) {
                     updatelist();
                 },

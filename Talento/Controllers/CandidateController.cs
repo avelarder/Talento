@@ -31,7 +31,7 @@ namespace Talento.Controllers
                     .ForMember(t => t.CreatedBy_Id, opt => opt.MapFrom(s => s.CreatedBy_Id))
                 ;
                 cfg.CreateMap<Candidate, EditCandidateViewModel>()
-                    .ForMember(s => s.Positions, opt => opt.MapFrom(p => p.Positions))
+                    .ForMember(s => s.PositionCandidates, opt => opt.MapFrom(p => p.PositionCandidates))
                 ;
 
             });
@@ -41,7 +41,7 @@ namespace Talento.Controllers
         {
             MemoryStream ms = new MemoryStream();
             TextWriter tw = new StreamWriter(ms);
-            var callbackUrl = Url.Action("Details", "Positions", new { toApply.Id }, protocol: Request.Url.Scheme);
+            var callbackUrl = Url.Action("Details", "Positions", new { toApply.PositionId }, protocol: Request.Url.Scheme);
             string body = "A profile has been added to " + toApply.Title + " by " + User.Identity.Name + " . " +
                             "Please visit the following URL for more information: " + callbackUrl;
             tw.WriteLine(body);
@@ -68,7 +68,7 @@ namespace Talento.Controllers
         {
             MemoryStream ms = new MemoryStream();
             TextWriter tw = new StreamWriter(ms);
-            var callbackUrl = Url.Action("Details", "Positions", new { toapply.Id }, protocol: Request.Url.Scheme);
+            var callbackUrl = Url.Action("Details", "Positions", new { toapply.PositionId }, protocol: Request.Url.Scheme);
             string body = "A profile's interview feedback form has been added to " + toapply.Title + " by " + User.Identity.Name + "." +
                             " Please visit the following URL for more information: " + callbackUrl;
             tw.WriteLine(body);
@@ -94,11 +94,12 @@ namespace Talento.Controllers
         //Call this action when a feedback interview change status
         public ActionResult InterviewFeedbackNewStatus(EditCandidateViewModel model, Position toapply, List<ApplicationUser> recipients)
         {
-            if (model.Status == CandidateStatus.Accepted)
+
+            if (model.PositionCandidates.FirstOrDefault(x => x.Position.PositionId == toapply.PositionId && x.Candidate.CandidateId == model.CandidateId).Status == PositionCandidatesStatus.Interview_Accepted)
             {
                 MemoryStream ms = new MemoryStream();
                 TextWriter tw = new StreamWriter(ms);
-                string callbackUrl = Url.Action("Details", "Positions", new { toapply.Id }, protocol: Request.Url.Scheme);
+                string callbackUrl = Url.Action("Details", "Positions", new { toapply.PositionId }, protocol: Request.Url.Scheme);
                 string body = model.Email + "has been accepted for " + toapply.Title + ", reported by " + User.Identity.Name + "." +
                                 " Please visit the following URL for more information: " + callbackUrl;
                 tw.WriteLine(body);
@@ -140,7 +141,7 @@ namespace Talento.Controllers
             candidate.Position_Id = positionId;
             Position currentPosition = PositionHelper.Get(positionId);
 
-            if (!currentPosition.Candidates.Any(x => x.Id.Equals(candidate.Id)))
+            if (!currentPosition.PositionCandidates.Any(x => x.CandidateID.Equals(candidate.CandidateId)))
             {
                 return HttpNotFound();
             }
@@ -167,18 +168,17 @@ namespace Talento.Controllers
                 {
                     HashSet<FileBlob> files = ((HashSet<FileBlob>)Session["files"]);
 
-                    string email = CandidateHelper.Get(candidate.Id).Email;
+                    string email = CandidateHelper.Get(candidate.CandidateId).Email;
 
                     Candidate newCandidate = new Candidate
                     {
-                        Id = candidate.Id,
+                        CandidateId = candidate.CandidateId,
                         Description = candidate.Description,
                         Competencies = candidate.Competencies,
                         Name = candidate.Name,
                         IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
-                        Status = candidate.Status,
                         Email = email,
-                        Positions = new List<Position> { PositionHelper.Get(candidate.Position_Id) }
+                        PositionCandidates = CandidateHelper.Get(candidate.CandidateId).PositionCandidates
                     };
 
                     int result = CandidateHelper.Edit(newCandidate, files, UserHelper.GetUserByEmail(User.Identity.Name));
@@ -208,7 +208,7 @@ namespace Talento.Controllers
             try
             {
                 int id = int.Parse(positionId);
-                if (PositionHelper.Get(id).Candidates.Where(x => x.Email.Trim().ToLower().Equals(emailCandidate.Trim().ToLower())).Count() > 0)
+                if (PositionHelper.Get(id).PositionCandidates.Where(x => x.Candidate.Email.Trim().ToLower().Equals(emailCandidate.Trim().ToLower())).Count() > 0)
                 {
                     return null;
                 }
@@ -230,28 +230,34 @@ namespace Talento.Controllers
             {
                 HashSet<FileBlob> files = ((HashSet<FileBlob>)Session["files"]);
                 ApplicationUser user = UserHelper.GetUserByEmail(User.Identity.Name);
-                List<Position> position = new List<Position> { PositionHelper.Get(candidate.Position_Id) };
-                if (position.First().Status == Status.Open)
+                Position position = PositionHelper.Get(candidate.Position_Id);
+                if (position.Status == Status.Open)
                 {
                     Candidate newCandidate = new Candidate
                     {
                         Competencies = candidate.Competencies,
-                        CratedOn = DateTime.Now,
+                        CreatedOn = DateTime.Now,
                         CreatedBy = user,
                         Description = candidate.Description,
                         Email = candidate.Email,
                         Name = candidate.Name,
                         IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
-                        Status = candidate.Status,
                         CreatedBy_Id = user.Id,
-                        Positions = position,
+                        PositionCandidates = new List<PositionCandidates>
+                        {
+                            new PositionCandidates
+                            {
+                                Position = PositionHelper.Get(candidate.Position_Id),
+                                Status = PositionCandidatesStatus.New
+                            }
+                        },
                         FileBlobs = files
                     };
 
                     int result = CandidateHelper.Create(newCandidate);
                     if (result != -1)
                     {
-                        return AttachProfile(candidate, position.First(), UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
+                        return AttachProfile(candidate, position, UserHelper.GetByRoles(new List<string> { "PM", "TL", "TAG", "RMG" }));
                     }
                 }
                 else

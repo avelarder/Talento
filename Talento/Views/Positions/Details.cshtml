@@ -38,8 +38,8 @@
                 <i class="material-icons md-24">keyboard_arrow_left</i>
             </a>
 
-            @*<input type="button" name="edit" value="Edit" onclick="@("window.location.href='" + @Url.Action("Edit", "Positions", new { id = Model.Id }) + "'");" />*@
-            <a href="@Url.Action("Edit", "Positions", new { id = Model.Id })" alt="Edit position">
+            @*<input type="button" name="edit" value="Edit" onclick="@("window.location.href='" + @Url.Action("Edit", "Positions", new { id = Model.PositionId }) + "'");" />*@
+            <a href="@Url.Action("Edit", "Positions", new { id = Model.PositionId })" alt="Edit position">
                 <i class="material-icons md-24">mode_edit</i>
             </a>
 
@@ -58,7 +58,7 @@
                         </div>
                         <div class="pmd-modal-action pmd-modal-bordered text-right">
                             <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                            <button data-dismiss="modal" type="button" onclick="@("window.location.href='" + @Url.Action("Delete", "Positions", new { id = Model.Id }) + "'");" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
+                            <button data-dismiss="modal" type="button" onclick="@("window.location.href='" + @Url.Action("Delete", "Positions", new { id = Model.PositionId }) + "'");" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
         <a href="#" class="container-close pmd-tooltip" data-toggle="tooltip" data-placement="left" title="Pagination Log">
             <i class="material-icons">format_list_bulleted</i>
         </a>
-        @Html.Action("List", "Positions", new { id = Model.Id })
+        @Html.Action("List", "Positions", new { id = Model.PositionId })
     </div>
 </div>
 
@@ -87,7 +87,6 @@
                     <th>Email</th>
                     <th>Created On</th>
                     <th>Created By</th>
-                    <th>Status</th>
                     @if (ViewBag.userRole != "Admin")
                     {
                         <th>
@@ -109,21 +108,18 @@
                         @cP.Email
                     </td>
                     <td>
-                        @cP.CratedOn
+                        @cP.CreatedOn
                     </td>
                     <td>
                         @cP.CreatedBy.Email
                     </td>
                     <td>
-                        @cP.Status
-                    </td>
-                    <td>
-                        <a href="@Url.Action("Edit", "Candidate",new { id = cP.Id, positionId = Model.Id } )" class="material-icons md-24 edit-candidate" data-target="#edit-position-dialog" alt="Edit candidate">
+                        <a href="@Url.Action("Edit", "Candidate",new { id = cP.CandidateId, positionId = Model.PositionId } )" class="material-icons md-24 edit-candidate" data-target="#edit-position-dialog" alt="Edit candidate">
                             mode_edit
                         </a>
                     </td>
                     <td>
-                        <a href="#" class="delete-candidate" data-target="#delete-position-dialog" data-candidate="@cP.Id" alt="Delete candidate">
+                        <a href="#" class="delete-candidate" data-target="#delete-position-dialog" data-candidate="@cP.CandidateId" alt="Delete candidate">
                             <i class="material-icons md-24">delete</i>
                         </a>
                     </td>
@@ -140,7 +136,7 @@
                     var $buttonDelete = $("#delete-candidate-button");
                     var url = $buttonDelete.attr("data-url");
                     var dataCandidate = "";
-                    var positionId = "@Model.Id";
+                    var positionId = "@Model.PositionId";
                     $buttonDelete.on("click", function (event) {
                         event.preventDefault();
                         $.ajax({
@@ -354,7 +350,7 @@
         </script>
         <!--pagination-->
         <!-- output a paging control that lets the user navigation to the previous page, next page, etc -->
-        @Html.PagedListPager((IPagedList)ViewBag.onePageOfCandidatePositions, page => Url.Action("Details", "Positions", new { Model.Id, page }))
+        @Html.PagedListPager((IPagedList)ViewBag.onePageOfCandidatePositions, page => Url.Action("Details", "Positions", new { Model.PositionId, page }))
 
         <!--Delete profile modal-->
         <div tabindex="-1" class="modal fade" id="delete-position-dialog" style="display: none;" aria-hidden="true">
@@ -365,7 +361,7 @@
                     </div>
                     <div class="pmd-modal-action pmd-modal-bordered text-right">
                         <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                        <button id="delete-candidate-button" data-candidate="" data-position="@Model.Id" data-url="@Url.Action("DeleteCandidate", "Positions")" data-dismiss="modal" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
+                        <button id="delete-candidate-button" data-candidate="" data-position="@Model.PositionId" data-url="@Url.Action("DeleteCandidate", "Positions")" data-dismiss="modal" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
                     </div>
                 </div>
             </div>
@@ -384,7 +380,7 @@
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             @Html.AntiForgeryToken()
                             <div class="form-horizontal">
-                                <input data-val="true" data-val-number="The field Id must be a number." data-val-required="The Id field is required." id="Position_Id" name="Position_Id" type="hidden" value="@Model.Id" />
+                                <input data-val="true" data-val-number="The field Id must be a number." data-val-required="The Id field is required." id="Position_Id" name="Position_Id" type="hidden" value="@Model.PositionId" />
                                 <div class="form-group">
                                     <label class="control-label col-md-2" for="Name">Name </label>
                                     <div class="col-md-10">

@@ -42,7 +42,7 @@ namespace Talento.Core.Helpers
         public void Delete(int Id, string uId)
         {
             ApplicationUser cu = Db.Users.Single(u => u.Id.Equals(uId)); //Get Current User
-            var p = Db.Positions.Where(x => x.Id == Id).Single();
+            var p = Db.Positions.Where(x => x.PositionId == Id).Single();
             // Add Log to Position
             string description = string.Format("Position Deleted by {0} at {1}", cu.Email, DateTime.Now.ToShortDateString());
             Log log = new Log()
@@ -65,7 +65,7 @@ namespace Talento.Core.Helpers
             try
             {
                 //Obtaining the position in its original state
-                Position position = Db.Positions.Single(p => p.Id == log.Id);
+                Position position = Db.Positions.Single(p => p.PositionId == log.PositionId);
                 //And obtaining the user that is modifying the Position
                 var previousStatus = position.Status;
                 //Modifying the position info from the edit form
@@ -123,7 +123,7 @@ namespace Talento.Core.Helpers
             var position = Db.Positions
                 .Include("Owner")
                 .Include("PortfolioManager")
-                .Single(x => x.Id == Id);
+                .Single(x => x.PositionId == Id);
 
             return position;
         }
@@ -137,20 +137,20 @@ namespace Talento.Core.Helpers
         {
             try
             {
-                Position currentPosition = Db.Positions.Find(position.Id);
-                currentPosition.Candidates.Remove(candidate);
+                PositionCandidates positionCandidate = Db.PositionCandidates.Where(pc => pc.CandidateID == candidate.CandidateId && pc.PositionID == position.PositionId).Single();
+                positionCandidate.Status = PositionCandidatesStatus.Mannualy_Removed;
 
                 Log log = new Log()
                 {
                     Action = Entities.Action.Edit,
-                    ActualStatus = currentPosition.Status,
-                    PreviousStatus = currentPosition.Status,
+                    ActualStatus = positionCandidate.Position.Status,
+                    PreviousStatus = positionCandidate.Position.Status,
                     Description = String.Format("Candidate {0} has been removed from position.", candidate.Email),
                     Date = DateTime.Now,
                     ApplicationUser_Id = modifier.Id,
                     User = modifier,
                 };
-                currentPosition.Logs.Add(log);
+                positionCandidate.Position.Logs.Add(log);
 
                 Db.SaveChanges();
             }

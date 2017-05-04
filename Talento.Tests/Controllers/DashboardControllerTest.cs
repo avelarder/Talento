@@ -34,7 +34,7 @@ namespace Talento.Tests.Controllers
 
             // create controller
             Mock<ICustomPagingList> mCustomPagingList = new Mock<ICustomPagingList>();
-            mCustomPagingList.Setup(x => x.GetAdminTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { Id = 1 } });
+            mCustomPagingList.Setup(x => x.GetAdminTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { PositionId = 1 } });
             DashboardController controller = new DashboardController(mCustomPagingList.Object)
             {
                 ControllerContext = mockContext.Object
@@ -65,7 +65,7 @@ namespace Talento.Tests.Controllers
 
             // create controller
             Mock<ICustomPagingList> mCustomPagingList = new Mock<ICustomPagingList>();
-            mCustomPagingList.Setup(x => x.GetBasicTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { Id = 1 } });
+            mCustomPagingList.Setup(x => x.GetBasicTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { PositionId = 1 } });
             DashboardController controller = new DashboardController(mCustomPagingList.Object)
             {
                 ControllerContext = mockContext.Object
@@ -95,7 +95,7 @@ namespace Talento.Tests.Controllers
 
             // create controller
             Mock<ICustomPagingList> mCustomPagingList = new Mock<ICustomPagingList>();
-            mCustomPagingList.Setup(x => x.GetAdminTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { Id = 1 } });
+            mCustomPagingList.Setup(x => x.GetAdminTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { PositionId = 1 } });
             DashboardController controller = new DashboardController(mCustomPagingList.Object)
             {
                 ControllerContext = mockContext.Object

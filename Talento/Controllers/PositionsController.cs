@@ -32,7 +32,7 @@ namespace Talento.Controllers
             {
                 cfg.CreateMap<Position, PositionModel>()
                     .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id))
-                    .ForMember(s => s.Candidates, opt => opt.MapFrom(p => p.Candidates))
+                    .ForMember(s => s.PositionCandidates, opt => opt.MapFrom(p => p.PositionCandidates))
                      .ForMember(s => s.Logs, opt => opt.MapFrom(p => p.Logs))
                 ;
                 cfg.CreateMap<Position, EditPositionViewModel>();
@@ -78,7 +78,7 @@ namespace Talento.Controllers
             }
 
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
-            var onePageOfCandidatePositions = position.Candidates.OrderByDescending(x => x.CratedOn).ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+            var onePageOfCandidatePositions = position.PositionCandidates.OrderByDescending(x => x.Candidate.CreatedOn).Select(x => x.Candidate).ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
             ViewBag.page = pageNumber;
             ViewBag.onePageOfCandidatePositions = onePageOfCandidatePositions;
 

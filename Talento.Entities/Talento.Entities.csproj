@@ -60,6 +60,7 @@
     <Compile Include="FileBlob.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="PositionCandidates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tag.cs" />
   </ItemGroup>

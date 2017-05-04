@@ -125,7 +125,7 @@ namespace Talento.Controllers
                 }
                 catch (Exception)
                 {
-                    throw;
+                    //throw;
                 }
             }
         }

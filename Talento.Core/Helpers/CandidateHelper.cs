@@ -21,33 +21,18 @@ namespace Talento.Core.Helpers
             LogHelper = logHelper;
         }
 
-        private int CandidateToPosition(Candidate candidate, Position position)
-        {
-            try
-            {
-                Db.Candidates.SingleOrDefault(x => x.Id.Equals(candidate.Id)).Positions.Add(position);
-                Db.SaveChanges();
-                return 0;
-            }
-            catch (Exception)
-            {
-                //Candidate already exists in specified position
-                return -2;
-            }
-        }
-
         public int Create(Candidate newCandidate)
         {
             try
             {
                 using (var tx = new TransactionScope(TransactionScopeOption.Required))
                 {
-                    Position currentPosition = PositionHelper.Get(newCandidate.Positions.First().Id);
+                    Position currentPosition = PositionHelper.Get(newCandidate.PositionCandidates.First().PositionID);
 
-                    foreach (Candidate c in currentPosition.Candidates)
+                    foreach (PositionCandidates c in currentPosition.PositionCandidates)
                     {
                         //If Email is already in the position return -1
-                        if (c.Email.Trim().ToLower().Contains(newCandidate.Email.Trim().ToLower()))
+                        if (c.Candidate.Email.Trim().ToLower().Contains(newCandidate.Email.Trim().ToLower()))
                         {
                             return -1;
                         }
@@ -88,17 +73,16 @@ namespace Talento.Core.Helpers
         {
             try
             {
-                Db.Candidates.Single(x => x.Id == editCandidate.Id).Competencies = editCandidate.Competencies;
-                Db.Candidates.Single(x => x.Id == editCandidate.Id).Description = editCandidate.Description;
-                Db.Candidates.Single(x => x.Id == editCandidate.Id).Name = editCandidate.Name;
-                Db.Candidates.Single(x => x.Id == editCandidate.Id).Status = editCandidate.Status;
-                Db.Candidates.Single(x => x.Id == editCandidate.Id).IsTcsEmployee = editCandidate.IsTcsEmployee;
-                Db.Candidates.Single(x => x.Id == editCandidate.Id).FileBlobs.Clear();
-                Db.Candidates.Single(x => x.Id == editCandidate.Id).FileBlobs = files;
+                Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).Competencies = editCandidate.Competencies;
+                Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).Description = editCandidate.Description;
+                Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).Name = editCandidate.Name;
+                Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).IsTcsEmployee = editCandidate.IsTcsEmployee;
+                Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).FileBlobs.Clear();
+                Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).FileBlobs = files;
 
                 Db.SaveChanges();
 
-                Position positionToLog = editCandidate.Positions.Last();
+                Position positionToLog = editCandidate.PositionCandidates.Last().Position;
 
                 Log log = new Log
                 {
@@ -110,7 +94,7 @@ namespace Talento.Core.Helpers
                     PreviousStatus = positionToLog.Status
                 };
 
-                PositionHelper.Get(positionToLog.Id).Logs.Add(log);
+                PositionHelper.Get(positionToLog.PositionId).Logs.Add(log);
 
                 Db.SaveChanges();
 
@@ -126,7 +110,7 @@ namespace Talento.Core.Helpers
         {
             try
             {
-                var candidate = Db.Candidates.Single(x => x.Id == Id);
+                var candidate = Db.Candidates.Single(x => x.CandidateId == Id);
                 return candidate;
             }
             catch (Exception)
