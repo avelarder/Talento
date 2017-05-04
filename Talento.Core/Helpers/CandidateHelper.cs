@@ -123,5 +123,32 @@ namespace Talento.Core.Helpers
         {
             return await Db.Candidates.ToListAsync();
         }
+
+        public void ChangeStatus(int Id, PositionCandidatesStatus newStatus, ApplicationUser currentUser)
+        {
+            PositionCandidates pc = Db.PositionCandidates.Single(x => x.CandidateID == Id);
+            Candidate candidateToLog = Db.Candidates.Find(pc.CandidateID);
+            Position positionToLog = Db.Positions.Single(x => x.PositionId == pc.PositionID);
+            pc.Status = newStatus;
+            Log log = new Log
+            {
+                Action = Entities.Action.Edit,
+                ActualStatus = positionToLog.Status,
+                User = currentUser,
+                Date = DateTime.Now,
+                Description = String.Format("Candidate {0} has been updated.", candidateToLog.Email)
+            };
+
+            PositionHelper.Get(positionToLog.PositionId).Logs.Add(log);
+
+            Db.SaveChanges();
+        }
+
+        public PositionCandidates GetPositionCandidate(int Id)
+        {
+            return Db.PositionCandidates.Single(x => x.CandidateID == Id);
+        }
+
+
     }
 }
