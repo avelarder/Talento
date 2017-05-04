@@ -51,7 +51,7 @@ namespace Talento.Core.Helpers
                     };
 
                     currentPosition.Logs.Add(log);
-                    currentPosition.OpenStatus = OpenStatus.Screening;
+                    currentPosition.OpenStatus = PositionOpenStatus.Screening;
                     int result = Db.SaveChanges();
                     tx.Complete();
                     return result;
@@ -126,22 +126,53 @@ namespace Talento.Core.Helpers
 
         public void ChangeStatus(int Id, PositionCandidatesStatus newStatus, ApplicationUser currentUser)
         {
-            PositionCandidates pc = Db.PositionCandidates.Single(x => x.CandidateID == Id);
-            Candidate candidateToLog = Db.Candidates.Find(pc.CandidateID);
-            Position positionToLog = Db.Positions.Single(x => x.PositionId == pc.PositionID);
-            pc.Status = newStatus;
-            Log log = new Log
+            try
+            { 
+                PositionCandidates pc = Db.PositionCandidates.Single(x => x.CandidateID == Id);
+                // Check if Update Status is Valid Conditions
+                if ((int)pc.Status == 1)
+                {
+                    if ((int)newStatus != 3 && (int)newStatus != 4)
+                    {
+                        throw new Exception();
+                    }
+                }
+                else if ((int)pc.Status == 3)
+                {
+                    if ((int)newStatus != 6 && (int)newStatus != 7)
+                    {
+                        throw new Exception();
+                    }
+                }
+                else
+                {
+                    throw new Exception();
+                }               
+
+                Candidate candidateToLog = Db.Candidates.Find(pc.CandidateID);
+                Position positionToLog = Db.Positions.Single(x => x.PositionId == pc.PositionID);
+            
+                pc.Status = newStatus;
+                var name = Enum.GetName(typeof(PositionCandidatesStatus), newStatus).Replace("_", " ");
+
+                Log log = new Log
+                {
+                    Action = Entities.Action.Edit,
+                    ActualStatus = positionToLog.Status,
+                    User = currentUser,
+                    Date = DateTime.Now,
+                    Description = String.Format("Candidate {0} Status has been updated to {1}.", candidateToLog.Email, name)
+                };
+
+                PositionHelper.Get(positionToLog.PositionId).Logs.Add(log);
+
+                Db.SaveChanges();
+            }
+            catch (Exception)
             {
-                Action = Entities.Action.Edit,
-                ActualStatus = positionToLog.Status,
-                User = currentUser,
-                Date = DateTime.Now,
-                Description = String.Format("Candidate {0} has been updated.", candidateToLog.Email)
-            };
+                throw;
+            }
 
-            PositionHelper.Get(positionToLog.PositionId).Logs.Add(log);
-
-            Db.SaveChanges();
         }
 
         public PositionCandidates GetPositionCandidate(int Id)

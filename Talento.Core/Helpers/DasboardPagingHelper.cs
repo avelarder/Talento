@@ -133,7 +133,7 @@ namespace Talento.Core.Helpers
 
             //Linq query that lists the positions
             var query = from p in Db.Positions
-                        where p.Status != Status.Removed
+                        where p.Status != PositionStatus.Removed
                         select p;
 
             //Filtering the positions by the parameters given

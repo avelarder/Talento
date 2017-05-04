@@ -52,11 +52,11 @@ namespace Talento.Core.Helpers
                 Action = Entities.Action.Delete,
                 PreviousStatus = p.Status,
                 Description = description,
-                ActualStatus = Status.Removed,
+                ActualStatus = PositionStatus.Removed,
                 ApplicationUser_Id = cu.Id
             };
             p.Logs.Add(log);
-            p.Status = Status.Removed;
+            p.Status = PositionStatus.Removed;
             Db.SaveChanges();
         }
 
@@ -82,15 +82,15 @@ namespace Talento.Core.Helpers
 
                 switch (position.Status = log.Status)
                 {
-                    case Status.Cancelled:
+                    case PositionStatus.Cancelled:
                         position.LastCancelledDate = DateTime.Now;
                         position.LastCancelledBy = modifier;
                         break;
-                    case Status.Open:
+                    case PositionStatus.Open:
                         position.LastOpenedDate = DateTime.Now;
                         position.LastOpenedBy = modifier;
                         break;
-                    case Status.Closed:
+                    case PositionStatus.Closed:
                         position.LastClosedDate = DateTime.Now;
                         position.LastClosedBy = modifier;
                         break;
