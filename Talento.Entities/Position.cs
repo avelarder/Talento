@@ -44,7 +44,7 @@ namespace Talento.Entities
 
         [Required(ErrorMessage = "Status is required")]
         [DefaultValue("Open")]
-        public Status Status { get; set; }
+        public PositionStatus Status { get; set; }
 
         public List<Tag> Tags { get; set; }
 
@@ -77,14 +77,14 @@ namespace Talento.Entities
         
         [Required(ErrorMessage = "OpenStatus is required")]
         [DefaultValue("New")]
-        public OpenStatus OpenStatus { get; set; }
+        public PositionOpenStatus OpenStatus { get; set; }
 
         public virtual ICollection<PositionCandidates> PositionCandidates { get; set; }
 
         public virtual ICollection<Log> Logs { get; set; }
     }
 
-    public enum Status
+    public enum PositionStatus
     {
         Removed = 1,
         Open = 2,
@@ -92,7 +92,7 @@ namespace Talento.Entities
         Closed = 4
     }
 
-    public enum OpenStatus
+    public enum PositionOpenStatus
     {
         New = 0,
         Screening = 1,

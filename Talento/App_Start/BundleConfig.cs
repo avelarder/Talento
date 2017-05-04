@@ -37,8 +37,8 @@ namespace Talento
                       "~/Content/styles.css",
                       "~/Content/PagedList.css",
                       "~/Content/toastr.min.css",
-                      "~/Content/alertify.min.css"
-                      ));
+                      "~/Content/alertify.min.css",
+                      "~/Content/select2-bootstrap.css"));
         }
     }
 }

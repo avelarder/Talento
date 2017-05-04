@@ -153,6 +153,36 @@ namespace Talento.Core.Migrations
             context.SaveChanges();
             #endregion
 
+            #region TAG User1
+            if (!context.Users.Any(u => u.UserName == "TAGuser1@example.com"))
+            {
+                var passwordHash = new PasswordHasher();
+                string password = passwordHash.HashPassword("TAGuser1@123456");
+
+                var user = new ApplicationUser
+                {
+                    UserName = "TAGuser1@example.com",
+                    Email = "TAGuser1@example.com",
+                    PasswordHash = password,
+                    EmailConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString()
+                };
+
+                IdentityResult resultCreate = manager.Create(user);
+                if (resultCreate.Succeeded == false)
+                {
+                    throw new Exception(resultCreate.Errors.First());
+                }
+
+                IdentityResult resultAddToRole = manager.AddToRole(user.Id, "TAG");
+                if (resultAddToRole.Succeeded == false)
+                {
+                    throw new Exception(resultAddToRole.Errors.First());
+                }
+            }
+            context.SaveChanges();
+            #endregion
+
             var tags = new List<Tag>
             {
                 new Tag { Name = ".Net"},
@@ -178,7 +208,7 @@ namespace Talento.Core.Migrations
                     Owner = manager.FindByEmail("Pmuser1@example.com"),
                     Area="IT",
                     RGS="",
-                    Status = Status.Open,
+                    Status = PositionStatus.Open,
                     CreationDate = Convert.ToDateTime("2017-03-15T13:45:30"),
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Napoleon bonaparte",
@@ -191,7 +221,7 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Create,
-                            ActualStatus = Status.Open,
+                            ActualStatus = PositionStatus.Open,
                             User = manager.FindByEmail("Pmuser1@example.com"),
                             Description = string.Format("Position Created by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-03-15T13:45:30").ToShortDateString()),
                             Date = Convert.ToDateTime("2017-03-15T13:45:30")
@@ -205,7 +235,7 @@ namespace Talento.Core.Migrations
                     Owner = manager.FindByEmail("Tluser1@example.com"),
                     Area="BPO",
                     RGS="",
-                    Status = Status.Closed,
+                    Status = PositionStatus.Closed,
                     CreationDate = Convert.ToDateTime("2017-03-22T09:43:30"),
                     PortfolioManager = manager.FindByEmail("Pmuser2@example.com"),
                     EngagementManager ="Alejandro Magno",
@@ -220,7 +250,7 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Create,
-                            ActualStatus = Status.Open,
+                            ActualStatus = PositionStatus.Open,
                             Description = string.Format("Position Created by {0} at {1}", "Tluser1@example.com", Convert.ToDateTime("2017-03-22T09:43:30").ToShortDateString()),
                             User = manager.FindByEmail("Tluser1@example.com"),
                             Date = Convert.ToDateTime("2017-03-22T09:43:30")
@@ -234,7 +264,7 @@ namespace Talento.Core.Migrations
                     Owner = manager.FindByEmail("Tluser1@example.com"),
                     Area="BPO",
                     RGS="",
-                    Status = Status.Cancelled,
+                    Status = PositionStatus.Cancelled,
                     CreationDate = Convert.ToDateTime("2017-02-15T11:13:30"),
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Anibal Barca",
@@ -249,7 +279,7 @@ namespace Talento.Core.Migrations
                           new Log
                         {
                             Action = Entities.Action.Create,
-                            ActualStatus = Status.Open,
+                            ActualStatus = PositionStatus.Open,
                             Description = string.Format("Position Created by {0} at {1}", "Tluser1@example.com", Convert.ToDateTime("2017-02-15T11:13:30").ToShortDateString()),
                             User = manager.FindByEmail("Tluser1@example.com"),
                             Date = Convert.ToDateTime("2017-02-15T11:13:30")
@@ -257,8 +287,8 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Edit,
-                            PreviousStatus = Status.Open,
-                            ActualStatus = Status.Closed,
+                            PreviousStatus = PositionStatus.Open,
+                            ActualStatus = PositionStatus.Closed,
                             Description = string.Format("Position Edited by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-03-30T18:01:30").ToShortDateString()),
                             User = manager.FindByEmail("Pmuser1@example.com"),
                             Date = Convert.ToDateTime("2017-03-30T18:01:30")
@@ -272,7 +302,7 @@ namespace Talento.Core.Migrations
                     Owner = manager.FindByEmail("Tluser1@example.com"),
                     Area="Dev",
                     RGS="",
-                    Status = Status.Open,
+                    Status = PositionStatus.Open,
                     CreationDate = Convert.ToDateTime("2017-01-03T11:13:30"),
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="THE Engagement Manager",
@@ -285,7 +315,7 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Create,
-                            ActualStatus = Status.Open,
+                            ActualStatus = PositionStatus.Open,
                             Description = string.Format("Position Created by {0} at {1}", "Tluser1@example.com", Convert.ToDateTime("2017-01-03T11:13:30").ToShortDateString()),
                             User = manager.FindByEmail("Tluser1@example.com"),
                             Date = Convert.ToDateTime("2017-01-03T11:13:30")
@@ -299,7 +329,7 @@ namespace Talento.Core.Migrations
                     Owner = manager.FindByEmail("Tluser1@example.com"),
                     Area="CrazyDevs",
                     RGS="",
-                    Status = Status.Open,
+                    Status = PositionStatus.Open,
                     CreationDate = Convert.ToDateTime("2017-04-03T12:13:30"),
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="El payaso plim plim",
@@ -312,7 +342,7 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Create,
-                            ActualStatus = Status.Open,
+                            ActualStatus = PositionStatus.Open,
                             Description = string.Format("Position Created by {0} at {1}", "Tluser1@example.com", Convert.ToDateTime("2017-04-03T12:13:30").ToShortDateString()),
                             User = manager.FindByEmail("Tluser1@example.com"),
                             Date = Convert.ToDateTime("2017-04-03T12:13:30")
@@ -326,7 +356,7 @@ namespace Talento.Core.Migrations
                     Owner = manager.FindByEmail("Tluser1@example.com"),
                     Area="Dev",
                     RGS="",
-                    Status = Status.Open,
+                    Status = PositionStatus.Open,
                     CreationDate = Convert.ToDateTime("2017-03-15T11:13:30"),
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="NoOne InParticular",
@@ -339,7 +369,7 @@ namespace Talento.Core.Migrations
                        new Log
                         {
                             Action = Entities.Action.Create,
-                            ActualStatus = Status.Open,
+                            ActualStatus = PositionStatus.Open,
                             Description = string.Format("Position Created by {0} at {1}", "Tluser1@example.com", Convert.ToDateTime("2017-03-15T11:13:30").ToShortDateString()),
                             User = manager.FindByEmail("Tluser1@example.com"),
                             Date = Convert.ToDateTime("2017-03-15T11:13:30")
@@ -353,7 +383,7 @@ namespace Talento.Core.Migrations
                     Owner = manager.FindByEmail("Tluser1@example.com"),
                     Area="Dev",
                     RGS="",
-                    Status = Status.Open,
+                    Status = PositionStatus.Open,
                     CreationDate = Convert.ToDateTime("2017-02-19T11:13:30"),
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Anibal Barca",
@@ -366,8 +396,8 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Edit,
-                            PreviousStatus = Status.Open,
-                            ActualStatus = Status.Closed,
+                            PreviousStatus = PositionStatus.Open,
+                            ActualStatus = PositionStatus.Closed,
                             Description = string.Format("Position Closed by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-03-30T18:01:30").ToShortDateString()),
                             User = manager.FindByEmail("Pmuser1@example.com"),
                             Date = Convert.ToDateTime("2017-03-30T18:01:30")
@@ -382,7 +412,7 @@ namespace Talento.Core.Migrations
                     Owner = manager.FindByEmail("Tluser1@example.com"),
                     Area="Dev",
                     RGS="",
-                    Status = Status.Closed,
+                    Status = PositionStatus.Closed,
                     CreationDate = Convert.ToDateTime("2017-02-09T11:13:30"),
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Alejandro Magno",
@@ -397,8 +427,8 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Edit,
-                            PreviousStatus = Status.Open,
-                            ActualStatus = Status.Closed,
+                            PreviousStatus = PositionStatus.Open,
+                            ActualStatus = PositionStatus.Closed,
                             User = manager.FindByEmail("Pmuser1@example.com"),
                             Description = string.Format("Position Closed by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-03-30T18:01:30").ToShortDateString()),
                             Date = Convert.ToDateTime("2017-03-30T18:01:30")
@@ -412,7 +442,7 @@ namespace Talento.Core.Migrations
                     Owner = manager.FindByEmail("Tluser1@example.com"),
                     Area="Dev",
                     RGS="",
-                    Status = Status.Closed,
+                    Status = PositionStatus.Closed,
                     CreationDate = Convert.ToDateTime("2017-02-15T11:13:30"),
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Anibal Barca",
@@ -426,7 +456,7 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Create,
-                            ActualStatus = Status.Open,
+                            ActualStatus = PositionStatus.Open,
                             User = manager.FindByEmail("Tluser1@example.com"),
                             Description = string.Format("Position Opened by {0} at {1}", "Tluser1@example.com", Convert.ToDateTime("2017-02-15T11:13:30").ToShortDateString()),
                             Date = Convert.ToDateTime("2017-02-15T11:13:30")
@@ -434,8 +464,8 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Edit,
-                            PreviousStatus = Status.Open,
-                            ActualStatus = Status.Closed,
+                            PreviousStatus = PositionStatus.Open,
+                            ActualStatus = PositionStatus.Closed,
                             User = manager.FindByEmail("Pmuser1@example.com"),
                             Description = string.Format("Position Opened by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-03-22T13:58:30").ToShortDateString()),
                             Date = Convert.ToDateTime("2017-03-22T13:58:30")
@@ -443,8 +473,8 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Edit,
-                            PreviousStatus = Status.Closed,
-                            ActualStatus = Status.Open,
+                            PreviousStatus = PositionStatus.Closed,
+                            ActualStatus = PositionStatus.Open,
                             User = manager.FindByEmail("Pmuser1@example.com"),
                             Description = string.Format("Position Opened by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-04-22T11:58:30").ToShortDateString()),
                             Date = Convert.ToDateTime("2017-04-22T11:58:30")
@@ -452,8 +482,8 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Edit,
-                            PreviousStatus = Status.Open,
-                            ActualStatus = Status.Open,
+                            PreviousStatus = PositionStatus.Open,
+                            ActualStatus = PositionStatus.Open,
                             User = manager.FindByEmail("Pmuser2@example.com"),
                             Description = string.Format("Position Opened by {0} at {1}", "Pmuser2@example.com", Convert.ToDateTime("2017-04-22T12:50:00").ToShortDateString()),
                             Date = Convert.ToDateTime("2017-04-22T12:50:00")
@@ -461,8 +491,8 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Edit,
-                            PreviousStatus = Status.Open,
-                            ActualStatus = Status.Open,
+                            PreviousStatus = PositionStatus.Open,
+                            ActualStatus = PositionStatus.Open,
                             User = manager.FindByEmail("Pmuser1@example.com"),
                             Description = string.Format("Position Opened by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-04-22T12:52:00").ToShortDateString()),
                             Date = Convert.ToDateTime("2017-04-22T12:52:00")
@@ -470,8 +500,8 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Edit,
-                            PreviousStatus = Status.Open,
-                            ActualStatus = Status.Closed,
+                            PreviousStatus = PositionStatus.Open,
+                            ActualStatus = PositionStatus.Closed,
                             User = manager.FindByEmail("Pmuser1@example.com"),
                             Description = string.Format("Position Closed by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-05-22T08:58:30").ToShortDateString()),
                             Date = Convert.ToDateTime("2017-05-22T08:58:30")
@@ -479,8 +509,8 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Edit,
-                            PreviousStatus = Status.Closed,
-                            ActualStatus = Status.Open,
+                            PreviousStatus = PositionStatus.Closed,
+                            ActualStatus = PositionStatus.Open,
                             User = manager.FindByEmail("Pmuser1@example.com"),
                             Description = string.Format("Position Opened by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-07-22T13:58:30").ToShortDateString()),
                             Date = Convert.ToDateTime("2017-07-22T13:58:30")
@@ -488,8 +518,8 @@ namespace Talento.Core.Migrations
                         new Log
                         {
                             Action = Entities.Action.Edit,
-                            PreviousStatus = Status.Open,
-                            ActualStatus = Status.Open,
+                            PreviousStatus = PositionStatus.Open,
+                            ActualStatus = PositionStatus.Open,
                             Description = string.Format("Position Opened by {0} at {1}", "Pmuser1@example.com", Convert.ToDateTime("2017-07-22T14:00:30").ToShortDateString()),
                             User = manager.FindByEmail("Pmuser1@example.com"),
                             Date = Convert.ToDateTime("2017-07-22T14:00:30")
