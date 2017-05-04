@@ -119,6 +119,45 @@ namespace Talento.Core.Helpers
             }
         }
 
+        public int AddTechnicalInterview(TechnicalInterview technicalInterview, ApplicationUser currentUser)
+        {
+            try
+            {
+                using (var tx = new TransactionScope(TransactionScopeOption.Required))
+                {
+                    Db.TechnicalInterviews.Add(technicalInterview);
+
+                    Log log = new Log
+                    {
+                        Action = Entities.Action.Edit,
+                        ActualStatus = technicalInterview.PositionCandidate.Position.Status,
+                        User = currentUser,
+                        Date = DateTime.Now,
+                        Description = String.Format("A new technical interview feedback was added for {0}", technicalInterview.PositionCandidate.Candidate.Email),
+                        PreviousStatus = technicalInterview.PositionCandidate.Position.Status
+                    };
+
+                    if (technicalInterview.IsAccepted)
+                    {
+                        technicalInterview.PositionCandidate.Status = PositionCandidatesStatus.Interview_Accepted;
+                    }
+                    else
+                    {
+                        technicalInterview.PositionCandidate.Status = PositionCandidatesStatus.Interview_Rejected;
+                    }
+
+                    technicalInterview.PositionCandidate.Position.Logs.Add(log);
+
+                    tx.Complete();
+                    return 0;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<List<Candidate>> GetAll()
         {
             return await Db.Candidates.ToListAsync();
