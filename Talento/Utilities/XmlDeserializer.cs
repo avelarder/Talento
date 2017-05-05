@@ -12,7 +12,9 @@ namespace Talento.Tests.Utilities
         public static ApplicationSettingXml DeserealizeXml(string xmlSource)
         {
             //cannot deserialize Identity, create a POCO
-            string path = @"C:\Users\1377753\Source\Talento_\Talento\Talento\App_Data\" + xmlSource;
+            //string path = @"C:\Users\1377753\Source\Talento_\Talento\Talento\App_Data\" + xmlSource;
+
+            string path = "../../Resources/" + xmlSource;
 
             XmlSerializer serializedObject = new XmlSerializer(typeof(ApplicationSettingXml));
             ApplicationSettingXml appSettings;
@@ -22,6 +24,5 @@ namespace Talento.Tests.Utilities
             }
             return appSettings;
         }
-
     }
 }

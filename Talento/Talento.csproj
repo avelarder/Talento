@@ -216,7 +216,6 @@
     <Compile Include="Utilities\XmlDeserializer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\ApplicationSettings.xml" />
     <Content Include="Content\alertify.min.css" />
     <Content Include="Content\alertify.rtl.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -337,6 +336,7 @@
     <Content Include="Views\Shared\TIFFDownload.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Controllers\Filters\" />
   </ItemGroup>
   <ItemGroup>
