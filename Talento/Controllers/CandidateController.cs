@@ -63,72 +63,7 @@ namespace Talento.Controllers
             //emailManager.SendEmail( recip, "talento@tcs.com", bcc, cc, "Talento notification messenger", body);
             return File(ms.GetBuffer(), "application/octet-stream", "MailNotification.txt");
         }
-
-        //Call this action when generate a feedback interview
-        private ActionResult InterviewFeedback(CandidateModel model, Position toapply, List<ApplicationUser> recipients)
-        {
-            MemoryStream ms = new MemoryStream();
-            TextWriter tw = new StreamWriter(ms);
-            var callbackUrl = Url.Action("Details", "Positions", new { toapply.PositionId }, protocol: Request.Url.Scheme);
-            string body = "A profile's interview feedback form has been added to " + toapply.Title + " by " + User.Identity.Name + "." +
-                            " Please visit the following URL for more information: " + callbackUrl;
-            tw.WriteLine(body);
-
-            tw.Write("Recipients: ");
-            List<string> recip = new List<string>();
-            List<string> cc = new List<string>
-            {
-                toapply.Owner.Email
-            };
-            List<string> bcc = new List<string>();
-            foreach (ApplicationUser user in recipients)
-            {
-                tw.Write(user.Email + ", ");
-                recip.Add(user.Email);
-            }
-            tw.Flush();
-            tw.Close();
-            //emailManager.SendEmail(recip, "talento@tcs.com", bcc, cc, "Talento notification messenger", body);
-            return File(ms.GetBuffer(), "application/octet-stream", "MailExample.txt");
-        }
-
-        //Call this action when a feedback interview change status
-        public ActionResult InterviewFeedbackNewStatus(EditCandidateViewModel model, Position toapply, List<ApplicationUser> recipients)
-        {
-
-            if (model.PositionCandidates.FirstOrDefault(x => x.Position.PositionId == toapply.PositionId && x.Candidate.CandidateId == model.CandidateId).Status == PositionCandidatesStatus.Interview_Accepted)
-            {
-                MemoryStream ms = new MemoryStream();
-                TextWriter tw = new StreamWriter(ms);
-                string callbackUrl = Url.Action("Details", "Positions", new { toapply.PositionId }, protocol: Request.Url.Scheme);
-                string body = model.Email + "has been accepted for " + toapply.Title + ", reported by " + User.Identity.Name + "." +
-                                " Please visit the following URL for more information: " + callbackUrl;
-                tw.WriteLine(body);
-
-                tw.Write("Recipients: ");
-                List<string> recip = new List<string>();
-                List<string> cc = new List<string>
-                {
-                    toapply.Owner.Email
-                };
-                List<string> bcc = new List<string>();
-                foreach (ApplicationUser user in recipients)
-                {
-                    tw.Write(user.Email + ", ");
-                    recip.Add(user.Email);
-                }
-                tw.Flush();
-                tw.Close();
-                //emailManager.SendEmail(recip, "talento@tcs.com", bcc, cc, "Talento notification messenger", body);
-                return File(ms.GetBuffer(), "application/octet-stream", "MailExample.txt");
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-
+        
         public virtual bool IsStateValid()
         {
             return ModelState.IsValid;

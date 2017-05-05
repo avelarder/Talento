@@ -119,6 +119,46 @@ namespace Talento.Core.Helpers
             }
         }
 
+        public int AddTechnicalInterview(TechnicalInterview technicalInterview, ApplicationUser currentUser, int positionId, string candidateEmail)
+        {
+            try
+            {
+                using (var tx = new TransactionScope(TransactionScopeOption.Required))
+                {
+                    int candidateId = Db.Candidates.Single(x => x.Email.Equals(candidateEmail)).CandidateId;
+                    technicalInterview.PositionCandidate = Db.PositionCandidates.FirstOrDefault(x => x.CandidateID.Equals(candidateId) && x.PositionID.Equals(positionId));
+                    Db.TechnicalInterviews.Add(technicalInterview);
+                    Log log = new Log
+                    {
+                        Action = Entities.Action.Edit,
+                        ActualStatus = technicalInterview.PositionCandidate.Position.Status,
+                        User = currentUser,
+                        Date = DateTime.Now,
+                        Description = String.Format("A new technical interview feedback was added for {0}", technicalInterview.PositionCandidate.Candidate.Email),
+                        PreviousStatus = technicalInterview.PositionCandidate.Position.Status
+                    };
+
+                    if (technicalInterview.IsAccepted)
+                    {
+                        technicalInterview.PositionCandidate.Status = PositionCandidatesStatus.Interview_Accepted;
+                    }
+                    else
+                    {
+                        technicalInterview.PositionCandidate.Status = PositionCandidatesStatus.Interview_Rejected;
+                    }
+
+                    technicalInterview.PositionCandidate.Position.Logs.Add(log);
+                    int result = Db.SaveChanges();
+                    tx.Complete();
+                    return result;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<List<Candidate>> GetAll()
         {
             return await Db.Candidates.ToListAsync();

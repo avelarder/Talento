@@ -16,5 +16,6 @@ namespace Talento.Core
         void Delete(int Id, string uId);
         PositionCandidates GetPositionCandidate(int Id);
         void ChangeStatus(int Id, PositionCandidatesStatus newStatus, ApplicationUser currentUser);
+        int AddTechnicalInterview(TechnicalInterview technicalInterview, ApplicationUser currentUser, int positionId, string candidateEmail);
     }
 }

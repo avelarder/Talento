@@ -200,10 +200,32 @@ namespace Talento.Core.Migrations
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.Name, unique: true, name: "RoleNameIndex");
             
+            CreateTable(
+                "dbo.TechnicalInterviews",
+                c => new
+                    {
+                        TechnicalInterviewId = c.Int(nullable: false, identity: true),
+                        Date = c.DateTime(nullable: false),
+                        IsAccepted = c.Boolean(nullable: false),
+                        Comment = c.String(maxLength: 500),
+                        InterviewerId = c.String(nullable: false, maxLength: 10),
+                        InterviewerName = c.String(nullable: false, maxLength: 50),
+                        FeedbackFile_Id = c.Int(nullable: false),
+                        PositionCandidate_PositionID = c.Int(nullable: false),
+                        PositionCandidate_CandidateID = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.TechnicalInterviewId)
+                .ForeignKey("dbo.FileBlobs", t => t.FeedbackFile_Id)
+                .ForeignKey("dbo.PositionCandidates", t => new { t.PositionCandidate_PositionID, t.PositionCandidate_CandidateID })
+                .Index(t => t.FeedbackFile_Id)
+                .Index(t => new { t.PositionCandidate_PositionID, t.PositionCandidate_CandidateID });
+            
         }
         
         public override void Down()
         {
+            DropForeignKey("dbo.TechnicalInterviews", new[] { "PositionCandidate_PositionID", "PositionCandidate_CandidateID" }, "dbo.PositionCandidates");
+            DropForeignKey("dbo.TechnicalInterviews", "FeedbackFile_Id", "dbo.FileBlobs");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropForeignKey("dbo.Tags", "Position_PositionId", "dbo.Positions");
             DropForeignKey("dbo.PositionCandidates", "PositionID", "dbo.Positions");
@@ -221,6 +243,8 @@ namespace Talento.Core.Migrations
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
+            DropIndex("dbo.TechnicalInterviews", new[] { "PositionCandidate_PositionID", "PositionCandidate_CandidateID" });
+            DropIndex("dbo.TechnicalInterviews", new[] { "FeedbackFile_Id" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropIndex("dbo.Tags", new[] { "Position_PositionId" });
             DropIndex("dbo.Logs", new[] { "Position_PositionId" });
@@ -240,6 +264,7 @@ namespace Talento.Core.Migrations
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.ApplicationSettings", new[] { "ApplicationUser_Id" });
+            DropTable("dbo.TechnicalInterviews");
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.Tags");
             DropTable("dbo.Logs");

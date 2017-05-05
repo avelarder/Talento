@@ -19,5 +19,7 @@ namespace Talento.Entities
         public string FileName { get; set; }
 
         public byte[] Blob { get; set; }
+
+        public virtual Candidate Candidate { get; set; }
     }
 }

@@ -114,4 +114,32 @@ namespace Talento.Models
 
         public IList<Position> Positions { get; set; }
     }
+
+    public class TechnicalInterviewModel
+    {
+        public int TechnicalInterviewId { get; set; }
+
+        [Required(ErrorMessage = "Position and candidate is required")]
+        public virtual PositionCandidates PositionCandidate { get; set; }
+
+        [Required(ErrorMessage = "Date is required")]
+        public DateTime? Date { get; set; }
+
+        [Required]
+        public bool IsAccepted { get; set; }
+
+        [StringLength(500, ErrorMessage = "Comment must have 500 characters maximum")]
+        public string Comment { get; set; }
+
+        [Required(ErrorMessage = "Interview ID is required")]
+        [StringLength(10, ErrorMessage = "Interviewer Id must have 10 characters maximum")]
+        public string InterviewerId { get; set; }
+
+        [Required(ErrorMessage = "Interviewer Name is required")]
+        [StringLength(50, ErrorMessage = "Interviewer Name must have 50 characters maximum")]
+        public string InterviewerName { get; set; }
+
+        [Required(ErrorMessage = "File is required")]
+        public FileBlob FeedbackFile { get; set; }
+    }
 }

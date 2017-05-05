@@ -100,19 +100,27 @@
                             }
                         </th>
                     }
+                    <th>
+                    </th>
+                    @if (Model.Status == Talento.Entities.Status.Open)
+                    {
+                        <th>
+                            Options
+                        </th>
+                    }
                 </tr>
             </thead>
             @foreach (var cP in ViewBag.onePageOfCandidatePositions)
             {
                 <tr class="candidate-row" data-candidate-id="@cP.CandidateId"> 
                     <td>
-                        @cP.Email
+                        @cP.Candidate.Email
                     </td>
                     <td>
-                        @cP.CreatedOn
+                        @cP.Candidate.CreatedOn
                     </td>
                     <td>
-                        @cP.CreatedBy.Email
+                        @cP.Candidate.CreatedBy.Email
                     </td>
                     <td>
                         @Html.Action("Status", "Candidate", new { positionModel = Model, candidateId = cP.CandidateId })
@@ -123,10 +131,18 @@
                         </a>
                     </td>                 
                     <td>
-                        <a href="#" class="delete-candidate" data-target="#delete-position-dialog" data-candidate="@cP.CandidateId" alt="Delete candidate">
+                        <a href="#" class="delete-candidate" data-target="#delete-position-dialog" data-candidate="@cP.Candidate.CandidateId" alt="Delete candidate">
                             <i class="material-icons md-24">delete</i>
                         </a>
                     </td>
+                    @if (Model.Status == Talento.Entities.Status.Open)
+                    {
+                        <td>
+                            <a href="@Url.Action("NewTechnicalInterview", "TechnicalInterview", new { candidateEmail = cP.Candidate.Email, positionId = cP.Position.PositionId })">
+                                Track Interview
+                            </a>
+                        </td>
+                    }
                 </tr>
             }
         </table>
