@@ -1,0 +1,92 @@
+﻿@model Talento.Models.CreateTechnicalInterviewViewModel
+
+@{
+    ViewBag.Title = "New Technical Interview";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<h2>NewTechnicalInterview</h2>
+
+<form action="/TechnicalInterview/NewTechnicalInterview" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>New Technical Interview to @Model.CandidateEmail</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.CandidateEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" value="@Model.CandidateEmail" readonly disabled>
+                <input type="hidden" name="PositionId" id="PositionId" value="@Model.PositionId">
+                @Html.EditorFor(model => model.CandidateEmail, new { htmlAttributes = new { @class = "form-control hidden"} })
+                @Html.ValidationMessageFor(model => model.CandidateEmail, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control text-box single-line valid" data-val="true" data-val-date="The field Date must be a date of type mm/dd/yyyy." data-val-required="The Date field is required." id="Date" name="Date" value="@DateTime.Today.ToShortDateString()" aria-required="true" aria-describedby="Date-error" aria-invalid="false" type="datetime">
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Result, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Result)
+                    @Html.ValidationMessageFor(model => model.Result, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InterviewerName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.InterviewerName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.InterviewerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InterviewerId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control text-box single-line input-validation-error" data-val="true" data-val-number="The field Interviewer's Id Number must be a number." data-val-required="The Interviewer's Id Number field is required." id="InterviewerId" name="InterviewerId" value="" aria-required="true" aria-describedby="InterviewerId-error" aria-invalid="true" type="text">
+                @Html.ValidationMessageFor(model => model.InterviewerId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.File, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="  single-line valid" data-val="true" data-val-required="An Interview file is required." id="File" name="File" value=""
+                       @*aria-required="true" aria-describedby="Date-error" aria-invalid="false"*@
+                       
+                       type="file">
+               
+                @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</form>
+
+<br/>
+<div>
+    <br />
+    @Html.ActionLink("Back to Details of the Position", "Details","Positions",new { id=Model.PositionId },null)
+</div>

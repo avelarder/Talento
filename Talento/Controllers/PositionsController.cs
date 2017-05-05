@@ -39,14 +39,7 @@ namespace Talento.Controllers
                 cfg.CreateMap<Log, PositionLogViewModel>();
                 cfg.CreateMap<EditPositionViewModel, Position>();
                 cfg.CreateMap<Candidate, CandidateModel>();
-
-                /*
-               This could be useful in future in case of needing to edit the owner user account. It is not yet requested in the Edit user story 295
-               4 / 4 / 2017 - Charlie
-               cfg.CreateMap<Position, EditPositionViewModel>()
-                    .ForMember(t => t.OwnerEmail, opt => opt.MapFrom(s => s.Owner.Email))
-                ;
-                */
+                
             });
         }
 
@@ -78,7 +71,7 @@ namespace Talento.Controllers
             }
 
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
-            var onePageOfCandidatePositions = position.PositionCandidates.OrderByDescending(x => x.Candidate.CreatedOn).Select(x => x.Candidate).ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+            var onePageOfCandidatePositions = position.PositionCandidates.OrderByDescending(x => x.Candidate.CreatedOn).ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
             ViewBag.page = pageNumber;
             ViewBag.onePageOfCandidatePositions = onePageOfCandidatePositions;
 
