@@ -11,7 +11,7 @@ using Talento.Core;
 using Talento.Entities;
 using Talento.Models;
 using Talento.EmailManager;
-
+using System.Security.Claims;
 
 namespace Talento.Tests.Controllers
 {
@@ -266,5 +266,70 @@ namespace Talento.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(FileResult));
             Assert.IsTrue(((FileResult)result).FileDownloadName == "MailExample.txt");
         }
+
+        [TestMethod]
+        public void StatusTest()
+        {
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<ICandidate> mockCandidateHelper = mocks.Create<ICandidate>();
+            Mock<IPosition> mockPositionHelper = mocks.Create<IPosition>();
+            Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
+            Mock<IMessenger> mockEmailManager = mocks.Create<IMessenger>();
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            Mock<ControllerContext> mockContext = mocks.Create<ControllerContext>();
+            mockPrincipal.Setup(x => x.IsInRole("TAG")).Returns(true);
+            mockContext.Setup(p => p.HttpContext.User.IsInRole("TAG")).Returns(true);
+
+            CandidateController controller = new CandidateController(mockCandidateHelper.Object, mockUserHelper.Object, mockPositionHelper.Object, mockEmailManager.Object)
+            {
+                ControllerContext = mockContext.Object
+            };
+
+            Position aPosition = new Position()
+            {
+                PositionId = 1,
+                Status=PositionStatus.Open
+            };
+
+            Candidate aCandidate = new Candidate() { CandidateId = 1 };
+
+            List<PositionCandidates> list = new List<PositionCandidates>();
+
+            PositionCandidates pc = new PositionCandidates()
+            {
+                PositionID = 1,
+                Position = aPosition,
+                CandidateID = 1,
+                Candidate = aCandidate,
+                Status = PositionCandidatesStatus.Interview_Accepted
+            };
+
+            list.Add(pc);
+
+            ApplicationUser aPm = new ApplicationUser();
+
+            PositionModel Pm = new PositionModel()
+            {
+                PositionId = 1,
+                Title = "aTitle",
+                Description = "aDescription",
+                CreationDate = DateTime.Now,
+                Area = "someArea",
+                EngagementManager = "anEm",
+                PortfolioManager_Id = "1",
+                PortfolioManager = aPm,
+                RGS = "1",
+                Status = PositionStatus.Open,
+                Owner = aPm,
+                PositionCandidates = list
+            };
+
+            var result = controller.Status(Pm, 1);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(PartialViewResult));
+            Assert.IsTrue(((PartialViewResult)result).ViewData.ContainsKey("Status"));
+        }
+
     }
 }

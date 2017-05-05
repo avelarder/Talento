@@ -366,7 +366,7 @@
 
                     if ($status.val() !== null) {
                         $.post({
-                            url: "/Candidate/Status",
+                            url: "/Candidate/ChangeStatus",
                             data: { positionCandidateId: candidateId, status: $status.val() }
                         }).done(function (response) {
                             location.reload();

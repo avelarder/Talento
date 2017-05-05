@@ -319,7 +319,7 @@ namespace Talento.Controllers
         [HttpPost]
         [ChildAndAjaxActionOnly]
         [Authorize]
-        public ActionResult Status(int positionCandidateId, int status)
+        public ActionResult ChangeStatus(int positionCandidateId, int status)
         {
             try
             {
