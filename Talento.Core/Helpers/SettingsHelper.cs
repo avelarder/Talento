@@ -7,13 +7,15 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Talento.Core.Data;
 using Talento.Entities;
 
 namespace Talento.Core.Helpers
 {
     public class SettingsHelper : BaseHelper, IApplicationSetting
     {
-        public SettingsHelper(Data.ApplicationDbContext db) : base(db)
+
+        public SettingsHelper(ApplicationDbContext db) : base(db)
         {
 
         }
@@ -112,10 +114,11 @@ namespace Talento.Core.Helpers
             }
         }
 
-        public void Create(ApplicationSetting aS)
+        public int Create(ApplicationSetting aS)
         {
             Db.ApplicationSetting.Add(aS);
-            Db.SaveChanges();
+            int result = Db.SaveChanges();
+            return result;
         }
 
         public List<string> GetParameters(string prefix)
