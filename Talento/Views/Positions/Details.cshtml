@@ -102,7 +102,7 @@
                     }
                     <th>
                     </th>
-                    @if (Model.Status == Talento.Entities.Status.Open)
+                    @if (Model.Status == Talento.Entities.PositionStatus.Open)
                     {
                         <th>
                             Options
@@ -112,7 +112,7 @@
             </thead>
             @foreach (var cP in ViewBag.onePageOfCandidatePositions)
             {
-                <tr class="candidate-row" data-candidate-id="@cP.CandidateId"> 
+                <tr class="candidate-row" data-candidate-id="@cP.CandidateID"> 
                     <td>
                         @cP.Candidate.Email
                     </td>
@@ -123,19 +123,19 @@
                         @cP.Candidate.CreatedBy.Email
                     </td>
                     <td>
-                        @Html.Action("Status", "Candidate", new { positionModel = Model, candidateId = cP.CandidateId })
+                        @Html.Action("Status", "Candidate", new { positionModel = Model, candidateId = cP.CandidateID })
                     </td>
                     <td>
-                        <a href="@Url.Action("Edit", "Candidate",new { id = cP.CandidateId, positionId = Model.PositionId } )" class="material-icons md-24 edit-candidate" data-target="#edit-position-dialog" alt="Edit candidate">
+                        <a href="@Url.Action("Edit", "Candidate",new { id = cP.CandidateID, positionId = Model.PositionId } )" class="material-icons md-24 edit-candidate" data-target="#edit-position-dialog" alt="Edit candidate">
                             mode_edit
                         </a>
                     </td>                 
                     <td>
-                        <a href="#" class="delete-candidate" data-target="#delete-position-dialog" data-candidate="@cP.Candidate.CandidateId" alt="Delete candidate">
+                        <a href="#" class="delete-candidate" data-target="#delete-position-dialog" data-candidate="@cP.CandidateID" alt="Delete candidate">
                             <i class="material-icons md-24">delete</i>
                         </a>
                     </td>
-                    @if (Model.Status == Talento.Entities.Status.Open)
+                    @if (Model.Status == Talento.Entities.PositionStatus.Open)
                     {
                         <td>
                             <a href="@Url.Action("NewTechnicalInterview", "TechnicalInterview", new { candidateEmail = cP.Candidate.Email, positionId = cP.Position.PositionId })">
