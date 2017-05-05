@@ -26,39 +26,39 @@ namespace Talento.Controllers
         }
 
         //Call this action when a feedback interview change status
-        private ActionResult InterviewFeedbackNewStatus(string candidateEmail, Position toapply, List<ApplicationUser> recipients)
-        {
-                MemoryStream ms = new MemoryStream();
-                TextWriter tw = new StreamWriter(ms);
-                string callbackUrl = Url.Action("Details", "Positions", new { id=toapply.PositionId }, protocol: Request.Url.Scheme);
-                string body = candidateEmail + " has been accepted for " + toapply.Title + ", reported by " + User.Identity.Name + "." +
-                                " Please visit the following URL for more information: " + callbackUrl;
-                tw.WriteLine(body);
-
-                tw.Write("Recipients: ");
-                List<string> recip = new List<string>();
-                List<string> cc = new List<string>
-                {
-                    toapply.Owner.Email
-                };
-                List<string> bcc = new List<string>();
-                foreach (ApplicationUser user in recipients)
-                {
-                    tw.Write(user.Email + ", ");
-                    recip.Add(user.Email);
-                }
-                tw.Flush();
-                tw.Close();
-                //emailManager.SendEmail(recip, "talento@tcs.com", bcc, cc, "Talento notification messenger", body);
-                return File(ms.GetBuffer(), "application/octet-stream", "MailExample.txt");
-            
-        }
-
-        private ActionResult InterviewFeedback(Position toapply, List<ApplicationUser> recipients)
+        public ActionResult InterviewFeedbackNewStatus(string candidateEmail, Position toapply, List<ApplicationUser> recipients)
         {
             MemoryStream ms = new MemoryStream();
             TextWriter tw = new StreamWriter(ms);
-            var callbackUrl = Url.Action("Details", "Positions", new { id=toapply.PositionId }, protocol: Request.Url.Scheme);
+            string callbackUrl = Url.Action("Details", "Positions", new { id = toapply.PositionId }, protocol: Request.Url.Scheme);
+            string body = candidateEmail + " has been accepted for " + toapply.Title + ", reported by " + User.Identity.Name + "." +
+                            " Please visit the following URL for more information: " + callbackUrl;
+            tw.WriteLine(body);
+
+            tw.Write("Recipients: ");
+            List<string> recip = new List<string>();
+            List<string> cc = new List<string>
+                {
+                    toapply.Owner.Email
+                };
+            List<string> bcc = new List<string>();
+            foreach (ApplicationUser user in recipients)
+            {
+                tw.Write(user.Email + ", ");
+                recip.Add(user.Email);
+            }
+            tw.Flush();
+            tw.Close();
+            //emailManager.SendEmail(recip, "talento@tcs.com", bcc, cc, "Talento notification messenger", body);
+            return File(ms.GetBuffer(), "application/octet-stream", "MailExample.txt");
+
+        }
+
+        public ActionResult InterviewFeedback(Position toapply, List<ApplicationUser> recipients)
+        {
+            MemoryStream ms = new MemoryStream();
+            TextWriter tw = new StreamWriter(ms);
+            var callbackUrl = Url.Action("Details", "Positions", new { id = toapply.PositionId }, protocol: Request.Url.Scheme);
             string body = " A profile's interview feedback form has been added to " + toapply.Title + " by " + User.Identity.Name + "." +
                             " Please visit the following URL for more information: " + callbackUrl;
             tw.WriteLine(body);
@@ -104,17 +104,18 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult NewTechnicalInterview(CreateTechnicalInterviewViewModel model)
         {
+            PositionCandidates positionCandidate = PositionHelper.Get(model.PositionId).PositionCandidates.Where(x => x.Candidate.Email.Contains(model.CandidateEmail)).Single();
             TechnicalInterview newTechnicalInterview = new TechnicalInterview()
             {
                 Comment = model.Comment,
                 Date = model.Date,
-                FeedbackFile = new FileBlob() { Blob = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength), FileName = model.CandidateEmail.Split('@')[0] + "_" + model.Date.Year + model.Date.Month + model.Date.Day + ".doc" },
+                FeedbackFile = new FileBlob() { Blob = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength), FileName = model.CandidateEmail.Split('@')[0] + "_" + model.Date.Year + model.Date.Month + model.Date.Day + ".doc", Candidate = positionCandidate.Candidate },
                 InterviewerId = model.InterviewerId + "",
                 InterviewerName = model.InterviewerName,
                 IsAccepted = model.Result,
             };
 
-            CandidateHelper.AddTechnicalInterview(newTechnicalInterview,UserHelper.GetUserByEmail(User.Identity.Name),model.PositionId,model.CandidateEmail);
+            CandidateHelper.AddTechnicalInterview(newTechnicalInterview, UserHelper.GetUserByEmail(User.Identity.Name), model.PositionId, model.CandidateEmail);
 
             if (model.Result)
             {
@@ -122,7 +123,7 @@ namespace Talento.Controllers
             }
             else
             {
-                return InterviewFeedback(PositionHelper.Get(model.PositionId),UserHelper.GetByRoles(new List<string>(){"RMG","TAG"}));
+                return InterviewFeedback(PositionHelper.Get(model.PositionId), UserHelper.GetByRoles(new List<string>() { "RMG", "TAG" }));
             }
         }
     }
