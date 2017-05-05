@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
+    <Content Include="ApplicationSettings.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

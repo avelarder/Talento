@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ApplicationSetting>
+  <ApplicationUser_Id>"1"</applicationUser_Id>
+    <CreatedBy></CreatedBy>
+    <CreationDate></CreationDate>
+    <SettingName></SettingName>
+    <ParameterName></ParameterName>
+    <ParameterValue></ParameterValue>
+</ApplicationSetting>
+
+
+
+<!--ApplicationSettingId = 1,
+ApplicationUser_Id = "1",
+CreatedBy = new ApplicationUser { Email = "admin@example.com", UserName = "admin@example.com" },
+CreationDate = DateTime.Now,
+SettingName = "Filter",
+ParameterName = "FilterBy",
+ParameterValue = "Name"-->
