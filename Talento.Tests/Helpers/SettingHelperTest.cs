@@ -15,57 +15,90 @@ using System.Web;
 using Talento.Core.Helpers;
 using Talento.Core.Data;
 using System.Data.Entity;
+using Talento.Tests.Utilities;
 
 namespace Talento.Tests.Helpers
 {
     [TestClass]
     public class SettingHelperTest
     {
-        private Mock<ApplicationDbContext> dbContext;
-        SettingsHelper settingsHelper;
-
         private MockRepository mocks;
         private Mock<IPrincipal> mockPrincipal;
         private Mock<IApplicationSetting> mockSettingsHelper;
         private Mock<ICustomUser> mockUserHelper;
         private Mock mockContext;
         private Mock<ApplicationUser> mockUser;
+        private string xmlSource;
 
         public SettingHelperTest()
         {
+            xmlSource = "ApplicationSettings.xml";
             mocks = new MockRepository(MockBehavior.Default);
             mockPrincipal = mocks.Create<IPrincipal>();
             mockSettingsHelper = mocks.Create<IApplicationSetting>();
             mockUserHelper = mocks.Create<ICustomUser>();
             mockContext = new Mock<ControllerContext>();
             mockUser = mocks.Create<ApplicationUser>();
-            //dbContext = new Mock<ApplicationDbContext>();
-            //settingsHelper = new SettingsHelper(dbContext.Object);
         }
 
         [TestMethod]
-        public void CreateSettingTest()
+        public void AddSettingTest()
         {
+            // get deserealized object
+            ApplicationSettingXml dataXml = XmlDeserializer.DeserealizeXml(xmlSource);
+
             ApplicationSetting data = new ApplicationSetting
             {
-                ApplicationSettingId = 1,
-                ApplicationUser_Id = "1",
-                CreatedBy = new ApplicationUser { Email = "admin@example.com", UserName = "admin@example.com" },
-                CreationDate = DateTime.Now,
-                SettingName = "Filter",
-                ParameterName = "FilterBy",
-                ParameterValue = "Name"
+                ApplicationSettingId = dataXml.ApplicationSettingId,
+                ApplicationUser_Id = dataXml.ApplicationUser_Id,
+                CreatedBy = new ApplicationUser { Email = dataXml.CreatedByEmail, UserName = dataXml.CreatedByUserName },
+                CreationDate = dataXml.CreationDate,
+                SettingName = dataXml.SettingName,
+                ParameterName = dataXml.ParameterName,
+                ParameterValue = dataXml.ParameterValue
+            };
+
+            var set = new Mock<DbSet<ApplicationSetting>>();
+
+            // mock dbContext
+            var context = new Mock<ApplicationDbContext>();
+            context.Setup(c => c.ApplicationSetting).Returns(set.Object);
+            context.Setup(x => x.SaveChanges()).Returns(1);
+
+            SettingsHelper settingHelper = new SettingsHelper(context.Object);
+
+            // execute helper query
+            int result = settingHelper.Create(data);
+
+            Assert.IsTrue(result == 1);
+        }
+
+        [TestMethod]
+        public void AddSettingNotWorkingTest()
+        {
+            ApplicationSettingXml dataXml = XmlDeserializer.DeserealizeXml(this.xmlSource);
+
+            ApplicationSetting data = new ApplicationSetting
+            {
+                ApplicationSettingId = dataXml.ApplicationSettingId,
+                ApplicationUser_Id = dataXml.ApplicationUser_Id,
+                CreatedBy = new ApplicationUser { Email = dataXml.CreatedByEmail, UserName = dataXml.CreatedByUserName },
+                CreationDate = dataXml.CreationDate,
+                SettingName = dataXml.SettingName,
+                ParameterName = dataXml.ParameterName,
+                ParameterValue = dataXml.ParameterValue
             };
 
             var set = new Mock<DbSet<ApplicationSetting>>();
 
             var context = new Mock<ApplicationDbContext>();
             context.Setup(c => c.ApplicationSetting).Returns(set.Object);
+            context.Setup(x => x.SaveChanges()).Returns(0);
 
-            SettingsHelper setting = new SettingsHelper(context.Object);
+            SettingsHelper settingHelper = new SettingsHelper(context.Object);
 
-            int result = setting.Create(data);
-            Assert.IsTrue(result == 1);
+            int result = settingHelper.Create(data);
+            Assert.IsTrue(result == 0);
         }
     }
 }
