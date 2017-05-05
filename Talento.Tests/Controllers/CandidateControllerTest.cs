@@ -11,7 +11,7 @@ using Talento.Core;
 using Talento.Entities;
 using Talento.Models;
 using Talento.EmailManager;
-
+using System.Security.Claims;
 
 namespace Talento.Tests.Controllers
 {

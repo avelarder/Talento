@@ -5,9 +5,7 @@
     ViewBag.BodyClass = "dashboard-home";
 }
 
-<form method="get" action="/Dashboard/DownloadTiffTemplate">
-    <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Download TIFF" style="margin-top: 4px" />
-</form>
+@Html.Partial("TIFFDownload")
 
 @using (Html.BeginForm("Index", "Dashboard", FormMethod.Get))
 {

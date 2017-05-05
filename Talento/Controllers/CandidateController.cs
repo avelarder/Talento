@@ -9,6 +9,7 @@ using Talento.Core;
 using Talento.Entities;
 using Talento.Models;
 using Talento.EmailManager;
+using Microsoft.AspNet.Identity;
 
 namespace Talento.Controllers
 {
@@ -166,7 +167,7 @@ namespace Talento.Controllers
                 HashSet<FileBlob> files = ((HashSet<FileBlob>)Session["files"]);
                 ApplicationUser user = UserHelper.GetUserByEmail(User.Identity.Name);
                 Position position = PositionHelper.Get(candidate.Position_Id);
-                if (position.Status == Status.Open)
+                if (position.Status == PositionStatus.Open)
                 {
                     Candidate newCandidate = new Candidate
                     {
@@ -222,6 +223,55 @@ namespace Talento.Controllers
             return New(candidate, RedirectToAction("Details", "Positions", new { id = candidate.Position_Id }));
         }
 
+        [ChildActionOnly]
+        [Authorize]
+        public ActionResult Status(PositionModel positionModel, int candidateId)
+        {
+            PositionCandidatesStatus status = positionModel.PositionCandidates.FirstOrDefault(x => x.CandidateID == candidateId).Status;
+
+            var name = Enum.GetName(typeof(PositionCandidatesStatus), status);
+            name = name.Replace("_", " ");
+
+            if (User.IsInRole("TAG") || User.IsInRole("RMG")) 
+            {
+                if ((int)status == 1)
+                {
+                    ViewData["Status"] = status;
+                    return PartialView();
+                }
+            }
+            else if (User.IsInRole("PM") || User.IsInRole("TL"))
+            {
+                if ((int)status == 3)
+                {
+                    ViewData["Status"] = status;
+                    return PartialView();
+                }
+            }            
+            return Content(name);
+        }
+
+        [HttpPost]
+        [ChildAndAjaxActionOnly]
+        [Authorize]
+        public ActionResult ChangeStatus(int positionCandidateId, int status)
+        {
+            try
+            {
+                var positionCandidateStatus = (PositionCandidatesStatus)status;
+                string currentUserId = User.Identity.GetUserId();
+                var currentUser = UserHelper.GetUserById(currentUserId);
+                
+
+                CandidateHelper.ChangeStatus(positionCandidateId, positionCandidateStatus, currentUser);
+
+                return new HttpStatusCodeResult(200);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
         protected class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
         {

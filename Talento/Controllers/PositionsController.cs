@@ -65,7 +65,7 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
-            if (position == null || position.Status == Status.Removed)
+            if (position == null || position.Status == PositionStatus.Removed)
             {
                 return HttpNotFound();
             }
@@ -115,7 +115,7 @@ namespace Talento.Controllers
                     Description = position.Description,
                     PortfolioManager = pmUser,
                     RGS = position.RGS,
-                    Status = Status.Open,
+                    Status = PositionStatus.Open,
                     PortfolioManager_Id = position.EmailPM,
                     ApplicationUser_Id = user,
                     LastOpenedBy = UserHelper.GetUserById(user),
@@ -139,7 +139,7 @@ namespace Talento.Controllers
                 {
                     return HttpNotFound();
                 }
-                if (position.Status.Equals(Status.Removed))
+                if (position.Status.Equals(PositionStatus.Removed))
                 {
                     return HttpNotFound();
                 }
@@ -194,7 +194,7 @@ namespace Talento.Controllers
                 return HttpNotFound();
             }
 
-            if (position.Status == Status.Removed)
+            if (position.Status == PositionStatus.Removed)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
@@ -216,7 +216,7 @@ namespace Talento.Controllers
             {
                 return HttpNotFound();
             }
-            if (position.Status == Status.Removed)
+            if (position.Status == PositionStatus.Removed)
             {
                 return RedirectToAction("Index", "Dashboard");
             }

@@ -84,7 +84,7 @@ namespace Talento.Controllers
         // GET: 
         public ActionResult NewTechnicalInterview(string candidateEmail, int positionId)
         {
-            if (PositionHelper.Get(positionId).Status.Equals(Status.Open))
+            if (PositionHelper.Get(positionId).Status.Equals(PositionStatus.Open))
             {
                 return View(new CreateTechnicalInterviewViewModel()
                 {

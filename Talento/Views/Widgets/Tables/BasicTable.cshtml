@@ -28,10 +28,6 @@
         </div>
 }
 
-<form method="get" action="/Dashboard/DownloadTiffTemplate">
-    <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Download TIFF" style="margin-top: 4px" />
-</form>
-
 <table class="table pmd-table table-hover table-striped display responsive nowrap" cellspacing="0" style="width:100%">
     <tr>
         <th>
@@ -101,7 +97,7 @@
                 @p.OpenDays
             </td>
             <td>
-                @if (p.Status == Talento.Entities.Status.Open)
+                @if (p.Status == Talento.Entities.PositionStatus.Open)
                 {
                     <input data-target="#complete-dialog" data-toggle="modal"
                            class="btn-modal btn btn-primary pmd-ripple-effect btn-primary pmd-z-depth"

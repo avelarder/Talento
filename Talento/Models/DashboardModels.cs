@@ -70,7 +70,7 @@ namespace Talento.Models
         public string RGS { get; set; }
 
         [Required(ErrorMessage = "Status is required")]
-        public Status Status { get; set; }
+        public PositionStatus Status { get; set; }
 
         public string ApplicationUser_Id { get; set; }
 
@@ -130,7 +130,7 @@ namespace Talento.Models
 
         [Required(ErrorMessage = "Status is required")]
         [Range(2, 4,ErrorMessage ="Positions can only be opened, cancelled or closed")]
-        public Status Status { get; set; }
+        public PositionStatus Status { get; set; }
 
         /*
         This could be useful in future in case of needing to edit the owner user account.It is not yet requested in the Edit user story 295
@@ -177,12 +177,12 @@ namespace Talento.Models
         public Entities.Action Action { get; set; }
 
         [Required(ErrorMessage = "Previous Status is required")]
-        public Status PreviousStatus { get; set; }
+        public PositionStatus PreviousStatus { get; set; }
 
         [Required]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Actual Status is required")]
-        public Status ActualStatus { get; set; }
+        public PositionStatus ActualStatus { get; set; }
     }
 }

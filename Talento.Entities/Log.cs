@@ -27,10 +27,10 @@ namespace Talento.Entities
         [Required]
         public Action Action { get; set; }
 
-        public Status PreviousStatus { get; set; }
+        public PositionStatus PreviousStatus { get; set; }
 
         [Required]
-        public Status ActualStatus { get; set; }
+        public PositionStatus ActualStatus { get; set; }
 
         public virtual Position Position { get; set; }
     }

@@ -1,0 +1,27 @@
+﻿<div class="container-status-candidate clearfix">
+    @if ((int)ViewData["Status"] == 1)
+    {
+        <div class="form-group pmd-textfield">
+            <label>Conditional Offer</label>
+            <select style="font-size:1em;" class="select-simple form-control pmd-select2 select-candidate-status" name="status">
+                <option disabled selected="selected">Negotiating</option>
+                <option value="3">Accepted</option>
+                <option value="4">Rejected</option>
+            </select>
+            <button style="width:100%;margin-top: 5px;" class="update-status-candidate btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary">Update</button>
+        </div>
+    }
+    else if ((int)ViewData["Status"] == 3)
+    {
+        <div class="form-group pmd-textfield">
+            <label>Customer Interview</label>
+            <select style="font-size:1em;" class="select-simple form-control pmd-select2 select-candidate-status" name="status">
+                <option disabled selected="selected">Customer Interview</option>
+                <option value="6">Approved</option>
+                <option value="7">Rejected</option>
+            </select>
+            <button style="width:100%;margin-top: 5px;" class="update-status-candidate btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary">Update</button>
+        </div>
+    }
+   
+</div>

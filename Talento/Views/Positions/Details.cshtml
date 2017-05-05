@@ -78,7 +78,8 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h2>Candidates</h2>
+        <span style="font-size:20px;">Candidates</span>
+        @Html.Partial("TIFFDownload")
 
         <!--pagination-->
         <table class="table" id="candidates-list">
@@ -87,20 +88,22 @@
                     <th>Email</th>
                     <th>Created On</th>
                     <th>Created By</th>
+                    <th>Status</th>
+                    <th rowspan="2">Options</th>
                     @if (ViewBag.userRole != "Admin")
                     {
                         <th>
-                            @if (Model.Status == Talento.Entities.Status.Open)
+                            @if (Model.Status == Talento.Entities.PositionStatus.Open)
                             {
-                                <a href="#" data-toggle="modal" alt="Add profile" id="buttonaddprofile" data-target="#new-complete-dialog">
-                                    <i class="material-icons md-24">note_add</i>
+                                <a style="margin-top: -15px;" class="btn btn-sm pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-primary" href="#" data-toggle="modal" alt="Add profile" id="buttonaddprofile" data-target="#new-complete-dialog">
+                                    <i class="material-icons md-24">add</i>
                                 </a>
                             }
                         </th>
                     }
                     <th>
                     </th>
-                    @if (Model.Status == Talento.Entities.Status.Open)
+                    @if (Model.Status == Talento.Entities.PositionStatus.Open)
                     {
                         <th>
                             Options
@@ -110,7 +113,7 @@
             </thead>
             @foreach (var cP in ViewBag.onePageOfCandidatePositions)
             {
-                <tr>
+                <tr class="candidate-row" data-candidate-id="@cP.CandidateID"> 
                     <td>
                         @cP.Candidate.Email
                     </td>
@@ -121,16 +124,19 @@
                         @cP.Candidate.CreatedBy.Email
                     </td>
                     <td>
-                        <a href="@Url.Action("Edit", "Candidate",new { id = cP.Candidate.CandidateId, positionId = Model.PositionId } )" class="material-icons md-24 edit-candidate" data-target="#edit-position-dialog" alt="Edit candidate">
-                            mode_edit
-                        </a>
+                        @Html.Action("Status", "Candidate", new { positionModel = Model, candidateId = cP.CandidateID })
                     </td>
                     <td>
-                        <a href="#" class="delete-candidate" data-target="#delete-position-dialog" data-candidate="@cP.Candidate.CandidateId" alt="Delete candidate">
+                        <a href="@Url.Action("Edit", "Candidate",new { id = cP.CandidateID, positionId = Model.PositionId } )" class="material-icons md-24 edit-candidate" data-target="#edit-position-dialog" alt="Edit candidate">
+                            mode_edit
+                        </a>
+                    </td>                 
+                    <td>
+                        <a href="#" class="delete-candidate" data-target="#delete-position-dialog" data-candidate="@cP.CandidateID" alt="Delete candidate">
                             <i class="material-icons md-24">delete</i>
                         </a>
                     </td>
-                    @if (Model.Status == Talento.Entities.Status.Open)
+                    @if (Model.Status == Talento.Entities.PositionStatus.Open)
                     {
                         <td>
                             <a href="@Url.Action("NewTechnicalInterview", "TechnicalInterview", new { candidateEmail = cP.Candidate.Email, positionId = cP.Position.PositionId })">
@@ -360,6 +366,34 @@
                         .addClass("field-validation-valid")
                         .empty();
                 }
+
+                // Candidate Status Update
+                var $selectCandidateStatus = $(".select-candidate-status");
+                var $updateCandidateStatus = $(".update-status-candidate");
+
+                $updateCandidateStatus.on("click", function (e) {
+                    e.preventDefault();
+                    var $self = $(this);
+
+                    var $status = $self.parent(".form-group").find(".select-candidate-status");
+                    var candidateId = $self.closest(".candidate-row").attr("data-candidate-id");
+
+                    console.log($status);
+                    console.log($status.val());
+
+                    if ($status.val() !== null) {
+                        $.post({
+                            url: "/Candidate/ChangeStatus",
+                            data: { positionCandidateId: candidateId, status: $status.val() }
+                        }).done(function (response) {
+                            location.reload();
+                        }).fail(function (error) {
+                            alertify.set('notifier', 'position', 'bottom-left');
+                            alertify.error("<strong style='color:#FFF;'>Invalid Action<i style='margin-top:10px; margin-left:10px;' class='material-icons'>warning</i></strong>");
+                        });
+                    }
+
+                });
             }
 
         </script>
