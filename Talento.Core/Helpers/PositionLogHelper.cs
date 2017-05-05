@@ -14,7 +14,6 @@ namespace Talento.Core.Helpers
         {
 
         }
-
         public void Add(Log log)
         {
             Db.PositionLogs.Add(log);

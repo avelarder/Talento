@@ -119,14 +119,15 @@ namespace Talento.Core.Helpers
             }
         }
 
-        public int AddTechnicalInterview(TechnicalInterview technicalInterview, ApplicationUser currentUser)
+        public int AddTechnicalInterview(TechnicalInterview technicalInterview, ApplicationUser currentUser, int positionId, string candidateEmail)
         {
             try
             {
                 using (var tx = new TransactionScope(TransactionScopeOption.Required))
                 {
+                    int candidateId = Db.Candidates.Single(x => x.Email.Equals(candidateEmail)).CandidateId;
+                    technicalInterview.PositionCandidate = Db.PositionCandidates.FirstOrDefault(x => x.CandidateID.Equals(candidateId) && x.PositionID.Equals(positionId));
                     Db.TechnicalInterviews.Add(technicalInterview);
-
                     Log log = new Log
                     {
                         Action = Entities.Action.Edit,
@@ -147,9 +148,9 @@ namespace Talento.Core.Helpers
                     }
 
                     technicalInterview.PositionCandidate.Position.Logs.Add(log);
-
+                    int result = Db.SaveChanges();
                     tx.Complete();
-                    return 0;
+                    return result;
                 }
             }
             catch (Exception)
