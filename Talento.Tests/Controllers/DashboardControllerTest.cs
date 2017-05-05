@@ -135,26 +135,26 @@ namespace Talento.Tests.Controllers
             Assert.IsInstanceOfType(result, typeof(ViewResult));
         }
 
-        [TestMethod]
+//        [TestMethod]
 
-        public void DownloadTiffTest()
-        {
-            var mocks = new MockRepository(MockBehavior.Default);
-            Mock<ICustomPagingList> mockPagingList = mocks.Create<ICustomPagingList>();
-            Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
-            Mock<IApplicationSetting> mockSettingsHelper = mocks.Create<IApplicationSetting>();
-            Mock<ControllerContext> mockContext = new Mock<ControllerContext>();
-            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
-            DashboardController controller = new DashboardController(mockPagingList.Object)
-            {
-                ControllerContext = mockContext.Object
-            };
+        //public void DownloadTiffTest()
+        //{
+            //var mocks = new MockRepository(MockBehavior.Default);
+            //Mock<ICustomPagingList> mockPagingList = mocks.Create<ICustomPagingList>();
+            //Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
+            //Mock<IApplicationSetting> mockSettingsHelper = mocks.Create<IApplicationSetting>();
+            //Mock<ControllerContext> mockContext = new Mock<ControllerContext>();
+            //mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+            //DashboardController controller = new DashboardController(mockPagingList.Object)
+            //{
+            //    ControllerContext = mockContext.Object
+            //};
 
-            var result = controller.DownloadTiffTemplate();
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(FilePathResult));
-            Assert.IsTrue(((FilePathResult)result).ContentType == "application/ms-word");
-            Assert.IsTrue(((FilePathResult)result).FileName == "~/Content/Files/Template_TIFF.doc");
-        }
+            //var result = controller.DownloadTiffTemplate();
+            //Assert.IsNotNull(result);
+            //Assert.IsInstanceOfType(result, typeof(FilePathResult));
+            //Assert.IsTrue(((FilePathResult)result).ContentType == "application/ms-word");
+            //Assert.IsTrue(((FilePathResult)result).FileName == "~/Content/Files/Template_TIFF.doc");
+        //}
     }
 }

@@ -134,7 +134,7 @@ namespace Talento.Controllers
         [HttpGet]
         public FileResult DownloadTiffTemplate()
         {
-            return new FilePathResult("~/Content/Files/Template_TIFF.doc", "application/ms-word");
+            return new FilePathResult("~/Content/Files/Template_TIFF.doc", "application/msword");
         }
     }
 }

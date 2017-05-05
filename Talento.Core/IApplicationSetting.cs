@@ -15,7 +15,7 @@ namespace Talento.Core
         List<ApplicationSetting> GetPagination(string orderBy, string filter);
         ApplicationSetting GetByName(string name);
         ApplicationSetting GetById(int id);
-        void Create(ApplicationSetting aS);
+        int Create(ApplicationSetting aS);
         void Edit(ApplicationSetting aS);
     }
 }
