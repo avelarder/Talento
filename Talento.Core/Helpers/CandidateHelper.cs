@@ -48,9 +48,10 @@ namespace Talento.Core.Helpers
                         Date = DateTime.Now,
                         Description = String.Format("Candidate {0} was attached to the position", newCandidate.Email),
                         PreviousStatus = currentPosition.Status,
+                        Position = currentPosition
                     };
 
-                    currentPosition.Logs.Add(log);
+                    LogHelper.Add(log);
                     currentPosition.OpenStatus = PositionOpenStatus.Screening;
                     int result = Db.SaveChanges();
                     tx.Complete();
@@ -91,11 +92,11 @@ namespace Talento.Core.Helpers
                     User = currentUser,
                     Date = DateTime.Now,
                     Description = String.Format("Candidate {0} has been updated.", editCandidate.Email),
-                    PreviousStatus = positionToLog.Status
+                    PreviousStatus = positionToLog.Status,
+                    Position = positionToLog                    
                 };
 
-                PositionHelper.Get(positionToLog.PositionId).Logs.Add(log);
-
+                LogHelper.Add(log);
                 Db.SaveChanges();
 
                 return 0;
@@ -135,7 +136,8 @@ namespace Talento.Core.Helpers
                         User = currentUser,
                         Date = DateTime.Now,
                         Description = String.Format("A new technical interview feedback was added for {0}", technicalInterview.PositionCandidate.Candidate.Email),
-                        PreviousStatus = technicalInterview.PositionCandidate.Position.Status
+                        PreviousStatus = technicalInterview.PositionCandidate.Position.Status,
+                        Position = technicalInterview.PositionCandidate.Position
                     };
 
                     if (technicalInterview.IsAccepted)
@@ -147,7 +149,7 @@ namespace Talento.Core.Helpers
                         technicalInterview.PositionCandidate.Status = PositionCandidatesStatus.Interview_Rejected;
                     }
 
-                    technicalInterview.PositionCandidate.Position.Logs.Add(log);
+                    LogHelper.Add(log);
                     int result = Db.SaveChanges();
                     tx.Complete();
                     return result;
@@ -201,10 +203,12 @@ namespace Talento.Core.Helpers
                     ActualStatus = positionToLog.Status,
                     User = currentUser,
                     Date = DateTime.Now,
-                    Description = String.Format("Candidate {0} Status has been updated to {1}.", candidateToLog.Email, name)
+                    Description = String.Format("Candidate {0} Status has been updated to {1}.", candidateToLog.Email, name),
+                    Position = positionToLog,
+                    PreviousStatus = positionToLog.Status
                 };
 
-                PositionHelper.Get(positionToLog.PositionId).Logs.Add(log);
+                LogHelper.Add(log);
 
                 Db.SaveChanges();
             }

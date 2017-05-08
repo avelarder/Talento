@@ -10,6 +10,6 @@ namespace Talento.Core
 {
     public interface IPositionLog
     {
-        void Add(Log log);
+        int Add(Log log);
     }
 }

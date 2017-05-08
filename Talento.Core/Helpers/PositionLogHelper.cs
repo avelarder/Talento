@@ -14,10 +14,18 @@ namespace Talento.Core.Helpers
         {
 
         }
-        public void Add(Log log)
+
+        public int Add(Log log)
         {
-            Db.PositionLogs.Add(log);
-            Db.SaveChanges();
+            try
+            {
+                Db.PositionLogs.Add(log);
+                return Db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
