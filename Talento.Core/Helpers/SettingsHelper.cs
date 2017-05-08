@@ -20,9 +20,9 @@ namespace Talento.Core.Helpers
 
         }
 
-        public ApplicationSetting GetByName(string name)
+        public ApplicationSetting GetByName(string settingName)
         {
-            var aS = Db.ApplicationSetting.FirstOrDefault(p => p.SettingName == name);
+            var aS = Db.ApplicationSetting.FirstOrDefault(p => p.SettingName == settingName);
             return aS;
         }
 
@@ -126,31 +126,32 @@ namespace Talento.Core.Helpers
             return Db.ApplicationSetting.Where(s => s.SettingName.StartsWith(prefix)).Select(x => x.SettingName).Distinct().ToList();
         }
 
-        public void Edit(ApplicationSetting pApplicationSetting)
+        public int Edit(ApplicationSetting pApplicationSetting)
         {
-            //row to edit
-            var appSettingToEdit = Db.ApplicationSetting.First(x => x.ApplicationSettingId == pApplicationSetting.ApplicationSettingId);
+            try
+            {
+                //row to edit
+                var appSettingToEdit = Db.ApplicationSetting.First(x => x.ApplicationSettingId == pApplicationSetting.ApplicationSettingId);
 
-            //// Si ya existe la PK, eliminar la vieja y agregar una nueva
-            //if (appSettingToEdit.SettingName != pApplicationSetting.SettingName || appSettingToEdit.ParameterName != pApplicationSetting.ParameterName)
-            //{
-            //    if (appSettingToEdit != null)
-            //    {
-            Db.ApplicationSetting.Remove(appSettingToEdit);
-            Db.SaveChanges();
-            //    }
-            //}
-            
-            //si no existe la PK se agrega
-            appSettingToEdit.ApplicationUser_Id = pApplicationSetting.ApplicationUser_Id;
-            appSettingToEdit.SettingName = pApplicationSetting.SettingName;
-            appSettingToEdit.ParameterName = pApplicationSetting.ParameterName;
-            appSettingToEdit.ParameterValue = pApplicationSetting.ParameterValue;
-            appSettingToEdit.CreatedBy = pApplicationSetting.CreatedBy;
-            appSettingToEdit.CreationDate = pApplicationSetting.CreationDate;
+                Db.ApplicationSetting.Remove(appSettingToEdit);
+                Db.SaveChanges();
 
-            Db.ApplicationSetting.Add(appSettingToEdit);
-            Db.SaveChanges();
+                appSettingToEdit.ApplicationUser_Id = pApplicationSetting.ApplicationUser_Id;
+                appSettingToEdit.SettingName = pApplicationSetting.SettingName;
+                appSettingToEdit.ParameterName = pApplicationSetting.ParameterName;
+                appSettingToEdit.ParameterValue = pApplicationSetting.ParameterValue;
+                appSettingToEdit.CreatedBy = pApplicationSetting.CreatedBy;
+                appSettingToEdit.CreationDate = pApplicationSetting.CreationDate;
+
+                Db.ApplicationSetting.Add(appSettingToEdit);
+                Db.SaveChanges();
+
+                return 1;
+            }
+            catch
+            {
+                return 0;
+            }
         }
     }
 }

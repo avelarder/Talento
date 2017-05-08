@@ -38,13 +38,13 @@ namespace Talento.Tests.Helpers
             {
                 listAppSettings.Add(new ApplicationSetting
                 {
-                    ApplicationSettingId = Convert.ToInt32(d["ApplicationSettingId"]), 
+                    ApplicationSettingId = Convert.ToInt32(d["ApplicationSettingId"]),
                     CreatedBy = new ApplicationUser { Email = d["CreatedByEmail"].ToString(), Id = d["ApplicationUser_Id"].ToString(), UserName = d["CreatedByUserName"].ToString() },
                     CreationDate = Convert.ToDateTime(d["CreationDate"]),
                     ApplicationUser_Id = d["ApplicationUser_Id"].ToString(),
                     ParameterName = d["ParameterName"].ToString(),
                     ParameterValue = d["ParameterValue"].ToString(),
-                    SettingName = d["SettingName"].ToString(),
+                    SettingName = d["SettingName"].ToString()
                 });
             }
 
@@ -84,13 +84,12 @@ namespace Talento.Tests.Helpers
                     ApplicationUser_Id = d["ApplicationUser_Id"].ToString(),
                     ParameterName = d["ParameterName"].ToString(),
                     ParameterValue = d["ParameterValue"].ToString(),
-                    SettingName = d["SettingName"].ToString(),
+                    SettingName = d["SettingName"].ToString()
                 });
             }
 
             var set = new Mock<DbSet<ApplicationSetting>>().SetupData(listAppSettings);
 
-            // mock dbContext
             var context = new Mock<ApplicationDbContext>();
             context.Setup(c => c.ApplicationSetting).Returns(set.Object);
             context.Setup(x => x.SaveChanges()).Returns(1);
@@ -109,7 +108,8 @@ namespace Talento.Tests.Helpers
         "Resources\\Tests\\SettingHelperTestData.xml",
         "GetByNameSettingHelperTest",
         DataAccessMethod.Sequential)]
-        public void GetByNameSettingHelperTest() {
+        public void GetByNameSettingHelperTest()
+        {
             //Test Data
             DataRow[] applicationSettingsData = TestContext.DataRow.GetChildRows("GetByNameSettingHelperTest_ApplicationSetting");
 
@@ -124,13 +124,12 @@ namespace Talento.Tests.Helpers
                     ApplicationUser_Id = d["ApplicationUser_Id"].ToString(),
                     ParameterName = d["ParameterName"].ToString(),
                     ParameterValue = d["ParameterValue"].ToString(),
-                    SettingName = d["SettingName"].ToString(),
+                    SettingName = d["SettingName"].ToString()
                 });
             }
 
             var set = new Mock<DbSet<ApplicationSetting>>().SetupData(listAppSettings);
 
-            // mock dbContext
             var context = new Mock<ApplicationDbContext>();
             context.Setup(c => c.ApplicationSetting).Returns(set.Object);
             context.Setup(x => x.SaveChanges()).Returns(1);
@@ -140,6 +139,195 @@ namespace Talento.Tests.Helpers
 
             Assert.IsInstanceOfType(result, typeof(ApplicationSetting));
             Assert.IsTrue(((ApplicationSetting)result).Equals(listAppSettings.First()));
+        }
+
+        [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
+        "Resources\\Tests\\SettingHelperTestData.xml",
+        "GetByIdSettingHelperTest",
+        DataAccessMethod.Sequential)]
+        public void GetByIdSettingHelperTest()
+        {
+            //Test Data
+            DataRow[] applicationSettingsData = TestContext.DataRow.GetChildRows("GetByIdSettingHelperTest_ApplicationSetting");
+
+            List<ApplicationSetting> listAppSettings = new List<ApplicationSetting>();
+            foreach (DataRow d in applicationSettingsData)
+            {
+                listAppSettings.Add(new ApplicationSetting
+                {
+                    ApplicationSettingId = Convert.ToInt32(d["ApplicationSettingId"]),
+                    CreatedBy = new ApplicationUser { Email = d["CreatedByEmail"].ToString(), Id = d["ApplicationUser_Id"].ToString(), UserName = d["CreatedByUserName"].ToString() },
+                    CreationDate = Convert.ToDateTime(d["CreationDate"]),
+                    ApplicationUser_Id = d["ApplicationUser_Id"].ToString(),
+                    ParameterName = d["ParameterName"].ToString(),
+                    ParameterValue = d["ParameterValue"].ToString(),
+                    SettingName = d["SettingName"].ToString()
+                });
+            }
+
+            var set = new Mock<DbSet<ApplicationSetting>>().SetupData(listAppSettings);
+
+            var context = new Mock<ApplicationDbContext>();
+            context.Setup(c => c.ApplicationSetting).Returns(set.Object);
+            context.Setup(x => x.SaveChanges()).Returns(1);
+
+            SettingsHelper settingHelper = new SettingsHelper(context.Object);
+            var result = settingHelper.GetById(listAppSettings.First().ApplicationSettingId);
+
+            Assert.IsInstanceOfType(result, typeof(ApplicationSetting));
+            Assert.IsTrue(((ApplicationSetting)result).Equals(listAppSettings.First()));
+        }
+
+        [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
+        "Resources\\Tests\\SettingHelperTestData.xml",
+        "CreateSettingHelperTest",
+        DataAccessMethod.Sequential)]
+        public void CreateSettingHelperTest()
+        {
+            //Test Data
+            DataRow[] applicationSettingsData = TestContext.DataRow.GetChildRows("CreateSettingHelperTest_ApplicationSetting");
+
+            List<ApplicationSetting> listAppSettings = new List<ApplicationSetting>();
+            foreach (DataRow d in applicationSettingsData)
+            {
+                listAppSettings.Add(new ApplicationSetting
+                {
+                    ApplicationSettingId = Convert.ToInt32(d["ApplicationSettingId"]),
+                    CreatedBy = new ApplicationUser { Email = d["CreatedByEmail"].ToString(), Id = d["ApplicationUser_Id"].ToString(), UserName = d["CreatedByUserName"].ToString() },
+                    CreationDate = Convert.ToDateTime(d["CreationDate"]),
+                    ApplicationUser_Id = d["ApplicationUser_Id"].ToString(),
+                    ParameterName = d["ParameterName"].ToString(),
+                    ParameterValue = d["ParameterValue"].ToString(),
+                    SettingName = d["SettingName"].ToString()
+                });
+            }
+
+            var set = new Mock<DbSet<ApplicationSetting>>().SetupData(listAppSettings);
+
+            var context = new Mock<ApplicationDbContext>();
+            context.Setup(c => c.ApplicationSetting).Returns(set.Object);
+            context.Setup(x => x.SaveChanges()).Returns(1);
+
+            SettingsHelper settingHelper = new SettingsHelper(context.Object);
+            var result = settingHelper.Create(listAppSettings.First());
+
+            Assert.IsTrue(result.Equals(1));
+        }
+
+        [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
+       "Resources\\Tests\\SettingHelperTestData.xml",
+       "EditSettingHelperTest",
+       DataAccessMethod.Sequential)]
+        public void EditSettingHelperTest()
+        {
+            //Test Data
+            DataRow[] applicationSettingsData = TestContext.DataRow.GetChildRows("EditSettingHelperTest_ApplicationSetting");
+
+            List<ApplicationSetting> listAppSettings = new List<ApplicationSetting>();
+            foreach (DataRow d in applicationSettingsData)
+            {
+                listAppSettings.Add(new ApplicationSetting
+                {
+                    ApplicationSettingId = Convert.ToInt32(d["ApplicationSettingId"]),
+                    CreatedBy = new ApplicationUser { Email = d["CreatedByEmail"].ToString(), Id = d["ApplicationUser_Id"].ToString(), UserName = d["CreatedByUserName"].ToString() },
+                    CreationDate = Convert.ToDateTime(d["CreationDate"]),
+                    ApplicationUser_Id = d["ApplicationUser_Id"].ToString(),
+                    ParameterName = d["ParameterName"].ToString(),
+                    ParameterValue = d["ParameterValue"].ToString(),
+                    SettingName = d["SettingName"].ToString()
+                });
+            }
+
+            var set = new Mock<DbSet<ApplicationSetting>>().SetupData(listAppSettings);
+
+            var context = new Mock<ApplicationDbContext>();
+            context.Setup(c => c.ApplicationSetting).Returns(set.Object);
+            context.Setup(x => x.SaveChanges()).Returns(1);
+
+            SettingsHelper settingHelper = new SettingsHelper(context.Object);
+            var result = settingHelper.Edit(listAppSettings.First());
+
+            Assert.IsTrue(result.Equals(1));
+        }
+
+        [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
+       "Resources\\Tests\\SettingHelperTestData.xml",
+       "GetPaginationSettingHelperTest",
+       DataAccessMethod.Sequential)]
+        public void GetPaginationSettingHelperTest()
+        {
+            //Test Data
+            DataRow[] applicationSettingsData = TestContext.DataRow.GetChildRows("GetPaginationSettingHelperTest_ApplicationSetting");
+
+            List<ApplicationSetting> listAppSettings = new List<ApplicationSetting>();
+            foreach (DataRow d in applicationSettingsData)
+            {
+                listAppSettings.Add(new ApplicationSetting
+                {
+                    ApplicationSettingId = Convert.ToInt32(d["ApplicationSettingId"]),
+                    CreatedBy = new ApplicationUser { Email = d["CreatedByEmail"].ToString(), Id = d["ApplicationUser_Id"].ToString(), UserName = d["CreatedByUserName"].ToString() },
+                    CreationDate = Convert.ToDateTime(d["CreationDate"]),
+                    ApplicationUser_Id = d["ApplicationUser_Id"].ToString(),
+                    ParameterName = d["ParameterName"].ToString(),
+                    ParameterValue = d["ParameterValue"].ToString(),
+                    SettingName = d["SettingName"].ToString()
+                });
+            }
+
+            var set = new Mock<DbSet<ApplicationSetting>>().SetupData(listAppSettings);
+
+            var context = new Mock<ApplicationDbContext>();
+            context.Setup(c => c.ApplicationSetting).Returns(set.Object);
+            context.Setup(x => x.SaveChanges()).Returns(1);
+
+            SettingsHelper settingHelper = new SettingsHelper(context.Object);
+            var result = settingHelper.GetPagination("CreationDate", "");
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
+       "Resources\\Tests\\SettingHelperTestData.xml",
+       "GetParametersSettingHelperTest",
+       DataAccessMethod.Sequential)]
+        public void GetParametersSettingHelperTest()
+        {
+            //Test Data
+            DataRow[] applicationSettingsData = TestContext.DataRow.GetChildRows("GetParametersSettingHelperTest_ApplicationSetting");
+
+            List<ApplicationSetting> listAppSettings = new List<ApplicationSetting>();
+            foreach (DataRow d in applicationSettingsData)
+            {
+                listAppSettings.Add(new ApplicationSetting
+                {
+                    ApplicationSettingId = Convert.ToInt32(d["ApplicationSettingId"]),
+                    CreatedBy = new ApplicationUser { Email = d["CreatedByEmail"].ToString(), Id = d["ApplicationUser_Id"].ToString(), UserName = d["CreatedByUserName"].ToString() },
+                    CreationDate = Convert.ToDateTime(d["CreationDate"]),
+                    ApplicationUser_Id = d["ApplicationUser_Id"].ToString(),
+                    ParameterName = d["ParameterName"].ToString(),
+                    ParameterValue = d["ParameterValue"].ToString(),
+                    SettingName = d["SettingName"].ToString()
+                });
+            }
+
+            var set = new Mock<DbSet<ApplicationSetting>>().SetupData(listAppSettings);
+
+            var context = new Mock<ApplicationDbContext>();
+            context.Setup(c => c.ApplicationSetting).Returns(set.Object);
+            context.Setup(x => x.SaveChanges()).Returns(1);
+
+            SettingsHelper settingHelper = new SettingsHelper(context.Object);
+            var result = settingHelper.GetParameters("Filtering");
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Count == 1);
+            Assert.AreEqual("Filtering", result[0].ToString());
         }
     }
 }
