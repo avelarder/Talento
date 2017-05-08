@@ -27,7 +27,7 @@ namespace Talento.Core.Helpers
             {
                 using (var tx = new TransactionScope(TransactionScopeOption.Required))
                 {
-                    Position currentPosition = PositionHelper.Get(newCandidate.PositionCandidates.First().PositionID);
+                    Position currentPosition = PositionHelper.Get(newCandidate.PositionCandidates.First().Position.PositionId);
 
                     foreach (PositionCandidates c in currentPosition.PositionCandidates)
                     {
@@ -63,11 +63,6 @@ namespace Talento.Core.Helpers
             {
                 throw;
             }
-        }
-
-        public void Delete(int Id, string uId)
-        {
-            throw new NotImplementedException();
         }
 
         public int Edit(Candidate editCandidate, HashSet<FileBlob> files, ApplicationUser currentUser)
@@ -159,11 +154,6 @@ namespace Talento.Core.Helpers
             {
                 throw;
             }
-        }
-
-        public async Task<List<Candidate>> GetAll()
-        {
-            return await Db.Candidates.ToListAsync();
         }
 
         public void ChangeStatus(int Id, PositionCandidatesStatus newStatus, ApplicationUser currentUser)

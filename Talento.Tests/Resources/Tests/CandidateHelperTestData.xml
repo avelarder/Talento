@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Talento>
+	<CreateCandidateHelperTest>
+		<Candidate>
+			<CandidateId>1</CandidateId>
+			<Name>Candidate0</Name>
+			<Email>Candidate0@example.com</Email>
+			<Competencies>comp1, comp2, comp3</Competencies>
+			<Description>A description</Description>
+			<CreatedOn>2017-05-08T10:16:00</CreatedOn>
+			<CreatedBy_Id>1</CreatedBy_Id>
+			<CreatedBy_Email>owner@example.com</CreatedBy_Email>
+			<IsTcsEmployee>false</IsTcsEmployee>
+			<Position_Id>1</Position_Id>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+			<FileBlob_Name>file.txt</FileBlob_Name>
+		</Candidate>
+		<Position>
+			<PositionId>1</PositionId>
+			<Title>position</Title>
+			<Description>description</Description>
+			<CreationDate>2017-05-02T10:16:00</CreationDate>
+			<Area>IT</Area>
+			<EngagementManager>Cristobal Colon</EngagementManager>
+			<Owner_Id>1</Owner_Id>
+			<Owner_Email>owner@example.com</Owner_Email>
+			<PortfolioManager_Id>2</PortfolioManager_Id>
+			<PortfolioManager_Email>pmuser1@example.com</PortfolioManager_Email>
+			<RGS>101010</RGS>
+			<Status>Open</Status>
+			<OpenStatus>New</OpenStatus>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+		</Position>
+	</CreateCandidateHelperTest>
+</Talento>
