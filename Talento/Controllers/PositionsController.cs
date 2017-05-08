@@ -15,6 +15,7 @@ using System.Web.Security;
 
 namespace Talento.Controllers
 {
+    [HandleError]
     [Authorize(Roles = "Admin, PM, TAG, RMG, TL")]
     public class PositionsController : Controller
     {

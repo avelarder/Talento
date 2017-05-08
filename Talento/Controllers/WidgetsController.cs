@@ -10,6 +10,7 @@ using Talento.Entities;
 
 namespace Talento.Controllers
 {
+    [HandleError]
     [Authorize]
     public class WidgetsController : Controller
     {

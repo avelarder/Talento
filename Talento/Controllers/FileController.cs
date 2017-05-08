@@ -10,6 +10,7 @@ using Talento.Models;
 
 namespace Talento.Controllers
 {
+    [HandleError]
     [Authorize]
     public class FileController : Controller
     {
