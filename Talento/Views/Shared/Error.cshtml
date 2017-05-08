@@ -3,19 +3,22 @@
 @{
     ViewBag.Title = "Error";
 }
+
 <style>
     #error-page {
         height:100vh;
         width:100%;
     }
-    #error-page .error-page-container{
+    #error-page .error-page-container{ background:url(../../Content/Images/bg1.png)
 
     }
 </style>
+
 <div id="error-page">
     <div class="error-page-container">
         <h1 class="text-danger text-center">Howdy! looks like we have a problem</h1>
-        <h2 class="text-danger text-center">Error code : <i>@ViewData["ErrorMessage"]</i></h2>
+        <img src="~/Content/Images/error.jpg" class="center-block" />
+        <h2 class="text-danger text-center">Error : <i>@Model.Exception.Message</i></h2>
     </div>
 </div>
 
