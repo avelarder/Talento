@@ -7,7 +7,7 @@ using Talento.Core.Data;
 
 namespace Talento.Providers
 {
-    public class CustomRoleProvider : RoleProvider
+    public class CustomRoleProvider : RoleProvider, IDisposable
     {
         ApplicationDbContext DbContext;
 
@@ -16,7 +16,7 @@ namespace Talento.Providers
             DbContext = new ApplicationDbContext();
         }
 
-        public override string ApplicationName { get ; set ; }
+        public override string ApplicationName { get; set; }
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
         {
@@ -49,8 +49,8 @@ namespace Talento.Providers
             var userId = DbContext.Users.SingleOrDefault(x => x.UserName == username).Id;
 
             return (from r in DbContext.Roles
-                       where r.Users.Any(x => x.UserId == userId)
-                       select r.Name).ToArray();
+                    where r.Users.Any(x => x.UserId == userId)
+                    select r.Name).ToArray();
         }
 
         public override string[] GetUsersInRole(string roleName)
@@ -60,8 +60,8 @@ namespace Talento.Providers
 
         public override bool IsUserInRole(string username, string roleName)
         {
-           var user = DbContext.Users.SingleOrDefault(x => x.UserName == username);
-           return DbContext.Roles.SingleOrDefault(x => x.Name == roleName).Users.Any(x=>x.UserId == user.Id);
+            var user = DbContext.Users.SingleOrDefault(x => x.UserName == username);
+            return DbContext.Roles.SingleOrDefault(x => x.Name == roleName).Users.Any(x => x.UserId == user.Id);
         }
 
         public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
@@ -73,5 +73,21 @@ namespace Talento.Providers
         {
             throw new NotImplementedException();
         }
+
+        #region Dispose
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                DbContext.Dispose();
+            }
+        }
+        #endregion
     }
 }

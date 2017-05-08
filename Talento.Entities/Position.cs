@@ -12,7 +12,7 @@ namespace Talento.Entities
     public class Position
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int PositionId { get; set; }
 
         [StringLength(50, ErrorMessage = "Title must have 50 characters maximum")]
         [Required(ErrorMessage = "Title is required")]
@@ -44,7 +44,7 @@ namespace Talento.Entities
 
         [Required(ErrorMessage = "Status is required")]
         [DefaultValue("Open")]
-        public Status Status { get; set; }
+        public PositionStatus Status { get; set; }
 
         public List<Tag> Tags { get; set; }
 
@@ -77,14 +77,14 @@ namespace Talento.Entities
         
         [Required(ErrorMessage = "OpenStatus is required")]
         [DefaultValue("New")]
-        public OpenStatus OpenStatus { get; set; }
+        public PositionOpenStatus OpenStatus { get; set; }
 
-        public virtual ICollection<Candidate> Candidates { get; set; }
+        public virtual ICollection<PositionCandidates> PositionCandidates { get; set; }
 
         public virtual ICollection<Log> Logs { get; set; }
     }
 
-    public enum Status
+    public enum PositionStatus
     {
         Removed = 1,
         Open = 2,
@@ -92,11 +92,10 @@ namespace Talento.Entities
         Closed = 4
     }
 
-    public enum OpenStatus
+    public enum PositionOpenStatus
     {
         New = 0,
         Screening = 1,
-        Interviewing = 2,
-        Offered = 3   
+        Interviewing = 2
     }
 }

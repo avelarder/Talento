@@ -62,13 +62,13 @@ namespace Talento.Controllers
             {
                 switch (item.Status)
                 {
-                    case Status.Open:
+                    case PositionStatus.Open:
                         item.OpenDays = (DateTime.Now - item.LastOpenedDate).Days;
                         break;
-                    case Status.Closed:
+                    case PositionStatus.Closed:
                         item.OpenDays = (item.LastClosedDate - item.LastOpenedDate).Days;
                         break;
-                    case Status.Cancelled:
+                    case PositionStatus.Cancelled:
                         item.OpenDays = (item.LastCancelledDate - item.LastOpenedDate).Days;
                         break;
                 }
@@ -134,7 +134,7 @@ namespace Talento.Controllers
         [HttpGet]
         public FileResult DownloadTiffTemplate()
         {
-            return new FilePathResult("~/Content/Files/Template_TIFF.doc", "application/ms-word");
+            return new FilePathResult("~/Content/Files/Template_TIFF.doc", "application/msword");
         }
     }
 }

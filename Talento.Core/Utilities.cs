@@ -13,9 +13,9 @@ namespace Talento.Core.Utilities
         public string Url { get; set; }
     }
 
-    public static class UtilityApplicationSettings
+    public class UtilityApplicationSettings: IUtilityApplicationSettings
     {
-        public static string GetSetting(string settingName, string parameterName)
+        public string GetSetting(string settingName, string parameterName)
         {
             var current = HttpContext.Current;
             List<ApplicationSetting> settings = HttpContext.Current.Application["AppSettings"] as List<ApplicationSetting>;
@@ -27,10 +27,16 @@ namespace Talento.Core.Utilities
             return null;
         }
 
-        public static List<ApplicationSetting> GetAllSettings()
+        public List<ApplicationSetting> GetAllSettings()
         {
             List<ApplicationSetting> settings = HttpContext.Current.Application["AppSettings"] as List<ApplicationSetting>;
             return settings;
         }
+    }
+
+    public interface IUtilityApplicationSettings
+    {
+        string GetSetting(string settingName, string parameterName);
+        List<ApplicationSetting> GetAllSettings();
     }
 }

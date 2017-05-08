@@ -81,10 +81,10 @@ namespace Talento.Core.Helpers
                     query = query.OrderByDescending(p => p.Status);
                     break;
                 case "Id":
-                    query = query.OrderBy(p => p.Id);
+                    query = query.OrderBy(p => p.PositionId);
                     break;
                 case "id_desc":
-                    query = query.OrderByDescending(p => p.Id);
+                    query = query.OrderByDescending(p => p.PositionId);
                     break;
                 case "EM":
                     query = query.OrderBy(p => p.EngagementManager);
@@ -133,7 +133,7 @@ namespace Talento.Core.Helpers
 
             //Linq query that lists the positions
             var query = from p in Db.Positions
-                        where p.Status != Status.Removed
+                        where p.Status != PositionStatus.Removed
                         select p;
 
             //Filtering the positions by the parameters given
@@ -193,10 +193,10 @@ namespace Talento.Core.Helpers
                     query = query.OrderByDescending(p => p.Owner.UserName);
                     break;
                 case "Id":
-                    query = query.OrderBy(p => p.Id);
+                    query = query.OrderBy(p => p.PositionId);
                     break;
                 case "id_desc":
-                    query = query.OrderByDescending(p => p.Id);
+                    query = query.OrderByDescending(p => p.PositionId);
                     break;
 
                 default:  // Date ascending 

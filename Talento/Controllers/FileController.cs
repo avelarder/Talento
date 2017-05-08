@@ -121,10 +121,11 @@ namespace Talento.Controllers
                     }
                     var httpContext = filterContext.HttpContext;
                     var cookie = httpContext.Request.Cookies[AntiForgeryConfig.CookieName];
-                    AntiForgery.Validate(cookie != null ? cookie.Value : null, httpContext.Request.Params["__RequestVerificationToken"]);
+                    AntiForgery.Validate(cookie?.Value, httpContext.Request.Params["__RequestVerificationToken"]);
                 }
                 catch (Exception)
                 {
+                    //throw;
                 }
             }
         }

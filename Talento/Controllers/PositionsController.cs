@@ -32,21 +32,14 @@ namespace Talento.Controllers
             {
                 cfg.CreateMap<Position, PositionModel>()
                     .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id))
-                    .ForMember(s => s.Candidates, opt => opt.MapFrom(p => p.Candidates))
+                    .ForMember(s => s.PositionCandidates, opt => opt.MapFrom(p => p.PositionCandidates))
                      .ForMember(s => s.Logs, opt => opt.MapFrom(p => p.Logs))
                 ;
                 cfg.CreateMap<Position, EditPositionViewModel>();
                 cfg.CreateMap<Log, PositionLogViewModel>();
                 cfg.CreateMap<EditPositionViewModel, Position>();
                 cfg.CreateMap<Candidate, CandidateModel>();
-
-                /*
-               This could be useful in future in case of needing to edit the owner user account. It is not yet requested in the Edit user story 295
-               4 / 4 / 2017 - Charlie
-               cfg.CreateMap<Position, EditPositionViewModel>()
-                    .ForMember(t => t.OwnerEmail, opt => opt.MapFrom(s => s.Owner.Email))
-                ;
-                */
+                
             });
         }
 
@@ -72,13 +65,13 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
-            if (position == null || position.Status == Status.Removed)
+            if (position == null || position.Status == PositionStatus.Removed)
             {
                 return HttpNotFound();
             }
 
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
-            var onePageOfCandidatePositions = position.Candidates.OrderByDescending(x => x.CratedOn).ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+            var onePageOfCandidatePositions = position.PositionCandidates.OrderByDescending(x => x.Candidate.CreatedOn).ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
             ViewBag.page = pageNumber;
             ViewBag.onePageOfCandidatePositions = onePageOfCandidatePositions;
 
@@ -122,7 +115,7 @@ namespace Talento.Controllers
                     Description = position.Description,
                     PortfolioManager = pmUser,
                     RGS = position.RGS,
-                    Status = Status.Open,
+                    Status = PositionStatus.Open,
                     PortfolioManager_Id = position.EmailPM,
                     ApplicationUser_Id = user,
                     LastOpenedBy = UserHelper.GetUserById(user),
@@ -146,7 +139,7 @@ namespace Talento.Controllers
                 {
                     return HttpNotFound();
                 }
-                if (position.Status.Equals(Status.Removed))
+                if (position.Status.Equals(PositionStatus.Removed))
                 {
                     return HttpNotFound();
                 }
@@ -201,7 +194,7 @@ namespace Talento.Controllers
                 return HttpNotFound();
             }
 
-            if (position.Status == Status.Removed)
+            if (position.Status == PositionStatus.Removed)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
@@ -223,7 +216,7 @@ namespace Talento.Controllers
             {
                 return HttpNotFound();
             }
-            if (position.Status == Status.Removed)
+            if (position.Status == PositionStatus.Removed)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
