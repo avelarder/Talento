@@ -48,7 +48,7 @@ namespace Talento.Tests.Helpers
                 });
             }
 
-            var set = new Mock<DbSet<ApplicationSetting>>();
+            var set = new Mock<DbSet<ApplicationSetting>>().SetupData(new List<ApplicationSetting>());
 
             // mock dbContext
             var context = new Mock<ApplicationDbContext>();
@@ -61,6 +61,9 @@ namespace Talento.Tests.Helpers
             int result = settingHelper.Create(listAppSettings.First());
 
             Assert.IsTrue(result == 1);
+            Assert.AreEqual(listAppSettings.First(), set.Object.Where(c => c.ApplicationSettingId == listAppSettings.First().ApplicationSettingId).Single());
+            set.Verify(m => m.Add(It.IsAny<ApplicationSetting>()), Times.Once());
+            context.Verify(m => m.SaveChanges(), Times.Once());
         }
 
         [TestMethod]
@@ -139,6 +142,7 @@ namespace Talento.Tests.Helpers
 
             Assert.IsInstanceOfType(result, typeof(ApplicationSetting));
             Assert.IsTrue(((ApplicationSetting)result).Equals(listAppSettings.First()));
+            Assert.AreEqual(listAppSettings.First(), set.Object.Where(c => c.ApplicationSettingId == listAppSettings.First().ApplicationSettingId).Single());
         }
 
         [TestMethod]
@@ -177,6 +181,7 @@ namespace Talento.Tests.Helpers
 
             Assert.IsInstanceOfType(result, typeof(ApplicationSetting));
             Assert.IsTrue(((ApplicationSetting)result).Equals(listAppSettings.First()));
+            Assert.AreEqual(listAppSettings.First(), set.Object.Where(c => c.ApplicationSettingId == listAppSettings.First().ApplicationSettingId).Single());
         }
 
         [TestMethod]
@@ -214,6 +219,8 @@ namespace Talento.Tests.Helpers
             var result = settingHelper.Edit(listAppSettings.First());
 
             Assert.IsTrue(result.Equals(1));
+            Assert.AreEqual(listAppSettings.First(), set.Object.Where(c => c.ApplicationSettingId == listAppSettings.First().ApplicationSettingId).Single());
+            set.Verify(m => m.Add(It.IsAny<ApplicationSetting>()), Times.Once());
         }
 
         [TestMethod]
@@ -245,7 +252,6 @@ namespace Talento.Tests.Helpers
 
             var context = new Mock<ApplicationDbContext>();
             context.Setup(c => c.ApplicationSetting).Returns(set.Object);
-            context.Setup(x => x.SaveChanges()).Returns(1);
 
             SettingsHelper settingHelper = new SettingsHelper(context.Object);
             var result = settingHelper.GetPagination("CreationDate", "");
@@ -283,7 +289,6 @@ namespace Talento.Tests.Helpers
 
             var context = new Mock<ApplicationDbContext>();
             context.Setup(c => c.ApplicationSetting).Returns(set.Object);
-            context.Setup(x => x.SaveChanges()).Returns(1);
 
             SettingsHelper settingHelper = new SettingsHelper(context.Object);
             var result = settingHelper.GetParameters("Filtering");
