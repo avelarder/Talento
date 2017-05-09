@@ -1,0 +1,76 @@
+﻿@model Talento.Models.CandidateModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+    }
+
+<h2>@Model.Name</h2>
+
+<div>
+    <h4>Details: </h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <br />
+        <dt>
+            @Html.DisplayNameFor(model => model.Competencies)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Competencies)
+        </dd>
+        <br />
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <br />
+        <dt>
+            Created On:
+        </dt>
+
+        <dd>
+            @Model.CreatedOn.ToLongDateString()
+        </dd>
+        <br />
+        <dt>
+            Created by
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy.UserName)
+        </dd>
+        <br />
+        <dt>
+            @if (Model.IsTcsEmployee)
+            {
+                <span>Is TCS Employee</span>
+            }
+            else
+            {
+                <span>Is <u>not</u> TCS Employee</span>
+            }
+        </dt>
+        <br/>
+    </dl>
+</div>
+<p>
+    <div class="form-group col-md-8">
+        <div style="float:right">
+            @Html.ActionLink("Back to Position ", "Details", "Positions", new { id = Model.PositionId },null)
+        </div>
+        <div style="float:left">
+            @Html.ActionLink(" Back to Dashboard", "Index", "Dashboard")
+        </div>
+        <br />
+    </div>
+</p>

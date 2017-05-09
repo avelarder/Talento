@@ -30,6 +30,7 @@ namespace Talento.Controllers
             {
                 cfg.CreateMap<Candidate, CandidateModel>()
                     .ForMember(t => t.CreatedBy_Id, opt => opt.MapFrom(s => s.CreatedBy_Id))
+                    .ForMember(t => t.CreatedOn, opt => opt.MapFrom(s => s.CreatedOn))
                 ;
                 cfg.CreateMap<Candidate, EditCandidateViewModel>()
                     .ForMember(s => s.PositionCandidates, opt => opt.MapFrom(p => p.PositionCandidates))
@@ -204,15 +205,22 @@ namespace Talento.Controllers
                 return actionError;
             }
         }
-        
+
         public ActionResult Create(int id)
         {
-            return View(new CreateCandidateViewModel (){
+            return View(new CreateCandidateViewModel()
+            {
                 Position_Name = PositionHelper.Get(id).Title,
                 Position_Id = id
             });
         }
 
+        public ActionResult Details(int id, int positionId)
+        {
+            CandidateModel aux = AutoMapper.Mapper.Map<CandidateModel>(CandidateHelper.Get(id));
+            aux.PositionId = positionId;
+            return View(aux);
+        }
 
         [HttpPost]
         public ActionResult Create(CreateCandidateViewModel candidate)

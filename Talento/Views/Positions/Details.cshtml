@@ -40,7 +40,7 @@
             </a>
 
             @*<input data-target="#complete-dialog" data-toggle="modal" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />*@
-            <a href="@Url.Action("Delete", "Positions", new { id = Model.PositionId })" data-target="#complete-dialog" alt="Delete position">
+            <a href="#" class="delete-position" data-target="#complete-dialog" data-position="@Model.PositionId" alt="Delete Position">
                 <i class="material-icons md-24">delete</i>
             </a>
 
@@ -54,7 +54,7 @@
                         </div>
                         <div class="pmd-modal-action pmd-modal-bordered text-right">
                             <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                            <button data-dismiss="modal" type="button" onclick="@("window.location.href='" + @Url.Action("Delete", "Positions", new { id = Model.PositionId }) + "'");" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
+                            <button id="delete-position-button" data-position="@Model.PositionId" data-url="@Url.Action("Delete", "Positions", new { id = Model.PositionId })" data-dismiss="modal" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -104,9 +104,10 @@
             </thead>
             @foreach (var cP in ViewBag.onePageOfCandidatePositions)
             {
+                string email = cP.Candidate.Email.ToString();
                 <tr class="candidate-row" data-candidate-id="@cP.CandidateID"> 
                     <td>
-                        @cP.Candidate.Email
+                        @Html.ActionLink(email, "Details", "Candidate", new { id = cP.Candidate.CandidateId, positionId = cP.Position.PositionId},null)
                     </td>
                     <td>
                         @cP.Candidate.CreatedOn
@@ -141,8 +142,7 @@
         </table>
         <script>
 
-            window.onload = function ()
-            {
+            window.onload = function () {
                 (function ($) {
                     // Delte Candidate
                     var $delete = $(".delete-candidate");
@@ -168,8 +168,31 @@
                         dataCandidate = $self.attr("data-candidate");
                         $modalTarget.modal('show');
                     });
-                    // start
-                    
+
+                    var $delete = $(".delete-position");
+                    var $buttonDelete = $("#delete-position-button");
+                    var url = $buttonDelete.attr("data-url");
+                    var dataCandidate = "";
+                    var positionId = "@Model.PositionId";
+                    $buttonDelete.on("click", function (event) {
+                        event.preventDefault();
+                        $.ajax({
+                            url: url,
+                            data: { idPosition: positionId}
+                        }).done(function (response) {
+                            location.reload();
+                        }).fail(function () {
+                            location.reload();
+                        });
+                    });
+                    $delete.on("click", function (event) {
+                        event.preventDefault();
+                        var $self = $(this);
+                        var $modalTarget = $("#delete-position-dialog");
+                        dataCandidate = $self.attr("data-candidate");
+                        $modalTarget.modal('show');
+                    });
+
 
                 }(jQuery));
                 // Clear Form from Validations -.-

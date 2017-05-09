@@ -67,7 +67,7 @@ namespace Talento.Controllers
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
             if (position == null || position.Status == PositionStatus.Removed)
             {
-                return HttpNotFound();
+                return RedirectToAction("Index", "Dashboard");
             }
 
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)

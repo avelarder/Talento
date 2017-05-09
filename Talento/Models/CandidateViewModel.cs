@@ -26,7 +26,7 @@ namespace Talento.Models
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
 
-        public DateTime? CratedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         public string CreatedBy_Id { get; set; }
 
@@ -34,6 +34,8 @@ namespace Talento.Models
 
         [Required]
         public bool IsTcsEmployee { get; set; }
+
+        public int PositionId { get; set; }
 
         public IList<PositionCandidates> PositionCandidates { get; set; }
     }
