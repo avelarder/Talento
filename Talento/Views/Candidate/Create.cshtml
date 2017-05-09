@@ -35,8 +35,14 @@
         <div class="form-group col-md-8">
             @Html.LabelFor(model => model.IsTcsEmployee, htmlAttributes: new { @class = "control-label" })
             <br />
-            @Html.CheckBoxFor(model => model.IsTcsEmployee, new { htmlAttributes = new { @class = "form-control" } })
             <br />
+            <label class="switch">
+                <input type="checkbox" onchange="switchIsEmployee()">
+                <div class="slider round"></div>
+            </label>
+            <div style="hidden">
+                @Html.CheckBoxFor(model => model.IsTcsEmployee, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
             @Html.ValidationMessageFor(model => model.IsTcsEmployee, "", new { @class = "text-danger" })
         </div>
 
@@ -57,9 +63,81 @@
 </form>
 <br />
 
+<style>
+    /* The switch - the box around the slider */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            display: none;
+        }
+
+    /* The slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+
 <script>
+    function switchIsEmployee() {
+        if ($('#IsTcsEmployee').prop('checked')) {
+            $('#IsTcsEmployee').prop('checked', false);
+        } else {
+            $('#IsTcsEmployee').prop('checked', true);
+        }
+    }
     window.onload = function () {
         (function ($) {
+            
+
             function addFile() {
                 var formData = new FormData();
                 formData.append('image', $('input[type=file]')[0].files[0]);
@@ -106,7 +184,7 @@
                 for (i = 0; i < filelist.length; i++) {
                     $("#fileListDiv").append("<p id='file_" + filelist[i] + "'>" +
                         "<i class='material-icons'>insert_drive_file</i>" +
-                        "<span>" + filelist[i].FileName + "</span>" +
+                        "<span style='font-size:18px;'>" + filelist[i].FileName + "</span>" +
                         "<i class='delete-file material-icons' style='cursor:pointer' data-file='" + filelist[i].FileName + "'>delete</i>" +
                         "</p>");
                 }

@@ -19,15 +19,8 @@
                             @Html.AntiForgeryToken()
                             <div class="dropdown-header">@User.Identity.GetUserName()</div>  
                             <ul class="list-group pmd-list-avatar pmd-card-list">
-                                <li>
-                                    <a href="#">Profile</a>
-                                </li>
-                                <li>
-                                    <a href="#">Settings</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
-                                </li>
+                                <li><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
+                                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
                             </ul>
                         }
                     </div>
