@@ -41,20 +41,21 @@ namespace Talento.Tests.Helpers
                 Position = new Position { PositionId = Convert.ToInt32(positionLogData[0]["Position_Id"].ToString()) }
             };
 
-            var set = new Mock<DbSet<Log>>();
+            var set = new Mock<DbSet<Log>>().SetupData(new List<Log>());
 
             // mock dbContext
-            var expected = 1;
             var context = new Mock<ApplicationDbContext>();
             context.Setup(c => c.PositionLogs).Returns(set.Object);
-            context.Setup(x => x.SaveChanges()).Returns(expected);
+            context.Setup(x => x.SaveChanges()).Verifiable();
 
             PositionLogHelper positionLogHelper = new PositionLogHelper(context.Object);
 
             // execute helper query
             int result = positionLogHelper.Add(log);
 
-            Assert.AreEqual(result, expected);
+            Assert.AreEqual(log, (set.Object.Where(l => l.Id == log.Id).Single()));
+            set.Verify(m => m.Add(It.IsAny<Log>()), Times.Once());
+            context.Verify(m => m.SaveChanges(), Times.Once());
         }
     }
 }

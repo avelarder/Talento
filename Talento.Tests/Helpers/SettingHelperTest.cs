@@ -181,43 +181,6 @@ namespace Talento.Tests.Helpers
 
         [TestMethod]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
-        "Resources\\Tests\\SettingHelperTestData.xml",
-        "CreateSettingHelperTest",
-        DataAccessMethod.Sequential)]
-        public void CreateSettingHelperTest()
-        {
-            //Test Data
-            DataRow[] applicationSettingsData = TestContext.DataRow.GetChildRows("CreateSettingHelperTest_ApplicationSetting");
-
-            List<ApplicationSetting> listAppSettings = new List<ApplicationSetting>();
-            foreach (DataRow d in applicationSettingsData)
-            {
-                listAppSettings.Add(new ApplicationSetting
-                {
-                    ApplicationSettingId = Convert.ToInt32(d["ApplicationSettingId"]),
-                    CreatedBy = new ApplicationUser { Email = d["CreatedByEmail"].ToString(), Id = d["ApplicationUser_Id"].ToString(), UserName = d["CreatedByUserName"].ToString() },
-                    CreationDate = Convert.ToDateTime(d["CreationDate"]),
-                    ApplicationUser_Id = d["ApplicationUser_Id"].ToString(),
-                    ParameterName = d["ParameterName"].ToString(),
-                    ParameterValue = d["ParameterValue"].ToString(),
-                    SettingName = d["SettingName"].ToString()
-                });
-            }
-
-            var set = new Mock<DbSet<ApplicationSetting>>().SetupData(listAppSettings);
-
-            var context = new Mock<ApplicationDbContext>();
-            context.Setup(c => c.ApplicationSetting).Returns(set.Object);
-            context.Setup(x => x.SaveChanges()).Returns(1);
-
-            SettingsHelper settingHelper = new SettingsHelper(context.Object);
-            var result = settingHelper.Create(listAppSettings.First());
-
-            Assert.IsTrue(result.Equals(1));
-        }
-
-        [TestMethod]
-        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
        "Resources\\Tests\\SettingHelperTestData.xml",
        "EditSettingHelperTest",
        DataAccessMethod.Sequential)]

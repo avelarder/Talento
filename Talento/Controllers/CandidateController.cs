@@ -262,7 +262,6 @@ namespace Talento.Controllers
                 string currentUserId = User.Identity.GetUserId();
                 var currentUser = UserHelper.GetUserById(currentUserId);
                 
-
                 CandidateHelper.ChangeStatus(positionCandidateId, positionCandidateStatus, currentUser);
 
                 return new HttpStatusCodeResult(200);
