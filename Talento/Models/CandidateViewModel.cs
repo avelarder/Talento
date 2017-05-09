@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 using Talento.Entities;
 
 namespace Talento.Models
@@ -77,7 +75,7 @@ namespace Talento.Models
         public virtual ApplicationUser CreatedBy { get; set; }
 
         [Required]
-        public string IsTcsEmployee { get; set; }
+        public bool IsTcsEmployee { get; set; }
 
         public IList<PositionCandidates> PositionCandidates { get; set; }
     }
@@ -85,6 +83,8 @@ namespace Talento.Models
     public class CreateCandidateViewModel
     {
         public int Position_Id { get; set; }
+
+        public string Position_Name { get; set; }
 
         [StringLength(50, ErrorMessage = "Name must have 50 characters maximum")]
         [Required(ErrorMessage = "Name is required")]
@@ -110,7 +110,7 @@ namespace Talento.Models
         public virtual ApplicationUser CreatedBy { get; set; }
 
         [Required]
-        public string IsTcsEmployee { get; set; }
+        public bool IsTcsEmployee { get; set; }
 
         public IList<Position> Positions { get; set; }
     }

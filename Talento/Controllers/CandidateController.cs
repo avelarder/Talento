@@ -87,7 +87,7 @@ namespace Talento.Controllers
                 return HttpNotFound();
             }
 
-            return PartialView(candidate);
+            return View(candidate);
         }
 
         // POST: Candidate/Edit/5
@@ -103,16 +103,14 @@ namespace Talento.Controllers
                 if (ModelState.IsValid)
                 {
                     HashSet<FileBlob> files = ((HashSet<FileBlob>)Session["files"]);
-
                     string email = CandidateHelper.Get(candidate.CandidateId).Email;
-
                     Candidate newCandidate = new Candidate
                     {
                         CandidateId = candidate.CandidateId,
                         Description = candidate.Description,
                         Competencies = candidate.Competencies,
                         Name = candidate.Name,
-                        IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
+                        IsTcsEmployee = candidate.IsTcsEmployee,
                         Email = email,
                         PositionCandidates = CandidateHelper.Get(candidate.CandidateId).PositionCandidates
                     };
@@ -177,19 +175,18 @@ namespace Talento.Controllers
                         Description = candidate.Description,
                         Email = candidate.Email,
                         Name = candidate.Name,
-                        IsTcsEmployee = candidate.IsTcsEmployee.Equals("on"),
+                        IsTcsEmployee = candidate.IsTcsEmployee,
                         CreatedBy_Id = user.Id,
                         PositionCandidates = new List<PositionCandidates>
                         {
                             new PositionCandidates
                             {
                                 Position = PositionHelper.Get(candidate.Position_Id),
-                                Status = PositionCandidatesStatus.New
+                                Status = PositionCandidatesStatus.New,
                             }
                         },
                         FileBlobs = files
                     };
-
                     int result = CandidateHelper.Create(newCandidate);
                     if (result != -1)
                     {
@@ -207,17 +204,23 @@ namespace Talento.Controllers
                 return actionError;
             }
         }
+        
+        public ActionResult Create(int id)
+        {
+            return View(new CreateCandidateViewModel (){
+                Position_Name = PositionHelper.Get(id).Title,
+                Position_Id = id
+            });
+        }
 
 
         [HttpPost]
-        [ValidateJsonAntiForgeryToken]
         public ActionResult Create(CreateCandidateViewModel candidate)
         {
             return New(candidate, RedirectToAction("Index", "Dashboard", null));
         }
 
         [HttpPost]
-        [ValidateJsonAntiForgeryToken]
         public ActionResult CreateDetails(CreateCandidateViewModel candidate)
         {
             return New(candidate, RedirectToAction("Details", "Positions", new { id = candidate.Position_Id }));
@@ -272,26 +275,6 @@ namespace Talento.Controllers
                 throw;
             }
         }
-        [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-        protected class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
-        {
-            public void OnAuthorization(AuthorizationContext filterContext)
-            {
-                try
-                {
-                    if (filterContext == null)
-                    {
-                        throw new ArgumentNullException("filterContext");
-                    }
-                    var httpContext = filterContext.HttpContext;
-                    var cookie = httpContext.Request.Cookies[AntiForgeryConfig.CookieName];
-                    AntiForgery.Validate(cookie?.Value, httpContext.Request.Params["__RequestVerificationToken"]);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
-        }
+        
     }
 }

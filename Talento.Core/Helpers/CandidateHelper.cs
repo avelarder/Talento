@@ -27,8 +27,7 @@ namespace Talento.Core.Helpers
             {
                 using (var tx = new TransactionScope(TransactionScopeOption.Required))
                 {
-                    Position currentPosition = PositionHelper.Get(newCandidate.PositionCandidates.First().PositionID);
-
+                    Position currentPosition = PositionHelper.Get(newCandidate.PositionCandidates.First().Position.PositionId);
                     foreach (PositionCandidates c in currentPosition.PositionCandidates)
                     {
                         //If Email is already in the position return -1
@@ -37,9 +36,7 @@ namespace Talento.Core.Helpers
                             return -1;
                         }
                     }
-
                     Db.Candidates.Add(newCandidate);
-
                     Log log = new Log
                     {
                         Action = Entities.Action.Edit,
@@ -49,14 +46,12 @@ namespace Talento.Core.Helpers
                         Description = String.Format("Candidate {0} was attached to the position", newCandidate.Email),
                         PreviousStatus = currentPosition.Status,
                     };
-
                     currentPosition.Logs.Add(log);
                     currentPosition.OpenStatus = PositionOpenStatus.Screening;
                     int result = Db.SaveChanges();
                     tx.Complete();
                     return result;
                 }
-
             }
             catch (Exception)
             {
@@ -77,7 +72,9 @@ namespace Talento.Core.Helpers
                 Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).Description = editCandidate.Description;
                 Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).Name = editCandidate.Name;
                 Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).IsTcsEmployee = editCandidate.IsTcsEmployee;
-                Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).FileBlobs.Clear();
+                files.ToList().ForEach(y=> Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).FileBlobs.Remove(y));
+
+                Db.SaveChanges();
                 Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).FileBlobs = files;
 
                 Db.SaveChanges();
@@ -100,7 +97,7 @@ namespace Talento.Core.Helpers
 
                 return 0;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw;
             }
@@ -128,6 +125,7 @@ namespace Talento.Core.Helpers
                     int candidateId = Db.Candidates.Single(x => x.Email.Equals(candidateEmail)).CandidateId;
                     technicalInterview.PositionCandidate = Db.PositionCandidates.FirstOrDefault(x => x.CandidateID.Equals(candidateId) && x.PositionID.Equals(positionId));
                     Db.TechnicalInterviews.Add(technicalInterview);
+                    Db.Candidates.Single(x => x.CandidateId.Equals(candidateId)).FileBlobs.Add(technicalInterview.FeedbackFile);
                     Log log = new Log
                     {
                         Action = Entities.Action.Edit,

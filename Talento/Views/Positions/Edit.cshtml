@@ -10,99 +10,56 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
+
     <div class="form-horizontal">
         <h4>@Model.Area - @Model.CreationDate.ToShortDateString()</h4>
         <hr />
+        @Html.HiddenFor(model => model.PositionId)
+
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-            </div>
+        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
+        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Area, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Area, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Area, "", new { @class = "text-danger" })
-            </div>
+        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+            @Html.LabelFor(model => model.Area, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Area, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Area, "", new { @class = "text-danger" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EngagementManager, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.EngagementManager, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EngagementManager, "", new { @class = "text-danger" })
-            </div>
+        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+            @Html.LabelFor(model => model.EngagementManager, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.EngagementManager, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EngagementManager, "", new { @class = "text-danger" })
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.RGS, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.RGS, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.RGS, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        @*
-        <div class="form-group">
-            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
-            </div>
-        </div>
-     
-        *@
         
-
-    <div class="form-group">
-        <label class="control-label col-md-2" for="Status">Status</label>
-        <div class="col-md-10">
-          @Html.DropDownListFor(model => model.Status, EnumHelper.GetSelectList(typeof(Talento.Entities.Status)).Where(e => e.Text != "Removed"), new { @class = "form-control" })
-          @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })  
+        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+            @Html.LabelFor(model => model.RGS, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.RGS, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.RGS, "", new { @class = "text-danger" })
         </div>
-    </div>
-         
-        <div class="form-group hide">
-            @Html.LabelFor(model => model.CreationDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CreationDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CreationDate, "", new { @class = "text-danger" })
-            </div>
+        
+        <div class="form-group col-md-8 pmd-textfield">
+            <label class="control-label col-md-2" style="margin-left:-50px;" for="Status">Status</label>
+                @Html.DropDownListFor(model => model.Status, EnumHelper.GetSelectList(typeof(Talento.Entities.PositionStatus)).Where(e => e.Text != "Removed"), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
         </div>
 
-        @*
-        This could be useful in future in case of needing to edit the owner user account. It is not yet requested in the Edit user story 295
-        4/4/2017 - Charlie
-    <div class="form-group">
-        @Html.LabelFor(model => model.OwnerEmail, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.OwnerEmail, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.OwnerEmail, "", new { @class = "text-danger" })
-        </div>
-    </div>
-        *@
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+        <div class="form-group col-md-8">
+            <div style="float:right">
+                <input type="submit" value="Update" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" />
+                @Html.ActionLink("Back to Dashboard", "Index", "Dashboard", null, new { @class = "btn pmd-btn-flat pmd-ripple-effect btn-primary" })
             </div>
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to Detail", "Details", "Positions", new { id = Model.Id},null )
-</div>
+<br/>

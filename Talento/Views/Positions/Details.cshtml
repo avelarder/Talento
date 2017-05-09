@@ -12,17 +12,13 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h2>Positions</h2>
+        <h2>@Html.DisplayFor(x => x.Title)</h2>
         <div>
             <div class="col-md-7">
-                <b>Title:</b> @Html.DisplayFor(x => x.Title)
-            </div>
-            <div class="col-md-5">
                 <b>Creation date:</b> @Html.DisplayFor(x => x.CreationDate)
             </div>
         </div>
         <div class="bottom">&nbsp;</div>
-        <br />
         <div class="col-md-11">
             <p><b>Description: </b>@Html.DisplayFor(x => x.Description)</p>
             <p><b>Area: </b>@Html.DisplayFor(x => x.Area)<p />
@@ -44,7 +40,7 @@
             </a>
 
             @*<input data-target="#complete-dialog" data-toggle="modal" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />*@
-            <a href="@Url.Action("Delete", "Positions")" data-target="#complete-dialog" alt="Delete position">
+            <a href="@Url.Action("Delete", "Positions", new { id = Model.PositionId })" data-target="#complete-dialog" alt="Delete position">
                 <i class="material-icons md-24">delete</i>
             </a>
 
@@ -78,9 +74,9 @@
 
 <div class="row">
     <div class="col-md-12">
-        <span style="font-size:20px;">Candidates</span>
+        <br/>
         @Html.Partial("TIFFDownload")
-
+        <span style="font-size:20px;">Candidates</span>
         <!--pagination-->
         <table class="table" id="candidates-list">
             <thead>
@@ -93,20 +89,15 @@
                     @if (ViewBag.userRole != "Admin")
                     {
                         <th>
+                        </th>
+                        <th>
                             @if (Model.Status == Talento.Entities.PositionStatus.Open)
                             {
-                                <a style="margin-top: -15px;" class="btn btn-sm pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-primary" href="#" data-toggle="modal" alt="Add profile" id="buttonaddprofile" data-target="#new-complete-dialog">
+                              <a style="margin-left: -35px;" class="btn btn-sm pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-primary"
+                                 href="/Candidate/Create/@Model.PositionId" alt="Add profile" id="buttonaddprofile" >
                                     <i class="material-icons md-24">add</i>
                                 </a>
                             }
-                        </th>
-                    }
-                    <th>
-                    </th>
-                    @if (Model.Status == Talento.Entities.PositionStatus.Open)
-                    {
-                        <th>
-                            Options
                         </th>
                     }
                 </tr>
@@ -126,16 +117,6 @@
                     <td>
                         @Html.Action("Status", "Candidate", new { positionModel = Model, candidateId = cP.CandidateID })
                     </td>
-                    <td>
-                        <a href="@Url.Action("Edit", "Candidate",new { id = cP.CandidateID, positionId = Model.PositionId } )" class="material-icons md-24 edit-candidate" data-target="#edit-position-dialog" alt="Edit candidate">
-                            mode_edit
-                        </a>
-                    </td>                 
-                    <td>
-                        <a href="#" class="delete-candidate" data-target="#delete-position-dialog" data-candidate="@cP.CandidateID" alt="Delete candidate">
-                            <i class="material-icons md-24">delete</i>
-                        </a>
-                    </td>
                     @if (Model.Status == Talento.Entities.PositionStatus.Open)
                     {
                         <td>
@@ -144,6 +125,17 @@
                             </a>
                         </td>
                     }
+                    <td>
+                        <a href="@Url.Action("Edit", "Candidate",new { id = cP.CandidateID, positionId = Model.PositionId } )" class="material-icons md-24 edit-candidate" alt="Edit candidate">
+                            mode_edit
+                        </a>
+                    </td>                 
+                    <td>
+                        <a href="#" class="delete-candidate" data-target="#delete-position-dialog" data-candidate="@cP.CandidateID" alt="Delete candidate">
+                            <i class="material-icons md-24">delete</i>
+                        </a>
+                    </td>
+                  
                 </tr>
             }
         </table>
@@ -177,184 +169,9 @@
                         $modalTarget.modal('show');
                     });
                     // start
-                    var $parent = $('#candidates-list');
-                    console.log("first trigger");
-                    $parent.on("click", '.edit-candidate', function (event) {
-                        var status = "@Html.Raw(Model.Status.ToString()).ToString()";
-                        // data-toggle="modal" data-target="#edit-position-dialog"
-                        if (status == "Closed" || status == "Cancelled") {
-                            event.preventDefault();
-                            alert("The information you are looking for is not available");
-                        }
-                        else {
-                            event.preventDefault();
-                            console.log("candidate trigger");
-                            var $this = $(this);
-                            var $target = $($this.attr('data-target'));
-                            $target.modal('show');
-                            var $url = $this.attr('href');
-                            $target.html('');
-                            $.ajax({
-                                url: $url
-                            }).fail(function (err) {
-                                var html = '<div class="modal-dialog"> \
-                                < div class="modal-content" > \
-                                    <div class="modal-body" id="edit-position-dialog-body"> Error:'+ err + '</div></div></div>';
-                                $target.html(html);
-                            }).done(function (result) {
-                    console.log("Load trigger");
-                                $target.html(result);
-                                $target.modal()
-                            });
-                        }
-                    });
-
-                    $(document).ready(function () {
-                        $(".btn-modal").on("click", function () {
-                            $("#Position_Id").val(($(this).attr("name")).split("-")[1]);
-                            $("#formnewprofile")[0].reset();
-                            $(".field-validation-error").hide();
-                    });
-                        $(".modal").on('shown', function () {
-                        clearForm();
-                    });
-
-                        $("#buttonaddprofile").click(function () {
-                            clearForm();
-                        });
-
-                        $("#buttonnewprofile").click(function (evt) {
-                            toastr.options = {
-                                "debug": false,
-                                "positionClass": "toast-top-center",
-                                "onclick": null,
-                                "fadeIn": 500,
-                                "fadeOut": 2000,
-                                "timeOut": 6000,
-                                "extendedTimeOut": 2000
-                            }
-                            var emailCandidate = $("#Email").val();
-                            var positionId = $("#Position_Id").val();
-                            $.ajax({
-                                type: "POST",
-                                url: '/Candidate/ValidEmail',
-                                dataType: 'json',
-                                data: {
-                                    emailCandidate: emailCandidate,
-                                    positionId: positionId
-                                },
-                                success: function (response) {
-                                    evt.preventDefault();
-                                    var $form = $('#formnewprofile');
-                                    if ($form.valid()) {
-                                        $form.submit();
-                                        $("#new-complete-dialog").modal("hide");
-                                        setTimeout(function () { toastr.success("Profile has been added."); }, 2500)
-                                    } else {
-                                        return;
-                                    }
-                                },
-                                error: function (error) {
-                                    toastr.error("A profile with the specified email address cannot be registered.")
-                                }
-                            });
-                    });
-                        $("#Files").on("change", function () {
-                        addFile();
-                    });
-                        $("#fileListDiv").on("click", ".delete-file", function () {
-                        deleteFile($(this).attr('data-file'));
-                    });
-                });
+                    
 
                 }(jQuery));
-
-                function clearForm() {
-                    document.getElementById("formnewprofile").reset();
-                }
-
-                function addFile() {
-                    var formData = new FormData();
-                    formData.append('image', $('input[type=file]')[0].files[0]);
-                    var token = $('input[name="__RequestVerificationToken"]').val();
-                    var headers = {};
-                    headers['__RequestVerificationToken'] = token;
-                    $.ajax({
-                        type: "POST",
-                        url: '/File/Add',
-                        headers: headers,
-                        data: formData,
-                        dataType: 'json',
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-
-                        },
-                        error: function (error) {
-                            //Error is good enough because the result is always empty
-                            updatelist();
-                        }
-
-                    });
-                }
-                function deleteFile(filename) {
-                    var formData = new FormData();
-                    $.ajax({
-                        type: "POST",
-                        url: '/File/Delete',
-                        data: "filename=" + filename,
-                        success: function (response) {
-                            updatelist();
-                        },
-                        error: function (error) {
-                            updatelist();
-                        }
-
-                    });
-                }
-
-                function buildFileList(filelist) {
-
-                    $("#fileListDiv").empty();
-                    for (i = 0; i < filelist.length; i++) {
-                        $("#fileListDiv").append("<p id='file_" + filelist[i] + "'>" +
-                            "<i class='material-icons'>insert_drive_file</i>" +
-                            "<span>" + filelist[i].FileName + "</span>" +
-                            "<i class='delete-file material-icons' style='cursor:pointer' data-file='" + filelist[i].FileName + "'>delete</i>" +
-                            "</p>");
-                    }
-                }
-
-                $('#new-complete-dialog').on('hidden.bs.modal', function () {
-                    $("body").removeClass("modal-open");
-                    $.ajax({
-                        type: "POST",
-                        url: '/File/EmptyList',
-                        dataType: 'json',
-                        success: function (response) {
-                            buildFileList(response);
-                        },
-                        error: function (error) {
-                        }
-                    });
-                    clearFormValidation($("#new-complete-dialog").find("form"));
-                    buildFileList();
-                    setTimeout(stopUpdate, 2000);
-                });
-
-                function updatelist() {
-                    $.ajax({
-                        type: "POST",
-                        url: '/File/ListCurrentFiles',
-                        dataType: 'json',
-                        success: function (response) {
-                            buildFileList(response);
-                        },
-                        error: function (error) {
-                        }
-                    });
-                }
-
                 // Clear Form from Validations -.-
                 function clearFormValidation(form) {
                     form.find("[data-valmsg-summary=true]")
@@ -400,7 +217,6 @@
         <!--pagination-->
         <!-- output a paging control that lets the user navigation to the previous page, next page, etc -->
         @Html.PagedListPager((IPagedList)ViewBag.onePageOfCandidatePositions, page => Url.Action("Details", "Positions", new { Model.PositionId, page }))
-
         <!--Delete profile modal-->
         <div tabindex="-1" class="modal fade" id="delete-position-dialog" style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
@@ -416,74 +232,5 @@
             </div>
         </div>
         <!--Delete profile modal-->
-        <!--Edit profile modal-->
-        <div tabindex="-1" class="modal fade" id="edit-position-dialog" aria-hidden="true"></div>
-        <!--Add profile modal-->
-        <div tabindex="-1" class="modal fade" id="new-complete-dialog" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form id="formnewprofile" action="/Candidate/CreateDetails/" method="post">
-                        <div class="modal-body">
-                            <h4>Attaching a new Profile to @Model.Title</h4>
-                            <hr />
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            @Html.AntiForgeryToken()
-                            <div class="form-horizontal">
-                                <input data-val="true" data-val-number="The field Id must be a number." data-val-required="The Id field is required." id="Position_Id" name="Position_Id" type="hidden" value="@Model.PositionId" />
-                                <div class="form-group">
-                                    <label class="control-label col-md-2" for="Name">Name </label>
-                                    <div class="col-md-10">
-                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Name is required" id="Name" name="Name" type="text" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true" maxlength="50"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-md-2" for="Email">Email </label>
-                                    <div class="col-md-10">
-                                        <input class="form-control text-box single-line" data-val="true" data-val-required="Email is required" id="Email" name="Email" type="email"
-                                               data-val-maxlength="The field Email Address must be a string or array type with a maximum length of '50'." data-val-maxlength-max="50" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true" maxlength="50"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-md-2" for="IsTcsEmployee">Is Tcs Employee? </label>
-                                    <div class="col-md-10">
-                                        <input class="form-control text-box single-line" data-val="true" id="IsTcsEmployee" name="IsTcsEmployee" type="checkbox" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="IsTcsEmployee" data-valmsg-replace="true"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-md-2" for="Competencies">Competencies </label>
-                                    <div class="col-md-10">
-                                        <input class="form-control text-box single-line" data-val="true" data-val-maxlength="The field Competencies must be a string" data-val-required="Competencies is required" id="Competencies" name="Competencies" type="text" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="Competencies" data-valmsg-replace="true" maxlength="300"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-md-2" for="Description">Description </label>
-                                    <div class="col-md-10">
-                                        <input class="form-control text-box single-line" data-val="true" data-val-maxlength="The field Description must be a string" data-val-required="Description is required" id="Description" name="Description" type="text" />
-                                        <span class="field-validation-valid text-danger" data-valmsg-for="Description" data-valmsg-replace="true" maxlength="300"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-md-2" for="LocalFiles">Local Files </label>
-                                    <div class="col-md-10">
-
-                                        @Html.Action("Index", "File", null)
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pmd-modal-action pmd-modal-bordered text-right">
-                            <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                            <input id="buttonnewprofile" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm" />
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
