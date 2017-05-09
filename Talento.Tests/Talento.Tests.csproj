@@ -131,6 +131,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Files\pdftest1.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Files\pdftest.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
