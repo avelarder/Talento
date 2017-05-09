@@ -5,7 +5,8 @@
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
-<h2>NewTechnicalInterview</h2>
+<span style="font-size:20px;">New Technical Interview</span>
+@Html.Partial("TIFFDownload")
 
 <form action="/TechnicalInterview/NewTechnicalInterview" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()

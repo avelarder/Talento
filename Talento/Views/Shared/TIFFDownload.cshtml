@@ -1,5 +1,7 @@
 ﻿<div class="pull-right">
-    <form method="get" action="/Dashboard/DownloadTiffTemplate">
-        <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Download TIFF" style="margin-top: 4px" />
-    </form>
+    <div class="pull-left">
+        <a href="@Url.Action("DownloadTiffTemplate", "Dashboard")" alt="Download TIFF Template">
+            <i class="material-icons md-24 pull-left">file_download</i><span class="pull-left">Download TIFF Template</span>
+        </a>
+    </div>
 </div>
