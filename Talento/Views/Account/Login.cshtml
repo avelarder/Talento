@@ -2,10 +2,16 @@
 @{
     ViewBag.Title = "Login";
     ViewBag.BodyClass = "login-home";
-    Layout = "~/Views/Account/Shared/_LayoutLogin.cshtml";
+    //Layout = "~/Views/Account/Shared/_LayoutLogin.cshtml";
 }
 
-<div class="login-card">
+<style>
+    .float-none {
+        float: none;
+    }
+</style>
+
+<div class="col-md-4 center-block float-none login-card">
     @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { ReturnUrl = ViewBag.ReturnUrl, @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
