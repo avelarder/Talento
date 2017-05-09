@@ -2,20 +2,20 @@
 @{
     ViewBag.Title = "Login";
     ViewBag.BodyClass = "login-home";
-    Layout = "~/Views/Account/Shared/_LayoutLogin.cshtml";
+    //Layout = "~/Views/Account/Shared/_LayoutLogin.cshtml";
 }
 
-<div class="login-card">
+<div class="col-md-4 center-block login-card" style="float: none;">
     @using (Html.BeginForm("RequestToken", "Account", FormMethod.Post, new { ReturnUrl = ViewBag.ReturnUrl, @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
         <div class="pmd-card-title card-header-border text-center">
             <div class="loginlogo">
-                <a href="javascript:void(0);">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/b/b1/Tata_Consultancy_Services_Logo.svg" alt="Logo TCS">
-                </a>
+
             </div>
-            <h2>Welcome to token request</h2>
+            <br />
+            <div class="login-title center-block">Request token</div>
+            <div class="login-bottom"></div>
         </div>
 
         <div class="pmd-card-body">
