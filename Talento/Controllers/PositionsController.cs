@@ -21,12 +21,14 @@ namespace Talento.Controllers
         Core.IPosition PositionHelper;
         Core.ICustomUser UserHelper;
         Core.ICandidate CandidateHelper;
+        IUtilityApplicationSettings ApplicationSettings;
 
-        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.ICandidate candidateHelper)
+        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.ICandidate candidateHelper, IUtilityApplicationSettings appSettings)
         {
             UserHelper = userHelper;
             PositionHelper = positionHelper;
             CandidateHelper = candidateHelper;
+            ApplicationSettings = appSettings;
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -70,8 +72,21 @@ namespace Talento.Controllers
                 return HttpNotFound();
             }
 
+            // Pagination
+            var pageSizeValue = ApplicationSettings.GetSetting("pagination", "pagesize"); // Setting Parameter
+            int pageSize = 0;
+
+            if (pageSizeValue != null)
+            {
+                pageSize = Convert.ToInt32(pageSizeValue);
+            }
+            else
+            {
+                pageSize = 25;
+            }
+
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
-            var onePageOfCandidatePositions = position.PositionCandidates.OrderByDescending(x => x.Candidate.CreatedOn).ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+            var onePageOfCandidatePositions = position.PositionCandidates.OrderByDescending(x => x.Candidate.CreatedOn).ToPagedList(pageNumber, pageSize); // will only contain 5 products max because of the pageSize
             ViewBag.page = pageNumber;
             ViewBag.onePageOfCandidatePositions = onePageOfCandidatePositions;
 
@@ -253,6 +268,19 @@ namespace Talento.Controllers
                 // Get Position With Logs
                 PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
                 var logs = position.Logs.OrderByDescending(x => x.Date).ToList();
+
+                // Pagination
+                var pageSizeValue = ApplicationSettings.GetSetting("pagination", "pagesize"); // Setting Parameter
+
+                if (pageSizeValue != null)
+                {
+                    pagesize = Convert.ToInt32(pageSizeValue);
+                }
+                else
+                {
+                    pagesize = 25;
+                }
+
                 // Get List of PositionLogs and the Pagination
                 var containerLogs = PositionHelper.PaginateLogs(logs, pagex, pagesize, url);
                 // No logs with the ID return 404
