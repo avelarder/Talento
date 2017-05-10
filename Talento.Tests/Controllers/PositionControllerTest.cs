@@ -10,6 +10,7 @@ using Talento.Controllers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Talento.Models;
+using System.Net;
 
 namespace Talento.Tests.Controllers
 {
@@ -114,10 +115,8 @@ namespace Talento.Tests.Controllers
             PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object);
 
             var result = posController.Details(-1, 1);
-            var httpStatusCodeResult = ((HttpStatusCodeResult)(((ActionResult)result)));
-            Assert.IsNotNull(httpStatusCodeResult);
-            Assert.IsInstanceOfType(httpStatusCodeResult, typeof(HttpStatusCodeResult));
-            Assert.IsTrue(((HttpStatusCodeResult)result).StatusCode == 404);
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
         }
 
         [TestMethod]
@@ -202,10 +201,8 @@ namespace Talento.Tests.Controllers
             PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object);
 
             var result = posController.Details(5, 1);
-            var httpStatusCodeResult = ((HttpStatusCodeResult)(((ActionResult)result))); // .Result
-            Assert.IsNotNull(httpStatusCodeResult);
-            Assert.IsInstanceOfType(httpStatusCodeResult, typeof(HttpStatusCodeResult));
-            Assert.IsTrue(((HttpStatusCodeResult)result).StatusCode == 404); // .Result
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
         }
 
         [TestMethod]

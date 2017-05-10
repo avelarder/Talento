@@ -15,6 +15,9 @@ namespace Talento.Models
         [Display(Name = "PositionId")]
         public int PositionId { get; set; }
 
+        [Display(Name = "CandidateId")]
+        public int CandidateId { get; set; }
+
         [Display(Name = "Date")]
         [Required]
         public DateTime Date { get; set; }
