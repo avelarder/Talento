@@ -168,9 +168,9 @@ namespace Talento.Core.Helpers
             { 
                 PositionCandidates pc = Db.PositionCandidates.Single(x => x.CandidateID == Id);
                 // Check if Update Status is Valid Conditions
-                if ((int)pc.Status == 1)
+                if ((int)pc.Status == 1 || (int)pc.Status == 5)
                 {
-                    if ((int)newStatus != 3 && (int)newStatus != 4)
+                    if ((int)newStatus != 3 && (int)newStatus != 4 && (int)newStatus != 5)
                     {
                         throw new Exception();
                     }
