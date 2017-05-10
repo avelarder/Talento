@@ -112,16 +112,20 @@
                     $("#confirmationbutton").click(function (evt) {
                         if (firsttry) {
                             alertify.set('notifier', 'position', 'bottom-left');
-                            if ($("#interviewform").valid()) {
-                                setTimeout(function () {
-                                    alertify.success('<b>The Interview has been Registered successfully</b>');
-                                }, 2000);
-                                setTimeout(function () { $("#interviewform").submit(); }, 4000);
-                                setTimeout(function () { window.location.pathname = "Candidate/Details/@Model.CandidateId"; }, 5550);
+                            if ($("#File").val() == "") {
+                                alertify.error('<b>A File attachment is necesary in order to register the interview.</b>');
                             } else {
-                                return;
+                                if ($("#interviewform").valid()) {
+                                    setTimeout(function () {
+                                        alertify.success('<b>The Interview has been Registered successfully</b>');
+                                    }, 2000);
+                                    setTimeout(function () { $("#interviewform").submit(); }, 4000);
+                                    setTimeout(function () { window.location.pathname = "Candidate/Details/@Model.CandidateId"; }, 5550);
+                                    firsttry = false;
+                                } else {
+                                    return;
+                                }
                             }
-                            firsttry = false;
                         }
                     });
                     $('#File').on("change", function () {
