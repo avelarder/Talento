@@ -10,6 +10,7 @@ using Talento.Core.Utilities;
 
 namespace Talento.Controllers
 {
+    [HandleError]
     [Authorize]
     public class DashboardController : Controller
     {
@@ -140,6 +141,11 @@ namespace Talento.Controllers
         public ActionResult AddSettingsForm()
         {
             return View();
+        }
+
+        public ActionResult Error()
+        {
+            return View("~/Shared/Error.cshtml");
         }
 
         [Authorize]

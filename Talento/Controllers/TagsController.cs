@@ -11,6 +11,7 @@ using Talento.Models;
 
 namespace Talento.Controllers
 {
+    [HandleError]
     public class TagsController : Controller
     {
         Core.ITag TagHelper;

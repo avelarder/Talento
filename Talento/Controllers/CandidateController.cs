@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Talento.Controllers
 {
+    [HandleError]
     public class CandidateController : Controller
     {
         ICandidate CandidateHelper;
@@ -245,7 +246,7 @@ namespace Talento.Controllers
 
             if (User.IsInRole("TAG") || User.IsInRole("RMG")) 
             {
-                if ((int)status == 1)
+                if ((int)status == 1 || (int)status == 5)
                 {
                     ViewData["Status"] = status;
                     return PartialView();

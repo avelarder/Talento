@@ -11,6 +11,7 @@ using Talento.Models;
 
 namespace Talento.Controllers
 {
+    [HandleError]
     [Authorize(Roles = "PM, TL")]
     public class TechnicalInterviewController : Controller
     {
