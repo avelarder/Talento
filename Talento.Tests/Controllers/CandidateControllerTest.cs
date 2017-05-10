@@ -66,7 +66,7 @@ namespace Talento.Tests.Controllers
                 Description = "aDescription",
                 Email = "aMail@tcs.com",
                 Name = "pepito",
-                IsTcsEmployee = "on",
+                IsTcsEmployee = true,
                 CreatedBy_Id = "1"
             };
 
@@ -142,7 +142,7 @@ namespace Talento.Tests.Controllers
                 Description = "aDescription",
                 Email = "aMail@tcs.com",
                 Name = "pepito",
-                IsTcsEmployee = "on",
+                IsTcsEmployee = true,
                 CreatedBy_Id = "1"
             };
 

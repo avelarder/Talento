@@ -95,7 +95,7 @@ namespace Talento.Core.Helpers
 
                 return 0;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
