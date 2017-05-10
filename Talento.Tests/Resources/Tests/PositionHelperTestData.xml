@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Talento>
+  <CreatePositionHelperTest>
+    <Position>
+      <PositionId>1</PositionId>
+      <Title>position</Title>
+      <Description>description</Description>
+      <CreationDate>2017-05-02T10:16:00</CreationDate>
+      <Area>IT</Area>
+      <EngagementManager>Cristobal Colon</EngagementManager>
+      <Owner_Id>1</Owner_Id>
+      <Owner_Email>owner@example.com</Owner_Email>
+      <PortfolioManager_Id>2</PortfolioManager_Id>
+      <PortfolioManager_Email>pmuser1@example.com</PortfolioManager_Email>
+      <RGS>101010</RGS>
+      <Status>Open</Status>
+      <OpenStatus>New</OpenStatus>
+      <PositionCandidate_Status>New</PositionCandidate_Status>
+    </Position>
+    <ApplicationUser>
+      <ApplicationUserId>1</ApplicationUserId>
+      <Email>user@example.com</Email>
+    </ApplicationUser>
+  </CreatePositionHelperTest>
+  <DeletePositionHelperTest>
+    <Position>
+      <PositionId>1</PositionId>
+      <Title>position</Title>
+      <Description>description</Description>
+      <CreationDate>2017-05-02T10:16:00</CreationDate>
+      <Area>IT</Area>
+      <EngagementManager>Cristobal Colon</EngagementManager>
+      <Owner_Id>1</Owner_Id>
+      <Owner_Email>owner@example.com</Owner_Email>
+      <PortfolioManager_Id>2</PortfolioManager_Id>
+      <PortfolioManager_Email>pmuser1@example.com</PortfolioManager_Email>
+      <RGS>101010</RGS>
+      <Status>Open</Status>
+      <OpenStatus>New</OpenStatus>
+      <PositionCandidate_Status>New</PositionCandidate_Status>
+    </Position>
+    <ApplicationUser>
+      <ApplicationUserId>1</ApplicationUserId>
+      <Email>user@example.com</Email>
+    </ApplicationUser>
+  </DeletePositionHelperTest>
+  <EditPositionHelperTest>
+    <Position>
+      <PositionId>1</PositionId>
+      <Title>position</Title>
+      <Description>description</Description>
+      <CreationDate>2017-05-02T10:16:00</CreationDate>
+      <Area>IT</Area>
+      <EngagementManager>Cristobal Colon</EngagementManager>
+      <Owner_Id>1</Owner_Id>
+      <Owner_Email>owner@example.com</Owner_Email>
+      <PortfolioManager_Id>2</PortfolioManager_Id>
+      <PortfolioManager_Email>pmuser1@example.com</PortfolioManager_Email>
+      <RGS>101010</RGS>
+      <Status>Open</Status>
+      <OpenStatus>New</OpenStatus>
+      <PositionCandidate_Status>New</PositionCandidate_Status>
+    </Position>
+    <ApplicationUser>
+      <ApplicationUserId>1</ApplicationUserId>
+      <Email>user@example.com</Email>
+    </ApplicationUser>
+  </EditPositionHelperTest>
+</Talento>
