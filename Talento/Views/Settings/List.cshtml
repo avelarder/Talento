@@ -31,7 +31,7 @@
             @Html.ActionLink("Created By", "List", new { orderBy = ViewBag.SortUser, filter = ViewBag.CurrentFilter })
         </th>
         <th>
-            <button data-target="#complete-dialog" data-toggle="modal" class="btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary" type="button">
+            <button id="btnAddNewParameter" class="btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary" onclick="window.location.href='/Dashboard/AddSettingsForm'">
                 <strong>+</strong> Add Parameter
             </button>
         </th>
@@ -55,7 +55,7 @@
                 @setting.CreatedBy.Email
             </td>
             <td class="">
-                <button data-id="@setting.ApplicationSettingId" data-target="#edit-dialog" data-toggle="modal" class="button-edit btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" type="button">
+                <button data-id="@setting.ApplicationSettingId" class="button-edit btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" onclick="window.location.href='/Settings/EditSettingsForm/@setting.ApplicationSettingId'" >
                     <i class="material-icons pmd-sm">mode_edit</i>
                 </button>
                 <button data-id="@setting.ApplicationSettingId" data-toggle="modal" class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-danger btn-sm" type="button">
