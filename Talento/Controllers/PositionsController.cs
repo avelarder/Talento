@@ -274,7 +274,7 @@ namespace Talento.Controllers
                 // No ID return 404
                 if (id == null)
                 {
-                    return HttpNotFound();
+                    return View("Error");
                 }
                 // Check if it's Ajax request, View check for this viewData
                 ViewData["AjaxTrue"] = false;
@@ -292,7 +292,7 @@ namespace Talento.Controllers
                 // No logs with the ID return 404
                 if (containerLogs == null)
                 {
-                    return HttpNotFound();
+                    return View("Error");
                 }
                 var logx = AutoMapper.Mapper.Map<List<PositionLogViewModel>>(containerLogs.Item1);
                 // Pagination
@@ -306,7 +306,7 @@ namespace Talento.Controllers
             }
             catch (Exception)
             {
-                return HttpNotFound();
+                return View("Error");
             }
         }
 
