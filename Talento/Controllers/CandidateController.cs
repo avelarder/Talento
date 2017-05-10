@@ -218,7 +218,9 @@ namespace Talento.Controllers
         public ActionResult Details(int id, int positionId)
         {
             CandidateModel aux = AutoMapper.Mapper.Map<CandidateModel>(CandidateHelper.Get(id));
+            List<TechnicalInterview> comments = CandidateHelper.GetCandidateComments(aux.CandidateId);
             aux.PositionId = positionId;
+            aux.Comments = comments;
             return View(aux);
         }
 

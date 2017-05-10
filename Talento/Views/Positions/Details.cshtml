@@ -121,7 +121,7 @@
                     @if (Model.Status == Talento.Entities.PositionStatus.Open)
                     {
                         <td>
-                            <a href="@Url.Action("NewTechnicalInterview", "TechnicalInterview", new { candidateEmail = cP.Candidate.Email, positionId = cP.Position.PositionId })">
+                            <a href="@Url.Action("NewTechnicalInterview", "TechnicalInterview", new { candidateEmail = cP.Candidate.Email, positionId = cP.Position.PositionId, candidateId = cP.Candidate.CandidateId })">
                                 Track Interview
                             </a>
                         </td>

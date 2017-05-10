@@ -17,5 +17,6 @@ namespace Talento.Core
         PositionCandidates GetPositionCandidate(int Id);
         void ChangeStatus(int Id, PositionCandidatesStatus newStatus, ApplicationUser currentUser);
         int AddTechnicalInterview(TechnicalInterview technicalInterview, ApplicationUser currentUser, int positionId, string candidateEmail);
+        List<TechnicalInterview> GetCandidateComments(int CandidateId);
     }
 }

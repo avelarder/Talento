@@ -38,6 +38,8 @@ namespace Talento.Models
         public int PositionId { get; set; }
 
         public IList<PositionCandidates> PositionCandidates { get; set; }
+
+        public List<TechnicalInterview> Comments { get; set; }
     }
 
     public class FileBlobViewModel

@@ -82,7 +82,7 @@ namespace Talento.Controllers
         }
 
         // GET: 
-        public ActionResult NewTechnicalInterview(string candidateEmail, int positionId)
+        public ActionResult NewTechnicalInterview(string candidateEmail, int positionId, int candidateId)
         {
             if (PositionHelper.Get(positionId).Status.Equals(PositionStatus.Open))
             {
@@ -90,7 +90,7 @@ namespace Talento.Controllers
                 {
                     CandidateEmail = candidateEmail,
                     PositionId = positionId,
-
+                    CandidateId = candidateId
                 });
             }
             else

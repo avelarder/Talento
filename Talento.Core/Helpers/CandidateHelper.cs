@@ -97,7 +97,7 @@ namespace Talento.Core.Helpers
 
                 return 0;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
@@ -109,6 +109,18 @@ namespace Talento.Core.Helpers
             {
                 var candidate = Db.Candidates.Single(x => x.CandidateId == Id);
                 return candidate;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<TechnicalInterview> GetCandidateComments(int CandidateId)
+        {
+            try
+            {
+                return Db.TechnicalInterviews.Where(x => x.PositionCandidate.CandidateID.Equals(CandidateId)).ToList();
             }
             catch (Exception)
             {
