@@ -67,14 +67,11 @@
     <Compile Include="IApplicationSetting.cs" />
     <Compile Include="ICandidate.cs" />
     <Compile Include="IPositionLog.cs" />
-    <Compile Include="ISendEmail.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="Helpers\PositionHelper.cs" />
-    <Compile Include="Helpers\TagHelper.cs" />
     <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="ICustomPagingList.cs" />
     <Compile Include="IPosition.cs" />
-    <Compile Include="ITag.cs" />
     <Compile Include="Migrations\201704211855311_InitialCreate.cs" />
     <Compile Include="Migrations\201704211855311_InitialCreate.Designer.cs">
       <DependentUpon>201704211855311_InitialCreate.cs</DependentUpon>

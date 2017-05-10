@@ -200,7 +200,6 @@
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\PositionsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
-    <Compile Include="Controllers\TagsController.cs" />
     <Compile Include="Controllers\TechnicalInterviewController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

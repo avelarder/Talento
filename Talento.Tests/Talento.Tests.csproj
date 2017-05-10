@@ -116,11 +116,15 @@
     <Compile Include="Helpers\SettingHelperTest.cs" />
     <Compile Include="Controllers\TechnicalInterviewControllerTest.cs" />
     <Compile Include="Helpers\DashboardPaginHelperTest.cs" />
+    <Compile Include="Helpers\UserHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\CustomRoleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
+    <Content Include="Resources\Tests\UserHelperTestData.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Tests\DashboardPaginHelperTestData.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
