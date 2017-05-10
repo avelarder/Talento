@@ -109,7 +109,7 @@ namespace Talento.Controllers
             {
                 Comment = model.Comment,
                 Date = model.Date,
-                FeedbackFile = new FileBlob() { Blob = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength), FileName = model.CandidateEmail.Split('@')[0] + "_" + model.Date.Year + model.Date.Month + model.Date.Day + ".doc", Candidate = positionCandidate.Candidate },
+                FeedbackFile = new FileBlob() { Blob = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength), FileName = model.CandidateEmail.Split('@')[0] + "_" + model.Date.Year + model.Date.Month + model.Date.Day + ".doc" },
                 InterviewerId = model.InterviewerId + "",
                 InterviewerName = model.InterviewerName,
                 IsAccepted = model.Result,

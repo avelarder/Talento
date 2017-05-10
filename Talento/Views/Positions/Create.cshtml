@@ -1,64 +1,84 @@
 ﻿@model Talento.Models.CreatePositionViewModel
-
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
-<h2>Create</h2>
-
-@using (Html.BeginForm("Create", "Positions", FormMethod.Post))
-{
+<h2>Creating a new Position</h2>
+<form action="/Positions/Create" method="post" novalidate="novalidate" id="createform">
     @Html.AntiForgeryToken()
-    
-
     <div class="form-horizontal">
-        <h4>Position</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
             @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Title,"", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
         </div>
-
         <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
             @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
         </div>
-
         <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
             @Html.LabelFor(model => model.Area, htmlAttributes: new { @class = "control-label" })
             @Html.EditorFor(model => model.Area, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Area, "", new { @class = "text-danger" })
         </div>
-
         <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
             @Html.LabelFor(model => model.EngagementManager, htmlAttributes: new { @class = "control-label" })
             @Html.EditorFor(model => model.EngagementManager, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.EngagementManager, "", new { @class = "text-danger" })
         </div>
-
         <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
             @Html.LabelFor(model => model.EmailPM, htmlAttributes: new { @class = "control-label" })
             @Html.EditorFor(model => model.EmailPM, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.EmailPM,"", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.EmailPM, "", new { @class = "text-danger" })
         </div>
-
         <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
             @Html.LabelFor(model => model.RGS, htmlAttributes: new { @class = "control-label" })
             @Html.EditorFor(model => model.RGS, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.RGS, "", new { @class = "text-danger" })
         </div>
-
-        
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" />
+        <div class="form-group col-md-8">
+            <div style="float:right">
+                <input type="button" value="Create" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" id="addbutton" />
                 @Html.ActionLink("Back to List", "Index", "Dashboard", null, new { @class = "btn pmd-btn-flat pmd-ripple-effect btn-primary" })
-                
             </div>
         </div>
     </div>
-}
+</form>
+
+<script>
+       window.onload = function () {
+            (function ($) {
+                $(document).ready(function () {
+                    $("#addbutton").click(function (evt) {
+                        alertify.set('notifier', 'position', 'bottom-left');
+                        var email = $("#EmailPM").val();
+                        $.ajax({
+                            type: "POST",
+                            url: '/Positions/PMExists',
+                            dataType: 'json',
+                            data: {
+                                email: email
+                            },
+                            success: function (response) {
+                                if ($("#createform").valid()) {
+                                    setTimeout(function () {
+                                        alertify.success('<b>The Position has been Added</b>');
+                                    }, 2500);
+                                    setTimeout(function () { $("#createform").submit(); }, 5000);
+                                } else {
+                                    return;
+                                }
+                            },
+                            error: function (error) {
+                                alertify.error("<b>A position with the specified Portfolio Manager Email address cannot be registered.</b>");
+                            }
+                        });
+                    });
+                });
+            }(jQuery));
+        }
+</script>

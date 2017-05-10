@@ -12,6 +12,7 @@ using PagedList;
 using Talento.Core.Utilities;
 using System.Security;
 using System.Web.Security;
+using System.Web.Helpers;
 
 namespace Talento.Controllers
 {
@@ -69,7 +70,7 @@ namespace Talento.Controllers
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
             if (position == null || position.Status == PositionStatus.Removed)
             {
-                return HttpNotFound();
+                return RedirectToAction("Index", "Dashboard");
             }
 
             // Pagination
@@ -98,6 +99,39 @@ namespace Talento.Controllers
         public ActionResult Create()
         {
             return View();
+        }
+
+        [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+        protected class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
+        {
+            public void OnAuthorization(AuthorizationContext filterContext)
+            {
+                try
+                {
+                    if (filterContext == null)
+                    {
+                        throw new ArgumentNullException("filterContext");
+                    }
+                    var httpContext = filterContext.HttpContext;
+                    var cookie = httpContext.Request.Cookies[AntiForgeryConfig.CookieName];
+                    AntiForgery.Validate(cookie?.Value, httpContext.Request.Params["__RequestVerificationToken"]);
+                }
+                catch (Exception)
+                {
+                    //throw;
+                }
+            }
+        }
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public JsonResult PMExists(string email)
+        {
+            if(UserHelper.SearchPM(email).Equals(null)){
+                return null;
+            }else{
+                return Json(true);
+            }
         }
 
         // POST: Positions/Create
@@ -190,7 +224,6 @@ namespace Talento.Controllers
                 {
                     return View(position);
                 }
-
             }
             return View(position);
         }
