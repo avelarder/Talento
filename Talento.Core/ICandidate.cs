@@ -12,7 +12,6 @@ namespace Talento.Core
         Candidate Get(int Id);
         int Create(Candidate log);
         int Edit(Candidate log, HashSet<FileBlob> files, ApplicationUser currentUser);
-        PositionCandidates GetPositionCandidate(int Id);
         void ChangeStatus(int Id, PositionCandidatesStatus newStatus, ApplicationUser currentUser);
         int AddTechnicalInterview(TechnicalInterview technicalInterview, ApplicationUser currentUser, int positionId, string candidateEmail);
     }

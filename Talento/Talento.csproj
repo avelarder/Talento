@@ -202,7 +202,6 @@
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TagsController.cs" />
     <Compile Include="Controllers\TechnicalInterviewController.cs" />
-    <Compile Include="Controllers\WidgetsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -313,7 +312,6 @@
     <Content Include="Views\Dashboard\Partials\_PartialContent.cshtml" />
     <Content Include="Views\Widgets\Tables\AdminTable.cshtml" />
     <Content Include="Views\Widgets\Accordion.cshtml" />
-    <Content Include="Views\Widgets\Index.cshtml" />
     <Content Include="Views\Dashboard\Partials\_PartialContentAdmin.cshtml" />
     <Content Include="Views\Account\RegisterConfirmation.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />

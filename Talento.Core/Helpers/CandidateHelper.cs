@@ -87,7 +87,7 @@ namespace Talento.Core.Helpers
                     Date = DateTime.Now,
                     Description = String.Format("Candidate {0} has been updated.", editCandidate.Email),
                     PreviousStatus = positionToLog.Status,
-                    Position = positionToLog                    
+                    Position = positionToLog
                 };
 
                 LogHelper.Add(log);
@@ -159,19 +159,19 @@ namespace Talento.Core.Helpers
         public void ChangeStatus(int Id, PositionCandidatesStatus newStatus, ApplicationUser currentUser)
         {
             try
-            { 
+            {
                 PositionCandidates pc = Db.PositionCandidates.Single(x => x.CandidateID == Id);
                 // Check if Update Status is Valid Conditions
-                if ((int)pc.Status == 1)
+                if (pc.Status == PositionCandidatesStatus.Interview_Accepted)
                 {
-                    if ((int)newStatus != 3 && (int)newStatus != 4)
+                    if (newStatus != PositionCandidatesStatus.Conditional_Offer_Accepted && newStatus != PositionCandidatesStatus.Conditional_Offer_Rejected)
                     {
                         throw new Exception();
                     }
                 }
-                else if ((int)pc.Status == 3)
+                else if (pc.Status == PositionCandidatesStatus.Conditional_Offer_Accepted)
                 {
-                    if ((int)newStatus != 6 && (int)newStatus != 7)
+                    if (newStatus != PositionCandidatesStatus.Customer_Approved && newStatus != PositionCandidatesStatus.Customer_Rejected)
                     {
                         throw new Exception();
                     }
@@ -179,11 +179,11 @@ namespace Talento.Core.Helpers
                 else
                 {
                     throw new Exception();
-                }               
+                }
 
-                Candidate candidateToLog = Db.Candidates.Find(pc.CandidateID);
-                Position positionToLog = Db.Positions.Single(x => x.PositionId == pc.PositionID);
-            
+                Candidate candidateToLog = pc.Candidate;
+                Position positionToLog = pc.Position;
+
                 pc.Status = newStatus;
                 var name = Enum.GetName(typeof(PositionCandidatesStatus), newStatus).Replace("_", " ");
 
@@ -206,14 +206,6 @@ namespace Talento.Core.Helpers
             {
                 throw;
             }
-
         }
-
-        public PositionCandidates GetPositionCandidate(int Id)
-        {
-            return Db.PositionCandidates.Single(x => x.CandidateID == Id);
-        }
-
-
     }
 }
