@@ -40,6 +40,11 @@ namespace Talento.Models
         public IList<PositionCandidates> PositionCandidates { get; set; }
 
         public List<TechnicalInterview> Comments { get; set; }
+
+        public bool isadmin { get; set; }
+
+        public bool isopenposition{ get; set; }
+
     }
 
     public class FileBlobViewModel

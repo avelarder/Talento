@@ -62,42 +62,58 @@
         </dt>
         <br />
     </dl>
+    
+    <div class="row">
+    
+        <div class="list-group">
+            @foreach (Talento.Entities.FileBlob f in Model.PositionCandidates.Single(x=>x.CandidateID.Equals(Model.CandidateId) && x.PositionID.Equals(Model.PositionId)).Candidate.FileBlobs)
+            {
+                <a href="#" class="list-group-item">@f.FileName</a>
+            }
+        </div>
 
-    <h3>
-        Comments:
-    </h3>
+    </div>
 
-    <div id="comments" class="row">
-        @foreach (Talento.Entities.TechnicalInterview x in Model.Comments)
-        {
-            <div class="col-sm-8">
-                <div class="panel panel-white post panel-shadow">
-                    <div class="post-heading">
-                        <div class="pull-left meta">
-                            <div class="title h5">
-                                <a href="#">Interviewed by <b>@x.InterviewerName (@x.InterviewerId)</b></a>
+        <h3>
+            Comments:
+        </h3>
+
+        <div id="comments" class="row">
+            @foreach (Talento.Entities.TechnicalInterview x in Model.Comments)
+            {
+                <div class="col-sm-8">
+                    <div class="panel panel-white post panel-shadow">
+                        <div class="post-heading">
+                            <div class="pull-left meta">
+                                <div class="title h5">
+                                    <a href="#">Interviewed by <b>@x.InterviewerName (@x.InterviewerId)</b></a>
+                                </div>
+                                <h6 class="text-muted time">Date: @x.Date.Value.ToLongDateString()</h6>
                             </div>
-                            <h6 class="text-muted time">Date: @x.Date.Value.ToLongDateString()</h6>
+                        </div>
+                        <div class="post-description">
+                            <p>@x.Comment</p>
                         </div>
                     </div>
-                    <div class="post-description">
-                        <p>@x.Comment</p>
-                    </div>
                 </div>
-            </div>        
-        }
+            }
         </div>
-        <p>
-            <div class="form-group col-md-8">
-                <div style="float:right">
-                    @Html.ActionLink("Back to Position ", "Details", "Positions", new { id = Model.PositionId }, null)
-                </div>
-                <div style="float:left">
-                    @Html.ActionLink(" Back to Dashboard", "Index", "Dashboard")
-                </div>
-                <br />
+        <br />
+        <div class="form-group col-md-8">
+            <div style="float:right">
+                @if (!Model.isadmin && Model.isopenposition)
+                {
+                    <a class="btn pmd-btn-flat pmd-ripple-effect btn-primary" href="/Candidate/Edit/@Model.CandidateId?positionId=@Model.PositionId">Edit </a>
+                }
+                @Html.ActionLink("Back to Position ", "Details", "Positions", new { id = Model.PositionId }, new { @class = "btn pmd-btn-flat pmd-ripple-effect btn-primary" })
             </div>
-        </p>
+            <div style="float:left">
+                @Html.ActionLink(" Back to Dashboard", "Index", "Dashboard")
+            </div>
+            <br />
+        </div>
+    </div>
+        <br/>
 
         <style>
 
