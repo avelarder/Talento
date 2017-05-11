@@ -157,15 +157,39 @@ namespace Talento.Tests.Helpers
                 }
             };
 
+            Position editedPosition = new Position
+            {
+                PositionId = 1,
+                Title = "position",
+                Description = "aNewDescription",
+                CreationDate = Convert.ToDateTime(positionData[0]["CreationDate"].ToString()),
+                Area = "IT",
+                EngagementManager = "Cristobal Colon",
+                Owner = new ApplicationUser { Id = positionData[0]["Owner_Id"].ToString(), Email = positionData[0]["Owner_Email"].ToString() },
+                ApplicationUser_Id = positionData[0]["Owner_Id"].ToString(),
+                PortfolioManager = user,
+                RGS = positionData[0]["RGS"].ToString(),
+                Status = (PositionStatus)Enum.Parse(typeof(PositionStatus), positionData[0]["Status"].ToString()),
+                OpenStatus = (PositionOpenStatus)Enum.Parse(typeof(PositionOpenStatus), positionData[0]["OpenStatus"].ToString()),
+                PositionCandidates = new List<PositionCandidates>(),
+            };
+
             var logSet = new Mock<DbSet<Log>>();
             var positionSet = new Mock<DbSet<Position>>().SetupData(list);
             var usersSet = new Mock<DbSet<ApplicationUser>>().SetupData(users);
             var DbContext = new Mock<ApplicationDbContext>();
-            var mockHelper = new Mock<IPositionLog>();
+            var mockLogHelper = new Mock<IPositionLog>();
             DbContext.Setup(p => p.Positions).Returns(positionSet.Object);
             DbContext.Setup(c => c.PositionLogs).Returns(logSet.Object);
             DbContext.Setup(x => x.SaveChanges()).Verifiable();
             DbContext.Setup(x => x.Users).Returns(usersSet.Object);
+
+            PositionHelper helper = new PositionHelper(DbContext.Object, mockLogHelper.Object);
+
+            helper.Edit(editedPosition, user);
+
+            DbContext.Verify(m => m.SaveChanges(), Times.AtLeastOnce());
+            Assert.IsTrue(list.First().Description == "aNewDescription");
         }
     }
 }
