@@ -174,21 +174,6 @@
                             .empty();
                     }
 
-                    // Autocomplete
-                    $('.add-setting-name').typeahead({
-                        hint: true,
-                        highlight: true,
-                        minLength: 3,
-                        delay: 400,
-                        source: function (query, process) {
-                            return $.post(
-                                '/Settings/GetApplicationParameters',
-                                { prefix: $("#SettingName").val() }).done(function (data) {
-                                    return process(data);
-                                });
-                        }
-                    });
-
                     $('.edit-setting-name').typeahead({
                         hint: true,
                         highlight: true,
