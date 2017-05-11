@@ -107,7 +107,7 @@ namespace Talento.Controllers
         {
             ApplicationSettingModel editApplicationSettingsVM = AutoMapper.Mapper.Map<ApplicationSettingModel>(SettingsHelper.GetById(id));
 
-            return PartialView(editApplicationSettingsVM);
+            return View(editApplicationSettingsVM);
         }
 
         // POST: Settings/Edit/5

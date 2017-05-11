@@ -221,10 +221,14 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Scripts\covervid.min.js" />
     <Content Include="Content\mdb.min.css" />
+    <Content Include="Content\Media\pwiaobv.mp4" />
+    <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\propeller.min.css" />
     <Content Include="Content\select2-bootstrap.css" />
+    <Content Include="Content\styles-covervid.css" />
     <Content Include="Content\styles.css" />
     <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
@@ -280,6 +284,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\covervid-scripts.js" />
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\typeahead.js" />
     <Content Include="Scripts\_dev\app.js" />
@@ -337,6 +342,7 @@
     <Content Include="Views\TechnicalInterview\NewTechnicalInterview.cshtml" />
     <Content Include="Views\Candidate\Create.cshtml" />
     <Content Include="Views\Candidate\Details.cshtml" />
+    <Content Include="Views\Shared\_Background.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

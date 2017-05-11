@@ -6,6 +6,7 @@ using System.Web.Security;
 using Talento.Models;
 using Talento.Core;
 using Talento.Entities;
+using Talento.Core.Utilities;
 
 namespace Talento.Controllers
 {
@@ -14,12 +15,12 @@ namespace Talento.Controllers
     public class DashboardController : Controller
     {
         ICustomPagingList DashboardPagingHelper;
-        //ISendEmail SendEmail;
+        IUtilityApplicationSettings ApplicationSettings;
 
-        public DashboardController(ICustomPagingList dashboardPagingHelper/*, ISendEmail sendemail*/)
+        public DashboardController(ICustomPagingList dashboardPagingHelper, IUtilityApplicationSettings appSettings)
         {
             DashboardPagingHelper = dashboardPagingHelper;
-            //SendEmail = sendemail;
+            ApplicationSettings = appSettings;
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -75,9 +76,21 @@ namespace Talento.Controllers
                 }
             }
 
+            // Pagination
+            var pageSizeValue = ApplicationSettings.GetSetting("pagination", "pagesize"); // Setting Parameter
+            int pageSize = 0;
+
+            if (pageSizeValue != null)
+            {
+                pageSize = Convert.ToInt32(pageSizeValue);
+            }
+            else {
+                pageSize = 25;
+            }
+
             return View(new DashBoardViewModel()
             {
-                Positions = new PositionsPagedList(temp, page.Value, 25)
+                Positions = new PositionsPagedList(temp, page.Value, pageSize)
             });
         }
 
@@ -125,10 +138,9 @@ namespace Talento.Controllers
             return role;
         }
 
-        [ChildAndAjaxActionOnly]
         public ActionResult AddSettingsForm()
         {
-            return PartialView();
+            return View();
         }
 
         public ActionResult Error()

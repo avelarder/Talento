@@ -4,6 +4,9 @@
     ViewBag.Title = "Widgets";
     ViewBag.BodyClass = "dashboard-home";
 }
+
+@Html.Partial("TIFFDownload")
+
 @using (Html.BeginForm("Index", "Dashboard", FormMethod.Get))
 {
     <div class="form-group col-sm-2">
@@ -23,7 +26,7 @@
             @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control" })
         </div>
         <div class="form-group">
-            <hr />
+            <br />
             <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Search" style="margin-top: 4px" />
         </div>
 }
