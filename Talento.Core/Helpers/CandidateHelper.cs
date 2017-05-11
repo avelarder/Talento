@@ -177,9 +177,9 @@ namespace Talento.Core.Helpers
             {
                 PositionCandidates pc = Db.PositionCandidates.Single(x => x.CandidateID == Id);
                 // Check if Update Status is Valid Conditions
-                if (pc.Status == PositionCandidatesStatus.Interview_Accepted)
+                if (pc.Status == PositionCandidatesStatus.Interview_Accepted || pc.Status == PositionCandidatesStatus.Conditional_Offer_Negotiating)
                 {
-                    if (newStatus != PositionCandidatesStatus.Conditional_Offer_Accepted && newStatus != PositionCandidatesStatus.Conditional_Offer_Rejected)
+                    if (newStatus != PositionCandidatesStatus.Conditional_Offer_Accepted && newStatus != PositionCandidatesStatus.Conditional_Offer_Rejected && newStatus != PositionCandidatesStatus.Conditional_Offer_Negotiating)
                     {
                         throw new Exception();
                     }
