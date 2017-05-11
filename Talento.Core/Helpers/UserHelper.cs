@@ -21,7 +21,7 @@ namespace Talento.Core.Helpers
                 var PM = Db.Roles.Single(r => r.Name == "PM");
                 if (userName != null)
                 {
-                    var usuario = Db.Users.Single(x => x.UserName == userName);
+                    var usuario = Db.Users.FirstOrDefault(x => x.UserName == userName);
                     if (usuario.Roles.Where(x => x.RoleId == PM.Id).Count() > 0)
                     {
                         return usuario;
@@ -51,7 +51,7 @@ namespace Talento.Core.Helpers
         {
             try
             {
-                return Db.Users.Find(id);
+                return Db.Users.FirstOrDefault(x => x.Id == id);
             }
             catch (Exception)
             {

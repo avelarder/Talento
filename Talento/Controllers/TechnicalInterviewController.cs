@@ -11,7 +11,8 @@ using Talento.Models;
 
 namespace Talento.Controllers
 {
-    [Authorize(Roles = "PM, TL")]
+    [HandleError]
+    [Authorize(Roles = "TAG, RMG, PM, TL")]
     public class TechnicalInterviewController : Controller
     {
         IPosition PositionHelper;
@@ -82,7 +83,7 @@ namespace Talento.Controllers
         }
 
         // GET: 
-        public ActionResult NewTechnicalInterview(string candidateEmail, int positionId)
+        public ActionResult NewTechnicalInterview(string candidateEmail, int positionId, int candidateId)
         {
             if (PositionHelper.Get(positionId).Status.Equals(PositionStatus.Open))
             {
@@ -90,7 +91,7 @@ namespace Talento.Controllers
                 {
                     CandidateEmail = candidateEmail,
                     PositionId = positionId,
-
+                    CandidateId = candidateId
                 });
             }
             else
@@ -109,7 +110,7 @@ namespace Talento.Controllers
             {
                 Comment = model.Comment,
                 Date = model.Date,
-                FeedbackFile = new FileBlob() { Blob = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength), FileName = model.CandidateEmail.Split('@')[0] + "_" + model.Date.Year + model.Date.Month + model.Date.Day + ".doc", Candidate = positionCandidate.Candidate },
+                FeedbackFile = new FileBlob() { Blob = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength), FileName = model.CandidateEmail.Split('@')[0] + "_" + model.Date.Year + model.Date.Month + model.Date.Day + ".doc" },
                 InterviewerId = model.InterviewerId + "",
                 InterviewerName = model.InterviewerName,
                 IsAccepted = model.Result,

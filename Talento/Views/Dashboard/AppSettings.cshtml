@@ -56,9 +56,9 @@
                 color: #fff;
             }
 
-        .tt-suggestion p {
+    .tt-suggestion p {
             margin: 0;
-        }
+    }
 
     .alertify-notifier {
         color: #FFF;
@@ -68,18 +68,11 @@
 <div class="pmd-content pmd-content-custom dropdown-component" id="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="">
                 <h1>Application Settings</h1>
             </div>
             <div class="clearfix"></div>
             <hr />
-        </div>
-        <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    @Html.Action("AddSettingsForm", "Dashboard")
-                </div>
-            </div>
         </div>
 
         <!--Edit Settings Container-->
@@ -160,9 +153,8 @@
                         }, duration);
                     }
 
-                    // Fred functions
                     var $form = $("#formnewparameter");
-                    var $modal = $("#complete-dialog");
+                    //var $modal = $("#complete-dialog");
 
                     // On Form Cancel Reset Form
                     $modal.on("hidden.bs.modal", function () {
@@ -181,50 +173,6 @@
                             .addClass("field-validation-valid")
                             .empty();
                     }
-
-                    // On form submit Add-Parameter
-                    $form.on("submit", function (event) {
-                        event.preventDefault();
-                        var $self = $(this);
-                        if ($form.valid()) {
-                            $.post({
-                                url: $self.attr("action"),
-                                data: $self.serialize()
-                            }).done(function (response) {
-                                $('#complete-dialog').modal('hide');
-                                $('body').removeClass('modal-open');
-                                $('.modal-backdrop').remove();
-                                $form[0].reset();
-                                alertify.set('notifier', 'position', 'bottom-left');
-                                alertify.success('<b>Parameter is Added</b>');
-                                // Reload List
-                                $.ajax({
-                                    url: "/Settings/List"
-                                }).done(function (data) {
-                                    $appContainer.html(data);
-                                });
-
-                            }).fail(function (error) {
-                                alertify.set('notifier', 'position', 'bottom-left');
-                                alertify.error("Error: <b>" + $("#SettingName").val() + "</b> already has parameter: " + "<b>" + $("#ParameterName").val() + "<b/>");
-                            });
-                        }
-                    });
-
-                    // Autocomplete
-                    $('.add-setting-name').typeahead({
-                        hint: true,
-                        highlight: true,
-                        minLength: 3,
-                        delay: 400,
-                        source: function (query, process) {
-                            return $.post(
-                                '/Settings/GetApplicationParameters',
-                                { prefix: $("#SettingName").val() }).done(function (data) {
-                                    return process(data);
-                                });
-                        }
-                    });
 
                     $('.edit-setting-name').typeahead({
                         hint: true,
@@ -253,34 +201,6 @@
                             console.log(response);
                         })
                     });
-
-                    //Submit edit form
-                    var $formEdit = $("#EditSettingsForm");
-                    $("#edit-dialog").on("submit", "#EditSettingsForm", function (event) {
-                        event.preventDefault();
-                        var $self = $(this);
-                        if ($form.valid()) {
-                            $.post({
-                                url: "/Settings/Edit/", //$self.attr("action")
-                                data: $self.serialize()
-                            }).done(function (response) {
-                                $('#edit-dialog').modal('hide');
-                                $form[0].reset();
-                                alertify.set('notifier', 'position', 'bottom-left');
-                                alertify.success('<b>Parameter was Edited</b>');
-                                // Reload
-                                $.ajax({
-                                    url: "/Settings/List"
-                                }).done(function (data) {
-                                    $appContainer.html(data);
-                                });
-                            }).fail(function (error) {
-                                alertify.set('notifier', 'position', 'bottom-left');
-                                alertify.error("Error: Update can not be done, check you data");
-                            });
-                        }
-                    });
-
                 })(jQuery);
             }
         </script>

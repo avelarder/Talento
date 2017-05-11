@@ -10,6 +10,7 @@ using Talento.Models;
 
 namespace Talento.Controllers
 {
+    [HandleError]
     [Authorize]
     public class FileController : Controller
     {
@@ -87,7 +88,7 @@ namespace Talento.Controllers
         [ValidateJsonAntiForgeryToken]
         public ActionResult Delete(string filename)
         {
-            ((HashSet<FileBlob>)Session["files"]).Remove(((HashSet<FileBlob>)Session["files"]).Single(x => x.FileName.Equals(filename)));
+            ((HashSet<FileBlob>)Session["files"]).Remove(((HashSet<FileBlob>)Session["files"]).FirstOrDefault(x => x.FileName.Equals(filename)));
 
             return new EmptyResult();
         }

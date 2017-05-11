@@ -1,6 +1,10 @@
 ﻿@model Talento.Models.ApplicationSettingModel
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
 
-@using (Html.BeginForm("Edit", "Settings", FormMethod.Post, new { id = "EditSettingsForm" }))
+@using (Html.BeginForm("Edit", "Settings", FormMethod.Post, new { id = "EditSettingsForm", @class = "col-md-8"}))
 {
     @Html.AntiForgeryToken()
 
@@ -15,7 +19,7 @@
                 @Html.LabelFor(model => model.SettingName, htmlAttributes: new { @class = "control-label col-md-4" })
                 <div class="col-md-8">
                     @Html.EditorFor(model => model.SettingName, new { htmlAttributes = new { @class = "form-control typeahead edit-setting-name", placeholder = "Edit new setting", autocomplete = "off", name = "setting-name" } })
-                    @Html.ValidationMessageFor(model => model.SettingName, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.SettingName, "", new { @class = "text-danger error-remove" })
                 </div>
             </div>
 
@@ -23,7 +27,7 @@
                 @Html.LabelFor(model => model.ParameterName, htmlAttributes: new { @class = "control-label col-md-4" })
                 <div class="col-md-8">
                     @Html.EditorFor(model => model.ParameterName, new { htmlAttributes = new { @class = "form-control", placeholder = "Edit new parameter", name = "parameter-name" } })
-                    @Html.ValidationMessageFor(model => model.ParameterName, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.ParameterName, "", new { @class = "text-danger error-remove" })
                 </div>
             </div>
 
@@ -33,13 +37,66 @@
                 @Html.LabelFor(model => model.ParameterValue, htmlAttributes: new { @class = "control-label col-md-4" })
                 <div class="col-md-8">
                     @Html.EditorFor(model => model.ParameterValue, new { htmlAttributes = new { @class = "form-control", placeholder = "Edit new value", name = "parameter-value" } })
-                    @Html.ValidationMessageFor(model => model.ParameterValue, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.ParameterValue, "", new { @class = "text-danger error-remove" })
                 </div>
             </div>
             <div class="pmd-modal-action pmd-modal-bordered text-right">
-                <button id="appSettingCancel" data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
+                <button id="appSettingCancel" data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary">Cancel</button>
                 <input id="submit-edit-setting" type="submit" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Confirm" />
             </div>
         </div>
     </div>
 }
+
+<script type="text/javascript">
+    window.onload = function () {
+        (function ($) {
+            //clean form and redirect on cancel
+            $("#appSettingCancel").click(
+                function () {
+                    $(".error-remove").remove();
+                    window.location.href = '/Dashboard/AppSettings';
+                });
+
+            // Autocomplete
+            $('.edit-setting-name').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 3,
+                delay: 400,
+                source: function (query, process) {
+                    return $.post(
+                        '/Settings/GetApplicationParameters',
+                        { prefix: $("#SettingName").val() }).done(function (data) {
+                            return process(data);
+                        });
+                }
+            });
+
+            //Submit edit form
+            var $formEdit = $("#EditSettingsForm");
+            $formEdit.on("submit", function (event) {
+                event.preventDefault();
+                var $self = $(this);
+                if ($formEdit.valid()) {
+                    $.post({
+                        url: "/Settings/Edit/", //$self.attr("action")
+                        data: $self.serialize()
+                    }).done(function (response) {
+                        alertify.set('notifier', 'position', 'bottom-left');
+                        alertify.success('<b>Parameter was Edited</b>');
+                        setTimeout(function () {
+                            window.location = "/Dashboard/AppSettings";
+                        }, 3000);
+                    }).fail(function (error) {
+                        alertify.set('notifier', 'position', 'bottom-left');
+                        alertify.error("Error: Update can not be done, check you data");
+                        setTimeout(function () {
+                            window.location = "/Dashboard/AppSettings";
+                        }, 3000);
+                    });
+                }
+            });
+        }(jQuery));
+    }
+</script>

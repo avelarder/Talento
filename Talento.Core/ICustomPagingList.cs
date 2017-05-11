@@ -12,6 +12,5 @@ namespace Talento.Core
     {
         List<Position> GetAdminTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page);
         List<Position> GetBasicTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page);
-        List<Position> GetByWidget(string sortOrder, string currentFilter, string searchString, int? page);
     }
 }

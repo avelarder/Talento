@@ -5,88 +5,198 @@
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
-<h2>NewTechnicalInterview</h2>
+<span style="font-size:20px;">New Technical Interview</span>
+@Html.Partial("TIFFDownload")
 
-<form action="/TechnicalInterview/NewTechnicalInterview" method="post" enctype="multipart/form-data">
+<form action="/TechnicalInterview/NewTechnicalInterview" method="post" enctype="multipart/form-data" id="interviewform">
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>New Technical Interview to @Model.CandidateEmail</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.CandidateEmail, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input type="text" value="@Model.CandidateEmail" readonly disabled>
-                <input type="hidden" name="PositionId" id="PositionId" value="@Model.PositionId">
-                @Html.EditorFor(model => model.CandidateEmail, new { htmlAttributes = new { @class = "form-control hidden"} })
-                @Html.ValidationMessageFor(model => model.CandidateEmail, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+            @Html.LabelFor(model => model.CandidateEmail, htmlAttributes: new { @class = "control-label " })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input class="form-control text-box single-line valid" data-val="true" data-val-date="The field Date must be a date of type mm/dd/yyyy." data-val-required="The Date field is required." id="Date" name="Date" value="@DateTime.Today.ToShortDateString()" aria-required="true" aria-describedby="Date-error" aria-invalid="false" type="datetime">
-                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Result, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Result)
-                    @Html.ValidationMessageFor(model => model.Result, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.InterviewerName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.InterviewerName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.InterviewerName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.InterviewerId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input class="form-control text-box single-line input-validation-error" data-val="true" data-val-number="The field Interviewer's Id Number must be a number." data-val-required="The Interviewer's Id Number field is required." id="InterviewerId" name="InterviewerId" value="" aria-required="true" aria-describedby="InterviewerId-error" aria-invalid="true" type="text">
-                @Html.ValidationMessageFor(model => model.InterviewerId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        
-        <div class="form-group">
-            @Html.LabelFor(model => model.File, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input class="  single-line valid" data-val="true" data-val-required="An Interview file is required." id="File" name="File" value=""
-                       @*aria-required="true" aria-describedby="Date-error" aria-invalid="false"*@
-                       
-                       type="file">
-               
-                @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
-            </div>
+            <input type="text" class="form-control text-box single-line valid" value="@Model.CandidateEmail" readonly disabled>
+            <input type="hidden" name="PositionId" id="PositionId" value="@Model.PositionId">
+            @Html.EditorFor(model => model.CandidateEmail, new { htmlAttributes = new { @class = "form-control hidden" } })
+            @Html.ValidationMessageFor(model => model.CandidateEmail, "", new { @class = "text-danger" })
         </div>
     </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+
+    <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+        @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label " })
+
+        <input class="form-control text-box single-line valid" data-val="true" data-val-date="The field Date must be a date of type mm/dd/yyyy." data-val-required="The Date field is required." id="Date" name="Date" value="@DateTime.Today.ToShortDateString()" aria-required="true" aria-describedby="Date-error" aria-invalid="false" type="datetime">
+        @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+    </div>
+
+
+    <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+        @Html.LabelFor(model => model.InterviewerName, htmlAttributes: new { @class = "control-label" })
+        @Html.EditorFor(model => model.InterviewerName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.InterviewerName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+        @Html.LabelFor(model => model.InterviewerId, htmlAttributes: new { @class = "control-label " })
+        <input class="form-control text-box single-line input-validation-error" data-val="true" data-val-number="The field Interviewer's Id Number must be a number." data-val-required="The Interviewer's Id Number field is required." id="InterviewerId" name="InterviewerId" value="" aria-required="true" aria-describedby="InterviewerId-error" aria-invalid="true" type="text">
+        @Html.ValidationMessageFor(model => model.InterviewerId, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+        @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label " })
+
+        @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+        <label class="control-label " for="Result">Was Approved</label>
+        <label style="margin-left:75px; margin-bottom:-10px;" class="switch">
+            <input type="checkbox" onchange="switchIsEmployee()">
+            <div class="slider round" id="roundcheckbox"></div>
+        </label>
+        <div style="visibility:hidden">
+            @Html.CheckBoxFor(model => model.Result, new { htmlAttributes = new { @class = "form-control" } })
         </div>
+        <br />
+        @Html.ValidationMessageFor(model => model.Result, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+        <label class="control-label " for="File">Attach Interview File: </label>
+        @*<input style="margin-left:50px;" class="  single-line valid" data-val="true" data-val-required="An Interview file is required." id="File" name="File" value="" type="file">*@
+        <label for="File" style="margin-left:35px;font-size:72px;">
+            <i class="material-icons" style="cursor:pointer;">
+                attachment
+            </i>
+        </label>
+        <span style="position:relative; top:20px; left:0px;" id="filename"></span>
+        <input style="margin-left:50px;" class=" hide single-line valid" data-val="true" data-val-required="An Interview file is required." id="File" name="File" value="" type="file">
+        @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+        <br />
+    </div>
+
+    <div class="form-group col-md-8">
+        <br />
+        <div style="float:right">
+            <input id="confirmationbutton" type="button" value="Create" class="btn btn-default" />
+            <a class="btn pmd-btn-flat pmd-ripple-effect btn-default" href="/Positions/Details/@Model.PositionId">Cancel</a>
+        </div>
+        <br />
+        <br />
+        @Html.ActionLink("Back to Dashboard", "Index", "Dashboard", null, null)
     </div>
 </form>
+<br />
+<br />
 
-<br/>
-<div>
-    <br />
-    @Html.ActionLink("Back to Details of the Position", "Details","Positions",new { id=Model.PositionId },null)
-</div>
+<script>
+    var firsttry = true;
+
+    function switchIsEmployee() {
+        if ($('#Result').prop('checked')) {
+            $('#Result').prop('checked', false);
+        } else {
+            $('#Result').prop('checked', true);
+        }
+    }
+
+    window.onload = function () {
+        (function ($) {
+            if ($('#Result').prop('checked')) {
+                $("#roundcheckbox").click();
+                $('#Result').prop('checked', true);
+            }
+                $(document).ready(function () {
+                    $("#confirmationbutton").click(function (evt) {
+                        if (firsttry) {
+                            alertify.set('notifier', 'position', 'bottom-left');
+                            if ($("#File").val() == "") {
+                                alertify.error('<b>A File attachment is necesary in order to register the interview.</b>');
+                            } else {
+                                if ($("#interviewform").valid()) {
+                                    setTimeout(function () {
+                                        alertify.success('<b>The Interview has been Registered successfully</b>');
+                                    }, 2000);
+                                    setTimeout(function () { $("#interviewform").submit(); }, 4000);
+                                    setTimeout(function () { window.location.pathname = "Candidate/Details/@Model.CandidateId"; }, 5550);
+                                    firsttry = false;
+                                } else {
+                                    return;
+                                }
+                            }
+                        }
+                    });
+                    $('#File').on("change", function () {
+                        var aux = $(this).val().split("\\");
+                        $("#filename").html(aux[aux.length-1]);
+                    });
+                });
+            }(jQuery));
+        }
+</script>
+
+<style>
+    /* The switch - the box around the slider */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            display: none;
+        }
+
+    /* The slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>

@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Talento>
+	<CreateCandidateHelperTest>
+		<Candidate>
+			<CandidateId>1</CandidateId>
+			<Name>Candidate0</Name>
+			<Email>Candidate0@example.com</Email>
+			<Competencies>comp1, comp2, comp3</Competencies>
+			<Description>A description</Description>
+			<CreatedOn>2017-05-08T10:16:00</CreatedOn>
+			<CreatedBy_Id>1</CreatedBy_Id>
+			<CreatedBy_Email>owner@example.com</CreatedBy_Email>
+			<IsTcsEmployee>false</IsTcsEmployee>
+			<Position_Id>1</Position_Id>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+			<FileBlob_Name>file.txt</FileBlob_Name>
+		</Candidate>
+		<Position>
+			<PositionId>1</PositionId>
+			<Title>position</Title>
+			<Description>description</Description>
+			<CreationDate>2017-05-02T10:16:00</CreationDate>
+			<Area>IT</Area>
+			<EngagementManager>Cristobal Colon</EngagementManager>
+			<Owner_Id>1</Owner_Id>
+			<Owner_Email>owner@example.com</Owner_Email>
+			<PortfolioManager_Id>2</PortfolioManager_Id>
+			<PortfolioManager_Email>pmuser1@example.com</PortfolioManager_Email>
+			<RGS>101010</RGS>
+			<Status>Open</Status>
+			<OpenStatus>New</OpenStatus>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+		</Position>
+	</CreateCandidateHelperTest>
+	<EditCandidateHelperTest>
+		<ApplicationUser>
+			<ApplicationUserId>1</ApplicationUserId>
+			<Email>user@example.com</Email>
+		</ApplicationUser>
+		<OriginalCandidate>
+			<CandidateId>1</CandidateId>
+			<Name>Candidate0</Name>
+			<Email>Candidate0@example.com</Email>
+			<Competencies>comp1, comp2, comp3</Competencies>
+			<Description>A description</Description>
+			<CreatedOn>2017-05-08T10:16:00</CreatedOn>
+			<CreatedBy_Id>1</CreatedBy_Id>
+			<CreatedBy_Email>owner@example.com</CreatedBy_Email>
+			<IsTcsEmployee>false</IsTcsEmployee>
+			<Position_Id>1</Position_Id>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+			<FileBlob_Name>file.txt</FileBlob_Name>
+		</OriginalCandidate>
+		<EditedCandidate>
+			<CandidateId>1</CandidateId>
+			<!--Changed Name-->
+			<Name>Edited Candidate</Name>
+			<Email>Candidate0@example.com</Email>
+			<Competencies>comp1, comp2, comp3</Competencies>
+			<Description>A description</Description>
+			<CreatedOn>2017-05-08T10:16:00</CreatedOn>
+			<CreatedBy_Id>1</CreatedBy_Id>
+			<CreatedBy_Email>owner@example.com</CreatedBy_Email>
+			<!--Changed IsTcsEmployee-->
+			<IsTcsEmployee>true</IsTcsEmployee>
+			<Position_Id>1</Position_Id>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+			<FileBlob_Name>file.txt</FileBlob_Name>
+		</EditedCandidate>
+		<Position>
+			<PositionId>1</PositionId>
+			<Title>position</Title>
+			<Description>description</Description>
+			<CreationDate>2017-05-02T10:16:00</CreationDate>
+			<Area>IT</Area>
+			<EngagementManager>Cristobal Colon</EngagementManager>
+			<Owner_Id>1</Owner_Id>
+			<Owner_Email>owner@example.com</Owner_Email>
+			<PortfolioManager_Id>2</PortfolioManager_Id>
+			<PortfolioManager_Email>pmuser1@example.com</PortfolioManager_Email>
+			<RGS>101010</RGS>
+			<Status>Open</Status>
+			<OpenStatus>New</OpenStatus>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+		</Position>
+	</EditCandidateHelperTest>
+	<GetCandidateHelperTest>
+		<Candidate>
+			<CandidateId>1</CandidateId>
+			<Name>Candidate0</Name>
+			<Email>Candidate0@example.com</Email>
+			<Competencies>comp1, comp2, comp3</Competencies>
+			<Description>A description</Description>
+			<CreatedOn>2017-05-08T10:16:00</CreatedOn>
+			<CreatedBy_Id>1</CreatedBy_Id>
+			<CreatedBy_Email>owner@example.com</CreatedBy_Email>
+			<IsTcsEmployee>false</IsTcsEmployee>
+			<Position_Id>1</Position_Id>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+			<FileBlob_Name>file.txt</FileBlob_Name>
+		</Candidate>
+	</GetCandidateHelperTest>
+	<AddTechnicalInterviewCandidateHelperTest>
+		<Candidate>
+			<CandidateId>1</CandidateId>
+			<Name>Candidate0</Name>
+			<Email>Candidate0@example.com</Email>
+			<Competencies>comp1, comp2, comp3</Competencies>
+			<Description>A description</Description>
+			<CreatedOn>2017-05-08T10:16:00</CreatedOn>
+			<CreatedBy_Id>1</CreatedBy_Id>
+			<CreatedBy_Email>owner@example.com</CreatedBy_Email>
+			<IsTcsEmployee>false</IsTcsEmployee>
+			<Position_Id>1</Position_Id>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+			<FileBlob_Name>file.txt</FileBlob_Name>
+		</Candidate>
+		<Position>
+			<PositionId>1</PositionId>
+			<Title>position</Title>
+			<Description>description</Description>
+			<CreationDate>2017-05-02T10:16:00</CreationDate>
+			<Area>IT</Area>
+			<EngagementManager>Cristobal Colon</EngagementManager>
+			<Owner_Id>1</Owner_Id>
+			<Owner_Email>owner@example.com</Owner_Email>
+			<PortfolioManager_Id>2</PortfolioManager_Id>
+			<PortfolioManager_Email>pmuser1@example.com</PortfolioManager_Email>
+			<RGS>101010</RGS>
+			<Status>Open</Status>
+			<OpenStatus>New</OpenStatus>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+		</Position>
+		<TechnicalInterview>
+			<TechnicalInterviewId>1</TechnicalInterviewId>
+			<Date>2017-05-08T10:16:00</Date>
+			<IsAccepted>true</IsAccepted>
+			<Comment>a comment</Comment>
+			<InterviewerId>707570</InterviewerId>
+			<InterviewerName>Interviewer</InterviewerName>
+		</TechnicalInterview>
+		<ApplicationUser>
+			<ApplicationUserId>1</ApplicationUserId>
+			<Email>user@example.com</Email>
+		</ApplicationUser>
+	</AddTechnicalInterviewCandidateHelperTest>
+	<ChangeStatusCandidateHelperTest>
+		<Candidate>
+			<CandidateId>1</CandidateId>
+			<Name>Candidate0</Name>
+			<Email>Candidate0@example.com</Email>
+			<Competencies>comp1, comp2, comp3</Competencies>
+			<Description>A description</Description>
+			<CreatedOn>2017-05-08T10:16:00</CreatedOn>
+			<CreatedBy_Id>1</CreatedBy_Id>
+			<CreatedBy_Email>owner@example.com</CreatedBy_Email>
+			<IsTcsEmployee>false</IsTcsEmployee>
+			<Position_Id>1</Position_Id>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+			<FileBlob_Name>file.txt</FileBlob_Name>
+		</Candidate>
+		<Position>
+			<PositionId>1</PositionId>
+			<Title>position</Title>
+			<Description>description</Description>
+			<CreationDate>2017-05-02T10:16:00</CreationDate>
+			<Area>IT</Area>
+			<EngagementManager>Cristobal Colon</EngagementManager>
+			<Owner_Id>1</Owner_Id>
+			<Owner_Email>owner@example.com</Owner_Email>
+			<PortfolioManager_Id>2</PortfolioManager_Id>
+			<PortfolioManager_Email>pmuser1@example.com</PortfolioManager_Email>
+			<RGS>101010</RGS>
+			<Status>Open</Status>
+			<OpenStatus>New</OpenStatus>
+			<PositionCandidate_Status>Interview_Accepted</PositionCandidate_Status>
+		</Position>
+		<NewPositionCandidateStatus>
+			<PositionCandidate_Status>Conditional_Offer_Accepted</PositionCandidate_Status>
+		</NewPositionCandidateStatus>
+		<ApplicationUser>
+			<ApplicationUserId>1</ApplicationUserId>
+			<Email>user@example.com</Email>
+		</ApplicationUser>
+	</ChangeStatusCandidateHelperTest>
+	<GetCandidateCommentsCanidateHelperTest>
+		<Candidate>
+			<CandidateId>1</CandidateId>
+			<Name>Candidate0</Name>
+			<Email>Candidate0@example.com</Email>
+			<Competencies>comp1, comp2, comp3</Competencies>
+			<Description>A description</Description>
+			<CreatedOn>2017-05-08T10:16:00</CreatedOn>
+			<CreatedBy_Id>1</CreatedBy_Id>
+			<CreatedBy_Email>owner@example.com</CreatedBy_Email>
+			<IsTcsEmployee>false</IsTcsEmployee>
+			<Position_Id>1</Position_Id>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+			<FileBlob_Name>file.txt</FileBlob_Name>
+		</Candidate>
+		<Position>
+			<PositionId>1</PositionId>
+			<Title>position</Title>
+			<Description>description</Description>
+			<CreationDate>2017-05-02T10:16:00</CreationDate>
+			<Area>IT</Area>
+			<EngagementManager>Cristobal Colon</EngagementManager>
+			<Owner_Id>1</Owner_Id>
+			<Owner_Email>owner@example.com</Owner_Email>
+			<PortfolioManager_Id>2</PortfolioManager_Id>
+			<PortfolioManager_Email>pmuser1@example.com</PortfolioManager_Email>
+			<RGS>101010</RGS>
+			<Status>Open</Status>
+			<OpenStatus>New</OpenStatus>
+			<PositionCandidate_Status>New</PositionCandidate_Status>
+		</Position>
+		<TechnicalInterview>
+			<TechnicalInterviewId>1</TechnicalInterviewId>
+			<Date>2017-05-08T10:16:00</Date>
+			<IsAccepted>true</IsAccepted>
+			<Comment>a comment</Comment>
+			<InterviewerId>707570</InterviewerId>
+			<InterviewerName>Interviewer</InterviewerName>
+		</TechnicalInterview>
+	</GetCandidateCommentsCanidateHelperTest>
+</Talento>

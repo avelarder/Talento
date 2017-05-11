@@ -12,21 +12,25 @@ using PagedList;
 using Talento.Core.Utilities;
 using System.Security;
 using System.Web.Security;
+using System.Web.Helpers;
 
 namespace Talento.Controllers
 {
+    [HandleError]
     [Authorize(Roles = "Admin, PM, TAG, RMG, TL")]
     public class PositionsController : Controller
     {
         Core.IPosition PositionHelper;
         Core.ICustomUser UserHelper;
         Core.ICandidate CandidateHelper;
+        IUtilityApplicationSettings ApplicationSettings;
 
-        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.ICandidate candidateHelper)
+        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.ICandidate candidateHelper, IUtilityApplicationSettings appSettings)
         {
             UserHelper = userHelper;
             PositionHelper = positionHelper;
             CandidateHelper = candidateHelper;
+            ApplicationSettings = appSettings;
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -67,11 +71,24 @@ namespace Talento.Controllers
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
             if (position == null || position.Status == PositionStatus.Removed)
             {
-                return HttpNotFound();
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            // Pagination
+            var pageSizeValue = ApplicationSettings.GetSetting("pagination", "pagesize"); // Setting Parameter
+            int pageSize = 0;
+
+            if (pageSizeValue != null)
+            {
+                pageSize = Convert.ToInt32(pageSizeValue);
+            }
+            else
+            {
+                pageSize = 25;
             }
 
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
-            var onePageOfCandidatePositions = position.PositionCandidates.OrderByDescending(x => x.Candidate.CreatedOn).ToPagedList(pageNumber, 5); // will only contain 5 products max because of the pageSize
+            var onePageOfCandidatePositions = position.PositionCandidates.OrderByDescending(x => x.Candidate.CreatedOn).ToPagedList(pageNumber, pageSize); // will only contain 5 products max because of the pageSize
             ViewBag.page = pageNumber;
             ViewBag.onePageOfCandidatePositions = onePageOfCandidatePositions;
 
@@ -83,6 +100,39 @@ namespace Talento.Controllers
         public ActionResult Create()
         {
             return View();
+        }
+
+        [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+        protected class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
+        {
+            public void OnAuthorization(AuthorizationContext filterContext)
+            {
+                try
+                {
+                    if (filterContext == null)
+                    {
+                        throw new ArgumentNullException("filterContext");
+                    }
+                    var httpContext = filterContext.HttpContext;
+                    var cookie = httpContext.Request.Cookies[AntiForgeryConfig.CookieName];
+                    AntiForgery.Validate(cookie?.Value, httpContext.Request.Params["__RequestVerificationToken"]);
+                }
+                catch (Exception)
+                {
+                    //throw;
+                }
+            }
+        }
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public JsonResult PMExists(string email)
+        {
+            if(UserHelper.SearchPM(email).Equals(null)){
+                return null;
+            }else{
+                return Json(true);
+            }
         }
 
         // POST: Positions/Create
@@ -175,7 +225,6 @@ namespace Talento.Controllers
                 {
                     return View(position);
                 }
-
             }
             return View(position);
         }
@@ -240,7 +289,7 @@ namespace Talento.Controllers
                 // No ID return 404
                 if (id == null)
                 {
-                    return HttpNotFound();
+                    return View("Error");
                 }
                 // Check if it's Ajax request, View check for this viewData
                 ViewData["AjaxTrue"] = false;
@@ -253,12 +302,25 @@ namespace Talento.Controllers
                 // Get Position With Logs
                 PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
                 var logs = position.Logs.OrderByDescending(x => x.Date).ToList();
+
+                // Pagination
+                var pageSizeValue = ApplicationSettings.GetSetting("pagination", "pagesize"); // Setting Parameter
+
+                if (pageSizeValue != null)
+                {
+                    pagesize = Convert.ToInt32(pageSizeValue);
+                }
+                else
+                {
+                    pagesize = 25;
+                }
+
                 // Get List of PositionLogs and the Pagination
                 var containerLogs = PositionHelper.PaginateLogs(logs, pagex, pagesize, url);
                 // No logs with the ID return 404
                 if (containerLogs == null)
                 {
-                    return HttpNotFound();
+                    return View("Error");
                 }
                 var logx = AutoMapper.Mapper.Map<List<PositionLogViewModel>>(containerLogs.Item1);
                 // Pagination
@@ -272,7 +334,7 @@ namespace Talento.Controllers
             }
             catch (Exception)
             {
-                return HttpNotFound();
+                return View("Error");
             }
         }
 

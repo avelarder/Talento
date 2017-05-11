@@ -4,13 +4,27 @@
         <div class="form-group pmd-textfield">
             <label>Conditional Offer</label>
             <select style="font-size:1em;" class="select-simple form-control pmd-select2 select-candidate-status" name="status">
-                <option disabled selected="selected">Negotiating</option>
-                <option value="3">Accepted</option>
-                <option value="4">Rejected</option>
+                <option disabled selected="selected">Interview Accepted</option>
+                <option value="3">C. Offer Accepted</option>
+                <option value="4">C. Offer Rejected</option>
+                <option value="5">C. Offer Negotiating</option>
             </select>
             <button style="width:100%;margin-top: 5px;" class="update-status-candidate btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary">Update</button>
         </div>
     }
+    else if ((int)ViewData["Status"] == 5)
+    {
+        <div class="form-group pmd-textfield">
+            <label>Conditional Offer</label>
+            <select style="font-size:1em;" class="select-simple form-control pmd-select2 select-candidate-status" name="status">
+                <option selected="selected">C. Offer Negotiating</option>
+                <option value="3">C. Offer Accepted</option>
+                <option value="4">C. Offer Rejected</option>
+            </select>
+            <button style="width:100%;margin-top: 5px;" class="update-status-candidate btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary">Update</button>
+        </div>
+    }
+
     else if ((int)ViewData["Status"] == 3)
     {
         <div class="form-group pmd-textfield">
@@ -23,5 +37,5 @@
             <button style="width:100%;margin-top: 5px;" class="update-status-candidate btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary">Update</button>
         </div>
     }
-   
+
 </div>

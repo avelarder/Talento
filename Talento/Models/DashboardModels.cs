@@ -27,7 +27,7 @@ namespace Talento.Models
 
         [Required(ErrorMessage = "Engagement Manager is required")]
         [DisplayName("Engagement Manager")]
-        [MaxLength(20)]
+        [MaxLength(50)]
         public string EngagementManager { get; set; }
 
         [RegularExpression("^[0-9]*$", ErrorMessage = "Invalid RGS")]
@@ -58,7 +58,7 @@ namespace Talento.Models
 
         [Required(ErrorMessage = "Engagement Manager is required")]
         [DisplayName("Engagement Manager")]
-        [MaxLength(20)]
+        [MaxLength(50)]
         public string EngagementManager { get; set; }
 
         public string PortfolioManager_Id { get; set; }
@@ -121,7 +121,7 @@ namespace Talento.Models
         public string Area { get; set; }
 
         [Required(ErrorMessage = "Engagement Manager is required")]
-        [MaxLength(20)]
+        [MaxLength(50)]
         public string EngagementManager { get; set; }
 
         [RegularExpression("^[0-9]*$", ErrorMessage = "Invalid RGS")]

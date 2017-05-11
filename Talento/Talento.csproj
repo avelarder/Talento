@@ -200,9 +200,7 @@
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\PositionsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
-    <Compile Include="Controllers\TagsController.cs" />
     <Compile Include="Controllers\TechnicalInterviewController.cs" />
-    <Compile Include="Controllers\WidgetsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -215,7 +213,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\CustomRoleProvider.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Utilities\XmlDeserializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\alertify.min.css" />
@@ -224,10 +221,14 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Scripts\covervid.min.js" />
     <Content Include="Content\mdb.min.css" />
+    <Content Include="Content\Media\pwiaobv.mp4" />
+    <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\propeller.min.css" />
     <Content Include="Content\select2-bootstrap.css" />
+    <Content Include="Content\styles-covervid.css" />
     <Content Include="Content\styles.css" />
     <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
@@ -283,6 +284,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\covervid-scripts.js" />
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\typeahead.js" />
     <Content Include="Scripts\_dev\app.js" />
@@ -314,7 +316,6 @@
     <Content Include="Views\Dashboard\Partials\_PartialContent.cshtml" />
     <Content Include="Views\Widgets\Tables\AdminTable.cshtml" />
     <Content Include="Views\Widgets\Accordion.cshtml" />
-    <Content Include="Views\Widgets\Index.cshtml" />
     <Content Include="Views\Dashboard\Partials\_PartialContentAdmin.cshtml" />
     <Content Include="Views\Account\RegisterConfirmation.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
@@ -339,9 +340,13 @@
     <Content Include="Views\Shared\TIFFDownload.cshtml" />
     <Content Include="Views\Candidate\Status.cshtml" />
     <Content Include="Views\TechnicalInterview\NewTechnicalInterview.cshtml" />
+    <Content Include="Views\Candidate\Create.cshtml" />
+    <Content Include="Views\Candidate\Details.cshtml" />
+    <Content Include="Views\Shared\_Background.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Images\" />
     <Folder Include="Controllers\Filters\" />
   </ItemGroup>
   <ItemGroup>

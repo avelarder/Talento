@@ -1,192 +1,238 @@
 ﻿@model Talento.Models.EditCandidateViewModel
+@{ViewBag.Title = "Editing " + @Model.Name;
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";}
 
-<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-body" id="edit-position-dialog-body">
-            <form id="EditCandidateForm" method="post" action="/Candidate/Edit">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.AntiForgeryToken()
-                <input type="hidden" id="CandidateId" name="CandidateId" value="@Model.CandidateId">
-                <input type="hidden" id="Position_Id" name="Position_Id" value="@Model.Position_Id">
-                <div class="modal-body">
-                    <p><strong>Edit Profile</strong></p>
-                    <div class="form-group row">
-                        <label for="Email" class="col-md-2 col-form-label">Email</label>
-                        <div class="col-md-4">
-                            <input disabled class="form-control" type="text" name="Email" id="Email" value="@Model.Email">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="Name" class="col-md-2 col-form-label">Name</label>
-                        <div class="col-md-4">
-                            <input class="form-control" type="text" id="Name" name="Name" value="@Model.Name" maxlength="50" data-val="true" required>
-                            <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="Competencies" class="col-md-2 col-form-label">Competencies</label>
-                        <div class="col-md-4">
-                            <textarea class="form-control" rows="6" type="text" id="Competencies" name="Competencies" 
-                                      style="resize:none;" maxlength="300" required>@Model.Competencies</textarea>
-                        </div>
-                    </div>
-                    <div class="checkbox">
-                        <div class="form-group row">
-                            <label class="control-label col-md-2" for="Email">Is Tcs Employee? </label>
-                            <div class="col-md-10">
+<h2>@ViewBag.Title</h2>
+<form id="EditCandidateForm" method="post" action="/Candidate/Edit">
+    <input name="Position_Id" id="Position_Id" value="@Model.Position_Id" type="hidden" />
+    <input name="CandidateId" id="CandidateId" value="@Model.CandidateId" type="hidden" />
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
 
-                                @if (Model.IsTcsEmployee.Equals("True"))
-                                {
-                                    <input class="form-control text-box single-line" data-val="true" id="IsTcsEmployee" name="IsTcsEmployee" type="checkbox" checked />
-                                }
-                                else
-                                {
-                                    <input class="form-control text-box single-line" data-val="true" id="IsTcsEmployee" name="IsTcsEmployee" type="checkbox" />
-                                }
-                                <span class="field-validation-valid text-danger" data-valmsg-for="IsTcsEmployee" data-valmsg-replace="true"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="Description" class="col-md-2 col-form-label">Description</label>
-                        <div class="col-md-4">
-                            <input class="form-control" type="text" id="Description" name="Description" value="@Model.Description"maxlength="300" data-val="true" required >
-                            <span class="field-validation-valid text-danger" data-valmsg-for="Description" data-valmsg-replace="true"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        @Html.Action("Edit", "File", new { candidateId = Model.CandidateId })
-                    </div>
-                </div>
-                <div class="pmd-modal-action pmd-modal-bordered text-right">
-                    <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                    <input type="button" id="buttoneditprofile" class="btn pmd-btn-flat pmd-ripple-effect btn-default" value="Save" />
-                </div>
-            </form>
+        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+            @Html.LabelFor(model => model.Competencies, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Competencies, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Competencies, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-md-8">
+            @Html.LabelFor(model => model.IsTcsEmployee, htmlAttributes: new { @class = "control-label" })
+            <br />
+            <br />
+            <label class="switch">
+                <input type="checkbox" onchange="switchIsEmployee()">
+                <div class="slider round" id="roundcheckbox"></div>
+            </label>
+            <div style="visibility:hidden">
+                @Html.CheckBoxFor(model => model.IsTcsEmployee, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            <br />
+            @Html.ValidationMessageFor(model => model.IsTcsEmployee, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
+            <label for="Files" class="col-md-2 col-form-label">Files</label>
+
+            @Html.Action("Edit", "File", new { candidateId = Model.CandidateId })
+            <span class="field-validation-valid text-danger" data-valmsg-for="Files" data-valmsg-replace="true"></span>
+
+        </div>
+        <div class="form-group col-md-8">
+            <div style="float:right">
+                <input type="button" id="buttoneditprofile" value="Update" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" />
+                @Html.ActionLink("Back to List", "Details", "Positions", new { id = Model.Position_Id }, new { @class = "btn pmd-btn-flat pmd-ripple-effect btn-primary" })
+            </div>
+            <br />
+            @Html.ActionLink("Back to Dashboard", "Index", "Dashboard", null, null)
         </div>
     </div>
-</div>
+</form>
+<br />
+
+
+<style>
+    /* The switch - the box around the slider */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            display: none;
+        }
+
+    /* The slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
+
+
 
 <script>
-    (function ($) {
-        function addFile() {
-            var formData = new FormData();
-            formData.append('image', $('input[type=file]')[0].files[0]);
-            formData.append('candidateId', @Model.CandidateId);
-            $.ajax({
-                type: "POST",
-                url: '/File/Add',
-                data: formData,
-                dataType: 'json',
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    updatelist();
-                },
-                error: function (error) {
-                    //Error is good enough because the result is always empty
-                    updatelist();
-                }
-
-            });
+    function switchIsEmployee() {
+        if ($('#IsTcsEmployee').prop('checked')) {
+            $('#IsTcsEmployee').prop('checked', false);
+        } else {
+            $('#IsTcsEmployee').prop('checked', true);
         }
-        function deleteFile(filename) {
-            var formData = new FormData();
-            $.ajax({
-                type: "POST",
-                url: '/File/DeleteEdit',
-                data: "filename=" + filename + "&candidateid="+@Model.CandidateId,
-                success: function (response) {
-                    updatelist();
-                },
-                error: function (error) {
-                    updatelist();
-                }
+    }
 
-            });
-        }
-
-        function buildFileList(filelist) {
-
-            $("#fileListDiv").empty();
-            for (i = 0; i < filelist.length; i++) {
-                $("#fileListDiv").append("<p id='file_" + filelist[i] + "'>" +
-                    "<i class='material-icons'>insert_drive_file</i>" +
-                    "<span>" + filelist[i].FileName + "</span>" +
-                    "<i class='delete-file material-icons' style='cursor:pointer' data-file='" + filelist[i].FileName + "'>delete</i>" +
-                    "</p>");
+    window.onload = function () {
+        (function ($) {
+            if ($('#IsTcsEmployee').prop('checked')) {
+                $("#roundcheckbox").click();
+                $('#IsTcsEmployee').prop('checked', true);
             }
-        }
-
-        $('#edit-position-dialog').on('hidden.bs.modal', function () {
-            console.log("Dirty Sanchez");
-            $("body").removeClass("modal-open");
-            $.ajax({
-                type: "POST",
-                url: '/File/EmptyList',
-                dataType: 'json',
-                success: function (response) {
-                    buildFileList(response);
-                },
-                error: function (error) {
-                    //alert("holi2");
-                }
-            });
-            buildFileList();
-            setTimeout(stopUpdate, 2000);
-        });
-
-        function updatelist() {
-            $.ajax({
-                type: "POST",
-                url: '/File/ListCurrentFiles/',
-                dataType: 'json',
-                success: function (response) {
-                    buildFileList(response);
-                },
-                error: function (error) {
-                    //alert("holi2");
-                }
-            });
-        }
-        $(document).ready(function () {
             updatelist();
-            $(".btn-modal").on("click", function () {
-                $("#Position_Id").val(($(this).attr("name")).split("-")[1]);
-            });
-            console.log("trigger 1");
-            $('#edit-position-dialog').on("change",'#Files', function () {
-                console.log('accc');
-                addFile();
-            });
-            $("#fileListDiv").on("click", ".delete-file", function () {
-                deleteFile($(this).attr('data-file'));
-            });
-                        
-            $("#buttoneditprofile").click(function (evt) {
-                evt.preventDefault();
-                var $form = $('#EditCandidateForm');
-                if ($form.valid()) {
-                    $("#complete-dialog").modal("hide");
-                    toastr.options = {
-                        "debug": false,
-                        "positionClass": "toast-top-center",
-                        "onclick": null,
-                        "fadeIn": 500,
-                        "fadeOut": 2000,
-                        "timeOut": 6000,
-                        "extendedTimeOut": 2000
+
+            function addFile() {
+                var formData = new FormData();
+                formData.append('image', $('input[type=file]')[0].files[0]);
+                var token = $('input[name="__RequestVerificationToken"]').val();
+                var headers = {};
+                headers['__RequestVerificationToken'] = token;
+                $.ajax({
+                    type: "POST",
+                    url: '/File/Add',
+                    headers: headers,
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                    },
+                    error: function (error) {
+                        updatelist();
                     }
-                    toastr.success("Profile has been edited successfully.");
-                    setTimeout(function () {  }, 2500)
-                    $form.submit();
-                } else {
-                    
-                    return;
+                });
+            }
 
+            function deleteFile(filename) {
+                var formData = new FormData();
+                $.ajax({
+                    type: "POST",
+                    url: '/File/Delete',
+                    data: "filename=" + filename,
+                    success: function (response) {
+                        updatelist();
+                    },
+                    error: function (error) {
+                        updatelist();
+                    }
+                });
+            }
+
+            function buildFileList(filelist) {
+                $("#fileListDiv").empty();
+                for (i = 0; i < filelist.length; i++) {
+                    $("#fileListDiv").append("<p id='file_" + filelist[i] + "'>" +
+                        "<i class='material-icons'>insert_drive_file</i>" +
+                            "<span style='font-size:18px;'>" + filelist[i].FileName + "</span>" +
+                        "<i class='delete-file material-icons' style='cursor:pointer' data-file='" + filelist[i].FileName + "'>delete</i>" +
+                    "</p>");
                 }
-            });
-        });
-    }(jQuery));
+            }
 
+            function updatelist() {
+                $.ajax({
+                    type: "POST",
+                    url: '/File/ListCurrentFiles',
+                    dataType: 'json',
+                    success: function (response) {
+                        buildFileList(response);
+                    },
+                    error: function (error) {
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                $("#buttoneditprofile").click(function (evt) {
+                    alertify.set('notifier', 'position', 'bottom-left');
+                    evt.preventDefault();
+                    var $form = $('#EditCandidateForm');
+                    if ($form.valid()) {
+                        setTimeout(function () {
+                            alertify.success('<b>Profile has been Updated successfully</b>');
+                        }, 2500);
+                        setTimeout(function () { $form.submit(); }, 4200);
+
+                    } else {
+                        return;
+                    }
+                });
+                $("#Files").on("change", function () {
+                    addFile();
+                });
+                $("#fileListDiv").on("click", ".delete-file", function () {
+                    deleteFile($(this).attr('data-file'));
+                });
+            });
+        }(jQuery));
+    }
 </script>

@@ -1,6 +1,14 @@
 ﻿@{
     this.ViewContext.HttpContext.Items["RoleClass"] = ViewData["RoleClass"];
 }
+
+<style>
+    .menu-option {
+        padding-left: 5px;
+        font-size: 15px;
+    }
+</style>
+
 <!-- Sidebar Navigation -->
 <div class="pmd-sidebar-overlay"></div>
 <aside id="navigation-side" class="pmd-sidebar sidebar-default pmd-sidebar-left pmd-z-depth propeller-docs-sidebar pmd-sidebar-open pmd-sidebar-slide-push" role="navigation">
@@ -8,73 +16,58 @@
         <li class="dropdown pmd-dropdown pmd-user-info visible-xs visible-md visible-sm visible-lg">
             <a aria-expanded="false" data-toggle="dropdown" class="btn-user dropdown-toggle media" data-sidebar="true" aria-expandedhref="javascript:void(0);">
                 <div class="media-left user-image">
-                    <img src="https://dummyimage.com/60x60/ffffff/1520b0.jpg" alt="User Image">
+                    <img src="https://cdn4.iconfinder.com/data/icons/ios7-active-2/512/Management.png" width="48" height="48" alt="User Image">
                 </div>
                 <div class="media-body media-middle"><span>@ViewData["Role"]</span> Dashboard</div>
             </a>
             <div class="pmd-dropdown-menu-container">
                 <ul class="dropdown-menu">
                     <li><a href="@Url.Action("Index", "Dashboard")">Home</a></li>
-                    <li><a href="#">Settings</a></li>
                     <li><a href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
                 </ul>
             </div>
         </li>
-        @if(ViewData["Role"].ToString() == "basic") { 
-        <li>
-            <a class="pmd-ripple-effect" href="@Url.Action("Create", "Positions")">
-                <i class="material-icons pmd-sm">note_add</i>
-                <span class="media-body">Create new Position</span>
-            </a>
-        </li>
+        @if (ViewData["Role"].ToString() == "basic")
+        {
+            <li>
+                <a class="pmd-ripple-effect" href="@Url.Action("Create", "Positions")">
+                    <span class="pull-left">
+                        <i class="material-icons pmd-sm">note_add</i>
+                    </span>
+                    <span class="pull-left">
+                        <span class="menu-option">Create new Position</span>
+                    </span>
+                </a>
+            </li>
         }
         @if (ViewData["Role"].ToString() == "admin")
         {
             <li>
                 <a class="pmd-ripple-effect" href="@Url.Action("Index", "Dashboard")">
-                    <i class="material-icons pmd-sm">work</i>
-                    <span class="media-body">Positions</span>
+                    <span class="pull-left">
+                        <i class="material-icons pmd-sm">work</i>
+                    </span>
+                    <span class="pull-left">
+                        <span class="menu-option">Positions</span>
+                    </span>
                 </a>
             </li>
             <li>
                 <a class="pmd-ripple-effect" href="@Url.Action("ManageUser", "Dashboard")">
-                    <i class="material-icons pmd-sm">face</i>
-                    <span class="media-body">Manage User</span>
+                    <span class="pull-left"><i class="material-icons pmd-sm">face</i></span>
+                    <span class="menu-option">Manage User</span>
                 </a>
             </li>
             <li>
                 <a class="pmd-ripple-effect" href="@Url.Action("AppSettings", "Dashboard")">
-                    <i class="material-icons pmd-sm">settings</i>
-                    <span class="media-body">Applications Settings</span>
+                    <span class="pull-left">
+                        <i class="material-icons pmd-sm">settings</i>
+                    </span>
+                    <span class="pull-left">
+                        <span class="menu-option">Applications Settings</span>
+                    </span>
                 </a>
             </li>
         }
-
-        <li class="dropdown pmd-dropdown">
-            <a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle media pmd-ripple-effect " data-sidebar="true" href="javascript:void(0);">
-                <i class="material-icons pmd-sm">layers</i>
-                <span class="media-body">Pages</span>
-                <div class="media-right media-bottom">
-                    <i class="dic-more-vert dic"></i>
-                </div>
-            </a>    
-            <div class="pmd-dropdown-menu-container">
-                <ul class="dropdown-menu">
-                    <li><a href="#">Page 1</a></li>
-                    <li><a href="#">Page 2</a></li>
-                    <li><a href="#">Page 3</a></li>
-                    <li><a href="#">Page 4</a></li>
-                    <li><a href="#">Page 5</a></li>
-                </ul>
-            </div>
-        </li>
-       
-        <li>
-            <a class="pmd-ripple-effect" href="#">
-                <i class="material-icons pmd-sm">more</i>
-                <span class="media-body">Notifications</span>
-            </a>
-        </li>
     </ul>
 </aside>
-

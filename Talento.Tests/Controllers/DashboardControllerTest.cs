@@ -13,6 +13,7 @@ using Talento.Tests.Providers;
 using Talento.Core;
 using System.Collections.Generic;
 using Talento.Entities;
+using Talento.Core.Utilities;
 
 namespace Talento.Tests.Controllers
 {
@@ -32,10 +33,12 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
             mockContext.Setup(p => p.HttpContext.User.IsInRole("Admin")).Returns(true);
 
+            Mock<IUtilityApplicationSettings> utilAppSetting = new Mock<IUtilityApplicationSettings>();
+
             // create controller
             Mock<ICustomPagingList> mCustomPagingList = new Mock<ICustomPagingList>();
             mCustomPagingList.Setup(x => x.GetAdminTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { PositionId = 1 } });
-            DashboardController controller = new DashboardController(mCustomPagingList.Object)
+            DashboardController controller = new DashboardController(mCustomPagingList.Object, utilAppSetting.Object)
             {
                 ControllerContext = mockContext.Object
             };
@@ -63,10 +66,11 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
             mockContext.Setup(p => p.HttpContext.User.IsInRole("Basic")).Returns(true);
 
+            Mock<IUtilityApplicationSettings> utilAppSetting = new Mock<IUtilityApplicationSettings>();
             // create controller
             Mock<ICustomPagingList> mCustomPagingList = new Mock<ICustomPagingList>();
             mCustomPagingList.Setup(x => x.GetBasicTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { PositionId = 1 } });
-            DashboardController controller = new DashboardController(mCustomPagingList.Object)
+            DashboardController controller = new DashboardController(mCustomPagingList.Object, utilAppSetting.Object)
             {
                 ControllerContext = mockContext.Object
             };
@@ -93,10 +97,11 @@ namespace Talento.Tests.Controllers
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
             mockContext.Setup(p => p.HttpContext.User.IsInRole("Admin")).Returns(true);
 
+            Mock<IUtilityApplicationSettings> utilAppSetting = new Mock<IUtilityApplicationSettings>();
             // create controller
             Mock<ICustomPagingList> mCustomPagingList = new Mock<ICustomPagingList>();
             mCustomPagingList.Setup(x => x.GetAdminTable("", "Status", "", "", 1)).Returns(new List<Position>() { new Position { PositionId = 1 } });
-            DashboardController controller = new DashboardController(mCustomPagingList.Object)
+            DashboardController controller = new DashboardController(mCustomPagingList.Object, utilAppSetting.Object)
             {
                 ControllerContext = mockContext.Object
             };
@@ -114,8 +119,9 @@ namespace Talento.Tests.Controllers
         [TestMethod]
         public void ManageUsersTest()
         {
+            Mock<IUtilityApplicationSettings> utilAppSetting = new Mock<IUtilityApplicationSettings>();
             Mock<ICustomPagingList> dashboardPagingHelper = new Mock<ICustomPagingList>();
-            DashboardController controller = new DashboardController(dashboardPagingHelper.Object);
+            DashboardController controller = new DashboardController(dashboardPagingHelper.Object, utilAppSetting.Object);
 
             var result = controller.ManageUser();
 
@@ -126,8 +132,9 @@ namespace Talento.Tests.Controllers
         [TestMethod]
         public void AppSettingsTest()
         {
+            Mock<IUtilityApplicationSettings> utilAppSetting = new Mock<IUtilityApplicationSettings>();
             Mock<ICustomPagingList> dashboardPagingHelper = new Mock<ICustomPagingList>();
-            DashboardController controller = new DashboardController(dashboardPagingHelper.Object);
+            DashboardController controller = new DashboardController(dashboardPagingHelper.Object, utilAppSetting.Object);
 
             var result = controller.AppSettings();
 
