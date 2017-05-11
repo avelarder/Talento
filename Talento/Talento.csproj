@@ -335,9 +335,12 @@
     <Content Include="Views\Shared\TIFFDownload.cshtml" />
     <Content Include="Views\Candidate\Status.cshtml" />
     <Content Include="Views\TechnicalInterview\NewTechnicalInterview.cshtml" />
+    <Content Include="Views\Candidate\Create.cshtml" />
+    <Content Include="Views\Candidate\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Images\" />
     <Folder Include="Controllers\Filters\" />
   </ItemGroup>
   <ItemGroup>
