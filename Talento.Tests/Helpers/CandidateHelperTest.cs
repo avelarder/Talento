@@ -414,5 +414,94 @@ namespace Talento.Tests.Helpers
             Assert.AreEqual(positionCandidate.Status, newStatus);
             context.Verify(m => m.SaveChanges(), Times.Once());
         }
+
+        [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
+                "Resources\\Tests\\CandidateHelperTestData.xml",
+                "GetCandidateCommentsCanidateHelperTest",
+                DataAccessMethod.Sequential)]
+        public void GetCandidateCommentsCanidateHelperTest()
+        {
+            DataRow candidateData = TestContext.DataRow.GetChildRows("GetCandidateCommentsCanidateHelperTest_Candidate").Single();
+            DataRow positionData = TestContext.DataRow.GetChildRows("GetCandidateCommentsCanidateHelperTest_Position").Single();
+            DataRow technicalInterviewData = TestContext.DataRow.GetChildRows("GetCandidateCommentsCanidateHelperTest_TechnicalInterview").Single();
+
+            Candidate candidate = new Candidate
+            {
+                CandidateId = Convert.ToInt32(candidateData["CandidateId"]),
+                Competencies = candidateData["Competencies"].ToString(),
+                CreatedBy = new ApplicationUser { Id = candidateData["CreatedBy_Id"].ToString(), Email = candidateData["CreatedBy_Email"].ToString(), UserName = candidateData["CreatedBy_Email"].ToString() },
+                CreatedBy_Id = candidateData["CreatedBy_Id"].ToString(),
+                CreatedOn = Convert.ToDateTime(candidateData["CreatedOn"].ToString()),
+                Description = candidateData["Description"].ToString(),
+                Email = candidateData["Email"].ToString(),
+                FileBlobs = new List<FileBlob> { new FileBlob { Blob = new byte[0], FileName = candidateData["FileBlob_Name"].ToString() } },
+                IsTcsEmployee = Convert.ToBoolean(candidateData["IsTcsEmployee"].ToString()),
+                Name = candidateData["Name"].ToString(),
+                PositionCandidates = new List<PositionCandidates> { new PositionCandidates { Position = new Position { PositionId = Convert.ToInt32(candidateData["Position_Id"].ToString()) }, Status = (PositionCandidatesStatus)Enum.Parse(typeof(PositionCandidatesStatus), candidateData["PositionCandidate_Status"].ToString()) } }
+            };
+            Position position = new Position
+            {
+                PositionId = Convert.ToInt32(positionData["PositionId"]),
+                Title = positionData["Title"].ToString(),
+                Description = positionData["Description"].ToString(),
+                CreationDate = Convert.ToDateTime(positionData["CreationDate"].ToString()),
+                Area = positionData["Area"].ToString(),
+                EngagementManager = positionData["EngagementManager"].ToString(),
+                Owner = new ApplicationUser { Id = positionData["Owner_Id"].ToString(), Email = positionData["Owner_Email"].ToString() },
+                ApplicationUser_Id = positionData["Owner_Id"].ToString(),
+                PortfolioManager = new ApplicationUser { Id = positionData["PortfolioManager_Id"].ToString(), Email = positionData["PortfolioManager_Email"].ToString() },
+                RGS = positionData["RGS"].ToString(),
+                Status = (PositionStatus)Enum.Parse(typeof(PositionStatus), positionData["Status"].ToString()),
+                OpenStatus = (PositionOpenStatus)Enum.Parse(typeof(PositionOpenStatus), positionData["OpenStatus"].ToString()),
+                PositionCandidates = new List<PositionCandidates>(),
+            };
+            PositionCandidates positionCandidate = new PositionCandidates
+            {
+                Candidate = candidate,
+                Position = position,
+                CandidateID = candidate.CandidateId,
+                PositionID = position.PositionId,
+                Status = (PositionCandidatesStatus)Enum.Parse(typeof(PositionCandidatesStatus), positionData["PositionCandidate_Status"].ToString())
+            };
+            TechnicalInterview technicalInterview = new TechnicalInterview
+            {
+                TechnicalInterviewId = Convert.ToInt32(technicalInterviewData["TechnicalInterviewId"].ToString()),
+                Date = Convert.ToDateTime(technicalInterviewData["Date"].ToString()),
+                IsAccepted = Convert.ToBoolean(technicalInterviewData["IsAccepted"].ToString()),
+                Comment = technicalInterviewData["Comment"].ToString(),
+                InterviewerId = technicalInterviewData["InterviewerId"].ToString(),
+                InterviewerName = technicalInterviewData["InterviewerId"].ToString(),
+                PositionCandidate = positionCandidate,
+                FeedbackFile = new FileBlob()
+            };
+
+            var candidateSet = new Mock<DbSet<Candidate>>().SetupData(new List<Candidate> { candidate });
+            var positionCandidateSet = new Mock<DbSet<PositionCandidates>>().SetupData(new List<PositionCandidates> { positionCandidate });
+            var technicalInterviewSet = new Mock<DbSet<TechnicalInterview>>().SetupData(new List<TechnicalInterview> { technicalInterview });
+
+            // mock dbContext
+            var context = new Mock<ApplicationDbContext>();
+            context.Setup(c => c.Candidates).Returns(candidateSet.Object);
+            context.Setup(c => c.PositionCandidates).Returns(positionCandidateSet.Object);
+            context.Setup(c => c.TechnicalInterviews).Returns(technicalInterviewSet.Object);
+            context.Setup(x => x.SaveChanges()).Verifiable();
+
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPosition> mockPositionHelper = mocks.Create<IPosition>();
+            Mock<IPositionLog> mockPositionLogHelper = mocks.Create<IPositionLog>();
+            Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
+
+            List<TechnicalInterview> expectedList = new List<TechnicalInterview> { technicalInterview };
+
+            CandidateHelper candidateHelper = new CandidateHelper(context.Object, mockPositionLogHelper.Object, mockUserHelper.Object, mockPositionHelper.Object);
+
+            var result = candidateHelper.GetCandidateComments(candidate.CandidateId);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(List<TechnicalInterview>));
+            Assert.AreEqual(expectedList.Count, result.Count);
+            Assert.AreEqual(expectedList.First(), result.First());
+        }
     }
 }

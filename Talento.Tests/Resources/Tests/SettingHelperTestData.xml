@@ -79,6 +79,16 @@
 			<CreatedByUserName>Admin1</CreatedByUserName>
 			<CreatedByEmail>admin@example.com</CreatedByEmail>
 		</ApplicationSetting>
+		<ApplicationSetting>
+			<ApplicationSettingId>1</ApplicationSettingId>
+			<SettingName>Filter</SettingName>
+			<ParameterName>FilterBy</ParameterName>
+			<ParameterValue>New Name</ParameterValue>
+			<CreationDate>2009-03-13T22:16:00</CreationDate>
+			<ApplicationUser_Id>1</ApplicationUser_Id>
+			<CreatedByUserName>Admin1</CreatedByUserName>
+			<CreatedByEmail>admin@example.com</CreatedByEmail>
+		</ApplicationSetting>
 	</EditSettingHelperTest>
 	<GetPaginationSettingHelperTest>
 		<ApplicationSetting>
