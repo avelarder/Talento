@@ -111,16 +111,43 @@
     <Compile Include="Controllers\PositionControllerTest.cs" />
     <Compile Include="Controllers\PositionLogsControllerTest.cs" />
     <Compile Include="Controllers\SettingsControllerTest.cs" />
+    <Compile Include="Helpers\CandidateHelperTest.cs" />
+    <Compile Include="Helpers\PositionHelperTest.cs" />
+    <Compile Include="Helpers\PositionLogHelperTest.cs" />
     <Compile Include="Helpers\SettingHelperTest.cs" />
     <Compile Include="Controllers\TechnicalInterviewControllerTest.cs" />
+    <Compile Include="Helpers\DashboardPaginHelperTest.cs" />
+    <Compile Include="Helpers\UserHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\CustomRoleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
-    <Content Include="Resources\ApplicationSettings.xml" />
+    <Content Include="Resources\Tests\PositionHelperTestData.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Resources\Tests\UserHelperTestData.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Tests\DashboardPaginHelperTestData.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Tests\CandidateHelperTestData.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Resources\Tests\PositionLogHelperTestData.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Tests\SettingHelperTestData.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Files\pdftest1.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Files\pdftest.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

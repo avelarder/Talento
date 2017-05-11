@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Talento>
+	<AddPositionLogHelperTest>
+		<Log>
+			<Id>1</Id>
+			<Date>2017-05-08T10:16:00</Date>
+			<Description>A description</Description>
+			<ApplicationUser_Id>1</ApplicationUser_Id>
+			<User_Email>user@Example.com</User_Email>
+			<Action>Edit</Action>
+			<PreviousStatus>Open</PreviousStatus>
+			<ActualStatus>Cancelled</ActualStatus>
+			<Position_Id>1</Position_Id>
+		</Log>
+	</AddPositionLogHelperTest>
+</Talento>

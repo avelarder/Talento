@@ -28,6 +28,7 @@ namespace Talento.Core.Helpers
                 using (var tx = new TransactionScope(TransactionScopeOption.Required))
                 {
                     Position currentPosition = PositionHelper.Get(newCandidate.PositionCandidates.First().Position.PositionId);
+
                     foreach (PositionCandidates c in currentPosition.PositionCandidates)
                     {
                         //If Email is already in the position return -1
@@ -45,8 +46,10 @@ namespace Talento.Core.Helpers
                         Date = DateTime.Now,
                         Description = String.Format("Candidate {0} was attached to the position", newCandidate.Email),
                         PreviousStatus = currentPosition.Status,
+                        Position = currentPosition
                     };
-                    currentPosition.Logs.Add(log);
+
+                    LogHelper.Add(log);
                     currentPosition.OpenStatus = PositionOpenStatus.Screening;
                     int result = Db.SaveChanges();
                     tx.Complete();
@@ -57,11 +60,6 @@ namespace Talento.Core.Helpers
             {
                 throw;
             }
-        }
-
-        public void Delete(int Id, string uId)
-        {
-            throw new NotImplementedException();
         }
 
         public int Edit(Candidate editCandidate, HashSet<FileBlob> files, ApplicationUser currentUser)
@@ -89,11 +87,11 @@ namespace Talento.Core.Helpers
                     User = currentUser,
                     Date = DateTime.Now,
                     Description = String.Format("Candidate {0} has been updated.", editCandidate.Email),
-                    PreviousStatus = positionToLog.Status
+                    PreviousStatus = positionToLog.Status,
+                    Position = positionToLog
                 };
 
-                PositionHelper.Get(positionToLog.PositionId).Logs.Add(log);
-
+                LogHelper.Add(log);
                 Db.SaveChanges();
 
                 return 0;
@@ -148,7 +146,8 @@ namespace Talento.Core.Helpers
                         User = currentUser,
                         Date = DateTime.Now,
                         Description = String.Format("A new technical interview feedback was added for {0}", technicalInterview.PositionCandidate.Candidate.Email),
-                        PreviousStatus = technicalInterview.PositionCandidate.Position.Status
+                        PreviousStatus = technicalInterview.PositionCandidate.Position.Status,
+                        Position = technicalInterview.PositionCandidate.Position
                     };
 
                     if (technicalInterview.IsAccepted)
@@ -160,7 +159,7 @@ namespace Talento.Core.Helpers
                         technicalInterview.PositionCandidate.Status = PositionCandidatesStatus.Interview_Rejected;
                     }
 
-                    technicalInterview.PositionCandidate.Position.Logs.Add(log);
+                    LogHelper.Add(log);
                     int result = Db.SaveChanges();
                     tx.Complete();
                     return result;
@@ -172,27 +171,22 @@ namespace Talento.Core.Helpers
             }
         }
 
-        public async Task<List<Candidate>> GetAll()
-        {
-            return await Db.Candidates.ToListAsync();
-        }
-
         public void ChangeStatus(int Id, PositionCandidatesStatus newStatus, ApplicationUser currentUser)
         {
             try
-            { 
+            {
                 PositionCandidates pc = Db.PositionCandidates.Single(x => x.CandidateID == Id);
                 // Check if Update Status is Valid Conditions
-                if ((int)pc.Status == 1 || (int)pc.Status == 5)
+                if (pc.Status == PositionCandidatesStatus.Interview_Accepted)
                 {
-                    if ((int)newStatus != 3 && (int)newStatus != 4 && (int)newStatus != 5)
+                    if (newStatus != PositionCandidatesStatus.Conditional_Offer_Accepted && newStatus != PositionCandidatesStatus.Conditional_Offer_Rejected)
                     {
                         throw new Exception();
                     }
                 }
-                else if ((int)pc.Status == 3)
+                else if (pc.Status == PositionCandidatesStatus.Conditional_Offer_Accepted)
                 {
-                    if ((int)newStatus != 6 && (int)newStatus != 7)
+                    if (newStatus != PositionCandidatesStatus.Customer_Approved && newStatus != PositionCandidatesStatus.Customer_Rejected)
                     {
                         throw new Exception();
                     }
@@ -200,11 +194,11 @@ namespace Talento.Core.Helpers
                 else
                 {
                     throw new Exception();
-                }               
+                }
 
-                Candidate candidateToLog = Db.Candidates.Find(pc.CandidateID);
-                Position positionToLog = Db.Positions.Single(x => x.PositionId == pc.PositionID);
-            
+                Candidate candidateToLog = pc.Candidate;
+                Position positionToLog = pc.Position;
+
                 pc.Status = newStatus;
                 var name = Enum.GetName(typeof(PositionCandidatesStatus), newStatus).Replace("_", " ");
 
@@ -214,10 +208,12 @@ namespace Talento.Core.Helpers
                     ActualStatus = positionToLog.Status,
                     User = currentUser,
                     Date = DateTime.Now,
-                    Description = String.Format("Candidate {0} Status has been updated to {1}.", candidateToLog.Email, name)
+                    Description = String.Format("Candidate {0} Status has been updated to {1}.", candidateToLog.Email, name),
+                    Position = positionToLog,
+                    PreviousStatus = positionToLog.Status
                 };
 
-                PositionHelper.Get(positionToLog.PositionId).Logs.Add(log);
+                LogHelper.Add(log);
 
                 Db.SaveChanges();
             }
@@ -225,14 +221,6 @@ namespace Talento.Core.Helpers
             {
                 throw;
             }
-
         }
-
-        public PositionCandidates GetPositionCandidate(int Id)
-        {
-            return Db.PositionCandidates.Single(x => x.CandidateID == Id);
-        }
-
-
     }
 }

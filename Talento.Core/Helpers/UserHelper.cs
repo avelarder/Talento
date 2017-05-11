@@ -51,7 +51,7 @@ namespace Talento.Core.Helpers
         {
             try
             {
-                return Db.Users.Find(id);
+                return Db.Users.FirstOrDefault(x => x.Id == id);
             }
             catch (Exception)
             {
