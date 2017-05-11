@@ -37,9 +37,7 @@ namespace Talento.Core.Helpers
                             return -1;
                         }
                     }
-
                     Db.Candidates.Add(newCandidate);
-
                     Log log = new Log
                     {
                         Action = Entities.Action.Edit,
@@ -57,7 +55,6 @@ namespace Talento.Core.Helpers
                     tx.Complete();
                     return result;
                 }
-
             }
             catch (Exception)
             {
@@ -73,7 +70,10 @@ namespace Talento.Core.Helpers
                 Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).Description = editCandidate.Description;
                 Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).Name = editCandidate.Name;
                 Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).IsTcsEmployee = editCandidate.IsTcsEmployee;
-                Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).FileBlobs.Clear();
+                List<FileBlob> actualFiles = Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).FileBlobs.ToList();
+                actualFiles.ForEach(f => Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).FileBlobs.Remove(f));
+
+                Db.SaveChanges();
                 Db.Candidates.Single(x => x.CandidateId == editCandidate.CandidateId).FileBlobs = files;
 
                 Db.SaveChanges();
@@ -115,15 +115,30 @@ namespace Talento.Core.Helpers
             }
         }
 
+        public List<TechnicalInterview> GetCandidateComments(int CandidateId)
+        {
+            try
+            {
+                return Db.TechnicalInterviews.Where(x => x.PositionCandidate.CandidateID.Equals(CandidateId)).ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public int AddTechnicalInterview(TechnicalInterview technicalInterview, ApplicationUser currentUser, int positionId, string candidateEmail)
         {
             try
             {
                 using (var tx = new TransactionScope(TransactionScopeOption.Required))
                 {
-                    int candidateId = Db.Candidates.Single(x => x.Email.Equals(candidateEmail)).CandidateId;
+                    int candidateId = Db.Candidates.Where(x => x.Email.Equals(candidateEmail)).Select(y=>y.CandidateId).ToList().FirstOrDefault(z=> {
+                        return Db.PositionCandidates.Where(a => a.PositionID.Equals(positionId)).Select(b => b.CandidateID).ToList().Contains(z);
+                    });
                     technicalInterview.PositionCandidate = Db.PositionCandidates.FirstOrDefault(x => x.CandidateID.Equals(candidateId) && x.PositionID.Equals(positionId));
                     Db.TechnicalInterviews.Add(technicalInterview);
+                    Db.Candidates.FirstOrDefault(x => x.CandidateId.Equals(candidateId)).FileBlobs.Add(technicalInterview.FeedbackFile);
                     Log log = new Log
                     {
                         Action = Entities.Action.Edit,

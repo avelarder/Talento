@@ -12,9 +12,11 @@ using PagedList;
 using Talento.Core.Utilities;
 using System.Security;
 using System.Web.Security;
+using System.Web.Helpers;
 
 namespace Talento.Controllers
 {
+    [HandleError]
     [Authorize(Roles = "Admin, PM, TAG, RMG, TL")]
     public class PositionsController : Controller
     {
@@ -67,7 +69,7 @@ namespace Talento.Controllers
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
             if (position == null || position.Status == PositionStatus.Removed)
             {
-                return HttpNotFound();
+                return RedirectToAction("Index", "Dashboard");
             }
 
             var pageNumber = page ?? 1; // if no page was specified in the querystring, default to the first page (1)
@@ -83,6 +85,39 @@ namespace Talento.Controllers
         public ActionResult Create()
         {
             return View();
+        }
+
+        [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+        protected class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
+        {
+            public void OnAuthorization(AuthorizationContext filterContext)
+            {
+                try
+                {
+                    if (filterContext == null)
+                    {
+                        throw new ArgumentNullException("filterContext");
+                    }
+                    var httpContext = filterContext.HttpContext;
+                    var cookie = httpContext.Request.Cookies[AntiForgeryConfig.CookieName];
+                    AntiForgery.Validate(cookie?.Value, httpContext.Request.Params["__RequestVerificationToken"]);
+                }
+                catch (Exception)
+                {
+                    //throw;
+                }
+            }
+        }
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public JsonResult PMExists(string email)
+        {
+            if(UserHelper.SearchPM(email).Equals(null)){
+                return null;
+            }else{
+                return Json(true);
+            }
         }
 
         // POST: Positions/Create
@@ -175,7 +210,6 @@ namespace Talento.Controllers
                 {
                     return View(position);
                 }
-
             }
             return View(position);
         }
@@ -240,7 +274,7 @@ namespace Talento.Controllers
                 // No ID return 404
                 if (id == null)
                 {
-                    return HttpNotFound();
+                    return View("Error");
                 }
                 // Check if it's Ajax request, View check for this viewData
                 ViewData["AjaxTrue"] = false;
@@ -258,7 +292,7 @@ namespace Talento.Controllers
                 // No logs with the ID return 404
                 if (containerLogs == null)
                 {
-                    return HttpNotFound();
+                    return View("Error");
                 }
                 var logx = AutoMapper.Mapper.Map<List<PositionLogViewModel>>(containerLogs.Item1);
                 // Pagination
@@ -272,7 +306,7 @@ namespace Talento.Controllers
             }
             catch (Exception)
             {
-                return HttpNotFound();
+                return View("Error");
             }
         }
 

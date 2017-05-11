@@ -8,14 +8,13 @@
         <li class="dropdown pmd-dropdown pmd-user-info visible-xs visible-md visible-sm visible-lg">
             <a aria-expanded="false" data-toggle="dropdown" class="btn-user dropdown-toggle media" data-sidebar="true" aria-expandedhref="javascript:void(0);">
                 <div class="media-left user-image">
-                    <img src="https://dummyimage.com/60x60/ffffff/1520b0.jpg" alt="User Image">
+                    <img src="https://cdn4.iconfinder.com/data/icons/ios7-active-2/512/Management.png" width="48" height="48" alt="User Image">
                 </div>
                 <div class="media-body media-middle"><span>@ViewData["Role"]</span> Dashboard</div>
             </a>
             <div class="pmd-dropdown-menu-container">
                 <ul class="dropdown-menu">
                     <li><a href="@Url.Action("Index", "Dashboard")">Home</a></li>
-                    <li><a href="#">Settings</a></li>
                     <li><a href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
                 </ul>
             </div>
@@ -50,6 +49,7 @@
             </li>
         }
 
+        <!--
         <li class="dropdown pmd-dropdown">
             <a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle media pmd-ripple-effect " data-sidebar="true" href="javascript:void(0);">
                 <i class="material-icons pmd-sm">layers</i>
@@ -75,6 +75,7 @@
                 <span class="media-body">Notifications</span>
             </a>
         </li>
+        -->
     </ul>
 </aside>
 

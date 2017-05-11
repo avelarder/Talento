@@ -1,17 +1,16 @@
-﻿@model Talento.Models.EditCandidateViewModel
-@{ViewBag.Title = "Editing " + @Model.Name;
+﻿@model Talento.Models.CreateCandidateViewModel
+@{ViewBag.Title = "Attaching a new Profile to " + @Model.Position_Name;
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";}
-
 <h2>@ViewBag.Title</h2>
-<form id="EditCandidateForm" method="post" action="/Candidate/Edit">
+
+<form id="formnewprofile" action="/Candidate/Create/" method="post">
     <input name="Position_Id" id="Position_Id" value="@Model.Position_Id" type="hidden" />
-    <input name="CandidateId" id="CandidateId" value="@Model.CandidateId" type="hidden" />
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
             @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
-            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control"} })
             @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
         </div>
 
@@ -39,25 +38,22 @@
             <br />
             <label class="switch">
                 <input type="checkbox" onchange="switchIsEmployee()">
-                <div class="slider round" id="roundcheckbox"></div>
+                <div class="slider round"></div>
             </label>
             <div style="visibility:hidden">
                 @Html.CheckBoxFor(model => model.IsTcsEmployee, new { htmlAttributes = new { @class = "form-control" } })
             </div>
-            <br />
             @Html.ValidationMessageFor(model => model.IsTcsEmployee, "", new { @class = "text-danger" })
         </div>
 
         <div class="form-group col-md-8 pmd-textfield pmd-textfield-floating-label">
             <label for="Files" class="col-md-2 col-form-label">Files</label>
-
-            @Html.Action("Edit", "File", new { candidateId = Model.CandidateId })
+            @Html.Action("Index", "File", null)
             <span class="field-validation-valid text-danger" data-valmsg-for="Files" data-valmsg-replace="true"></span>
-
         </div>
         <div class="form-group col-md-8">
             <div style="float:right">
-                <input type="button" id="buttoneditprofile" value="Update" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" />
+                <input type="button"  id="buttonnewprofile" value="Create" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" />
                 @Html.ActionLink("Back to List", "Details", "Positions", new { id = Model.Position_Id }, new { @class = "btn pmd-btn-flat pmd-ripple-effect btn-primary" })
             </div>
             <br />
@@ -66,7 +62,6 @@
     </div>
 </form>
 <br />
-
 
 <style>
     /* The switch - the box around the slider */
@@ -129,9 +124,7 @@
         .slider.round:before {
             border-radius: 50%;
         }
-</style>
-
-
+    </style>
 
 <script>
     function switchIsEmployee() {
@@ -141,14 +134,9 @@
             $('#IsTcsEmployee').prop('checked', true);
         }
     }
-
     window.onload = function () {
         (function ($) {
-            if ($('#IsTcsEmployee').prop('checked')) {
-                $("#roundcheckbox").click();
-                $('#IsTcsEmployee').prop('checked', true);
-            }
-            updatelist();
+            
 
             function addFile() {
                 var formData = new FormData();
@@ -165,13 +153,15 @@
                     contentType: false,
                     processData: false,
                     success: function (response) {
+
                     },
                     error: function (error) {
+                        //Error is good enough because the result is always empty
                         updatelist();
                     }
+
                 });
             }
-
             function deleteFile(filename) {
                 var formData = new FormData();
                 $.ajax({
@@ -184,17 +174,19 @@
                     error: function (error) {
                         updatelist();
                     }
+
                 });
             }
 
             function buildFileList(filelist) {
+
                 $("#fileListDiv").empty();
                 for (i = 0; i < filelist.length; i++) {
                     $("#fileListDiv").append("<p id='file_" + filelist[i] + "'>" +
                         "<i class='material-icons'>insert_drive_file</i>" +
-                            "<span style='font-size:18px;'>" + filelist[i].FileName + "</span>" +
+                        "<span style='font-size:18px;'>" + filelist[i].FileName + "</span>" +
                         "<i class='delete-file material-icons' style='cursor:pointer' data-file='" + filelist[i].FileName + "'>delete</i>" +
-                    "</p>");
+                        "</p>");
                 }
             }
 
@@ -210,21 +202,34 @@
                     }
                 });
             }
-
             $(document).ready(function () {
-                $("#buttoneditprofile").click(function (evt) {
+                $("#buttonnewprofile").click(function (evt) {
                     alertify.set('notifier', 'position', 'bottom-left');
-                    evt.preventDefault();
-                    var $form = $('#EditCandidateForm');
-                    if ($form.valid()) {
-                        setTimeout(function () {
-                            alertify.success('<b>Profile has been Updated successfully</b>');
-                        }, 2500);
-                        setTimeout(function () { $form.submit(); }, 4200);
-
-                    } else {
-                        return;
-                    }
+                    var emailCandidate = $("#Email").val();
+                    var positionId = $("#Position_Id").val();
+                    $.ajax({
+                        type: "POST",
+                        url: '/Candidate/ValidEmail',
+                        dataType: 'json',
+                        data: {
+                            emailCandidate: emailCandidate,
+                            positionId: positionId
+                        },
+                        success: function (response) {
+                            evt.preventDefault();
+                            var $form = $('#formnewprofile');
+                            if ($form.valid()) {
+                                $form.submit();
+                                setTimeout(function () {alertify.success('<b>Profile has been Added</b>');}, 2500);
+                                setTimeout(function () { window.location.pathname = "Positions/Details/@Model.Position_Id"; }, 4750);
+                            } else {
+                                return;
+                            }
+                        },
+                        error: function (error) {
+                            alertify.error("<b>A profile with the specified email address cannot be registered.</b>");
+                        }
+                    });
                 });
                 $("#Files").on("change", function () {
                     addFile();

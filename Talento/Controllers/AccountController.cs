@@ -16,6 +16,7 @@ using Talento.EmailManager;
 
 namespace Talento.Controllers
 {
+    [HandleError]
     [Authorize]
     public class AccountController : Controller
     {

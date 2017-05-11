@@ -13,6 +13,7 @@ using Talento.Models;
 
 namespace Talento.Controllers
 {
+    [HandleError]
     public class SettingsController : Controller
     {
         IApplicationSetting SettingsHelper;
