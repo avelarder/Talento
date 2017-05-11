@@ -164,5 +164,59 @@ namespace Talento.Tests.Controllers
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
         }
+
+        [TestMethod]
+        public void CandidateDetailsTest()
+        {
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<ICandidate> mockCandidateHelper = mocks.Create<ICandidate>();
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            Mock<IPosition> mockPositionHelper = mocks.Create<IPosition>();
+            Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
+            Mock<IMessenger> mockEmailManager = mocks.Create<IMessenger>();
+            Mock<HttpContextBase> mockHttpcontext = mocks.Create<HttpContextBase>();
+            var mockContext = new Mock<ControllerContext>();
+            Mock<ApplicationUser> mockUser = mocks.Create<ApplicationUser>();
+
+            List<PositionCandidates> list = new List<PositionCandidates>()
+            {
+                new PositionCandidates
+                {
+                    PositionID = 1,
+                    CandidateID = 1
+                }
+            };
+            Candidate aCandidate = new Candidate
+            {
+                CandidateId = 1,
+                Name = "aName",
+                Email = "anEmail@example.com",
+                Competencies = "someCompetencies",
+                Description = "aDescription",
+                PositionCandidates = list
+            };
+
+            Position aPosition = new Position
+            {
+                PositionId = 1,
+                Title = "aTitle",
+                EngagementManager= "anEmail@example.com",
+                Description = "aDescription",
+                PositionCandidates = list,
+                                
+            };
+
+            mockCandidateHelper.Setup(x => x.Get(1)).Returns(aCandidate);
+            mockPositionHelper.Setup(x => x.Get(1)).Returns(aPosition);
+            CandidateController controller = new CandidateController(mockCandidateHelper.Object, mockUserHelper.Object,mockPositionHelper.Object, mockEmailManager.Object)
+            {
+                ControllerContext = mockContext.Object
+            };
+            mockContext.Setup(x => x.HttpContext.User.IsInRole("Admin")).Returns(false);
+            var result = controller.Details(1, 1);
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+            Assert.IsInstanceOfType(((ViewResult)result).Model, typeof(CandidateModel));
+        }
     }
 }

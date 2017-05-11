@@ -50,11 +50,14 @@
             @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
         </div>
 
+
         <div class="form-group col-md-8">
             <div style="float:right">
-                <input type="button" value="Update" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" id="editbutton" />
-                @Html.ActionLink("Back to Dashboard", "Index", "Dashboard", null, new { @class = "btn pmd-btn-flat pmd-ripple-effect btn-primary" })
+                <input type="button" id="editbutton" value="Update" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" />
+                @Html.ActionLink("Back to Details of "+Model.Title, "Details", "Positions", new { id = Model.PositionId }, new { @class = "btn pmd-btn-flat pmd-ripple-effect btn-primary" })
             </div>
+            <br />
+            @Html.ActionLink("Back to Dashboard", "Index", "Dashboard", null, null)
         </div>
     </div>
 </form>

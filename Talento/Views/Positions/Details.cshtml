@@ -40,17 +40,17 @@
             </a>
 
             @*<input data-target="#complete-dialog" data-toggle="modal" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />*@
-            <a href="#" class="delete-position" data-target="#complete-dialog" data-position="@Model.PositionId" alt="Delete Position">
+            <a href="#" class="delete-position" data-target="#delete-position-dialog" data-position="@Model.PositionId" alt="Delete Position">
                 <i class="material-icons md-24">delete</i>
             </a>
 
             <!--Delete position modal-->
-            <div tabindex="-1" class="modal fade" id="complete-dialog" style="display: none;" aria-hidden="true">
+            <div tabindex="-1" class="modal fade" id="delete-position-dialog" style="display: none;" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Delete profile</h4>
+                            <p>Are you sure you want to remove this position?</p>
                         </div>
                         <div class="pmd-modal-action pmd-modal-bordered text-right">
                             <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
@@ -121,7 +121,7 @@
                     @if (Model.Status == Talento.Entities.PositionStatus.Open)
                     {
                         <td>
-                            <a href="@Url.Action("NewTechnicalInterview", "TechnicalInterview", new { candidateEmail = cP.Candidate.Email, positionId = cP.Position.PositionId })">
+                            <a href="@Url.Action("NewTechnicalInterview", "TechnicalInterview", new { candidateEmail = cP.Candidate.Email, positionId = cP.Position.PositionId, candidateId = cP.Candidate.CandidateId })">
                                 Track Interview
                             </a>
                         </td>
@@ -132,7 +132,7 @@
                         </a>
                     </td>                 
                     <td>
-                        <a href="#" class="delete-candidate" data-target="#delete-position-dialog" data-candidate="@cP.CandidateID" alt="Delete candidate">
+                        <a href="#" class="delete-candidate" data-target="#delete-candidate-dialog" data-candidate="@cP.CandidateID" alt="Delete candidate">
                             <i class="material-icons md-24">delete</i>
                         </a>
                     </td>
@@ -141,19 +141,19 @@
             }
         </table>
         <script>
-
+            var candidateid = 0;
             window.onload = function () {
                 (function ($) {
                     // Delte Candidate
-                    var $delete = $(".delete-candidate");
-                    var $buttonDelete = $("#delete-candidate-button");
-                    var url = $buttonDelete.attr("data-url");
+                    var $deleteC = $(".delete-candidate");
+                    var $buttonDeleteC = $("#delete-candidate-button");
+                    var urlC = $buttonDeleteC.attr("data-url");
                     var dataCandidate = "";
                     var positionId = "@Model.PositionId";
-                    $buttonDelete.on("click", function (event) {
+                    $buttonDeleteC.on("click", function (event) {
                         event.preventDefault();
                         $.ajax({
-                            url: url,
+                            url: urlC,
                             data: { idPosition: positionId, idCandidate: dataCandidate }
                         }).done(function (response) {
                             location.reload();
@@ -161,10 +161,10 @@
                             location.reload();
                         });
                     });
-                    $delete.on("click", function (event) {
+                    $deleteC.on("click", function (event) {
                         event.preventDefault();
                         var $self = $(this);
-                        var $modalTarget = $("#delete-position-dialog");
+                        var $modalTarget = $("#delete-candidate-dialog");
                         dataCandidate = $self.attr("data-candidate");
                         $modalTarget.modal('show');
                     });
@@ -229,7 +229,7 @@
                             location.reload();
                         }).fail(function (error) {
                             alertify.set('notifier', 'position', 'bottom-left');
-                            alertify.error("<strong style='color:#FFF;'>Invalid Action<i style='margin-top:10px; margin-left:10px;' class='material-icons'>warning</i></strong>");
+                            alertify.error("<strong style='color:#FFF;'>Invalid Action<i style='margin-top:0px; margin-right:0px; position:relative; float:right;' class='material-icons'>warning</i></strong>");
                         });
                     }
 
@@ -241,13 +241,13 @@
         <!-- output a paging control that lets the user navigation to the previous page, next page, etc -->
         @Html.PagedListPager((IPagedList)ViewBag.onePageOfCandidatePositions, page => Url.Action("Details", "Positions", new { Model.PositionId, page }))
         <!--Delete profile modal-->
-        <div tabindex="-1" class="modal fade" id="delete-position-dialog" style="display: none;" aria-hidden="true">
+        <div tabindex="-1" class="modal fade" id="delete-candidate-dialog" style="display: none;" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <p>Are you sure?</p>
+                        <p>Are you sure you want to remove this candidate from the position?</p>
                     </div>
-                    <div class="pmd-modal-action pmd-modal-bordered text-right">
+                    <div class="pmd-modal-action pmd-modal-bordered text-right"> 
                         <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
                         <button id="delete-candidate-button" data-candidate="" data-position="@Model.PositionId" data-url="@Url.Action("DeleteCandidate", "Positions")" data-dismiss="modal" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
                     </div>

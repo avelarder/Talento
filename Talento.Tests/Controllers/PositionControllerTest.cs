@@ -10,6 +10,7 @@ using Talento.Controllers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Talento.Models;
+using System.Net;
 using Talento.Core.Utilities;
 
 namespace Talento.Tests.Controllers

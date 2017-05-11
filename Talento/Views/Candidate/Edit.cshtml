@@ -41,7 +41,7 @@
                 <input type="checkbox" onchange="switchIsEmployee()">
                 <div class="slider round" id="roundcheckbox"></div>
             </label>
-            <div @*style="visibility:hidden"*@>
+            <div style="visibility:hidden">
                 @Html.CheckBoxFor(model => model.IsTcsEmployee, new { htmlAttributes = new { @class = "form-control" } })
             </div>
             <br />

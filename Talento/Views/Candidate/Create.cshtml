@@ -220,11 +220,8 @@
                             var $form = $('#formnewprofile');
                             if ($form.valid()) {
                                 $form.submit();
-                                $("#complete-dialog").modal("hide");
-                                setTimeout(function () {
-                                    alertify.success('<b>Profile has been Added</b>');
-                                }, 2500);
-                                setTimeout(function () { window.location.pathname = "Positions/Details/@Model.Position_Id"; }, 4200);
+                                setTimeout(function () {alertify.success('<b>Profile has been Added</b>');}, 2500);
+                                setTimeout(function () { window.location.pathname = "Positions/Details/@Model.Position_Id"; }, 4750);
                             } else {
                                 return;
                             }

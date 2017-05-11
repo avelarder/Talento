@@ -12,7 +12,7 @@ using Talento.Models;
 namespace Talento.Controllers
 {
     [HandleError]
-    [Authorize(Roles = "PM, TL")]
+    [Authorize(Roles = "TAG, RMG, PM, TL")]
     public class TechnicalInterviewController : Controller
     {
         IPosition PositionHelper;
@@ -83,7 +83,7 @@ namespace Talento.Controllers
         }
 
         // GET: 
-        public ActionResult NewTechnicalInterview(string candidateEmail, int positionId)
+        public ActionResult NewTechnicalInterview(string candidateEmail, int positionId, int candidateId)
         {
             if (PositionHelper.Get(positionId).Status.Equals(PositionStatus.Open))
             {
@@ -91,7 +91,7 @@ namespace Talento.Controllers
                 {
                     CandidateEmail = candidateEmail,
                     PositionId = positionId,
-
+                    CandidateId = candidateId
                 });
             }
             else
