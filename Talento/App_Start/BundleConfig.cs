@@ -8,6 +8,18 @@ namespace Talento
         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+          bundles.Add(new StyleBundle("~/Content/css").Include(
+          "~/Content/bootstrap.css",
+          "~/Content/propeller.min.css",
+          "~/Content/styles.css",
+          "~/Content/PagedList.css",
+          "~/Content/toastr.min.css",
+          "~/Content/alertify.min.css",
+          "~/Content/select2-bootstrap.css",
+          "~/Content/normalize.css",
+          "~/Content/styles-covervid.css"
+          ));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
@@ -25,20 +37,13 @@ namespace Talento
                       "~/Scripts/propeller.min.js",
                       "~/Scripts/toastr.min.js",
                       "~/Scripts/typeahead.js",
-                      "~/Scripts/alertify.min.js"
+                      "~/Scripts/alertify.min.js",
+                      "~/Scripts/covervid-scripts.js",
+                      "~/Scripts/covervid.min.js"
                       ));
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                       "~/Scripts/app.js"));
-
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/propeller.min.css",
-                      "~/Content/styles.css",
-                      "~/Content/PagedList.css",
-                      "~/Content/toastr.min.css",
-                      "~/Content/alertify.min.css",
-                      "~/Content/select2-bootstrap.css"));
         }
     }
 }
