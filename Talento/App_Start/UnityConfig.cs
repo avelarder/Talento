@@ -49,9 +49,9 @@ namespace Talento.App_Start
             container.RegisterType<ApplicationUserManager>(new PerRequestLifetimeManager());
             container.RegisterType<ICustomPagingList, DashboardPagingHelper>(new PerRequestLifetimeManager());
             container.RegisterType<IPosition, PositionHelper>(new PerRequestLifetimeManager());
+            container.RegisterType<IComment, CommentHelper>(new PerRequestLifetimeManager());
             container.RegisterType<IPositionLog, PositionLogHelper>(new PerRequestLifetimeManager());
             container.RegisterType<AccountController>(new InjectionConstructor());
-            container.RegisterType<IPosition, PositionHelper>(new PerRequestLifetimeManager());
             container.RegisterType<ICandidate, CandidateHelper>(new PerRequestLifetimeManager());
             container.RegisterType<ICustomUser, UserHelper>(new PerRequestLifetimeManager());
             container.RegisterType<IApplicationSetting, SettingsHelper>(new PerRequestLifetimeManager());
