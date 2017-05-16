@@ -156,5 +156,15 @@ namespace Talento.Controllers
             aux.FileDownloadName = "TiffTemplate.doc";
             return aux;
         }
+
+        [Authorize]
+        [HttpGet]
+        public FileResult DownloadXl()
+        {
+            FileResult aux = new FilePathResult(DashboardPagingHelper.CreateXl(), "application/msexcel");
+            aux.FileDownloadName = "OpenPositions.xls";
+            return aux;
+        }
+
     }
 }

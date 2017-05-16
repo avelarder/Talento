@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Talento.Entities;
+using Microsoft.Office.Core;
+using System.Runtime.InteropServices;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Talento.Core.Helpers
 {
@@ -13,6 +16,13 @@ namespace Talento.Core.Helpers
         public DashboardPagingHelper(Talento.Core.Data.ApplicationDbContext _db) : base(_db)
         {
         }
+        Excel.Application xl = new Excel.Application();
+        Excel.Workbook xlworkBook;
+        Excel.Worksheet xlSheet;
+        object misValue = System.Reflection.Missing.Value;
+        Excel.Range xlCellrange;
+        
+        List<Position> ListToExport = new List<Position>();
 
         public List<Position> GetAdminTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
         {
@@ -183,9 +193,80 @@ namespace Talento.Core.Helpers
                     query = query.OrderByDescending(p => p.CreationDate);
                     break;
             }
-
+            ListToExport = query.ToList();
             int pageNumber = (page ?? 1);
             return query.ToList();
+        }
+
+        public string CreateXl()
+        {
+            try
+            {
+                xl.Visible = false;
+                xl.DisplayAlerts = false;
+                xlworkBook = xl.Workbooks.Add(misValue);
+                xlSheet = (Excel.Worksheet)xlworkBook.ActiveSheet;
+                xlSheet.Name = "Open Positions";
+                xlSheet.Cells[1, 1] = "Area";
+                xlSheet.Cells[1, 2] = "Position Skill/Role";
+                xlSheet.Cells[1, 3] = "Local Manager";
+                xlSheet.Cells[1, 4] = "Onsite contact";
+                xlSheet.Cells[1, 5] = "RGS ID";
+                xlSheet.Cells[1, 6] = "Status on Position";
+                xlSheet.Cells[1, 7] = "Created Date";
+                xlSheet.Cells[1, 8] = "Days Open";
+                xlSheet.Cells[1, 9] = "Candidates";
+                xlSheet.Cells[1, 10] = "Comments";
+                int count = 2;
+                int OpenDays = 0;
+                string[] candidates;
+                List<string> candlist = new List<string>();
+                foreach (Position p in ListToExport)
+                {
+                    xlSheet.Cells[count, 1] = p.Area;
+                    xlSheet.Cells[count, 2] = p.Title;
+                    xlSheet.Cells[count, 3] = p.Owner.Email;
+                    xlSheet.Cells[count, 4] = p.PortfolioManager.Email;
+                    xlSheet.Cells[count, 5] = p.RGS;
+                    xlSheet.Cells[count, 6] = p.Status.ToString();
+                    xlSheet.Cells[count, 7] = p.CreationDate.ToString();
+                    switch (p.Status)
+                    {
+                        case PositionStatus.Open:
+                            OpenDays = (DateTime.Today - (DateTime)p.LastOpenedDate).Days;
+                            break;
+                        case PositionStatus.Closed:
+                            OpenDays = ((DateTime)p.LastClosedDate - (DateTime)p.LastOpenedDate).Days;
+                            break;
+                        case PositionStatus.Cancelled:
+                            OpenDays = ((DateTime)p.LastCancelledDate - (DateTime)p.LastOpenedDate).Days;
+                            break;
+                    }
+                    xlSheet.Cells[count, 8] = OpenDays.ToString();
+                    foreach(PositionCandidates pc in p.PositionCandidates)
+                    {
+                        candlist.Add(pc.Candidate.Name);
+                    }
+                    candidates = candlist.ToArray();
+                    xlSheet.Cells[count, 9] = candidates.Split(',');
+
+                    count++;
+                }
+                xl.Cells.Select();
+                xl.Cells.EntireColumn.AutoFit();
+                var filePath = System.IO.Path.GetTempFileName();
+                xlworkBook.SaveAs(filePath);
+                xl.Quit();
+                Marshal.ReleaseComObject(xlSheet);
+                Marshal.ReleaseComObject(xlworkBook);
+                System.GC.Collect();
+                System.GC.WaitForPendingFinalizers();
+                return filePath;
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
     }
 }
