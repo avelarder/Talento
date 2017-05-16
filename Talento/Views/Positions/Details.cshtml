@@ -110,7 +110,7 @@
                         @Html.ActionLink(email, "Details", "Candidate", new { id = cP.Candidate.CandidateId, positionId = cP.Position.PositionId},null)
                     </td>
                     <td>
-                        @cP.Candidate.CreatedOn
+                        @cP.Candidate.CreatedOn.ToString("dd/MM/yyyy")
                     </td>
                     <td>
                         @cP.Candidate.CreatedBy.Email

@@ -26,6 +26,7 @@ namespace Talento.Models
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CreatedOn { get; set; }
 
         public string CreatedBy_Id { get; set; }
@@ -77,6 +78,7 @@ namespace Talento.Models
         [Required(ErrorMessage = "Competencies is required")]
         public string Description { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? CratedOn { get; set; }
 
         public string CreatedBy_Id { get; set; }
@@ -112,6 +114,7 @@ namespace Talento.Models
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? CratedOn { get; set; }
 
         public string CreatedBy_Id { get; set; }
@@ -132,6 +135,7 @@ namespace Talento.Models
         public virtual PositionCandidates PositionCandidate { get; set; }
 
         [Required(ErrorMessage = "Date is required")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? Date { get; set; }
 
         [Required]
