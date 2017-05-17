@@ -12,6 +12,6 @@ namespace Talento.Core
     {
         List<Position> GetAdminTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page);
         List<Position> GetBasicTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page);
-        string CreateXl(List<Position> ListToExport);
+        string CreateXl(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page);
     }
 }

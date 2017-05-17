@@ -195,14 +195,18 @@ namespace Talento.Core.Helpers
             return query.ToList();
         }
 
-        public string CreateXl(List<Position> ListToExport)
+        public string CreateXl(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
         {
             try
             {
+                //Creating the excel
+                List<Position> ListToExport = GetBasicTable(sortOrder, FilterBy, currentFilter, searchString, page);
                 xl.Visible = false;
                 xl.DisplayAlerts = false;
                 xlworkBook = xl.Workbooks.Add(misValue);
                 xlSheet = (Excel.Worksheet)xlworkBook.ActiveSheet;
+
+                //Formatting the excel
                 xlSheet.Name = "Open Positions";
                 xlSheet.Cells[1, 1] = "Area";
                 xlSheet.Cells[1, 2] = "Position Skill/Role";
@@ -248,6 +252,13 @@ namespace Talento.Core.Helpers
                     xlSheet.Cells[count, 9] = string.Join(", ", candidates);
                     count++;
                 }
+
+                //xlCellrange = xlSheet.get_Range("a1");
+                //xlCellrange.EntireRow.Font.Bold = true;
+                //xlCellrange.EntireRow.Font.Size = 18;
+                //xlCellrange.EntireRow.Font.Color = ConsoleColor.DarkGreen;
+                //xlCellrange.Interior.Color = ConsoleColor.Gray;
+
                 xl.Cells.Select();
                 xl.Cells.EntireColumn.AutoFit();
                 var filePath = System.IO.Path.GetTempFileName();
