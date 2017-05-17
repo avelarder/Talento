@@ -22,7 +22,7 @@ namespace Talento.Core.Helpers
 
         public int Create(Comment newComment)
         {
-            if(newComment.Content.Length <= 500)
+            if (newComment.Content.Length <= 500)
             {
                 using (var tx = new TransactionScope(TransactionScopeOption.Required))
                 {
@@ -54,10 +54,14 @@ namespace Talento.Core.Helpers
 
                     LogHelper.Add(CreateLog);
 
-                int result = Db.SaveChanges();
-                tx.Complete();
-                return result;
+                    int result = Db.SaveChanges();
+                    tx.Complete();
+                    return result;
+                }
             }
+            else
+                return -1;
+                
         }
 
         public List<Comment> Get(int CandidateId, int PositionId)
