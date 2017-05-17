@@ -9,60 +9,134 @@
 <div>
     <h4>Details: </h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+    <div class="row">
+        <div class="col-lg-6">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <br />
-        <dt>
-            @Html.DisplayNameFor(model => model.Competencies)
-        </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+                <br />
+                <dt>
+                    @Html.DisplayNameFor(model => model.Competencies)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Competencies)
-        </dd>
-        <br />
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Competencies)
+                </dd>
+                <br />
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <br />
-        <dt>
-            Created On:
-        </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+                <br />
+                <dt>
+                    Created On:
+                </dt>
 
-        <dd>
-            @Model.CreatedOn.ToLongDateString()
-        </dd>
-        <br />
-        <dt>
-            Created by
-        </dt>
+                <dd>
+                    @Model.CreatedOn.ToLongDateString()
+                </dd>
+                <br />
+                <dt>
+                    Created by
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.CreatedBy.UserName)
-        </dd>
-        <br />
-        <dt>
-            @if (Model.IsTcsEmployee)
-            {
-                <span>Is TCS Employee</span>
-            }
-            else
-            {
-                <span>Is <u>not</u> TCS Employee</span>
-            }
-        </dt>
-        <br />
-    </dl>
-
+                <dd>
+                    @Html.DisplayFor(model => model.CreatedBy.UserName)
+                </dd>
+                <br />
+                <dt>
+                    @if (Model.IsTcsEmployee)
+                    {
+                        <span>Is TCS Employee</span>
+                    }
+                    else
+                    {
+                        <span>Is <u>not</u> TCS Employee</span>
+                    }
+                </dt>
+                <br />
+            </dl>
+        </div>
+        <div class="col-lg-6">
+            <br />
+            <div id="comments" class="row">
+                <h4 class="panel-title">
+                    <a id="buttoncollapse" data-toggle="collapse" href="#collapse">Comments</a>
+                    <br />
+                </h4>
+                <br />
+                <div id="collapse" class="panel-collapse collapse">
+                    @if (!Model.isadmin)
+                    {
+                        <form id="newcommentform" action="/Candidate/AddComment" method="post">
+                            @Html.HiddenFor(x => x.PositionId)
+                            @Html.HiddenFor(x => x.CandidateId)
+                            <div class="col-lg-11">
+                                <div class="panel panel-white post panel-shadow">
+                                    <div class="post-heading">
+                                        <div class="pull-left image">
+                                            <img src="https://cdn0.iconfinder.com/data/icons/alien-space/512/call_center_help_desk_reception_hotline_number_emergency_service_phone_operator_support_chat_alien-512.png"
+                                                 class="img-circle avatar" alt="user profile image" />
+                                        </div>
+                                        <div class="pull-left meta">
+                                            <div class="title h5">
+                                                <span><b>@User.Identity.Name</b></span>
+                                            </div>
+                                            <h6 class="text-muted time">New Comment</h6>
+                                        </div>
+                                    </div>
+                                    <div class="post-description" style="overflow:auto">
+                                        <textarea id="Comment" name="Comment" style="width:100%;resize: none;"></textarea>
+                                        @Html.AntiForgeryToken()
+                                        <br />
+                                        <span style="position:relative;float:left;margin-left:20px;margin-top:10px;color:gray" id="charsleft">500  characters left.</span>
+                                        <input type="submit" value="Add" class="btn-modal btn btn-primary pmd-ripple-effect btn-primary pmd-z-depth" style="width:20px; margin-top:10px;float:right" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    }
+                    @if (Model.Comments != null)
+                    {
+                        if (Model.Comments.Count > 0)
+                        {
+                            foreach (Talento.Entities.Comment x in Model.Comments)
+                            {
+                                <div class="col-lg-11">
+                                    <div class="panel panel-white post panel-shadow">
+                                        <div class="post-heading">
+                                            <div class="pull-left image">
+                                                <img src="https://cdn0.iconfinder.com/data/icons/alien-space/512/call_center_help_desk_reception_hotline_number_emergency_service_phone_operator_support_chat_alien-512.png"
+                                                     class="img-circle avatar" alt="user profile image" />
+                                            </div>
+                                            <div class="pull-left meta">
+                                                <div class="title h5">
+                                                    <span><b>@x.User.Email</b></span>
+                                                    made a comment.
+                                                </div>
+                                                <h6 class="text-muted time">@x.Date.ToLongDateString() - @x.Date.ToShortTimeString()</h6>
+                                            </div>
+                                        </div>
+                                        <div class="post-description" style="overflow:auto">
+                                            <span>@x.Content</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
 
         <div class="list-group">
@@ -73,34 +147,6 @@
         </div>
 
     </div>
-
-    @if (Model.Comments != null)
-    {
-        if (Model.Comments.Count > 0)
-        {
-            <div id="comments" class="row">
-                <h3>Comments:</h3>
-                @foreach (Talento.Entities.TechnicalInterview x in Model.Comments)
-                {
-                    <div class="col-sm-8">
-                        <div class="panel panel-white post panel-shadow">
-                            <div class="post-heading">
-                                <div class="pull-left meta">
-                                    <div class="title h5">
-                                        <a href="#">Interviewed by <b>@x.InterviewerName (@x.InterviewerId)</b></a>
-                                    </div>
-                                    <h6 class="text-muted time">Date: @x.Date.Value.ToLongDateString()</h6>
-                                </div>
-                            </div>
-                            <div class="post-description">
-                                <p>Comment</p>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-    }
 
     <br />
     <div class="form-group col-md-8">
@@ -118,6 +164,33 @@
     </div>
 </div>
 <br />
+
+<script>
+
+    window.onload = function () {
+        (function ($) {
+
+            $(document).on('input propertychange', "textarea[name='Comment']", function () {
+                if ($('#Comment').val().length <= 500) {
+                    $("#charsleft").html((500 - $('#Comment').val().length) + " characters left.");
+                } else {
+                    $("#charsleft").html("Your comment is too long!");
+                }
+            });
+
+            $("#newcommentform").on("submit", function () {
+                if ($('#Comment').val().length < 1 || $('#Comment').val().length > 500){
+                    alertify.error('<b>The comment must have between 1 and 500 characters</b>');
+                    return false;
+                }
+            })
+
+            $("#buttoncollapse").click();
+
+        }(jQuery));
+    }
+
+</script>
 
 <style>
     .panel-shadow {

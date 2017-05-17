@@ -20,9 +20,11 @@ namespace Talento.Controllers
         IPosition PositionHelper;
         ICustomUser UserHelper;
         IMessenger EmailManager;
+        IComment CommentHelper;
 
-        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPosition positionHelper, IMessenger emailManager)
+        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPosition positionHelper, IMessenger emailManager, IComment commentHelper)
         {
+            CommentHelper = commentHelper;
             EmailManager = emailManager;
             CandidateHelper = candidateHelper;
             UserHelper = userHelper;
@@ -222,7 +224,7 @@ namespace Talento.Controllers
             List<TechnicalInterview> comments = CandidateHelper.GetCandidateComments(aux.CandidateId);
             aux.isadmin = User.IsInRole("Admin");
             aux.PositionId = positionId;
-            aux.Comments = comments;
+            aux.Comments = CommentHelper.Get(id,positionId);
             aux.isopenposition = PositionHelper.Get(positionId).Status.Equals(PositionStatus.Open);
             return View(aux);
         }
@@ -266,6 +268,22 @@ namespace Talento.Controllers
             }            
             return Content(name);
         }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult AddComment(string Comment, int PositionId, int CandidateId)
+        {
+            CommentHelper.Create(new Comment
+            {
+                CandidateId = CandidateId,
+                Content = Comment,
+                User = UserHelper.GetUserByEmail(User.Identity.Name),
+                PositionId = PositionId
+            });
+
+            return RedirectToAction("Details", "Candidate", new { id = CandidateId, positionId = PositionId });
+        }
+
 
         [HttpPost]
         [ChildAndAjaxActionOnly]
