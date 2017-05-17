@@ -13,6 +13,7 @@ using Talento.Core.Utilities;
 using System.Security;
 using System.Web.Security;
 using System.Web.Helpers;
+using Talento.Core;
 
 namespace Talento.Controllers
 {
@@ -20,14 +21,16 @@ namespace Talento.Controllers
     [Authorize(Roles = "Admin, PM, TAG, RMG, TL")]
     public class PositionsController : Controller
     {
-        Core.IPosition PositionHelper;
-        Core.ICustomUser UserHelper;
-        Core.ICandidate CandidateHelper;
+        IPosition PositionHelper;
+        ICustomUser UserHelper;
+        ICandidate CandidateHelper;
+        IComment CommentHelper;
         IUtilityApplicationSettings ApplicationSettings;
 
-        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.ICandidate candidateHelper, IUtilityApplicationSettings appSettings)
+        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.ICandidate candidateHelper, IComment commentHelper, IUtilityApplicationSettings appSettings)
         {
             UserHelper = userHelper;
+            CommentHelper = commentHelper;
             PositionHelper = positionHelper;
             CandidateHelper = candidateHelper;
             ApplicationSettings = appSettings;
@@ -45,6 +48,20 @@ namespace Talento.Controllers
                 cfg.CreateMap<Candidate, CandidateModel>();
                 
             });
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult AddComment(string Comment, int PositionId )
+        {
+            CommentHelper.Create(new Comment {
+                CandidateId = null,
+                Content = Comment,
+                User = UserHelper.GetUserByEmail(User.Identity.Name),
+                PositionId = PositionId
+            });
+
+            return RedirectToAction("Details", "Positions", new { id = PositionId });
         }
 
         // GET: Positions
@@ -69,6 +86,8 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
+            position.Comments = CommentHelper.GetAll(id.Value).OrderByDescending(x=>x.Date).ToList().GetRange(0,10);
+            
             if (position == null || position.Status == PositionStatus.Removed)
             {
                 return RedirectToAction("Index", "Dashboard");
