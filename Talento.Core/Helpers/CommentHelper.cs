@@ -20,7 +20,7 @@ namespace Talento.Core.Helpers
             CandidateHelper = candidateHelper;
         }
 
-        public void Create(Comment newComment)
+        public int Create(Comment newComment)
         {
             using (var tx = new TransactionScope(TransactionScopeOption.Required))
             {
@@ -52,8 +52,9 @@ namespace Talento.Core.Helpers
 
                 LogHelper.Add(CreateLog);
 
-                Db.SaveChanges();
+                int result = Db.SaveChanges();
                 tx.Complete();
+                return result;
             }
         }
 

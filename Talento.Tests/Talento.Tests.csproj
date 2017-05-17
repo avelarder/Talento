@@ -111,6 +111,7 @@
     <Compile Include="Controllers\PositionControllerTest.cs" />
     <Compile Include="Controllers\PositionLogsControllerTest.cs" />
     <Compile Include="Controllers\SettingsControllerTest.cs" />
+    <Compile Include="Helpers\CommentHelperTest.cs" />
     <Compile Include="Helpers\CandidateHelperTest.cs" />
     <Compile Include="Helpers\PositionHelperTest.cs" />
     <Compile Include="Helpers\PositionLogHelperTest.cs" />
@@ -123,6 +124,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
+    <Content Include="Resources\Tests\CommentHelperTestData.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Tests\PositionHelperTestData.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>

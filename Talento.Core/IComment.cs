@@ -6,7 +6,7 @@ namespace Talento.Core
 {
     public interface IComment
     {
-        void Create(Comment newComment);
+        int Create(Comment newComment);
         List<Comment> Get(int CandidateId, int PositionId);
         List<Comment> Get(int PositionId);
         List<Comment> GetAll(int PositionId);
