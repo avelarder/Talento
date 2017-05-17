@@ -345,12 +345,12 @@
     <Content Include="Views\Candidate\Create.cshtml" />
     <Content Include="Views\Candidate\Details.cshtml" />
     <Content Include="Views\Shared\_Background.cshtml" />
+    <Content Include="Views\ChangeImageProfile\ChangeImageProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Images\" />
     <Folder Include="Controllers\Filters\" />
-    <Folder Include="Views\ChangeImageProfile\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
