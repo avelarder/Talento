@@ -35,7 +35,7 @@
 <div class="pull-right">
     <div class="pull-left">
         <br />
-        <a href="@Url.Action("DownloadXl", "Dashboard", new { sortOrder = ViewBag.IdSortParm, currentFilter = ViewBag.CurrentFilter })" alt="Download list in excel">
+        <a href="@Url.Action("DownloadXl", "Dashboard", new { list = Model.Positions })" alt="Download list in excel">
             <i class="material-icons md-24 pull-left">file_download</i><span class="pull-left">Download list in excel</span>
         </a>
     </div>
