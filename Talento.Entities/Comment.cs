@@ -18,9 +18,15 @@ namespace Talento.Entities
         
         public int?CandidateId { get; set; }
 
+        [ForeignKey("CandidateId")]
+        public virtual Candidate Candidate { get; set; }
+
         [Required]
         public int PositionId { get; set; }
-        
+
+        [ForeignKey("PositionId")]
+        public virtual Position Position { get; set; }
+
         [Required]
         public DateTime Date { get; set; }
 

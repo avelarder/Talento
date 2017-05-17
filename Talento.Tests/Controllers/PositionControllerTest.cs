@@ -71,6 +71,7 @@ namespace Talento.Tests.Controllers
 
             Mock<ICandidate> mCandidate = new Mock<ICandidate>();
             Mock<IComment> mComment = new Mock<IComment>();
+            mComment.Setup(m => m.GetAll(5)).Returns(new List<Comment>());
             PositionsController controller = new PositionsController(position.Object, mUser.Object, mCandidate.Object, mComment.Object, utilAppSetting.Object);
 
             var result = controller.Details(5, 1);
@@ -118,6 +119,10 @@ namespace Talento.Tests.Controllers
             // create controller
             Mock<ICandidate> mCandidate = new Mock<ICandidate>();
             Mock<IComment> mComment = new Mock<IComment>();
+            
+            mComment.Setup(m => m.GetAll(1)).Returns(new List<Comment>());
+            mComment.Setup(m => m.GetAll(-1)).Returns(new List<Comment>());
+            
             PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object, mComment.Object,utilAppSetting.Object);
 
             var result = posController.Details(-1, 1);
@@ -210,6 +215,8 @@ namespace Talento.Tests.Controllers
             // create controller
             Mock<ICandidate> mCandidate = new Mock<ICandidate>();
             Mock<IComment> mComment = new Mock<IComment>();
+            mComment.Setup(m => m.GetAll(1)).Returns(new List<Comment>());
+            mComment.Setup(m => m.GetAll(5)).Returns(new List<Comment>());
             PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object,mComment.Object, utilAppSetting.Object);
 
             var result = posController.Details(5, 1);
@@ -407,6 +414,7 @@ namespace Talento.Tests.Controllers
 
             Mock<ICandidate> mCandidate = new Mock<ICandidate>();
             Mock<IComment> mComment = new Mock<IComment>();
+            mComment.Setup(m => m.GetAll(5)).Returns(new List<Comment>());
             PositionsController controller = new PositionsController(position.Object, mUser.Object, mCandidate.Object,mComment.Object, utilAppSetting.Object);
 
             var result = controller.Details(5, 1);

@@ -63,13 +63,7 @@ namespace Talento.Controllers
 
             return RedirectToAction("Details", "Positions", new { id = PositionId });
         }
-
-        // GET: Positions
-        public async Task<ActionResult> Index()
-        {
-            return View(await PositionHelper.GetAll());
-        }
-
+        
         // GET: Positions/Details/5
         [Authorize(Roles = "Admin, PM, TL, TAG, RMG")]
         public ActionResult Details(int? id, int? page)
@@ -86,7 +80,13 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
-            position.Comments = CommentHelper.GetAll(id.Value).OrderByDescending(x=>x.Date).ToList();
+            
+           if (position == null || position.Status == PositionStatus.Removed)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            position.Comments = CommentHelper.GetAll(id.Value).OrderByDescending(x => x.Date).ToList();
 
             if (position.Comments.Count > 0)
             {
@@ -100,10 +100,6 @@ namespace Talento.Controllers
                 position.Comments = new List<Comment>();
             }
 
-            if (position == null || position.Status == PositionStatus.Removed)
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
 
             // Pagination
             var pageSizeValue = ApplicationSettings.GetSetting("pagination", "pagesize"); // Setting Parameter

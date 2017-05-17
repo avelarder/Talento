@@ -32,16 +32,12 @@ namespace Talento.Controllers
         public ActionResult Index(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page = 1)
         {
             string Dashboard = "_PartialContent.cshtml";
-
             string test = ModelState.IsValid.ToString();
-
             List<Position> rawData = new List<Position>();
-
             if (User.IsInRole("Admin"))
             {
                 Dashboard = "_PartialContentAdmin.cshtml";
                 rawData = DashboardPagingHelper.GetAdminTable(sortOrder, FilterBy, currentFilter, searchString, page);
-
             }
             if (!User.IsInRole("Admin"))
             {
@@ -57,9 +53,7 @@ namespace Talento.Controllers
             ViewBag.CurrentFilter = searchString;
 
             ViewData["Dashboard"] = Dashboard;
-
             var temp = AutoMapper.Mapper.Map<List<PositionModel>>(rawData.ToList());
-
             foreach (PositionModel item in temp)
             {
                 switch (item.Status)

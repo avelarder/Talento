@@ -22,35 +22,37 @@ namespace Talento.Core.Helpers
 
         public int Create(Comment newComment)
         {
-            using (var tx = new TransactionScope(TransactionScopeOption.Required))
+            if(newComment.Content.Length <= 500)
             {
-                newComment.Date = DateTime.Now;
-                Position related = PositionHelper.Get(newComment.PositionId);
-                string logdescription;
-
-                if (newComment.CandidateId == null)
+                using (var tx = new TransactionScope(TransactionScopeOption.Required))
                 {
-                    logdescription = string.Format("Comment Created by {0} at {1}", newComment.User.Email, related.Title);
-                }
-                else
-                {
-                    logdescription = string.Format("Comment Created by {0} at {1} in {2}", newComment.User.Email, related.Title, CandidateHelper.Get(newComment.CandidateId.Value).Name);
-                }
+                    newComment.Date = DateTime.Now;
+                    Position related = PositionHelper.Get(newComment.PositionId);
+                    string logdescription;
 
-                Db.Comments.Add(newComment);
+                    if (newComment.CandidateId == null)
+                    {
+                        logdescription = string.Format("Comment Created by {0} at {1}", newComment.User.Email, related.Title);
+                    }
+                    else
+                    {
+                        logdescription = string.Format("Comment Created by {0} at {1} in {2}", newComment.User.Email, related.Title, CandidateHelper.Get(newComment.CandidateId.Value).Name);
+                    }
 
-                Log CreateLog = new Log()
-                {
-                    Action = Entities.Action.Create,
-                    ActualStatus = related.Status,
-                    PreviousStatus = related.Status,
-                    Description = logdescription,
-                    Date = DateTime.Now,
-                    ApplicationUser_Id = newComment.UserId,
-                    Position = related
-                };
+                    Db.Comments.Add(newComment);
 
-                LogHelper.Add(CreateLog);
+                    Log CreateLog = new Log()
+                    {
+                        Action = Entities.Action.Create,
+                        ActualStatus = related.Status,
+                        PreviousStatus = related.Status,
+                        Description = logdescription,
+                        Date = DateTime.Now,
+                        ApplicationUser_Id = newComment.UserId,
+                        Position = related
+                    };
+
+                    LogHelper.Add(CreateLog);
 
                 int result = Db.SaveChanges();
                 tx.Complete();
@@ -60,7 +62,7 @@ namespace Talento.Core.Helpers
 
         public List<Comment> Get(int CandidateId, int PositionId)
         {
-            return Db.Comments.Where(x => x.CandidateId.Equals(CandidateId) && x.PositionId.Equals(PositionId)).ToList();
+            return Db.Comments.Where(x => x.CandidateId == CandidateId && x.PositionId == PositionId).ToList();
         }
 
         public List<Comment> Get(int PositionId)

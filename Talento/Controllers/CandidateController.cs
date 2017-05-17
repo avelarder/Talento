@@ -20,9 +20,11 @@ namespace Talento.Controllers
         IPosition PositionHelper;
         ICustomUser UserHelper;
         IMessenger EmailManager;
+        IComment CommentHelper;
 
-        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPosition positionHelper, IMessenger emailManager)
+        public CandidateController(ICandidate candidateHelper, ICustomUser userHelper, IPosition positionHelper, IMessenger emailManager, IComment commentHelper)
         {
+            CommentHelper = commentHelper;
             EmailManager = emailManager;
             CandidateHelper = candidateHelper;
             UserHelper = userHelper;
@@ -66,10 +68,6 @@ namespace Talento.Controllers
             return File(ms.GetBuffer(), "application/octet-stream", "MailNotification.txt");
         }
         
-        public virtual bool IsStateValid()
-        {
-            return ModelState.IsValid;
-        }
         //GET: Edit Candidate
         [Authorize]
         public ActionResult Edit(int id, int positionId)
@@ -93,8 +91,6 @@ namespace Talento.Controllers
         }
 
         // POST: Candidate/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -132,12 +128,7 @@ namespace Talento.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "An error ocurred. Please contact system administrator.");
             }
         }
-        // GET: Candidate
-        public ActionResult Manage()
-        {
-            return PartialView();
-        }
-
+        
         [Authorize(Roles = "Admin, PM, TL, TAG, RMG")]
         public JsonResult ValidEmail(string emailCandidate, string positionId)
         {
@@ -222,7 +213,7 @@ namespace Talento.Controllers
             List<TechnicalInterview> comments = CandidateHelper.GetCandidateComments(aux.CandidateId);
             aux.isadmin = User.IsInRole("Admin");
             aux.PositionId = positionId;
-            aux.Comments = comments;
+            aux.Comments = CommentHelper.Get(id,positionId);
             aux.isopenposition = PositionHelper.Get(positionId).Status.Equals(PositionStatus.Open);
             return View(aux);
         }
@@ -267,6 +258,22 @@ namespace Talento.Controllers
             return Content(name);
         }
 
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        [Authorize(Roles = "PM, TL, TAG, RMG")]
+        public ActionResult AddComment(string Comment, int PositionId, int CandidateId)
+        {
+            CommentHelper.Create(new Comment
+            {
+                CandidateId = CandidateId,
+                Content = Comment,
+                User = UserHelper.GetUserByEmail(User.Identity.Name),
+                PositionId = PositionId
+            });
+
+            return RedirectToAction("Details", "Candidate", new { id = CandidateId, positionId = PositionId });
+        }
+        
         [HttpPost]
         [ChildAndAjaxActionOnly]
         [Authorize]
@@ -286,7 +293,6 @@ namespace Talento.Controllers
             {
                 throw;
             }
-        }
-        
+        }        
     }
 }
