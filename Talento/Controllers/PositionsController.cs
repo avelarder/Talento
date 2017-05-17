@@ -90,15 +90,24 @@ namespace Talento.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            ApplicationSettingModel applicationParameter = AutoMapper.Mapper.Map<ApplicationSettingModel>(SettingsHelper.GetByName("Comments"));
-
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
             position.Comments = CommentHelper.GetAll(id.Value).OrderByDescending(x => x.Date).ToList();
 
-            int commentCount = Convert.ToInt32(applicationParameter.ParameterValue);
-
             if (position.Comments.Count > 0)
             {
+                ApplicationSettingModel applicationParameter = AutoMapper.Mapper.Map<ApplicationSettingModel>(SettingsHelper.GetByName("Comments"));
+                int commentCount;
+
+                //get application settings value for comment count. If application parameter is not found, the default is 10
+                if (applicationParameter != null)
+                {
+                    commentCount = Convert.ToInt32(applicationParameter.ParameterValue);
+                }
+                else
+                {
+                    commentCount = 10;
+                }
+
                 if (position.Comments.Count > 10)
                 {
                     position.Comments = position.Comments.Take(commentCount).ToList();
