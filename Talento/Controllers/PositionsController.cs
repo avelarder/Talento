@@ -26,14 +26,16 @@ namespace Talento.Controllers
         ICandidate CandidateHelper;
         IComment CommentHelper;
         IUtilityApplicationSettings ApplicationSettings;
+        IApplicationSetting SettingsHelper;
 
-        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.ICandidate candidateHelper, IComment commentHelper, IUtilityApplicationSettings appSettings)
+        public PositionsController(Core.IPosition positionHelper, Core.ICustomUser userHelper, Core.ICandidate candidateHelper, IComment commentHelper, IUtilityApplicationSettings appSettings, IApplicationSetting settingsHelper)
         {
             UserHelper = userHelper;
             CommentHelper = commentHelper;
             PositionHelper = positionHelper;
             CandidateHelper = candidateHelper;
             ApplicationSettings = appSettings;
+            SettingsHelper = settingsHelper;
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -46,15 +48,18 @@ namespace Talento.Controllers
                 cfg.CreateMap<Log, PositionLogViewModel>();
                 cfg.CreateMap<EditPositionViewModel, Position>();
                 cfg.CreateMap<Candidate, CandidateModel>();
-                
+                cfg.CreateMap<ApplicationSetting, ApplicationSettingModel>()
+                    .ForMember(apsm => apsm.ApplicationSettingId, aps => aps.MapFrom(s => s.ApplicationSettingId));
+
             });
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult AddComment(string Comment, int PositionId )
+        public ActionResult AddComment(string Comment, int PositionId)
         {
-            CommentHelper.Create(new Comment {
+            CommentHelper.Create(new Comment
+            {
                 CandidateId = null,
                 Content = Comment,
                 User = UserHelper.GetUserByEmail(User.Identity.Name),
@@ -80,19 +85,26 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
-            
-           if (position == null || position.Status == PositionStatus.Removed)
-            {
-                return RedirectToAction("Index", "Dashboard");
-            }
-
             position.Comments = CommentHelper.GetAll(id.Value).OrderByDescending(x => x.Date).ToList();
 
             if (position.Comments.Count > 0)
             {
+                ApplicationSettingModel applicationParameter = AutoMapper.Mapper.Map<ApplicationSettingModel>(SettingsHelper.GetByName("Comments"));
+                int commentCount;
+
+                //get application settings value for comment count. If application parameter is not found, the default is 10
+                if (applicationParameter != null)
+                {
+                    commentCount = Convert.ToInt32(applicationParameter.ParameterValue);
+                }
+                else
+                {
+                    commentCount = 10;
+                }
+
                 if (position.Comments.Count > 10)
                 {
-                    position.Comments = position.Comments.Take(10).ToList();
+                    position.Comments = position.Comments.Take(commentCount).ToList();
                 }
             }
             else
@@ -155,9 +167,12 @@ namespace Talento.Controllers
         [ValidateJsonAntiForgeryToken]
         public JsonResult PMExists(string email)
         {
-            if(UserHelper.SearchPM(email).Equals(null)){
+            if (UserHelper.SearchPM(email).Equals(null))
+            {
                 return null;
-            }else{
+            }
+            else
+            {
                 return Json(true);
             }
         }

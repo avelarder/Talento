@@ -46,6 +46,7 @@ namespace Talento.Models
         public string Description { get; set; }
 
         [Required]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CreationDate { get; set; }
 
         [Required(ErrorMessage = "Area is required")]
@@ -110,6 +111,7 @@ namespace Talento.Models
         public string Description { get; set; }
 
         [Required]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime CreationDate { get; set; }
 
         [Required(ErrorMessage = "Area is required")]
@@ -156,6 +158,7 @@ namespace Talento.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Date is required")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime Date { get; set; }
 
         public string ApplicationUser_Id { get; set; }
