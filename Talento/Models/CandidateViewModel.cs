@@ -39,7 +39,7 @@ namespace Talento.Models
 
         public IList<PositionCandidates> PositionCandidates { get; set; }
 
-        public List<TechnicalInterview> Comments { get; set; }
+        public List<Comment> Comments { get; set; }
 
         public bool isadmin { get; set; }
 

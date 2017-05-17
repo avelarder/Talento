@@ -141,6 +141,9 @@
             var candidateid = 0;
             window.onload = function () {
                 (function ($) {
+
+                    $("#buttoncollapse").click();
+
                     // Delte Candidate
                     var $deleteC = $(".delete-candidate");
                     var $buttonDeleteC = $("#delete-candidate-button");
@@ -203,6 +206,22 @@
                         .addClass("field-validation-valid")
                         .empty();
                 }
+
+
+                $(document).on('input propertychange', "textarea[name='Comment']", function () {
+                    if ($('#Comment').val().length <= 500) {
+                        $("#charsleft").html((500 - $('#Comment').val().length) + " characters left.");
+                    } else {
+                        $("#charsleft").html("Your comment is too long!");
+                    }
+                });
+
+                $("#newcommentform").on("submit", function () {
+                    if ($('#Comment').val().length < 1 || $('#Comment').val().length > 500) {
+                        alertify.error('<b>The comment must have between 1 and 500 characters</b>');
+                        return false;
+                    }
+                })
 
                 // Candidate Status Update
                 var $selectCandidateStatus = $(".select-candidate-status");
@@ -391,12 +410,12 @@
     <br />
     <div id="comments" class="row">
         <h4 class="panel-title">
-            <a data-toggle="collapse" href="#collapse">Comments</a>
+            <a id="buttoncollapse" data-toggle="collapse" href="#collapse">Comments</a>
             <br />
         </h4>
         <br />
-        <div id="collapse" class="panel-collapse">
-            <form action="/Positions/AddComment" method="post">
+        <div id="collapse" class="panel-collapse collapse">
+            <form id="newcommentform" action="/Positions/AddComment" method="post">
                 @Html.HiddenFor(x=>x.PositionId)
                 <div class="col-md-8">
                     <div class="panel panel-white post panel-shadow">
@@ -407,7 +426,7 @@
                             </div>
                             <div class="pull-left meta">
                                 <div class="title h5">
-                                    <a href="#"><b>@User.Identity.Name</b></a>
+                                    <span><b>@User.Identity.Name</b></span>
                                 </div>
                                 <h6 class="text-muted time">New Comment</h6>
                             </div>
@@ -416,6 +435,7 @@
                             <textarea id="Comment" name="Comment" style="width:100%;resize: none;"></textarea>
                             @Html.AntiForgeryToken()
                             <br />
+                            <span style="position:relative;float:left;margin-left:20px;margin-top:10px;color:gray" id="charsleft">500  characters left.</span>
                             <input type="submit" value="Add" class="btn-modal btn btn-primary pmd-ripple-effect btn-primary pmd-z-depth" style="width:20px; margin-top:10px;float:right" />
                         </div>
                     </div>
@@ -436,8 +456,15 @@
                                     </div>
                                     <div class="pull-left meta">
                                         <div class="title h5">
-                                            <a href="#"><b>@x.User.Email</b></a>
-                                            made a comment.
+                                            <span><b>@x.User.Email</b></span>
+                                            @if (x.CandidateId != null)
+                                            {
+                                                <span>made a comment in @x.Candidate.Name.</span>
+                                            }
+                                            else
+                                            {
+                                                <span>made a comment.</span>
+                                            }
                                         </div>
                                         <h6 class="text-muted time">@x.Date.ToLongDateString() - @x.Date.ToShortTimeString()</h6>
                                     </div>
