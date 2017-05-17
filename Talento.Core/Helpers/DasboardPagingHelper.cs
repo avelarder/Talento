@@ -21,8 +21,6 @@ namespace Talento.Core.Helpers
         Excel.Worksheet xlSheet;
         object misValue = System.Reflection.Missing.Value;
         Excel.Range xlCellrange;
-        
-        List<Position> ListToExport = new List<Position>();
 
         public List<Position> GetAdminTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
         {
@@ -193,12 +191,11 @@ namespace Talento.Core.Helpers
                     query = query.OrderByDescending(p => p.CreationDate);
                     break;
             }
-            ListToExport = query.ToList();
             int pageNumber = (page ?? 1);
             return query.ToList();
         }
 
-        public string CreateXl()
+        public string CreateXl(List<Position> ListToExport)
         {
             try
             {
@@ -219,8 +216,6 @@ namespace Talento.Core.Helpers
                 xlSheet.Cells[1, 10] = "Comments";
                 int count = 2;
                 int OpenDays = 0;
-                string[] candidates;
-                List<string> candlist = new List<string>();
                 foreach (Position p in ListToExport)
                 {
                     xlSheet.Cells[count, 1] = p.Area;
@@ -243,13 +238,14 @@ namespace Talento.Core.Helpers
                             break;
                     }
                     xlSheet.Cells[count, 8] = OpenDays.ToString();
+                    int count2 = 0;
+                    string[] candidates = new string[p.PositionCandidates.Count];
                     foreach(PositionCandidates pc in p.PositionCandidates)
                     {
-                        candlist.Add(pc.Candidate.Name);
+                        candidates[count2] = pc.Candidate.Name;
+                        count2++;
                     }
-                    candidates = candlist.ToArray();
-                    xlSheet.Cells[count, 9] = candidates.Split(',');
-
+                    xlSheet.Cells[count, 9] = string.Join(", ", candidates);
                     count++;
                 }
                 xl.Cells.Select();

@@ -28,6 +28,7 @@ namespace Talento.Controllers
                     .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id));
             });
         }
+
         // GET: Dashboard
         public ActionResult Index(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page = 1)
         {
@@ -159,9 +160,10 @@ namespace Talento.Controllers
 
         [Authorize]
         [HttpGet]
-        public FileResult DownloadXl()
+        public FileResult DownloadXl(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page = 1)
         {
-            FileResult aux = new FilePathResult(DashboardPagingHelper.CreateXl(), "application/msexcel");
+            List<Position> ListToExport = DashboardPagingHelper.GetBasicTable(sortOrder, FilterBy, currentFilter, searchString, page);
+            FileResult aux = new FilePathResult(DashboardPagingHelper.CreateXl(ListToExport), "application/msexcel");
             aux.FileDownloadName = "OpenPositions.xls";
             return aux;
         }

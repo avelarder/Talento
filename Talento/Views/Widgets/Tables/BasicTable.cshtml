@@ -25,11 +25,21 @@
             <label for="searchString" class="control-label">Filter:</label>
             @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control" })
         </div>
+
         <div class="form-group">
             <br />
             <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Search" style="margin-top: 4px" />
         </div>
 }
+
+<div class="pull-right">
+    <div class="pull-left">
+        <br />
+        <a href="@Url.Action("DownloadXl", "Dashboard", new { sortOrder = ViewBag.IdSortParm, currentFilter = ViewBag.CurrentFilter })" alt="Download list in excel">
+            <i class="material-icons md-24 pull-left">file_download</i><span class="pull-left">Download list in excel</span>
+        </a>
+    </div>
+</div>
 
 <table class="table pmd-table table-hover table-striped display responsive nowrap" cellspacing="0" style="width:100%">
     <tr>
