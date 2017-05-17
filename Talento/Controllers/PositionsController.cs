@@ -86,8 +86,20 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
-            position.Comments = CommentHelper.GetAll(id.Value).OrderByDescending(x=>x.Date).ToList().GetRange(0,10);
-            
+            position.Comments = CommentHelper.GetAll(id.Value).OrderByDescending(x=>x.Date).ToList();
+
+            if (position.Comments.Count > 0)
+            {
+                if (position.Comments.Count > 10)
+                {
+                    position.Comments = position.Comments.Take(10).ToList();
+                }
+            }
+            else
+            {
+                position.Comments = new List<Comment>();
+            }
+
             if (position == null || position.Status == PositionStatus.Removed)
             {
                 return RedirectToAction("Index", "Dashboard");
