@@ -195,10 +195,19 @@ namespace Talento.Core.Helpers
             return query.ToList();
         }
 
-        public string CreateXl(List<Position> ListToExport)
+        public string CreateXl(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
         {
             try
             {
+                //Format the excel
+                xlCellrange = xlSheet.get_Range("a1");
+                xlCellrange.EntireRow.Font.Bold = true;
+                xlCellrange.EntireRow.Font.Size = 18;
+                xlCellrange.EntireRow.Font.Color = ConsoleColor.DarkGreen;
+                xlCellrange.Interior.Color = ConsoleColor.Gray;
+
+
+                List<Position> ListToExport = GetBasicTable(sortOrder, FilterBy, currentFilter, searchString, page);
                 xl.Visible = false;
                 xl.DisplayAlerts = false;
                 xlworkBook = xl.Workbooks.Add(misValue);

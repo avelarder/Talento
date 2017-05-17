@@ -26,7 +26,6 @@ namespace Talento.Controllers
             {
                 cfg.CreateMap<Position, PositionModel>()
                     .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id));
-                cfg.CreateMap<PositionModel, Position>();
             });
         }
 
@@ -161,12 +160,9 @@ namespace Talento.Controllers
 
         [Authorize]
         [HttpGet]
-        public FileResult DownloadXl(PositionsPagedList list)
+        public FileResult DownloadXl(string TableSortOrder, string TableFilterBy, string TableSearchString)
         {
-            //List<Position> ListToExport = DashboardPagingHelper.GetBasicTable(sortOrder, FilterBy, currentFilter, searchString, page);
-            List<Position> positions = new List<Position>();
-            list.Subset.ForEach(x => positions.Add(AutoMapper.Mapper.Map<Position>(x)));
-            FileResult aux = new FilePathResult(DashboardPagingHelper.CreateXl(positions), "application/msexcel");
+            FileResult aux = new FilePathResult(DashboardPagingHelper.CreateXl(TableSortOrder, TableFilterBy, null, TableSearchString, null), "application/msexcel");
             aux.FileDownloadName = "OpenPositions.xls";
             return aux;
         }
