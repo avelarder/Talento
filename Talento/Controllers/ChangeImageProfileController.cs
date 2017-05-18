@@ -28,10 +28,19 @@ namespace Talento.Controllers
         {
             try
             {
+                Image i;
+
                 ApplicationUser appUser = UserHelper.GetUserById(User.Identity.GetUserId());
 
-                MemoryStream ms = new MemoryStream(appUser.ImageProfile);
-                Image i = Image.FromStream(ms);
+                if (appUser.ImageProfile == null)
+                {
+                    i = Image.FromFile(Server.MapPath("~/Content/Images/iconuseralien.png"));
+                }
+                else
+                {
+                    MemoryStream ms = new MemoryStream(appUser.ImageProfile);
+                    i = Image.FromStream(ms);
+                }
 
                 return View(new ChangeImageProfileViewModel
                 {

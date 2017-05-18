@@ -16,11 +16,13 @@ namespace Talento.Controllers
     {
         ICustomPagingList DashboardPagingHelper;
         IUtilityApplicationSettings ApplicationSettings;
+        ICustomUser UserHelper;
 
-        public DashboardController(ICustomPagingList dashboardPagingHelper, IUtilityApplicationSettings appSettings)
+        public DashboardController(ICustomPagingList dashboardPagingHelper, IUtilityApplicationSettings appSettings, ICustomUser userHelper)
         {
             DashboardPagingHelper = dashboardPagingHelper;
             ApplicationSettings = appSettings;
+            UserHelper = userHelper;
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -95,6 +97,8 @@ namespace Talento.Controllers
             string role = GetRole();
             ViewData["Role"] = role;
             ViewData["RoleClass"] = role + "-role";
+
+            ViewData["Image"] = UserHelper.GetUserByEmail(User.Identity.Name).ImageProfile;
 
             return PartialView("~/Views/Shared/Dashboard/_PartialTopNavigation.cshtml");
         }

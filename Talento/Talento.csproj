@@ -223,6 +223,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\iconuseralien.png" />
     <Content Include="Content\round-about.css" />
     <Content Include="Scripts\covervid.min.js" />
     <Content Include="Content\mdb.min.css" />
@@ -347,12 +348,11 @@
     <Content Include="Views\Candidate\Details.cshtml" />
     <Content Include="Views\Shared\_Background.cshtml" />
     <Content Include="Views\Dashboard\AboutUs.cshtml" />
+    <Content Include="Views\ChangeImageProfile\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Images\" />
     <Folder Include="Controllers\Filters\" />
-    <Folder Include="Views\ChangeImageProfile\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
