@@ -18,12 +18,7 @@ namespace Talento.Core.Helpers
         {
             CommentHelper = commentHelper;
         }
-        Excel.Application xl = new Excel.Application();
-        Excel.Workbook xlworkBook;
-        Excel.Worksheet xlSheet;
-        object misValue = System.Reflection.Missing.Value;
-        Excel.Range xlCellrange;
-
+        
         public List<Position> GetAdminTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
         {
             //Keeping paging and sorting
@@ -201,6 +196,12 @@ namespace Talento.Core.Helpers
         {
             try
             {
+                Excel.Application xl = new Excel.Application();
+                Excel.Workbook xlworkBook;
+                Excel.Worksheet xlSheet;
+                object misValue = System.Reflection.Missing.Value;
+                Excel.Range xlCellrange;
+
                 List<Position> ListToExport = GetBasicTable(sortOrder, FilterBy, currentFilter, searchString, page);
                 xl.Visible = false;
                 xl.DisplayAlerts = false;
@@ -256,18 +257,23 @@ namespace Talento.Core.Helpers
                     string[] comments = new string[allComments.Count];
                     foreach (Comment c in allComments)
                     {
-                        comments[count3] = c.Content;
+                        comments[count3] = c.User.UserName + ", " + c.Date.ToString() + ", " +c.Content;
                         count3++;
                     }
-                    xlSheet.Cells[count, 10] = string.Join(", ", comments);
+                    xlSheet.Cells[count, 10] = comments.Split('\n');
                     count++;
                 }
+                string finalcell = (ListToExport.Count + 1).ToString(); 
+                Excel.Range formatRange;
+                formatRange = xlSheet.get_Range("A1", "J"+finalcell);
+                formatRange.BorderAround(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlMedium, 
+                                Excel.XlColorIndex.xlColorIndexAutomatic, Excel.XlColorIndex.xlColorIndexAutomatic);
 
-                //xlCellrange = xlSheet.get_Range("a1");
-                //xlCellrange.EntireRow.Font.Bold = true;
-                //xlCellrange.EntireRow.Font.Size = 18;
-                //xlCellrange.EntireRow.Font.Color = ConsoleColor.DarkGreen;
-                //xlCellrange.Interior.Color = ConsoleColor.Gray;
+                xlCellrange = xlSheet.get_Range("a1","j1");
+                xlCellrange.EntireRow.Font.Bold = true;
+                xlCellrange.EntireRow.Font.Size = 11;
+                xlCellrange.EntireRow.Font.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.White);
+                xlCellrange.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Blue);
 
                 xl.Cells.Select();
                 xl.Cells.EntireColumn.AutoFit();
