@@ -18,12 +18,7 @@ namespace Talento.Core.Helpers
         {
             CommentHelper = commentHelper;
         }
-        Excel.Application xl = new Excel.Application();
-        Excel.Workbook xlworkBook;
-        Excel.Worksheet xlSheet;
-        object misValue = System.Reflection.Missing.Value;
-        Excel.Range xlCellrange;
-
+        
         public List<Position> GetAdminTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
         {
             //Keeping paging and sorting
@@ -201,6 +196,12 @@ namespace Talento.Core.Helpers
         {
             try
             {
+                Excel.Application xl = new Excel.Application();
+                Excel.Workbook xlworkBook;
+                Excel.Worksheet xlSheet;
+                object misValue = System.Reflection.Missing.Value;
+                Excel.Range xlCellrange;
+
                 List<Position> ListToExport = GetBasicTable(sortOrder, FilterBy, currentFilter, searchString, page);
                 xl.Visible = false;
                 xl.DisplayAlerts = false;
@@ -256,7 +257,7 @@ namespace Talento.Core.Helpers
                     string[] comments = new string[allComments.Count];
                     foreach (Comment c in allComments)
                     {
-                        comments[count3] = c.Content;
+                        comments[count3] = c.User.UserName + c.Date.ToString() + c.Content;
                         count3++;
                     }
                     xlSheet.Cells[count, 10] = string.Join(", ", comments);
