@@ -27,6 +27,7 @@ namespace Talento.Core.Migrations
                 c => new
                     {
                         Id = c.String(nullable: false, maxLength: 128),
+                        ImageProfile = c.Binary(storeType: "image"),
                         Email = c.String(maxLength: 256),
                         EmailConfirmed = c.Boolean(nullable: false),
                         PasswordHash = c.String(),

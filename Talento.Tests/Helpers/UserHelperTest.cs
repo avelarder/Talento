@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using Talento.Core.Data;
 using Talento.Core.Helpers;
+using System.IO;
 
 namespace Talento.Tests.Helpers
 {
@@ -224,5 +225,43 @@ namespace Talento.Tests.Helpers
             Assert.IsInstanceOfType(result, typeof(List<ApplicationUser>));
             Assert.AreEqual(allUsers.Count, result.Count);
         }
+
+        [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
+              "Resources\\Tests\\UserHelperTestData.xml",
+              "ChangeImageProfileUserHelperTest",
+              DataAccessMethod.Sequential)]
+        public void ChangeImageProfileUserHelperTest()
+        {
+            DataRow applicationUserData = TestContext.DataRow.GetChildRows("ChangeImageProfileUserHelperTest_ApplicationUser").Single();
+
+            byte[] originalImage = File.ReadAllBytes(Path.GetFullPath(@applicationUserData["OriginalImagePath"].ToString()));
+            byte[] editedImage = File.ReadAllBytes(Path.GetFullPath(@applicationUserData["EditedImagePath"].ToString()));
+
+            ApplicationUser user = new ApplicationUser
+            {
+                Id = applicationUserData["ApplicationUserId"].ToString(),
+                Email = applicationUserData["Email"].ToString(),
+                UserName = applicationUserData["Email"].ToString(),
+                ImageProfile = originalImage
+            };
+
+            var applicationUserSet = new Mock<DbSet<ApplicationUser>>().SetupData(new List<ApplicationUser> { user });
+
+            var context = new Mock<ApplicationDbContext>();
+            context.Setup(c => c.Users).Returns(applicationUserSet.Object);
+
+            //change image
+            user.ImageProfile = editedImage;
+
+            UserHelper userHelper = new UserHelper(context.Object);
+
+            var result = userHelper.ChangeImageProfile(user);
+
+            Assert.IsNotNull(result);
+            context.Verify(m => m.SaveChanges(), Times.AtLeastOnce());
+            Assert.AreEqual(user, applicationUserSet.Object.Where(x=>x.Id == user.Id).Single());
+        }
     }
 }
+

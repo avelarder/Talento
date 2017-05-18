@@ -66,6 +66,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Extensions" />
@@ -112,6 +113,7 @@
     <Compile Include="Controllers\PositionLogsControllerTest.cs" />
     <Compile Include="Controllers\SettingsControllerTest.cs" />
     <Compile Include="Helpers\CommentHelperTest.cs" />
+    <Compile Include="Controllers\ChangeImageProfileControllerTest.cs" />
     <Compile Include="Helpers\CandidateHelperTest.cs" />
     <Compile Include="Helpers\PositionHelperTest.cs" />
     <Compile Include="Helpers\PositionLogHelperTest.cs" />
@@ -126,6 +128,12 @@
     <Content Include="App.config" />
     <Content Include="Resources\Tests\CommentHelperTestData.xml">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\editedImage.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\originalImage.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Tests\PositionHelperTestData.xml">
