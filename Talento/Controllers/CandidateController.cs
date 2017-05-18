@@ -210,10 +210,9 @@ namespace Talento.Controllers
         public ActionResult Details(int id, int positionId)
         {
             CandidateModel aux = AutoMapper.Mapper.Map<CandidateModel>(CandidateHelper.Get(id));
-            List<TechnicalInterview> comments = CandidateHelper.GetCandidateComments(aux.CandidateId);
             aux.isadmin = User.IsInRole("Admin");
             aux.PositionId = positionId;
-            aux.Comments = CommentHelper.Get(id,positionId);
+            aux.Comments = CommentHelper.Get(id,positionId).OrderByDescending(x => x.Date).ToList();
             aux.isopenposition = PositionHelper.Get(positionId).Status.Equals(PositionStatus.Open);
             return View(aux);
         }

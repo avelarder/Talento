@@ -71,8 +71,9 @@ namespace Talento.Tests.Controllers
 
             Mock<ICandidate> mCandidate = new Mock<ICandidate>();
             Mock<IComment> mComment = new Mock<IComment>();
+            Mock<IApplicationSetting> msetting= new Mock<IApplicationSetting>();
             mComment.Setup(m => m.GetAll(5)).Returns(new List<Comment>());
-            PositionsController controller = new PositionsController(position.Object, mUser.Object, mCandidate.Object, mComment.Object, utilAppSetting.Object);
+            PositionsController controller = new PositionsController(position.Object, mUser.Object, mCandidate.Object, mComment.Object, utilAppSetting.Object, msetting.Object);
 
             var result = controller.Details(5, 1);
             var viewModel = (PositionModel)(((ViewResult)result).Model);
@@ -119,11 +120,12 @@ namespace Talento.Tests.Controllers
             // create controller
             Mock<ICandidate> mCandidate = new Mock<ICandidate>();
             Mock<IComment> mComment = new Mock<IComment>();
-            
+            Mock<IApplicationSetting> msetting = new Mock<IApplicationSetting>();
+
             mComment.Setup(m => m.GetAll(1)).Returns(new List<Comment>());
             mComment.Setup(m => m.GetAll(-1)).Returns(new List<Comment>());
             
-            PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object, mComment.Object,utilAppSetting.Object);
+            PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object, mComment.Object,utilAppSetting.Object,msetting.Object);
 
             var result = posController.Details(-1, 1);
             Assert.IsNotNull(result);
@@ -216,9 +218,10 @@ namespace Talento.Tests.Controllers
             // create controller
             Mock<ICandidate> mCandidate = new Mock<ICandidate>();
             Mock<IComment> mComment = new Mock<IComment>();
+            Mock<IApplicationSetting> msetting = new Mock<IApplicationSetting>();
             mComment.Setup(m => m.GetAll(1)).Returns(new List<Comment>());
             mComment.Setup(m => m.GetAll(5)).Returns(new List<Comment>());
-            PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object,mComment.Object, utilAppSetting.Object);
+            PositionsController posController = new PositionsController(position.Object, user.Object, mCandidate.Object,mComment.Object, utilAppSetting.Object,msetting.Object);
 
             var result = posController.Details(5, 1);
             Assert.IsNotNull(result);
@@ -416,9 +419,10 @@ namespace Talento.Tests.Controllers
             });
 
             Mock<ICandidate> mCandidate = new Mock<ICandidate>();
+            Mock<IApplicationSetting> msetting = new Mock<IApplicationSetting>();
             Mock<IComment> mComment = new Mock<IComment>();
             mComment.Setup(m => m.GetAll(5)).Returns(new List<Comment>());
-            PositionsController controller = new PositionsController(position.Object, mUser.Object, mCandidate.Object,mComment.Object, utilAppSetting.Object);
+            PositionsController controller = new PositionsController(position.Object, mUser.Object, mCandidate.Object,mComment.Object, utilAppSetting.Object,msetting.Object);
 
             var result = controller.Details(5, 1);
 

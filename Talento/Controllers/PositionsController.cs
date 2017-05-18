@@ -85,33 +85,41 @@ namespace Talento.Controllers
             }
 
             PositionModel position = AutoMapper.Mapper.Map<PositionModel>(PositionHelper.Get(id.Value));
-            position.Comments = CommentHelper.GetAll(id.Value).OrderByDescending(x => x.Date).ToList();
 
-            if (position.Comments.Count > 0)
+            if (position == null)
             {
-                ApplicationSettingModel applicationParameter = AutoMapper.Mapper.Map<ApplicationSettingModel>(SettingsHelper.GetByName("Comments"));
-                int commentCount;
-
-                //get application settings value for comment count. If application parameter is not found, the default is 10
-                if (applicationParameter != null)
-                {
-                    commentCount = Convert.ToInt32(applicationParameter.ParameterValue);
-                }
-                else
-                {
-                    commentCount = 10;
-                }
-
-                if (position.Comments.Count > 10)
-                {
-                    position.Comments = position.Comments.Take(commentCount).ToList();
-                }
+                return RedirectToAction("Index", "Dashboard");
             }
             else
             {
-                position.Comments = new List<Comment>();
-            }
+                position.Comments = CommentHelper.GetAll(id.Value).OrderByDescending(x => x.Date).ToList();
 
+                if (position.Comments.Count > 0)
+                {
+                    ApplicationSettingModel applicationParameter = AutoMapper.Mapper.Map<ApplicationSettingModel>(SettingsHelper.GetByName("Comments"));
+                    int commentCount;
+
+                    //get application settings value for comment count. If application parameter is not found, the default is 10
+                    if (applicationParameter != null)
+                    {
+                        commentCount = Convert.ToInt32(applicationParameter.ParameterValue);
+                    }
+                    else
+                    {
+                        commentCount = 10;
+                    }
+
+                    if (position.Comments.Count > 10)
+                    {
+                        position.Comments = position.Comments.Take(commentCount).ToList();
+                    }
+                }
+                else
+                {
+                    position.Comments = new List<Comment>();
+                }
+
+            }
 
             // Pagination
             var pageSizeValue = ApplicationSettings.GetSetting("pagination", "pagesize"); // Setting Parameter
