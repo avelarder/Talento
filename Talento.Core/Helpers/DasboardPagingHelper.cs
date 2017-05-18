@@ -13,8 +13,10 @@ namespace Talento.Core.Helpers
 {
     public class DashboardPagingHelper : BaseHelper, ICustomPagingList
     {
-        public DashboardPagingHelper(Talento.Core.Data.ApplicationDbContext _db) : base(_db)
+        IComment CommentHelper;
+        public DashboardPagingHelper(Talento.Core.Data.ApplicationDbContext _db, IComment commentHelper) : base(_db)
         {
+            CommentHelper = commentHelper;
         }
         Excel.Application xl = new Excel.Application();
         Excel.Workbook xlworkBook;
@@ -199,14 +201,6 @@ namespace Talento.Core.Helpers
         {
             try
             {
-                //Format the excel
-                xlCellrange = xlSheet.get_Range("a1");
-                xlCellrange.EntireRow.Font.Bold = true;
-                xlCellrange.EntireRow.Font.Size = 18;
-                xlCellrange.EntireRow.Font.Color = ConsoleColor.DarkGreen;
-                xlCellrange.Interior.Color = ConsoleColor.Gray;
-
-
                 List<Position> ListToExport = GetBasicTable(sortOrder, FilterBy, currentFilter, searchString, page);
                 xl.Visible = false;
                 xl.DisplayAlerts = false;
@@ -257,6 +251,15 @@ namespace Talento.Core.Helpers
                         count2++;
                     }
                     xlSheet.Cells[count, 9] = string.Join(", ", candidates);
+                    int count3 = 0;
+                    List<Comment> allComments = CommentHelper.GetAll(p.PositionId);
+                    string[] comments = new string[allComments.Count];
+                    foreach (Comment c in allComments)
+                    {
+                        comments[count3] = c.Content;
+                        count3++;
+                    }
+                    xlSheet.Cells[count, 10] = string.Join(", ", comments);
                     count++;
                 }
 
