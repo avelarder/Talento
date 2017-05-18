@@ -150,5 +150,9 @@ namespace Talento.Controllers
             aux.FileDownloadName = "TiffTemplate.doc";
             return aux;
         }
+
+        public ActionResult AboutUs() {
+            return View();
+        }
     }
 }
