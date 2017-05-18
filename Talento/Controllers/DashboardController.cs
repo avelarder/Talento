@@ -16,11 +16,13 @@ namespace Talento.Controllers
     {
         ICustomPagingList DashboardPagingHelper;
         IUtilityApplicationSettings ApplicationSettings;
+        ICustomUser UserHelper;
 
-        public DashboardController(ICustomPagingList dashboardPagingHelper, IUtilityApplicationSettings appSettings)
+        public DashboardController(ICustomPagingList dashboardPagingHelper, IUtilityApplicationSettings appSettings, ICustomUser userHelper)
         {
             DashboardPagingHelper = dashboardPagingHelper;
             ApplicationSettings = appSettings;
+            UserHelper = userHelper;
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -32,16 +34,12 @@ namespace Talento.Controllers
         public ActionResult Index(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page = 1)
         {
             string Dashboard = "_PartialContent.cshtml";
-
             string test = ModelState.IsValid.ToString();
-
             List<Position> rawData = new List<Position>();
-
             if (User.IsInRole("Admin"))
             {
                 Dashboard = "_PartialContentAdmin.cshtml";
                 rawData = DashboardPagingHelper.GetAdminTable(sortOrder, FilterBy, currentFilter, searchString, page);
-
             }
             if (!User.IsInRole("Admin"))
             {
@@ -57,9 +55,7 @@ namespace Talento.Controllers
             ViewBag.CurrentFilter = searchString;
 
             ViewData["Dashboard"] = Dashboard;
-
             var temp = AutoMapper.Mapper.Map<List<PositionModel>>(rawData.ToList());
-
             foreach (PositionModel item in temp)
             {
                 switch (item.Status)
@@ -101,6 +97,8 @@ namespace Talento.Controllers
             string role = GetRole();
             ViewData["Role"] = role;
             ViewData["RoleClass"] = role + "-role";
+
+            ViewData["Image"] = UserHelper.GetUserByEmail(User.Identity.Name).ImageProfile;
 
             return PartialView("~/Views/Shared/Dashboard/_PartialTopNavigation.cshtml");
         }
@@ -155,6 +153,10 @@ namespace Talento.Controllers
             FileResult aux = new FilePathResult("~/Content/Files/Template_TIFF.doc", "application/msword");
             aux.FileDownloadName = "TiffTemplate.doc";
             return aux;
+        }
+
+        public ActionResult AboutUs() {
+            return View();
         }
     }
 }

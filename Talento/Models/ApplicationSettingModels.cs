@@ -26,6 +26,7 @@ namespace Talento.Models
         [DisplayName("Parameter Value")]
         public string ParameterValue { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? CreatedOn { get; set; }
 
         public string CreatedBy_Id { get; set; }

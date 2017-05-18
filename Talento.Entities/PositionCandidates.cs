@@ -20,6 +20,8 @@ namespace Talento.Entities
 
         [Required]
         public virtual PositionCandidatesStatus Status { get; set; }
+        
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 
     public enum PositionCandidatesStatus
