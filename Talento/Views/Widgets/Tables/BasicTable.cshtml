@@ -72,24 +72,22 @@
             @Html.ActionLink("Status", "Index", new { sortOrder = ViewBag.StatusSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
+            RGS ID
+        </th>
+        <th>
             Engagement Manager
-            @*@Html.ActionLink("EM", "Index", new { sortOrder = ViewBag.EMSortParm, currentFilter = ViewBag.CurrentFilter })*@
         </th>
         <th>
             Portfolio Manager
-            @*@Html.ActionLink("EM", "Index", new { sortOrder = ViewBag.EMSortParm, currentFilter = ViewBag.CurrentFilter })*@
         </th>
         <th>
             Area
-            @*@Html.ActionLink("Area", "Index", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter })*@
         </th>
         <th>
             Created By
-            @*@Html.ActionLink("Owner", "Index", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter })*@
         </th>
         <th>
             Open Days
-            @*@Html.ActionLink("Open Days", "Index", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter })*@
         </th>
         <th>
             Profile Options
@@ -99,16 +97,19 @@
     {
         <tr>
             <td>
-                @p.CreationDate
+                @p.CreationDate.ToString("dd/MM/yyyy")
             </td>
             <td>
                 @Html.ActionLink(@p.PositionId.ToString(), "Details", "Positions", new { id = p.PositionId }, null)
             </td>
             <td>
                 @Html.ActionLink(@p.Title.ToString(), "Details", "Positions", new { id = p.PositionId }, null)
-            </td>
+            </td>            
             <td>
                 @p.Status.ToString()
+            </td>
+            <td>
+                @p.RGS.ToString()
             </td>
             <td>
                 @p.EngagementManager

@@ -13,5 +13,6 @@ namespace Talento.Core
         ApplicationUser GetUserById(string id);
         ApplicationUser GetUserByEmail(string email);
         List<ApplicationUser>GetByRoles(List<string> roles);
+        int ChangeImageProfile(ApplicationUser user);
     }
 }

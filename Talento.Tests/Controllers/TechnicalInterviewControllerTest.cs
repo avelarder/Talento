@@ -22,6 +22,7 @@ namespace Talento.Tests.Controllers
         {
             var mocks = new MockRepository(MockBehavior.Default);
             Mock<ICandidate> mockCandidateHelper = mocks.Create<ICandidate>();
+            Mock<IComment> mockCommentHelper = mocks.Create<IComment>();
             Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
             Mock<IPosition> mockPositionHelper = mocks.Create<IPosition>();
             Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
@@ -108,7 +109,7 @@ namespace Talento.Tests.Controllers
             mockUserHelper.Setup(p => p.GetUserByEmail("pablo@example.com")).Returns(userTest);
             mockPositionHelper.Setup(p => p.Get(1)).Returns(positionTest);
             mockCandidateHelper.Setup(p => p.Get(1)).Returns(candidate);
-            TechnicalInterviewController controller = new TechnicalInterviewController(mockPositionHelper.Object, mockCandidateHelper.Object, mockUserHelper.Object)
+            TechnicalInterviewController controller = new TechnicalInterviewController(mockPositionHelper.Object, mockCandidateHelper.Object, mockUserHelper.Object, mockCommentHelper.Object)
             {
                 ControllerContext = mockContext.Object
             };
@@ -132,6 +133,7 @@ namespace Talento.Tests.Controllers
             Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
             Mock<IPosition> mockPositionHelper = mocks.Create<IPosition>();
             Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
+            Mock<IComment> mockCommentHelper = mocks.Create<IComment>();
             Mock<IMessenger> mockEmailManager = mocks.Create<IMessenger>();
             Mock<HttpContextBase> mockHttpcontext = mocks.Create<HttpContextBase>();
             var mockContext = new Mock<ControllerContext>();
@@ -227,7 +229,7 @@ namespace Talento.Tests.Controllers
             });
             mockPositionHelper.Setup(p => p.Get(1)).Returns(positionTest);
             mockCandidateHelper.Setup(p => p.Get(1)).Returns(candidate);
-            TechnicalInterviewController controller = new TechnicalInterviewController(mockPositionHelper.Object, mockCandidateHelper.Object, mockUserHelper.Object)
+            TechnicalInterviewController controller = new TechnicalInterviewController(mockPositionHelper.Object, mockCandidateHelper.Object, mockUserHelper.Object, mockCommentHelper.Object)
             {
                 ControllerContext = mockContext.Object
             };

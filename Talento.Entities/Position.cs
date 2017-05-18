@@ -45,9 +45,7 @@ namespace Talento.Entities
         [Required(ErrorMessage = "Status is required")]
         [DefaultValue("Open")]
         public PositionStatus Status { get; set; }
-
-        public List<Tag> Tags { get; set; }
-
+        
         public string ApplicationUser_Id { get; set; }
 
         [Required]
