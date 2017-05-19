@@ -138,7 +138,14 @@ namespace Talento.Controllers
             var onePageOfCandidatePositions = position.PositionCandidates.OrderByDescending(x => x.Candidate.CreatedOn).ToPagedList(pageNumber, pageSize); // will only contain 5 products max because of the pageSize
             ViewBag.page = pageNumber;
             ViewBag.onePageOfCandidatePositions = onePageOfCandidatePositions;
-            ViewData["Image"] = UserHelper.GetUserByEmail(User.Identity.Name).ImageProfile;
+            if (User != null)
+            {
+                if (User.Identity != null)
+                {
+                    ViewData["Image"] = UserHelper.GetUserByEmail(User.Identity.Name).ImageProfile;
+                }
+
+            }
             return View(position);
         }
 

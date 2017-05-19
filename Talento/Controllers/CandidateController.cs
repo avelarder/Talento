@@ -214,7 +214,13 @@ namespace Talento.Controllers
             aux.PositionId = positionId;
             aux.Comments = CommentHelper.Get(id,positionId).OrderByDescending(x => x.Date).ToList();
             aux.isopenposition = PositionHelper.Get(positionId).Status.Equals(PositionStatus.Open);
-            ViewData["Image"] = UserHelper.GetUserByEmail(User.Identity.Name).ImageProfile;
+            if (User != null)
+            {
+                if (User.Identity != null)
+                {
+                    ViewData["Image"] = UserHelper.GetUserByEmail(User.Identity.Name).ImageProfile;
+                }
+            }
             return View(aux);
         }
 
