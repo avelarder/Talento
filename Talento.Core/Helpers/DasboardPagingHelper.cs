@@ -104,6 +104,15 @@ namespace Talento.Core.Helpers
             return query.ToList();
         }
 
+        /// <summary>
+        /// Get a list of positions for a basic user. You can provide sorting and filtering.
+        /// </summary>
+        /// <param name="sortOrder"></param>
+        /// <param name="FilterBy"></param>
+        /// <param name="currentFilter"></param>
+        /// <param name="searchString"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public List<Position> GetBasicTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
         {
             //Keeping paging and sorting
@@ -177,11 +186,17 @@ namespace Talento.Core.Helpers
                 case "owner_desc":
                     query = query.OrderByDescending(p => p.Owner.UserName);
                     break;
-                case "Id":
+                case "Id": 
                     query = query.OrderBy(p => p.PositionId);
                     break;
                 case "id_desc":
                     query = query.OrderByDescending(p => p.PositionId);
+                    break;
+                case "RGS":
+                    query = query.OrderBy(p => p.RGS);
+                    break;
+                case "rgs_desc":
+                    query = query.OrderByDescending(p => p.RGS);
                     break;
 
                 default:  // Date ascending 
@@ -260,7 +275,7 @@ namespace Talento.Core.Helpers
                         comments[count3] = c.User.UserName + ", " + c.Date.ToString() + ", " +c.Content;
                         count3++;
                     }
-                    xlSheet.Cells[count, 10] = comments.Split('\n');
+                    xlSheet.Cells[count, 10] = comments.ToString();
                     xlSheet.Cells[count, 10].Style.WrapText = true; 
                     count++;
                 }

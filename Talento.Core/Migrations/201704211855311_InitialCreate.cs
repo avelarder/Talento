@@ -27,6 +27,7 @@ namespace Talento.Core.Migrations
                 c => new
                     {
                         Id = c.String(nullable: false, maxLength: 128),
+                        ImageProfile = c.Binary(storeType: "image"),
                         Email = c.String(maxLength: 256),
                         EmailConfirmed = c.Boolean(nullable: false),
                         PasswordHash = c.String(),
@@ -125,6 +126,27 @@ namespace Talento.Core.Migrations
                 .Index(t => t.CandidateID);
             
             CreateTable(
+                "dbo.Comments",
+                c => new
+                    {
+                        CommentId = c.Int(nullable: false, identity: true),
+                        Content = c.String(maxLength: 500),
+                        CandidateId = c.Int(),
+                        PositionId = c.Int(nullable: false),
+                        Date = c.DateTime(nullable: false),
+                        UserId = c.String(nullable: false, maxLength: 128),
+                    })
+                .PrimaryKey(t => t.CommentId)
+                .ForeignKey("dbo.Candidates", t => t.CandidateId)
+                .ForeignKey("dbo.Positions", t => t.PositionId)
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId)
+                .ForeignKey("dbo.PositionCandidates", t => new { t.PositionId, t.CandidateId })
+                .Index(t => t.CandidateId)
+                .Index(t => new { t.PositionId, t.CandidateId })
+                .Index(t => t.PositionId)
+                .Index(t => t.UserId);
+            
+            CreateTable(
                 "dbo.Positions",
                 c => new
                     {
@@ -178,17 +200,6 @@ namespace Talento.Core.Migrations
                 .Index(t => t.Position_PositionId);
             
             CreateTable(
-                "dbo.Tags",
-                c => new
-                    {
-                        Name = c.String(nullable: false, maxLength: 128),
-                        Position_PositionId = c.Int(),
-                    })
-                .PrimaryKey(t => t.Name)
-                .ForeignKey("dbo.Positions", t => t.Position_PositionId)
-                .Index(t => t.Position_PositionId);
-            
-            CreateTable(
                 "dbo.AspNetRoles",
                 c => new
                     {
@@ -207,7 +218,6 @@ namespace Talento.Core.Migrations
                         TechnicalInterviewId = c.Int(nullable: false, identity: true),
                         Date = c.DateTime(nullable: false),
                         IsAccepted = c.Boolean(nullable: false),
-                        Comment = c.String(maxLength: 500),
                         InterviewerId = c.String(nullable: false, maxLength: 10),
                         InterviewerName = c.String(nullable: false, maxLength: 50),
                         FeedbackFile_Id = c.Int(nullable: false),
@@ -227,7 +237,9 @@ namespace Talento.Core.Migrations
             DropForeignKey("dbo.TechnicalInterviews", new[] { "PositionCandidate_PositionID", "PositionCandidate_CandidateID" }, "dbo.PositionCandidates");
             DropForeignKey("dbo.TechnicalInterviews", "FeedbackFile_Id", "dbo.FileBlobs");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropForeignKey("dbo.Tags", "Position_PositionId", "dbo.Positions");
+            DropForeignKey("dbo.Comments", new[] { "PositionId", "CandidateId" }, "dbo.PositionCandidates");
+            DropForeignKey("dbo.Comments", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Comments", "PositionId", "dbo.Positions");
             DropForeignKey("dbo.PositionCandidates", "PositionID", "dbo.Positions");
             DropForeignKey("dbo.Positions", "PortfolioManager_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Positions", "ApplicationUser_Id", "dbo.AspNetUsers");
@@ -236,6 +248,7 @@ namespace Talento.Core.Migrations
             DropForeignKey("dbo.Positions", "LastOpenedBy_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Positions", "LastClosedBy_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Positions", "LastCancelledBy_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.Comments", "CandidateId", "dbo.Candidates");
             DropForeignKey("dbo.PositionCandidates", "CandidateID", "dbo.Candidates");
             DropForeignKey("dbo.FileBlobs", "Candidate_CandidateId", "dbo.Candidates");
             DropForeignKey("dbo.Candidates", "CreatedBy_Id", "dbo.AspNetUsers");
@@ -246,7 +259,6 @@ namespace Talento.Core.Migrations
             DropIndex("dbo.TechnicalInterviews", new[] { "PositionCandidate_PositionID", "PositionCandidate_CandidateID" });
             DropIndex("dbo.TechnicalInterviews", new[] { "FeedbackFile_Id" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
-            DropIndex("dbo.Tags", new[] { "Position_PositionId" });
             DropIndex("dbo.Logs", new[] { "Position_PositionId" });
             DropIndex("dbo.Logs", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.Positions", new[] { "LastClosedBy_Id" });
@@ -254,6 +266,10 @@ namespace Talento.Core.Migrations
             DropIndex("dbo.Positions", new[] { "LastOpenedBy_Id" });
             DropIndex("dbo.Positions", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.Positions", new[] { "PortfolioManager_Id" });
+            DropIndex("dbo.Comments", new[] { "UserId" });
+            DropIndex("dbo.Comments", new[] { "PositionId" });
+            DropIndex("dbo.Comments", new[] { "PositionId", "CandidateId" });
+            DropIndex("dbo.Comments", new[] { "CandidateId" });
             DropIndex("dbo.PositionCandidates", new[] { "CandidateID" });
             DropIndex("dbo.PositionCandidates", new[] { "PositionID" });
             DropIndex("dbo.FileBlobs", new[] { "Candidate_CandidateId" });
@@ -266,9 +282,9 @@ namespace Talento.Core.Migrations
             DropIndex("dbo.ApplicationSettings", new[] { "ApplicationUser_Id" });
             DropTable("dbo.TechnicalInterviews");
             DropTable("dbo.AspNetRoles");
-            DropTable("dbo.Tags");
             DropTable("dbo.Logs");
             DropTable("dbo.Positions");
+            DropTable("dbo.Comments");
             DropTable("dbo.PositionCandidates");
             DropTable("dbo.FileBlobs");
             DropTable("dbo.Candidates");

@@ -107,7 +107,7 @@ namespace Talento.Tests.Helpers
         }
 
         //This test was commented out because we were unable to integrate office library into continuous integration
-        #region Test for xml creator helper
+        #region Test for Excel creator helper
         //[TestMethod]
         //[DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
         //        "Resources\\Tests\\DashboardPaginHelperTestData.xml",
@@ -136,9 +136,9 @@ namespace Talento.Tests.Helpers
         //            Status = (PositionStatus)Enum.Parse(typeof(PositionStatus), r["Status"].ToString()),
         //            OpenStatus = (PositionOpenStatus)Enum.Parse(typeof(PositionOpenStatus), r["OpenStatus"].ToString()),
         //            PositionCandidates = new List<PositionCandidates>(),
-        //            LastOpenedDate=DateTime.Today,
-        //            LastClosedDate=DateTime.Today,
-        //            LastCancelledDate=DateTime.Today
+        //            LastOpenedDate = DateTime.Today,
+        //            LastClosedDate = DateTime.Today,
+        //            LastCancelledDate = DateTime.Today
         //        });
         //    }
 
@@ -182,6 +182,6 @@ namespace Talento.Tests.Helpers
         //    Assert.IsInstanceOfType(result, typeof(string));
         //}
 
-#endregion 
+        #endregion
     }
 }

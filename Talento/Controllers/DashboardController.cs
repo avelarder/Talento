@@ -53,6 +53,7 @@ namespace Talento.Controllers
             ViewBag.IdSortParm = sortOrder == "Id" ? "id_desc" : "Id";
             ViewBag.OwnerSortParm = sortOrder == "Owner" ? "owner_desc" : "Owner";
             ViewBag.EMSortParm = sortOrder == "EM" ? "em_desc" : "EM";
+            ViewBag.RGSSortParm = sortOrder == "RGS" ? "rgs_desc" : "RGS";
             ViewBag.CurrentFilter = searchString;
 
             ViewData["Dashboard"] = Dashboard;
