@@ -118,7 +118,7 @@ namespace Talento.Controllers
             };
 
             CandidateHelper.AddTechnicalInterview(newTechnicalInterview, UserHelper.GetUserByEmail(User.Identity.Name), model.PositionId, model.CandidateEmail);
-            CommentHelper.Create(new Comment { CandidateId = model.CandidateId, Content = model.Comment, PositionId = model.PositionId,User = UserHelper.GetUserByEmail(User.Identity.Name)});
+            CommentHelper.Create(new Comment { CandidateId = model.CandidateId, Content = "Technical Interview Comment: \""+model.Comment+"\" by " +model.InterviewerName+". \n" ,PositionId = model.PositionId,User = UserHelper.GetUserByEmail(User.Identity.Name)});
 
             if (model.Result)
             {

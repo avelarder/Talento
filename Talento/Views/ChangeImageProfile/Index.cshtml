@@ -9,19 +9,18 @@
 <div class="row">
     @{
         var imgSrc = "";
-        if (Model.profileImage == null)
+        if (Model != null)
         {
-            imgSrc = "/Content/Images/iconuseralien.png";
-        }
-        else
-        {
-
-
-            System.Drawing.ImageConverter imgCon = new System.Drawing.ImageConverter();
-            var base64 = Convert.ToBase64String((byte[])imgCon.ConvertTo(Model.profileImage, typeof(byte[])));
-            imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-            
-
+            if (Model.profileImage == null)
+            {
+                imgSrc = "/Content/Images/alien1.png";
+            }
+            else
+            {
+                System.Drawing.ImageConverter imgCon = new System.Drawing.ImageConverter();
+                var base64 = Convert.ToBase64String((byte[])imgCon.ConvertTo(Model.profileImage, typeof(byte[])));
+                imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            }
         }
     }
     <form action="ChangeProfileImage/ChangeProfileImage" method="post" enctype="multipart/form-data">
@@ -29,7 +28,7 @@
         <h3>Your image:</h3>
         <img id="displayImage" src="@imgSrc" width="128" height="128" />
         <br/>
-        <input style="margin-left:50px;" class="hide single-line valid" data-val="true" data-val-required="An Interview file is required." id="File" name="File" value="" type="file">
+        <input style="margin-left:50px;" class="hide single-line valid" data-val="true" data-val-required="An Interview file is required." id="File" name="File" value="" type="file" accept="image/x-png,image/gif,image/jpeg">
         <label for="File" style="margin-top:10px;">
             <i class="material-icons" style="cursor:pointer;">
                 description

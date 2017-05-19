@@ -13,6 +13,8 @@ using System.Net.Mail;
 using Talento.Entities;
 using System.Web.Security;
 using Talento.EmailManager;
+using Talento.Core;
+using System.Drawing;
 
 namespace Talento.Controllers
 {
@@ -23,16 +25,18 @@ namespace Talento.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private IMessenger _emailManager;
+        ICustomUser UserHelper;
 
         public AccountController()
         {
         }
         
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IMessenger emailManager)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IMessenger emailManager, ICustomUser userhelper)
         {
             UserManager = userManager;
             SignInManager = signInManager;
             _emailManager = emailManager;
+            UserHelper = userhelper;
         }
 
         public ApplicationSignInManager SignInManager
@@ -207,8 +211,19 @@ namespace Talento.Controllers
                     return View(model);
                 }
 
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                
+                 
+                Random rnd = new Random();
+                int dice = rnd.Next(1, 5);
+
+
+                MemoryStream ms = new MemoryStream();
+                Image img = Image.FromFile(Server.MapPath("/Content/Images/alien" + dice + ".png"));
+                img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, ImageProfile = ms.ToArray()};
                 var result = await UserManager.CreateAsync(user, model.Password);
+                
 
                 if (result.Succeeded)
                 {
@@ -237,8 +252,7 @@ namespace Talento.Controllers
                 }
                 AddErrors(result);
             }
-
-            // If we got this far, something failed, redisplay form
+            
             return View(model);
         }
 
