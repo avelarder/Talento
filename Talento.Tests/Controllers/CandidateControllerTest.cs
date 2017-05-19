@@ -178,7 +178,6 @@ namespace Talento.Tests.Controllers
             Mock<IComment> mockComment = mocks.Create<IComment>();
             Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
             Mock<IMessenger> mockEmailManager = mocks.Create<IMessenger>();
-            Mock<IComment> mCommentHelper = new Mock<IComment>();
             Mock<HttpContextBase> mockHttpcontext = mocks.Create<HttpContextBase>();
             var mockContext = new Mock<ControllerContext>();
             Mock<ApplicationUser> mockUser = mocks.Create<ApplicationUser>();
@@ -213,6 +212,7 @@ namespace Talento.Tests.Controllers
 
             mockCandidateHelper.Setup(x => x.Get(1)).Returns(aCandidate);
             mockPositionHelper.Setup(x => x.Get(1)).Returns(aPosition);
+            mockComment.Setup(x => x.Get(1,1)).Returns(new List<Comment>());
             CandidateController controller = new CandidateController(mockCandidateHelper.Object, mockUserHelper.Object,mockPositionHelper.Object, mockEmailManager.Object, mockComment.Object)
             {
                 ControllerContext = mockContext.Object

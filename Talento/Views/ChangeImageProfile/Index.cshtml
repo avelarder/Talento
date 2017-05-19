@@ -1,0 +1,71 @@
+﻿@model Talento.Models.ChangeImageProfileViewModel
+@{
+    ViewBag.Title = "Change Image Profile";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<h2>Change Your Image Profile</h2>
+
+<div class="row">
+    @{
+        var imgSrc = "";
+        if (Model.profileImage == null)
+        {
+            imgSrc = "/Content/Images/iconuseralien.png";
+        }
+        else
+        {
+
+
+            System.Drawing.ImageConverter imgCon = new System.Drawing.ImageConverter();
+            var base64 = Convert.ToBase64String((byte[])imgCon.ConvertTo(Model.profileImage, typeof(byte[])));
+            imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            
+
+        }
+    }
+    <form action="ChangeProfileImage/ChangeProfileImage" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <h3>Your image:</h3>
+        <img id="displayImage" src="@imgSrc" width="128" height="128" />
+        <br/>
+        <input style="margin-left:50px;" class="hide single-line valid" data-val="true" data-val-required="An Interview file is required." id="File" name="File" value="" type="file">
+        <label for="File" style="margin-top:10px;">
+            <i class="material-icons" style="cursor:pointer;">
+                description
+            </i>
+            <span style="position:relative; bottom:5px;" id="filename">Change image</span>
+        </label>
+        <br/>
+        <input type="submit" class="btn-modal btn btn-primary pmd-ripple-effect btn-primary pmd-z-depth" value="Confirm Changes"/>
+        <a class="btn pmd-btn-flat pmd-ripple-effect btn-default" href="/Dashboard/Index/">Back to Dashboard</a>
+    </form>
+</div>
+
+<script>
+    window.onload = function () {
+        (function ($) {
+
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#displayImage').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#File").change(function () {
+                readURL(this);
+            });
+
+            $('#File').on("change", function () {
+                var aux = $(this).val().split("\\");
+                $("#filename").html(aux[aux.length - 1]);
+            });
+
+        }(jQuery));
+    }
+</script>
