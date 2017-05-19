@@ -14,6 +14,11 @@ namespace Talento.Core.Helpers
 
         }
 
+        /// <summary>
+        /// Search for a user with role PM
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         public ApplicationUser SearchPM(string userName)
         {
             try
@@ -35,6 +40,11 @@ namespace Talento.Core.Helpers
             }
         }
 
+        /// <summary>
+        /// Get user by its Email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public ApplicationUser GetUserByEmail(string email)
         {
             try
@@ -47,6 +57,11 @@ namespace Talento.Core.Helpers
             }
         }
 
+        /// <summary>
+        /// Get user by its ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ApplicationUser GetUserById(string id)
         {
             try
@@ -59,6 +74,11 @@ namespace Talento.Core.Helpers
             }
         }
 
+        /// <summary>
+        /// Get a list of user by one or more roles
+        /// </summary>
+        /// <param name="roles"></param>
+        /// <returns></returns>
         public List<ApplicationUser> GetByRoles(List<string> roles)
         {
             try
@@ -76,6 +96,11 @@ namespace Talento.Core.Helpers
             }
         }
 
+        /// <summary>
+        /// Change image profile for one user.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public int ChangeImageProfile(ApplicationUser user)
         {
             try

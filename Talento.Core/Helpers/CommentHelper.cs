@@ -20,6 +20,11 @@ namespace Talento.Core.Helpers
             CandidateHelper = candidateHelper;
         }
 
+        /// <summary>
+        /// Create a new comment either for a position or a candidate within in a position.
+        /// </summary>
+        /// <param name="newComment"></param>
+        /// <returns></returns>
         public int Create(Comment newComment)
         {
             if (newComment.Content.Length <= 500)
@@ -64,16 +69,32 @@ namespace Talento.Core.Helpers
                 
         }
 
+        /// <summary>
+        /// Get a list of comments of a candidate within a position.
+        /// </summary>
+        /// <param name="CandidateId"></param>
+        /// <param name="PositionId"></param>
+        /// <returns></returns>
         public List<Comment> Get(int CandidateId, int PositionId)
         {
             return Db.Comments.Where(x => x.CandidateId == CandidateId && x.PositionId == PositionId).ToList();
         }
 
+        /// <summary>
+        /// get a list of comments related to a position. Candidate is not required.
+        /// </summary>
+        /// <param name="PositionId"></param>
+        /// <returns></returns>
         public List<Comment> Get(int PositionId)
         {
             return Db.Comments.Where(x => x.CandidateId.Equals(null) && x.PositionId.Equals(PositionId)).ToList();
         }
 
+        /// <summary>
+        /// get a list of all comments of a position.
+        /// </summary>
+        /// <param name="PositionId"></param>
+        /// <returns></returns>
         public List<Comment> GetAll(int PositionId)
         {
             return Db.Comments.Where(x => x.PositionId.Equals(PositionId)).ToList();

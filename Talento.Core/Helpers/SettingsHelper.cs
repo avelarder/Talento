@@ -20,24 +20,44 @@ namespace Talento.Core.Helpers
 
         }
 
+        /// <summary>
+        /// Get an ApplicationSetting by its name
+        /// </summary>
+        /// <param name="settingName"></param>
+        /// <returns></returns>
         public ApplicationSetting GetByName(string settingName)
         {
             var aS = Db.ApplicationSetting.FirstOrDefault(p => p.SettingName == settingName);
             return aS;
         }
 
+        /// <summary>
+        /// Get an ApplicationSetting by its Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ApplicationSetting GetById(int id)
         {
             var aS = Db.ApplicationSetting.FirstOrDefault(p => p.ApplicationSettingId == id);
             return aS;
         }
 
+        /// <summary>
+        /// Get a list of all ApplicationSettings
+        /// </summary>
+        /// <returns></returns>
         public List<ApplicationSetting> GetAll()
         {
             var settings = Db.ApplicationSetting.ToList();
             return settings;
         }
 
+        /// <summary>
+        /// Get a list of ApplicationSettings using pagination. 
+        /// </summary>
+        /// <param name="orderBy"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         public List<ApplicationSetting> GetPagination(string orderBy = "CreationDate", string filter = "")
         {
             try
@@ -114,6 +134,11 @@ namespace Talento.Core.Helpers
             }
         }
 
+        /// <summary>
+        /// Create a new applicationSetting
+        /// </summary>
+        /// <param name="aS"></param>
+        /// <returns></returns>
         public int Create(ApplicationSetting aS)
         {
             Db.ApplicationSetting.Add(aS);
@@ -121,11 +146,21 @@ namespace Talento.Core.Helpers
             return result;
         }
 
+        /// <summary>
+        /// Get a list of possible parameters by a prefix
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
         public List<string> GetParameters(string prefix)
         {
             return Db.ApplicationSetting.Where(s => s.SettingName.StartsWith(prefix)).Select(x => x.SettingName).Distinct().ToList();
         }
 
+        /// <summary>
+        /// Edit an ApplicationSetting
+        /// </summary>
+        /// <param name="pApplicationSetting"></param>
+        /// <returns></returns>
         public int Edit(ApplicationSetting pApplicationSetting)
         {
             try

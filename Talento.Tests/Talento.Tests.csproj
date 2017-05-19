@@ -129,6 +129,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
+    <Content Include="Resources\Tests\CommentHelperTestData.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\editedImage.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

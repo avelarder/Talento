@@ -21,6 +21,11 @@ namespace Talento.Core.Helpers
             LogHelper = logHelper;
         }
 
+        /// <summary>
+        /// Register a new candidate into a position.
+        /// </summary>
+        /// <param name="newCandidate"></param>
+        /// <returns></returns>
         public int Create(Candidate newCandidate)
         {
             try
@@ -62,6 +67,13 @@ namespace Talento.Core.Helpers
             }
         }
 
+        /// <summary>
+        /// Edit a candidate and its associated files
+        /// </summary>
+        /// <param name="editCandidate"></param>
+        /// <param name="files"></param>
+        /// <param name="currentUser"></param>
+        /// <returns></returns>
         public int Edit(Candidate editCandidate, HashSet<FileBlob> files, ApplicationUser currentUser)
         {
             try
@@ -102,6 +114,11 @@ namespace Talento.Core.Helpers
             }
         }
 
+        /// <summary>
+        /// Get a single candidate by its Id
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public Candidate Get(int Id)
         {
             try
@@ -115,6 +132,11 @@ namespace Talento.Core.Helpers
             }
         }
 
+        /// <summary>
+        /// Return all comments from all candidate's technical interviews
+        /// </summary>
+        /// <param name="CandidateId"></param>
+        /// <returns></returns>
         public List<TechnicalInterview> GetCandidateComments(int CandidateId)
         {
             try
@@ -127,6 +149,14 @@ namespace Talento.Core.Helpers
             }
         }
 
+        /// <summary>
+        /// Register a new technical interview for a candidate in a position.
+        /// </summary>
+        /// <param name="technicalInterview"></param>
+        /// <param name="currentUser"></param>
+        /// <param name="positionId"></param>
+        /// <param name="candidateEmail"></param>
+        /// <returns></returns>
         public int AddTechnicalInterview(TechnicalInterview technicalInterview, ApplicationUser currentUser, int positionId, string candidateEmail)
         {
             try
@@ -171,6 +201,12 @@ namespace Talento.Core.Helpers
             }
         }
 
+        /// <summary>
+        /// Change the status for a relation between a Candidate and a Position
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="newStatus"></param>
+        /// <param name="currentUser"></param>
         public void ChangeStatus(int Id, PositionCandidatesStatus newStatus, ApplicationUser currentUser)
         {
             try

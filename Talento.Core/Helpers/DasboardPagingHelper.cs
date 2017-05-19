@@ -104,6 +104,15 @@ namespace Talento.Core.Helpers
             return query.ToList();
         }
 
+        /// <summary>
+        /// Get a list of positions for a basic user. You can provide sorting and filtering.
+        /// </summary>
+        /// <param name="sortOrder"></param>
+        /// <param name="FilterBy"></param>
+        /// <param name="currentFilter"></param>
+        /// <param name="searchString"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public List<Position> GetBasicTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
         {
             //Keeping paging and sorting
