@@ -212,6 +212,7 @@
     <Compile Include="Models\DashboardModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\InterviewViewModel.cs" />
+    <Compile Include="Models\PositionsModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\CustomRoleProvider.cs" />
     <Compile Include="Startup.cs" />
@@ -223,7 +224,11 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\Images\iconuseralien.png" />
+    <Content Include="Content\Images\alien1.png" />
+    <Content Include="Content\Images\alien2.png" />
+    <Content Include="Content\Images\alien4.png" />
+    <Content Include="Content\Images\alien5.png" />
+    <Content Include="Content\Images\alien3.png" />
     <Content Include="Content\round-about.css" />
     <Content Include="Scripts\covervid.min.js" />
     <Content Include="Content\mdb.min.css" />

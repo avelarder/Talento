@@ -34,7 +34,7 @@ namespace Talento.Controllers
 
                 if (appUser.ImageProfile == null)
                 {
-                    i = Image.FromFile(Server.MapPath("~/Content/Images/iconuseralien.png"));
+                    i = Image.FromFile(Server.MapPath("~/Content/Images/alien1.png"));
                 }
                 else
                 {
@@ -46,6 +46,10 @@ namespace Talento.Controllers
                 {
                     profileImage = i
                 });
+            }
+            catch (ArgumentException)
+            {
+                return View();
             }
             catch (Exception)
             {
