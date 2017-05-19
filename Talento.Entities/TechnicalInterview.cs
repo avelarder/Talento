@@ -22,9 +22,6 @@ namespace Talento.Entities
         [Required]
         public bool IsAccepted { get; set; }
 
-        [StringLength(500, ErrorMessage = "Comment must have 500 characters maximum")]
-        public string Comment { get; set; }
-
         [Required]
         [StringLength(10, ErrorMessage = "Interviewer Id must have 10 characters maximum")]
         public string InterviewerId { get; set; }

@@ -196,6 +196,7 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CandidateController.cs" />
+    <Compile Include="Controllers\ChangeImageProfileController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\PositionsController.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationSettingModels.cs" />
     <Compile Include="Models\CandidateViewModel.cs" />
+    <Compile Include="Models\ChangeImageProfileViewModel.cs" />
     <Compile Include="Models\DashboardModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\InterviewViewModel.cs" />
@@ -221,6 +223,8 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\iconuseralien.png" />
+    <Content Include="Content\round-about.css" />
     <Content Include="Scripts\covervid.min.js" />
     <Content Include="Content\mdb.min.css" />
     <Content Include="Content\Media\pwiaobv.mp4" />
@@ -249,7 +253,6 @@
     <Content Include="Content\_scss\core\override.scss" />
     <Content Include="Content\_scss\core\variables.scss" />
     <Content Include="Content\_scss\page\login.scss" />
-    <Content Include="package.json" />
     <Content Include="Content\_scss\components\form.scss" />
     <Content Include="Content\_scss\page\dashboard.scss" />
     <Content Include="Content\_scss\components\navigation.scss" />
@@ -343,10 +346,11 @@
     <Content Include="Views\Candidate\Create.cshtml" />
     <Content Include="Views\Candidate\Details.cshtml" />
     <Content Include="Views\Shared\_Background.cshtml" />
+    <Content Include="Views\Dashboard\AboutUs.cshtml" />
+    <Content Include="Views\ChangeImageProfile\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Images\" />
     <Folder Include="Controllers\Filters\" />
   </ItemGroup>
   <ItemGroup>

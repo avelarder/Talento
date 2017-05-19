@@ -4,69 +4,144 @@
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
-<h2>Postulation of @Model.Name for @Model.PositionCandidates.FirstOrDefault(x=>x.PositionID.Equals(Model.PositionId)).Position.Title</h2>
+<h2>Postulation of @Model.Name for @Model.PositionCandidates.FirstOrDefault(x => x.PositionID.Equals(Model.PositionId)).Position.Title</h2>
 
 <div>
     <h4>Details: </h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <br />
-        <dt>
-            @Html.DisplayNameFor(model => model.Competencies)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Competencies)
-        </dd>
-        <br />
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <br />
-        <dt>
-            Created On:
-        </dt>
-
-        <dd>
-            @Model.CreatedOn.ToLongDateString()
-        </dd>
-        <br />
-        <dt>
-            Created by
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedBy.UserName)
-        </dd>
-        <br />
-        <dt>
-            @if (Model.IsTcsEmployee)
-            {
-                <span>Is TCS Employee</span>
-            }
-            else
-            {
-                <span>Is <u>not</u> TCS Employee</span>
-            }
-        </dt>
-        <br />
-    </dl>
-    
     <div class="row">
-    
+        <div class="col-lg-6">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+                <br />
+                <dt>
+                    @Html.DisplayNameFor(model => model.Competencies)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Competencies)
+                </dd>
+                <br />
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+                <br />
+                <dt>
+                    Created On:
+                </dt>
+
+                <dd>
+                    @Model.CreatedOn.ToLongDateString()
+                </dd>
+                <br />
+                <dt>
+                    Created by
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CreatedBy.UserName)
+                </dd>
+                <br />
+                <dt>
+                    @if (Model.IsTcsEmployee)
+                    {
+                        <span>Is TCS Employee</span>
+                    }
+                    else
+                    {
+                        <span>Is <u>not</u> TCS Employee</span>
+                    }
+                </dt>
+                <br />
+            </dl>
+        </div>
+        <div class="col-lg-6">
+            <br />
+            <div id="comments" class="row">
+                <h4 class="panel-title">
+                    <a id="buttoncollapse" data-toggle="collapse" href="#collapse">Comments</a>
+                    <br />
+                </h4>
+                <br />
+                <div id="collapse" class="panel-collapse collapse">
+                    @if (!Model.isadmin)
+                    {
+                        <form id="newcommentform" action="/Candidate/AddComment" method="post">
+                            @Html.HiddenFor(x => x.PositionId)
+                            @Html.HiddenFor(x => x.CandidateId)
+                            <div class="col-lg-11">
+                                <div class="panel panel-white post panel-shadow">
+                                    <div class="post-heading">
+                                        <div class="pull-left image">
+                                            <img src="https://cdn0.iconfinder.com/data/icons/alien-space/512/call_center_help_desk_reception_hotline_number_emergency_service_phone_operator_support_chat_alien-512.png"
+                                                 class="img-circle avatar" alt="user profile image" />
+                                        </div>
+                                        <div class="pull-left meta">
+                                            <div class="title h5">
+                                                <span><b>@User.Identity.Name</b></span>
+                                            </div>
+                                            <h6 class="text-muted time">New Comment</h6>
+                                        </div>
+                                    </div>
+                                    <div class="post-description" style="overflow:auto">
+                                        <br/>
+                                        <textarea id="Comment" name="Comment" style="width:100%;resize: none;"></textarea>
+                                        @Html.AntiForgeryToken()
+                                        <br />
+                                        <span style="position:relative;float:left;margin-left:20px;margin-top:10px;color:gray" id="charsleft">500  characters left.</span>
+                                        <input type="submit" value="Add" class="btn-modal btn btn-primary pmd-ripple-effect btn-primary pmd-z-depth" style="width:20px; margin-top:10px;float:right" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    }
+                    @if (Model.Comments != null)
+                    {
+                        if (Model.Comments.Count > 0)
+                        {
+                            foreach (Talento.Entities.Comment x in Model.Comments)
+                            {
+                                <div class="col-lg-11">
+                                    <div class="panel panel-white post panel-shadow">
+                                        <div class="post-heading">
+                                            <div class="pull-left image">
+                                                <img src="https://cdn0.iconfinder.com/data/icons/alien-space/512/call_center_help_desk_reception_hotline_number_emergency_service_phone_operator_support_chat_alien-512.png"
+                                                     class="img-circle avatar" alt="user profile image" />
+                                            </div>
+                                            <div class="pull-left meta">
+                                                <div class="title h5">
+                                                    <span><b>@x.User.Email</b></span>
+                                                    made a comment.
+                                                </div>
+                                                <h6 class="text-muted time">@x.Date.ToLongDateString() - @x.Date.ToShortTimeString()</h6>
+                                            </div>
+                                        </div>
+                                        <div class="post-description" style="overflow:auto">
+                                            <span>@x.Content</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
         <div class="list-group">
-            @foreach (Talento.Entities.FileBlob f in Model.PositionCandidates.Single(x=>x.CandidateID.Equals(Model.CandidateId) && x.PositionID.Equals(Model.PositionId)).Candidate.FileBlobs)
+            @foreach (Talento.Entities.FileBlob f in Model.PositionCandidates.Single(x => x.CandidateID.Equals(Model.CandidateId) && x.PositionID.Equals(Model.PositionId)).Candidate.FileBlobs)
             {
                 <a href="#" class="list-group-item">@f.FileName</a>
             }
@@ -74,176 +149,178 @@
 
     </div>
 
-        <h3>
-            Comments:
-        </h3>
-
-        <div id="comments" class="row">
-            @foreach (Talento.Entities.TechnicalInterview x in Model.Comments)
+    <br />
+    <div class="form-group col-md-8">
+        <div style="float:right">
+            @if (!Model.isadmin && Model.isopenposition)
             {
-                <div class="col-sm-8">
-                    <div class="panel panel-white post panel-shadow">
-                        <div class="post-heading">
-                            <div class="pull-left meta">
-                                <div class="title h5">
-                                    <a href="#">Interviewed by <b>@x.InterviewerName (@x.InterviewerId)</b></a>
-                                </div>
-                                <h6 class="text-muted time">Date: @x.Date.Value.ToLongDateString()</h6>
-                            </div>
-                        </div>
-                        <div class="post-description">
-                            <p>@x.Comment</p>
-                        </div>
-                    </div>
-                </div>
+                <a class="btn pmd-btn-flat pmd-ripple-effect btn-primary" href="/Candidate/Edit/@Model.CandidateId?positionId=@Model.PositionId">Edit </a>
             }
+            @Html.ActionLink("Back to Position ", "Details", "Positions", new { id = Model.PositionId }, new { @class = "btn pmd-btn-flat pmd-ripple-effect btn-primary" })
+        </div>
+        <div style="float:left">
+            @Html.ActionLink(" Back to Dashboard", "Index", "Dashboard")
         </div>
         <br />
-        <div class="form-group col-md-8">
-            <div style="float:right">
-                @if (!Model.isadmin && Model.isopenposition)
-                {
-                    <a class="btn pmd-btn-flat pmd-ripple-effect btn-primary" href="/Candidate/Edit/@Model.CandidateId?positionId=@Model.PositionId">Edit </a>
-                }
-                @Html.ActionLink("Back to Position ", "Details", "Positions", new { id = Model.PositionId }, new { @class = "btn pmd-btn-flat pmd-ripple-effect btn-primary" })
-            </div>
-            <div style="float:left">
-                @Html.ActionLink(" Back to Dashboard", "Index", "Dashboard")
-            </div>
-            <br />
-        </div>
     </div>
-        <br/>
+</div>
+<br />
 
-        <style>
+<script>
 
-            .panel-shadow {
-                box-shadow: rgba(0, 0, 0, 0.3) 7px 7px 7px;
+    window.onload = function () {
+        (function ($) {
+
+            $(document).on('input propertychange', "textarea[name='Comment']", function () {
+                if ($('#Comment').val().length <= 500) {
+                    $("#charsleft").html((500 - $('#Comment').val().length) + " characters left.");
+                } else {
+                    $("#charsleft").html("Your comment is too long!");
+                }
+            });
+
+            $("#newcommentform").on("submit", function () {
+                if ($('#Comment').val().length < 1 || $('#Comment').val().length > 500){
+                    alertify.error('<b>The comment must have between 1 and 500 characters</b>');
+                    return false;
+                }
+            })
+
+            $("#buttoncollapse").click();
+
+        }(jQuery));
+    }
+
+</script>
+
+<style>
+    .panel-shadow {
+        box-shadow: rgba(0, 0, 0, 0.3) 7px 7px 7px;
+    }
+
+    .panel-white {
+        border: 1px solid #dddddd;
+    }
+
+        .panel-white .panel-heading {
+            color: #333;
+            background-color: #fff;
+            border-color: #ddd;
+        }
+
+        .panel-white .panel-footer {
+            background-color: #fff;
+            border-color: #ddd;
+        }
+
+    .post .post-heading {
+        height: 95px;
+        padding: 20px 15px;
+    }
+
+        .post .post-heading .avatar {
+            width: 60px;
+            height: 60px;
+            display: block;
+            margin-right: 15px;
+        }
+
+        .post .post-heading .meta .title {
+            margin-bottom: 0;
+        }
+
+            .post .post-heading .meta .title a {
+                color: black;
             }
 
-            .panel-white {
-                border: 1px solid #dddddd;
+                .post .post-heading .meta .title a:hover {
+                    color: #aaaaaa;
+                }
+
+        .post .post-heading .meta .time {
+            margin-top: 8px;
+            color: #999;
+        }
+
+    .post .post-image .image {
+        width: 100%;
+        height: auto;
+    }
+
+    .post .post-description {
+        padding: 15px;
+        padding-top: 0px;
+        margin-top: -15px;
+    }
+
+        .post .post-description p {
+            font-size: 14px;
+        }
+
+        .post .post-description .stats {
+            margin-top: 20px;
+        }
+
+            .post .post-description .stats .stat-item {
+                display: inline-block;
+                margin-right: 15px;
             }
 
-                .panel-white .panel-heading {
-                    color: #333;
-                    background-color: #fff;
-                    border-color: #ddd;
+                .post .post-description .stats .stat-item .icon {
+                    margin-right: 8px;
                 }
 
-                .panel-white .panel-footer {
-                    background-color: #fff;
-                    border-color: #ddd;
-                }
+    .post .post-footer {
+        border-top: 1px solid #ddd;
+        padding: 15px;
+    }
 
-            .post .post-heading {
-                height: 95px;
-                padding: 20px 15px;
-            }
+        .post .post-footer .input-group-addon a {
+            color: #454545;
+        }
 
-                .post .post-heading .avatar {
-                    width: 60px;
-                    height: 60px;
-                    display: block;
-                    margin-right: 15px;
-                }
+        .post .post-footer .comments-list {
+            padding: 0;
+            margin-top: 20px;
+            list-style-type: none;
+        }
 
-                .post .post-heading .meta .title {
-                    margin-bottom: 0;
-                }
-
-                    .post .post-heading .meta .title a {
-                        color: black;
-                    }
-
-                        .post .post-heading .meta .title a:hover {
-                            color: #aaaaaa;
-                        }
-
-                .post .post-heading .meta .time {
-                    margin-top: 8px;
-                    color: #999;
-                }
-
-            .post .post-image .image {
+            .post .post-footer .comments-list .comment {
+                display: block;
                 width: 100%;
-                height: auto;
+                margin: 20px 0;
             }
 
-            .post .post-description {
-                padding: 15px;
-                padding-top:0px;
-                margin-top:-15px;
-            }
-
-                .post .post-description p {
-                    font-size: 14px;
+                .post .post-footer .comments-list .comment .avatar {
+                    width: 35px;
+                    height: 35px;
                 }
 
-                .post .post-description .stats {
-                    margin-top: 20px;
+                .post .post-footer .comments-list .comment .comment-heading {
+                    display: block;
+                    width: 100%;
                 }
 
-                    .post .post-description .stats .stat-item {
-                        display: inline-block;
-                        margin-right: 15px;
+                    .post .post-footer .comments-list .comment .comment-heading .user {
+                        font-size: 14px;
+                        font-weight: bold;
+                        display: inline;
+                        margin-top: 0;
+                        margin-right: 10px;
                     }
 
-                        .post .post-description .stats .stat-item .icon {
-                            margin-right: 8px;
-                        }
-
-            .post .post-footer {
-                border-top: 1px solid #ddd;
-                padding: 15px;
-            }
-
-                .post .post-footer .input-group-addon a {
-                    color: #454545;
-                }
-
-                .post .post-footer .comments-list {
-                    padding: 0;
-                    margin-top: 20px;
-                    list-style-type: none;
-                }
-
-                    .post .post-footer .comments-list .comment {
-                        display: block;
-                        width: 100%;
-                        margin: 20px 0;
+                    .post .post-footer .comments-list .comment .comment-heading .time {
+                        font-size: 12px;
+                        color: #aaa;
+                        margin-top: 0;
+                        display: inline;
                     }
 
-                        .post .post-footer .comments-list .comment .avatar {
-                            width: 35px;
-                            height: 35px;
-                        }
+                .post .post-footer .comments-list .comment .comment-body {
+                    margin-left: 50px;
+                }
 
-                        .post .post-footer .comments-list .comment .comment-heading {
-                            display: block;
-                            width: 100%;
-                        }
-
-                            .post .post-footer .comments-list .comment .comment-heading .user {
-                                font-size: 14px;
-                                font-weight: bold;
-                                display: inline;
-                                margin-top: 0;
-                                margin-right: 10px;
-                            }
-
-                            .post .post-footer .comments-list .comment .comment-heading .time {
-                                font-size: 12px;
-                                color: #aaa;
-                                margin-top: 0;
-                                display: inline;
-                            }
-
-                        .post .post-footer .comments-list .comment .comment-body {
-                            margin-left: 50px;
-                        }
-
-                        .post .post-footer .comments-list .comment > .comments-list {
-                            margin-left: 50px;
-                        }
-        </style>
+                .post .post-footer .comments-list .comment > .comments-list {
+                    margin-left: 50px;
+                }
+</style>

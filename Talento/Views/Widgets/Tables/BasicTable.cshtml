@@ -6,8 +6,8 @@
 }
 
 @Html.Partial("TIFFDownload")
-
-@using (Html.BeginForm("Index", "Dashboard", FormMethod.Get))
+@{string actionName = "Index"; }
+@using (Html.BeginForm(actionName, "Dashboard", FormMethod.Get))
 {
     <div class="form-group col-sm-2">
         <label for="FilterBy" class="control-label">Filter By:</label>
@@ -21,16 +21,42 @@
                 }, new { @class = "form-control" })
     </div>
 
-        <div class="form-group col-sm-4">
-            <label for="searchString" class="control-label">Filter:</label>
-            @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control" })
-        </div>
-        <div class="form-group">
+    <div class="form-group col-sm-4">
+        <label for="searchString" class="control-label">Filter:</label>
+        @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control" })
+    </div>
+        <div class="col-sm-2 form-group">
             <br />
             <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Search" style="margin-top: 4px" />
         </div>
 }
+<div class="col-sm-2 form-group">
+    @using (Html.BeginForm("DownloadXl", "Dashboard", FormMethod.Get, new { id = "formtest"}))
+    {
+        <input type="hidden" name="TableSortOrder" id="TableSortOrder" value="" />
+                <input type="hidden" name="TableFilterBy" id="TableFilterBy" value="" />
+                <input type="hidden" name="TableCurrentFilter" id="TableCurrentFilter" value="" />
+                <input type="hidden" name="TableSearchString" id="TableSearchString" value="" />
+        //<input type="hidden" name="TablePage" id="TablePage" value="" />
+        <input type="submit" class="btn pmd-ripple-effect btn-primary" value="ExporXl" style="margin-top: 4px" />
+    }
+</div>
 
+
+
+<script>
+
+    window.onload = function () {
+        (function ($) {
+            $("#formtest").submit(function () {
+                $("#TableSortOrder").val($("id_desc"));
+                $("#TableFilterBy").val($("#FilterBy").val());
+                $("#TableSearchString").val($("#searchString").val());
+            });
+        }(jQuery));
+    }
+
+</script>
 <table class="table pmd-table table-hover table-striped display responsive nowrap" cellspacing="0" style="width:100%">
     <tr>
         <th>
@@ -46,24 +72,22 @@
             @Html.ActionLink("Status", "Index", new { sortOrder = ViewBag.StatusSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
+            RGS ID
+        </th>
+        <th>
             Engagement Manager
-            @*@Html.ActionLink("EM", "Index", new { sortOrder = ViewBag.EMSortParm, currentFilter = ViewBag.CurrentFilter })*@
         </th>
         <th>
             Portfolio Manager
-            @*@Html.ActionLink("EM", "Index", new { sortOrder = ViewBag.EMSortParm, currentFilter = ViewBag.CurrentFilter })*@
         </th>
         <th>
             Area
-            @*@Html.ActionLink("Area", "Index", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter })*@
         </th>
         <th>
             Created By
-            @*@Html.ActionLink("Owner", "Index", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter })*@
         </th>
         <th>
             Open Days
-            @*@Html.ActionLink("Open Days", "Index", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter })*@
         </th>
         <th>
             Profile Options
@@ -73,16 +97,19 @@
     {
         <tr>
             <td>
-                @p.CreationDate
+                @p.CreationDate.ToString("dd/MM/yyyy")
             </td>
             <td>
                 @Html.ActionLink(@p.PositionId.ToString(), "Details", "Positions", new { id = p.PositionId }, null)
             </td>
             <td>
                 @Html.ActionLink(@p.Title.ToString(), "Details", "Positions", new { id = p.PositionId }, null)
-            </td>
+            </td>            
             <td>
                 @p.Status.ToString()
+            </td>
+            <td>
+                @p.RGS.ToString()
             </td>
             <td>
                 @p.EngagementManager
@@ -102,12 +129,11 @@
             <td>
                 @if (p.Status == Talento.Entities.PositionStatus.Open)
                 {
-                    <a 
-                           class="btn-modal btn btn-primary pmd-ripple-effect btn-primary pmd-z-depth"
-                           name="position-@p.PositionId"
-                           style="width:20px" href="/Candidate/Create/@p.PositionId">
+                    <a class="btn-modal btn btn-primary pmd-ripple-effect btn-primary pmd-z-depth"
+                       name="position-@p.PositionId"
+                       style="width:20px" href="/Candidate/Create/@p.PositionId">
                         Add
-                        </a>
+                    </a>
                 }
             </td>
         </tr>
@@ -115,3 +141,9 @@
 </table>
 
 @Html.PagedListPager(Model.Positions, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+<script>
+    function exportXl() {
+
+    }
+</script>
