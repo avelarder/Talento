@@ -156,7 +156,7 @@ namespace Talento.Controllers
         }
 
         public ActionResult AboutUs() {
-            return View();
+            return PartialView();
         }
     }
 }

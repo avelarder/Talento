@@ -223,6 +223,12 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\1377750.png" />
+    <Content Include="Content\Images\1377751.jpg" />
+    <Content Include="Content\Images\1377753.png" />
+    <Content Include="Content\Images\805634.png" />
+    <Content Include="Content\Images\bg1.png" />
+    <Content Include="Content\Images\error.jpg" />
     <Content Include="Content\Images\iconuseralien.png" />
     <Content Include="Content\round-about.css" />
     <Content Include="Scripts\covervid.min.js" />
