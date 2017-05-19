@@ -30,6 +30,7 @@ namespace Talento.Controllers
                     .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id));
             });
         }
+
         // GET: Dashboard
         public ActionResult Index(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page = 1)
         {
@@ -152,6 +153,15 @@ namespace Talento.Controllers
         {
             FileResult aux = new FilePathResult("~/Content/Files/Template_TIFF.doc", "application/msword");
             aux.FileDownloadName = "TiffTemplate.doc";
+            return aux;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public FileResult DownloadXl(string TableSortOrder, string TableFilterBy, string TableSearchString)
+        {
+            FileResult aux = new FilePathResult(DashboardPagingHelper.CreateXl(TableSortOrder, TableFilterBy, null, TableSearchString, null), "application/msexcel");
+            aux.FileDownloadName = "OpenPositions.xls";
             return aux;
         }
 

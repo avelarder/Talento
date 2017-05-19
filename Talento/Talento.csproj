@@ -253,7 +253,6 @@
     <Content Include="Content\_scss\core\override.scss" />
     <Content Include="Content\_scss\core\variables.scss" />
     <Content Include="Content\_scss\page\login.scss" />
-    <Content Include="package.json" />
     <Content Include="Content\_scss\components\form.scss" />
     <Content Include="Content\_scss\page\dashboard.scss" />
     <Content Include="Content\_scss\components\navigation.scss" />

@@ -6,8 +6,8 @@
 }
 
 @Html.Partial("TIFFDownload")
-
-@using (Html.BeginForm("Index", "Dashboard", FormMethod.Get))
+@{string actionName = "Index"; }
+@using (Html.BeginForm(actionName, "Dashboard", FormMethod.Get))
 {
     <div class="form-group col-sm-2">
         <label for="FilterBy" class="control-label">Filter By:</label>
@@ -25,12 +25,38 @@
         <label for="searchString" class="control-label">Filter:</label>
         @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control" })
     </div>
-        <div class="form-group">
+        <div class="col-sm-2 form-group">
             <br />
             <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Search" style="margin-top: 4px" />
         </div>
 }
+<div class="col-sm-2 form-group">
+    @using (Html.BeginForm("DownloadXl", "Dashboard", FormMethod.Get, new { id = "formtest"}))
+    {
+        <input type="hidden" name="TableSortOrder" id="TableSortOrder" value="" />
+                <input type="hidden" name="TableFilterBy" id="TableFilterBy" value="" />
+                <input type="hidden" name="TableCurrentFilter" id="TableCurrentFilter" value="" />
+                <input type="hidden" name="TableSearchString" id="TableSearchString" value="" />
+        //<input type="hidden" name="TablePage" id="TablePage" value="" />
+        <input type="submit" class="btn pmd-ripple-effect btn-primary" value="ExporXl" style="margin-top: 4px" />
+    }
+</div>
 
+
+
+<script>
+
+    window.onload = function () {
+        (function ($) {
+            $("#formtest").submit(function () {
+                $("#TableSortOrder").val($("id_desc"));
+                $("#TableFilterBy").val($("#FilterBy").val());
+                $("#TableSearchString").val($("#searchString").val());
+            });
+        }(jQuery));
+    }
+
+</script>
 <table class="table pmd-table table-hover table-striped display responsive nowrap" cellspacing="0" style="width:100%">
     <tr>
         <th>
@@ -115,3 +141,9 @@
 </table>
 
 @Html.PagedListPager(Model.Positions, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+<script>
+    function exportXl() {
+
+    }
+</script>
