@@ -152,7 +152,7 @@ namespace Talento.Tests.Controllers
             dashboardPagingHelper.Setup(x => x.CreateXl("id_desc", "Status", null, "", null)).Returns("filepath/");
             Mock<ControllerContext> mockContext = new Mock<ControllerContext>();
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
-            DashboardController controller = new DashboardController(dashboardPagingHelper.Object, utilAppSetting.Object)
+            DashboardController controller = new DashboardController(dashboardPagingHelper.Object, utilAppSetting.Object, mockUserHelper.Object)
             {
                 ControllerContext = mockContext.Object
             };
