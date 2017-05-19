@@ -56,7 +56,7 @@
     {
         <tr>
             <td>
-                @p.Title
+                @Html.ActionLink(p.Title,  "Details", "Positions", new { id = p.PositionId },null)
             </td>
             <td>
                 @p.CreationDate.ToString("dd/MM/yyyy")
