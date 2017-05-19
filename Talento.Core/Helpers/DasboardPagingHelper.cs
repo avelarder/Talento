@@ -261,22 +261,27 @@ namespace Talento.Core.Helpers
                     xlSheet.Cells[count, 8] = OpenDays.ToString();
                     int count2 = 0;
                     string[] candidates = new string[p.PositionCandidates.Count];
-                    foreach(PositionCandidates pc in p.PositionCandidates)
+                    if(p.PositionCandidates.Count>0)
                     {
-                        candidates[count2] = pc.Candidate.Name;
-                        count2++;
+                        foreach (PositionCandidates pc in p.PositionCandidates)
+                        {
+                            candidates[count2] = pc.Candidate.Name;
+                            count2++;
+                        }
+                        xlSheet.Cells[count, 9] = string.Join(", ", candidates);
                     }
-                    xlSheet.Cells[count, 9] = string.Join(", ", candidates);
                     int count3 = 0;
                     List<Comment> allComments = CommentHelper.GetAll(p.PositionId);
                     string[] comments = new string[allComments.Count];
-                    foreach (Comment c in allComments)
+                    if(allComments.Count>0)
                     {
-                        comments[count3] = c.User.UserName + ", " + c.Date.ToString() + ", " +c.Content;
-                        count3++;
+                        foreach (Comment c in allComments)
+                        {
+                            comments[count3] = c.User.UserName + ", " + c.Date.ToString() + ", " + c.Content;
+                            count3++;
+                        }
+                        xlSheet.Cells[count, 10] = string.Join(" ", comments);
                     }
-                    xlSheet.Cells[count, 10] = comments.ToString();
-                    xlSheet.Cells[count, 10].Style.WrapText = true; 
                     count++;
                 }
                 string finalcell = (ListToExport.Count + 1).ToString(); 
