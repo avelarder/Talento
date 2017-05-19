@@ -145,6 +145,11 @@ namespace Talento.Core.Helpers
             return position;
         }
 
+        public async Task<List<Position>> GetAll()
+        {
+            return await Db.Positions.ToListAsync();
+        }
+
         public bool DeleteCandidate(Position position, Candidate candidate, ApplicationUser modifier)
         {
             try

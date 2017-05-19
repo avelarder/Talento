@@ -79,6 +79,9 @@ namespace Talento.Core.Data
             // ApplicationSetting and Parameter Name must be unique
             modelBuilder.Entity<ApplicationSetting>().HasKey(x => new { x.ParameterName, x.SettingName });
         }
+
+        public virtual DbSet<Tag> Tags { get; set; }
+
         public virtual DbSet<Position> Positions { get; set; }
 
         public virtual DbSet<Log> PositionLogs { get; set; }
@@ -92,7 +95,5 @@ namespace Talento.Core.Data
         public virtual DbSet<PositionCandidates> PositionCandidates { get; set; }
 
         public virtual DbSet<TechnicalInterview> TechnicalInterviews { get; set; }
-
-        public virtual DbSet<Comment> Comments { get; set; }
     }
 }

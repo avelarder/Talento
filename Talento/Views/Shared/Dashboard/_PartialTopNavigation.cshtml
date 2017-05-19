@@ -9,31 +9,17 @@
             <div class="dropdown icons pmd-dropdown">
                 @if (Request.IsAuthenticated)
                 {
-                    <span style="position:relative; right:10px; top:5px;" class="user-name">Hello @User.Identity.GetUserName()! </span>
+                    <span class="user-name">Howdy @User.Identity.GetUserName()! </span>
                     <a href="javascript:void(0)" title="Notification" class="dropdown-toggle pmd-ripple-effect" data-toggle="dropdown" role="button" aria-expanded="true">
-                        @{
-                            var imgSrc = "";
-                            if ((byte[])ViewData["Image"]==null)
-                            {
-                                imgSrc = "/Content/Images/iconuseralien.png";
-                            }
-                            else
-                            {
-                                var base64 = Convert.ToBase64String((byte[])ViewData["Image"]);
-                                imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-                            }
-                        }
-
-                        <img src="@imgSrc" width="28" height="28"/>
+                        <div class="material-icons">account_circle</div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right pmd-card pmd-card-default pmd-z-depth" role="menu">
                         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "" }))
                         {
                             @Html.AntiForgeryToken()
-                            <div class="dropdown-header">Options: </div>  
+                            <div class="dropdown-header">@User.Identity.GetUserName()</div>  
                             <ul class="list-group pmd-list-avatar pmd-card-list">
                                 <li><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
-                                <li><a href="@Url.Action("Index", "ChangeImageProfile")">Change My Image</a></li>
                                 <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
                             </ul>
                         }

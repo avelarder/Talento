@@ -11,6 +11,7 @@ namespace Talento.Core
     public interface IPosition
     {
         Position Get(int Id);
+        Task<List<Position>> GetAll();
         void Create(Position log);
         bool Edit(Position log, ApplicationUser modifier);
         void Delete(int Id, string uId);

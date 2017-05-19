@@ -9,11 +9,11 @@ namespace Talento.Core.Helpers
 {
     public class UserHelper : BaseHelper, ICustomUser
     {
-        public UserHelper(Core.Data.ApplicationDbContext db) : base(db)
+        public UserHelper(Core.Data.ApplicationDbContext db): base(db)
         {
 
         }
-
+        
         public ApplicationUser SearchPM(string userName)
         {
             try
@@ -64,25 +64,11 @@ namespace Talento.Core.Helpers
             try
             {
                 List<string> matchingUserIds = new List<string>();
-                roles.ForEach(rol => matchingUserIds.AddRange(Db.Roles.SingleOrDefault(r => r.Name.Equals(rol)).Users.Select(u => u.UserId)));
+                roles.ForEach(rol => matchingUserIds.AddRange(Db.Roles.SingleOrDefault(r => r.Name.Equals(rol)).Users.Select(u=>u.UserId)));
                 List<ApplicationUser> matchingUsers = new List<ApplicationUser>();
                 matchingUserIds.ForEach(id => matchingUsers.Add(GetUserById(id)));
 
                 return matchingUsers;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public int ChangeImageProfile(ApplicationUser user)
-        {
-            try
-            {
-                ApplicationUser toEdit = this.GetUserByEmail(user.Email);
-                toEdit = user;
-                return Db.SaveChanges();
             }
             catch (Exception)
             {

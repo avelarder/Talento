@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Talento.Controllers;
 using System.Web.Mvc;
 using Moq;
-using System.Drawing;
+using System.Web.Security;
 
 namespace Talento.Tests.Controllers
 {

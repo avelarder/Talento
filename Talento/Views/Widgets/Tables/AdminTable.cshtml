@@ -48,9 +48,7 @@
         <th>
             @Html.ActionLink("Portfolio Manager", "Index", new { sortOrder = ViewBag.OwnerSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
-        <th>
-            RGS ID
-        </th>
+        <th></th>
     </tr>
     @foreach (var p in Model.Positions)
     {
@@ -59,7 +57,7 @@
                 @p.Title
             </td>
             <td>
-                @p.CreationDate.ToString("dd/MM/yyyy")
+                @p.CreationDate
             </td>
             <td>
                 @p.Status
@@ -69,9 +67,6 @@
             </td>
             <td>
                 @p.Owner.UserName
-            </td>
-            <td>
-                @p.RGS.ToString()
             </td>
         </tr>
     }

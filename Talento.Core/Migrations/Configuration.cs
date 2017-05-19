@@ -182,7 +182,19 @@ namespace Talento.Core.Migrations
             }
             context.SaveChanges();
             #endregion
-            
+
+            var tags = new List<Tag>
+            {
+                new Tag { Name = ".Net"},
+                new Tag { Name = "Java"},
+                new Tag { Name = "SQL"},
+                new Tag { Name = "PMP"},
+                new Tag { Name = "Haskell"},
+                new Tag { Name = "Lamda Calculus"},
+                new Tag { Name = "Object Orientated Programming"},
+                new Tag { Name = "Madness"},
+            };
+            tags.ForEach(r => context.Tags.AddOrUpdate(p => p.Name, r));
             context.SaveChanges();
 
             #region PositionsSeed
@@ -201,6 +213,7 @@ namespace Talento.Core.Migrations
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Napoleon bonaparte",
                     Description = "Full-stack .Net developer with knowledge in everything.",
+                    Tags = new List<Tag>{ context.Tags.Find(".Net") },
                     LastOpenedBy = manager.FindByEmail("Pmuser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-03-15T13:45:30"),
                     Logs = new List<Log>
@@ -227,6 +240,7 @@ namespace Talento.Core.Migrations
                     PortfolioManager = manager.FindByEmail("Pmuser2@example.com"),
                     EngagementManager ="Alejandro Magno",
                     Description = "Project manager with Mode-God on",
+                    Tags = new List<Tag>{ context.Tags.Find("PMP") },
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-03-22T09:43:30"),
                     LastClosedBy = manager.FindByEmail("Pmuser1@example.com"),
@@ -255,6 +269,7 @@ namespace Talento.Core.Migrations
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Anibal Barca",
                     Description = "Java programmer. Not Javascript!!!!",
+                    Tags = new List<Tag>{ context.Tags.Find("Java") },
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-02-15T11:13:30"),
                     LastCancelledBy = manager.FindByEmail("Tluser1@example.com"),
@@ -292,6 +307,7 @@ namespace Talento.Core.Migrations
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="THE Engagement Manager",
                     Description = "Yeah, you just have to be cool",
+                    Tags = new List<Tag>{},
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-01-03T11:13:30"),
                     Logs = new List<Log>
@@ -318,6 +334,7 @@ namespace Talento.Core.Migrations
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="El payaso plim plim",
                     Description = "Lambda Programming skills",
+                    Tags = new List<Tag>{ context.Tags.Find("Haskell"),context.Tags.Find("Madness"), },
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-04-03T12:13:30"),
                     Logs = new List<Log>
@@ -344,6 +361,7 @@ namespace Talento.Core.Migrations
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="NoOne InParticular",
                     Description = "Go for poloymoprhic types!!",
+                    Tags = new List<Tag>{ context.Tags.Find("Madness") },
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-03-15T11:13:30"),
                     Logs = new List<Log>
@@ -370,6 +388,7 @@ namespace Talento.Core.Migrations
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Anibal Barca",
                     Description = "We need another dev for pair programming, the previous one left its partner alone :(",
+                    Tags = new List<Tag>{ context.Tags.Find("Objet Orientated Programming") },
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-02-19T11:13:30"),
                     Logs = new List<Log>
@@ -398,6 +417,7 @@ namespace Talento.Core.Migrations
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Alejandro Magno",
                     Description = "You will work with a pair.",
+                    Tags = new List<Tag>{ context.Tags.Find("Objet Orientated Programming") },
                     LastOpenedBy = manager.FindByEmail("Tluser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-02-09T11:13:30"),
                     LastClosedBy = manager.FindByEmail("Tluser1@example.com"),
@@ -427,6 +447,7 @@ namespace Talento.Core.Migrations
                     PortfolioManager = manager.FindByEmail("Pmuser1@example.com"),
                     EngagementManager ="Anibal Barca",
                     Description = "You will work with a pair.",
+                    Tags = new List<Tag>{ context.Tags.Find("Objet Orientated Programming") },
                     LastOpenedBy = manager.FindByEmail("Pmuser1@example.com"),
                     LastOpenedDate = Convert.ToDateTime("2017-07-22T13:58:30"),
                     LastClosedBy = manager.FindByEmail("Pmuser1@example.com"),

@@ -18,11 +18,9 @@ namespace Talento.Controllers
         IPosition PositionHelper;
         ICustomUser UserHelper;
         ICandidate CandidateHelper;
-        IComment CommentHelper;
 
-        public TechnicalInterviewController(Core.IPosition positionHelper, Core.ICandidate candidateHelper, ICustomUser userHelper, IComment commentHelper)
+        public TechnicalInterviewController(Core.IPosition positionHelper, Core.ICandidate candidateHelper, ICustomUser userHelper)
         {
-            CommentHelper = commentHelper;
             PositionHelper = positionHelper;
             CandidateHelper = candidateHelper;
             UserHelper = userHelper;
@@ -110,6 +108,7 @@ namespace Talento.Controllers
             PositionCandidates positionCandidate = PositionHelper.Get(model.PositionId).PositionCandidates.Where(x => x.Candidate.Email.Contains(model.CandidateEmail)).Single();
             TechnicalInterview newTechnicalInterview = new TechnicalInterview()
             {
+                Comment = model.Comment,
                 Date = model.Date,
                 FeedbackFile = new FileBlob() { Blob = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength), FileName = model.CandidateEmail.Split('@')[0] + "_" + model.Date.Year + model.Date.Month + model.Date.Day + ".doc" },
                 InterviewerId = model.InterviewerId + "",
@@ -118,7 +117,6 @@ namespace Talento.Controllers
             };
 
             CandidateHelper.AddTechnicalInterview(newTechnicalInterview, UserHelper.GetUserByEmail(User.Identity.Name), model.PositionId, model.CandidateEmail);
-            CommentHelper.Create(new Comment { CandidateId = model.CandidateId, Content = model.Comment, PositionId = model.PositionId,User = UserHelper.GetUserByEmail(User.Identity.Name)});
 
             if (model.Result)
             {

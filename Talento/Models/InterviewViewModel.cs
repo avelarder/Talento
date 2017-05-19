@@ -18,9 +18,8 @@ namespace Talento.Models
         [Display(Name = "CandidateId")]
         public int CandidateId { get; set; }
 
-        [Required]
         [Display(Name = "Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [Required]
         public DateTime Date { get; set; }
 
         [Display(Name = "Result")]
