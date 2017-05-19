@@ -261,6 +261,7 @@ namespace Talento.Core.Helpers
                         count3++;
                     }
                     xlSheet.Cells[count, 10] = comments.Split('\n');
+                    xlSheet.Cells[count, 10].Style.WrapText = true; 
                     count++;
                 }
                 string finalcell = (ListToExport.Count + 1).ToString(); 
