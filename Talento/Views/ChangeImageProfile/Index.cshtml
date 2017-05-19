@@ -9,19 +9,22 @@
 <div class="row">
     @{
         var imgSrc = "";
-        if (Model.profileImage == null)
+        if (Model != null)
         {
-            imgSrc = "/Content/Images/iconuseralien.png";
-        }
-        else
-        {
+            if (Model.profileImage == null)
+            {
+                imgSrc = "/Content/Images/iconuseralien.png";
+            }
+            else
+            {
 
 
-            System.Drawing.ImageConverter imgCon = new System.Drawing.ImageConverter();
-            var base64 = Convert.ToBase64String((byte[])imgCon.ConvertTo(Model.profileImage, typeof(byte[])));
-            imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-            
+                System.Drawing.ImageConverter imgCon = new System.Drawing.ImageConverter();
+                var base64 = Convert.ToBase64String((byte[])imgCon.ConvertTo(Model.profileImage, typeof(byte[])));
+                imgSrc = String.Format("data:image/gif;base64,{0}", base64);
 
+
+            }
         }
     }
     <form action="ChangeProfileImage/ChangeProfileImage" method="post" enctype="multipart/form-data">

@@ -47,6 +47,10 @@ namespace Talento.Controllers
                     profileImage = i
                 });
             }
+            catch (ArgumentException)
+            {
+                return View();
+            }
             catch (Exception)
             {
                 throw;

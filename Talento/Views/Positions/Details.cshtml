@@ -117,7 +117,7 @@
                     @if (Model.Status == Talento.Entities.PositionStatus.Open)
                     {
                         <td>
-                            <a href="@Url.Action(" NewTechnicalInterview", "TechnicalInterview" , new { candidateEmail=cP.Candidate.Email, positionId=cP.Position.PositionId, candidateId=cP.Candidate.CandidateId })">
+                            <a href="@Url.Action("NewTechnicalInterview", "TechnicalInterview" , new { candidateEmail=cP.Candidate.Email, positionId=cP.Position.PositionId, candidateId=cP.Candidate.CandidateId })">
                                 Track Interview
                             </a>
                         </td>
@@ -397,7 +397,7 @@
                     </div>
                     <div class="pmd-modal-action pmd-modal-bordered text-right">
                         <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                        <button id="delete-candidate-button" data-candidate="" data-position="@Model.PositionId" data-url="@Url.Action(" DeleteCandidate", "Positions" )" data-dismiss="modal" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
+                        <button id="delete-candidate-button" data-candidate="" data-position="@Model.PositionId" data-url="@Url.Action("DeleteCandidate", "Positions" )" data-dismiss="modal" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
                     </div>
                 </div>
             </div>
@@ -469,7 +469,8 @@
                                         <h6 class="text-muted time">@x.Date.ToLongDateString() - @x.Date.ToShortTimeString()</h6>
                                     </div>
                                 </div>
-                                <div class="post-description" style="overflow:auto">
+                                <br/>
+                                <div class="post-description">
                                     <span>@x.Content</span>
                                 </div>
                             </div>
