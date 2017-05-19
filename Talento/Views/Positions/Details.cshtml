@@ -420,8 +420,20 @@
                     <div class="panel panel-white post panel-shadow">
                         <div class="post-heading">
                             <div class="pull-left image">
-                                <img src="https://cdn0.iconfinder.com/data/icons/alien-space/512/call_center_help_desk_reception_hotline_number_emergency_service_phone_operator_support_chat_alien-512.png"
-                                     class="img-circle avatar" alt="user profile image"/>
+                                @{
+                                    var imgSrc = "";
+                                    if ((byte[])ViewData["Image"] == null)
+                                    {
+                                        imgSrc = "/Content/Images/alien1.png";
+                                    }
+                                    else
+                                    {
+                                        var base64 = Convert.ToBase64String((byte[])ViewData["Image"]);
+                                        imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                                    }
+                                }
+                                <img src="@imgSrc"
+                                     class="img-circle avatar" alt="user profile image" />
                             </div>
                             <div class="pull-left meta">
                                 <div class="title h5">
@@ -450,7 +462,19 @@
                             <div class="panel panel-white post panel-shadow">
                                 <div class="post-heading">
                                     <div class="pull-left image" style="width:20%">
-                                        <img src="https://cdn0.iconfinder.com/data/icons/alien-space/512/call_center_help_desk_reception_hotline_number_emergency_service_phone_operator_support_chat_alien-512.png"
+
+                                        @{
+                                            if (x.User.ImageProfile == null)
+                                            {
+                                                imgSrc = "/Content/Images/alien1.png";
+                                            }
+                                            else
+                                            {
+                                                var base64 = Convert.ToBase64String(x.User.ImageProfile);
+                                                imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                                            }
+                                        }
+                                        <img src="@imgSrc"
                                              class="img-circle avatar" alt="user profile image"/>
                                     </div>
                                     <div class="pull-left meta" style="width:70%">
