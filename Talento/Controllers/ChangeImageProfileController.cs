@@ -61,6 +61,9 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeProfileImage(ChangeImageProfileViewModel model)
         {
+            try
+            {
+
             ApplicationUser appUser = UserHelper.GetUserById(User.Identity.GetUserId());
 
             Byte[] newImage = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength);
@@ -74,6 +77,11 @@ namespace Talento.Controllers
             }
 
             return View(model);
+            }
+            catch (Exception)
+            {
+                return View(model);
+            }
         }
     }
 }
