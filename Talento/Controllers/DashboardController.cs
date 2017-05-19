@@ -16,13 +16,11 @@ namespace Talento.Controllers
     {
         ICustomPagingList DashboardPagingHelper;
         IUtilityApplicationSettings ApplicationSettings;
-        ICustomUser UserHelper;
 
-        public DashboardController(ICustomPagingList dashboardPagingHelper, IUtilityApplicationSettings appSettings, ICustomUser userHelper)
+        public DashboardController(ICustomPagingList dashboardPagingHelper, IUtilityApplicationSettings appSettings)
         {
             DashboardPagingHelper = dashboardPagingHelper;
             ApplicationSettings = appSettings;
-            UserHelper = userHelper;
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
@@ -30,17 +28,20 @@ namespace Talento.Controllers
                     .ForMember(t => t.ApplicationUser_Id, opt => opt.MapFrom(s => s.ApplicationUser_Id));
             });
         }
-
         // GET: Dashboard
         public ActionResult Index(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page = 1)
         {
             string Dashboard = "_PartialContent.cshtml";
+
             string test = ModelState.IsValid.ToString();
+
             List<Position> rawData = new List<Position>();
+
             if (User.IsInRole("Admin"))
             {
                 Dashboard = "_PartialContentAdmin.cshtml";
                 rawData = DashboardPagingHelper.GetAdminTable(sortOrder, FilterBy, currentFilter, searchString, page);
+
             }
             if (!User.IsInRole("Admin"))
             {
@@ -56,7 +57,9 @@ namespace Talento.Controllers
             ViewBag.CurrentFilter = searchString;
 
             ViewData["Dashboard"] = Dashboard;
+
             var temp = AutoMapper.Mapper.Map<List<PositionModel>>(rawData.ToList());
+
             foreach (PositionModel item in temp)
             {
                 switch (item.Status)
@@ -98,8 +101,6 @@ namespace Talento.Controllers
             string role = GetRole();
             ViewData["Role"] = role;
             ViewData["RoleClass"] = role + "-role";
-
-            ViewData["Image"] = UserHelper.GetUserByEmail(User.Identity.Name).ImageProfile;
 
             return PartialView("~/Views/Shared/Dashboard/_PartialTopNavigation.cshtml");
         }
@@ -154,19 +155,6 @@ namespace Talento.Controllers
             FileResult aux = new FilePathResult("~/Content/Files/Template_TIFF.doc", "application/msword");
             aux.FileDownloadName = "TiffTemplate.doc";
             return aux;
-        }
-
-        [Authorize]
-        [HttpGet]
-        public FileResult DownloadXl(string TableSortOrder, string TableFilterBy, string TableSearchString)
-        {
-            FileResult aux = new FilePathResult(DashboardPagingHelper.CreateXl(TableSortOrder, TableFilterBy, null, TableSearchString, null), "application/msexcel");
-            aux.FileDownloadName = "OpenPositions.xls";
-            return aux;
-        }
-
-        public ActionResult AboutUs() {
-            return View();
         }
     }
 }

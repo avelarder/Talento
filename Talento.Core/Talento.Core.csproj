@@ -48,7 +48,6 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -61,14 +60,12 @@
   <ItemGroup>
     <Compile Include="BaseHelper.cs" />
     <Compile Include="Data\ApplicationDbContext.cs" />
-    <Compile Include="Helpers\CommentHelper.cs" />
     <Compile Include="Helpers\PositionLogHelper.cs" />
     <Compile Include="Helpers\CandidateHelper.cs" />
     <Compile Include="Helpers\DasboardPagingHelper.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="IApplicationSetting.cs" />
     <Compile Include="ICandidate.cs" />
-    <Compile Include="IComment.cs" />
     <Compile Include="IPositionLog.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="Helpers\PositionHelper.cs" />
@@ -99,35 +96,6 @@
     <EmbeddedResource Include="Migrations\201704211855311_InitialCreate.resx">
       <DependentUpon>201704211855311_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="Microsoft.Office.Core">
-      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>5</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="Microsoft.Office.Interop.Excel">
-      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>7</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="VBIDE">
-      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>5</VersionMajor>
-      <VersionMinor>3</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

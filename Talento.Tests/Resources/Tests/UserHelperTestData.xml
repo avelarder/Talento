@@ -59,13 +59,4 @@
 			<Name>TAG</Name>
 		</Role>
 	</GetByRolesUserHelperTest>
-	<ChangeImageProfileUserHelperTest>
-		<ApplicationUser>
-			<ApplicationUserId>1</ApplicationUserId>
-			<Email>user1@example.com</Email>
-			<Role>PM</Role>
-			<OriginalImagePath>Files\originalImage.png</OriginalImagePath>
-			<EditedImagePath>Files\editedImage.png</EditedImagePath>
-		</ApplicationUser>
-	</ChangeImageProfileUserHelperTest>
 </Talento>

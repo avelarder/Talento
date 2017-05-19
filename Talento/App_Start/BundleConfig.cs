@@ -15,8 +15,9 @@ namespace Talento
           "~/Content/PagedList.css",
           "~/Content/toastr.min.css",
           "~/Content/alertify.min.css",
-          "~/Content/select2-bootstrap.css",
-          "~/Content/round-about.css"
+          "~/Content/select2-bootstrap.css"
+          //"~/Content/normalize.css",
+          //"~/Content/styles-covervid.css"
           ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
