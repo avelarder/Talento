@@ -32,6 +32,7 @@
 
 
 <script type="text/javascript">
+
     window.onload = function () {
         (function ($) {
 
@@ -71,18 +72,15 @@
                     interests: "Software Development, Popular Science, Domotics, Science Fiction, Philosophy, Travel, Other Cultures",
                     hobbies: "Skate, some Sports, Gaming, OS projects",
                     image: "1377751.jpg"
-                }
-            ];
-
-            var profileList2 = [
+                },
                 {
-                    name: "Carlos Hackenbruch Siri",
-                    employeeId: "1377750",
-                    tcsEmail: "carlos.siri@tcs.com",
-                    description: "I entered Tata in January of 2017 and work as a junior developer aspiring to achieve Seniority and become a faculty and trainer in Microsoft .Net technologies",
-                    interests: "Software Development, Leadership, Philosophy, Epistemology, Science, Math, Physics, Quantum computing",
-                    hobbies: "PC Gaming, Swimming, Science Teaching",
-                    image: "1377750.png"
+                name: "Carlos Hackenbruch Siri",
+                employeeId: "1377750",
+                tcsEmail: "carlos.siri@tcs.com",
+                description: "I entered Tata in January of 2017 and work as a junior developer aspiring to achieve Seniority and become a faculty and trainer in Microsoft .Net technologies",
+                interests: "Software Development, Leadership, Philosophy, Epistemology, Science, Math, Physics, Quantum computing",
+                hobbies: "PC Gaming, Swimming, Science Teaching",
+                image: "1377750.png"
                 },
                 {
                     name: "Darío Prololoza",
@@ -112,30 +110,37 @@
                     image: "1377753.png"
                 }];
 
+            //Aca resolve el random dentro de profile list
+
+            //-- Despues de aca esta todo como lo dejaste:
+
+            var profileList1 = profileList.slice(0, 4);
+            var profileList2 = profileList.slice(4, 9);
+
             function listProfiles1() {
                 var profiles = '';
-                for (var i = 0; i < profileList.length; i++) {
+                for (var i = 0; i < profileList1.length; i++) {
                     profiles +=
                         "<div class='col-lg-3 col-sm-6 text-center'>" +
-                        "<img class='img-circle img-responsive img-center' src='/Content/Images/" + profileList[i].image + "' alt='Profile image' style='width: 50%;'>" +
+                        "<img class='img-circle img-responsive img-center' src='/Content/Images/" + profileList1[i].image + "' alt='Profile image' style='width: 50%;'>" +
                         "<h3>" +
-                        "<b>" + profileList[i].name + "</b>" +
+                        "<b>" + profileList1[i].name + "</b>" +
                         "<br />" +
-                        "<span>" + profileList[i].employeeId + "</span>" +
+                        "<span>" + profileList1[i].employeeId + "</span>" +
                         "<br />" +
-                        "<span>" + profileList[i].tcsEmail + "</span>" +
+                        "<span>" + profileList1[i].tcsEmail + "</span>" +
                         "</h3>" +
                         "<b>Description</b>" +
                         "<br />" +
-                        "<p>" + profileList[i].description + "</p>" +
+                        "<p>" + profileList1[i].description + "</p>" +
                         "<br />" +
                         "<b>Interests</b>" +
                         "<br />" +
-                        "<p>" + profileList[i].interests + "</p>" +
+                        "<p>" + profileList1[i].interests + "</p>" +
                         "<br />" +
                         "<b>Hobbies</b>" +
                         "<br />" +
-                        "<p>" + profileList[i].hobbies + "</p>" +
+                        "<p>" + profileList1[i].hobbies + "</p>" +
                         "<br />" +
                         "</div>"
                 }
