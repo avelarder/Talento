@@ -15,6 +15,11 @@ namespace Talento.Core.Helpers
 
         }
 
+        /// <summary>
+        /// Add a new Log
+        /// </summary>
+        /// <param name="log"></param>
+        /// <returns></returns>
         public int Add(Log log)
         {
             try

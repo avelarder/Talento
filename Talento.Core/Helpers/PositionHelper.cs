@@ -21,6 +21,10 @@ namespace Talento.Core.Helpers
             LogHelper = logHelper;
         }
 
+        /// <summary>
+        /// Create a new position. Status will be open.
+        /// </summary>
+        /// <param name="position"></param>
         public void Create(Position position)
         {
             using (var tx = new TransactionScope(TransactionScopeOption.Required))
@@ -47,6 +51,12 @@ namespace Talento.Core.Helpers
             }
         }
 
+
+        /// <summary>
+        /// Delete a position. Status will be changed to removed
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="uId"></param>
         public void Delete(int Id, string uId)
         {
             using (var tx = new TransactionScope(TransactionScopeOption.Required))
@@ -73,6 +83,12 @@ namespace Talento.Core.Helpers
             }
         }
 
+        /// <summary>
+        /// Edit a position
+        /// </summary>
+        /// <param name="log"></param>
+        /// <param name="modifier"></param>
+        /// <returns></returns>
         public bool Edit(Position log, ApplicationUser modifier)
         {
             try
@@ -135,6 +151,11 @@ namespace Talento.Core.Helpers
             return true;
         }
 
+        /// <summary>
+        /// Get a position by its Id
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public Position Get(int Id)
         {
             var position = Db.Positions
@@ -145,11 +166,13 @@ namespace Talento.Core.Helpers
             return position;
         }
 
-        public async Task<List<Position>> GetAll()
-        {
-            return await Db.Positions.ToListAsync();
-        }
-
+        /// <summary>
+        /// Delete a candidate from a position. The relation status will change to Mannualy Removed
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="candidate"></param>
+        /// <param name="modifier"></param>
+        /// <returns></returns>
         public bool DeleteCandidate(Position position, Candidate candidate, ApplicationUser modifier)
         {
             try

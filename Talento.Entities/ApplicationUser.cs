@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -18,5 +19,8 @@ namespace Talento.Entities
             // Add custom user claims here
             return userIdentity;
         }
+
+        [Column(TypeName = "image")]
+        public byte[] ImageProfile { get; set; }
     }
 }

@@ -1,0 +1,201 @@
+﻿@model Talento.Models.CandidateModel
+@{
+    ViewBag.Title = "AppSettings";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<!-- Page Content -->
+<div class="container">
+
+    <!-- Introduction Row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                About Us
+                <small>It's Nice to Meet You!</small>
+            </h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint, explicabo dolores ipsam aliquam inventore corrupti eveniet quisquam quod totam laudantium repudiandae obcaecati ea consectetur debitis velit facere nisi expedita vel?</p>
+        </div>
+    </div>
+
+    <!-- Team Members Row -->
+    <div class="row" id="profiles1">
+        @*<div class="col-lg-12">
+                <h2 class="page-header">Our Team</h2>
+            </div>*@
+    </div>
+    <div class="row" id="profiles2">
+            
+    </div>
+    <hr>
+</div>
+
+
+<script type="text/javascript">
+    window.onload = function () {
+        (function ($) {
+
+            var profileList = [
+                {
+                    name: "Arturo Velarde Rojas",
+                    employeeId: "805634",
+                    tcsEmail: "arturo.velarde@tcs.com",
+                    description: "IT Guy interested on software engineering, technology and photography",
+                    interests: "Software Development, Photography",
+                    hobbies: "Woodworking and Bricolage",
+                    image: "805634.png"
+                },
+                {
+                    name: "Pablo Carmona",
+                    employeeId: "1377771",
+                    tcsEmail: "pablo.carmona@tcs.com",
+                    description: "I am a very nice and friendly person. I enjoy contributing new ideas. I am self motivated and a very good team player.My hobbies are playing the guitar, practice sports and listening music",
+                    interests: "",
+                    hobbies: "My hobbies are playing the guitar, practice sports and listening music",
+                    image: "1377771.jpg"
+                },
+                {
+                    name: "Martin Mato",
+                    employeeId: "1377754",
+                    tcsEmail: "martin.mato@tcs.com",
+                    description: "TCS associate since 2012, Martin is very communicative person and friendly",
+                    interests: "Sci-Fi and Fantasy books, Music, Movies, VideoGames, technology",
+                    hobbies: "Studying new technologies to improve his knowdlege, reading Sci-Fi books, movies, videogames and spend time with family and friends",
+                    image: "1377754.jpg"
+                },
+                {
+                    name: "Fabián Gargaglione",
+                    employeeId: "1377751",
+                    tcsEmail: "arturo.velarde@tcs.com",
+                    description: "I have joined TCS on January 2017 as a Junior Developer looking for new challenges to enhance my skills as a Developer",
+                    interests: "Software Development, Popular Science, Domotics, Science Fiction, Philosophy, Travel, Other Cultures",
+                    hobbies: "Skate, some Sports, Gaming, OS projects",
+                    image: "1377751.jpg"
+                }
+            ];
+
+            var profileList2 = [
+                {
+                    name: "Carlos Hackenbruch Siri",
+                    employeeId: "1377750",
+                    tcsEmail: "carlos.siri@tcs.com",
+                    description: "I entered Tata in January of 2017 and work as a junior developer aspiring to achieve Seniority and become a faculty and trainer in Microsoft .Net technologies",
+                    interests: "Software Development, Leadership, Philosophy, Epistemology, Science, Math, Physics, Quantum computing",
+                    hobbies: "PC Gaming, Swimming, Science Teaching",
+                    image: "1377750.png"
+                },
+                {
+                    name: "Darío Prololoza",
+                    employeeId: "1359388",
+                    tcsEmail: "d.prololoza@tcs.com",
+                    description: "",
+                    interests: "Soccer, Music",
+                    hobbies: "I like playing guitar",
+                    image: "alien1.png"
+                },
+                {
+                    name: "Ramón Arana",
+                    employeeId: "1387239",
+                    tcsEmail: "arana.ramon@tcs.com",
+                    description: "Technology fan, music lover",
+                    interests: "Self-sustaining housing, music, spirituality",
+                    hobbies: "Djing, outdoors activities",
+                    image: "1387239.jpg"
+                },
+                {
+                    name: "Federico Testoni",
+                    employeeId: "1387239",
+                    tcsEmail: "federico.testoni@tcs.com",
+                    description: "I am a Programmer and Web Designer, willing to grow and be part of diverse projects.",
+                    interests: "Software Development, Music, Movies, and Sports",
+                    hobbies: "Playing Guitar and Bass, hanging out with friends, and drinking cold beer",
+                    image: "1377753.png"
+                }];
+
+            function listProfiles1() {
+                var profiles = '';
+                for (var i = 0; i < profileList.length; i++) {
+                    profiles +=
+                        "<div class='col-lg-3 col-sm-6 text-center'>" +
+                        "<img class='img-circle img-responsive img-center' src='/Content/Images/" + profileList[i].image + "' alt='Profile image' style='width: 50%;'>" +
+                        "<h3>" +
+                        "<b>" + profileList[i].name + "</b>" +
+                        "<br />" +
+                        "<span>" + profileList[i].employeeId + "</span>" +
+                        "<br />" +
+                        "<span>" + profileList[i].tcsEmail + "</span>" +
+                        "</h3>" +
+                        "<b>Description</b>" +
+                        "<br />" +
+                        "<p>" + profileList[i].description + "</p>" +
+                        "<br />" +
+                        "<b>Interests</b>" +
+                        "<br />" +
+                        "<p>" + profileList[i].interests + "</p>" +
+                        "<br />" +
+                        "<b>Hobbies</b>" +
+                        "<br />" +
+                        "<p>" + profileList[i].hobbies + "</p>" +
+                        "<br />" +
+                        "</div>"
+                }
+                return profiles;
+            }
+
+            function listProfiles2() {
+                var profiles = '';
+                for (var i = 0; i < profileList2.length; i++) {
+                    profiles +=
+                        "<div class='col-lg-3 col-sm-6 text-center'>" +
+                    "<img class='img-circle img-responsive img-center' src='/Content/Images/" + profileList2[i].image + "' alt='Profile image' style='width: 50%;'>" +
+                        "<h3>" +
+                        "<b>" + profileList2[i].name + "</b>" +
+                        "<br />" +
+                        "<span>" + profileList2[i].employeeId + "</span>" +
+                        "<br />" +
+                        "<span>" + profileList2[i].tcsEmail + "</span>" +
+                        "</h3>" +
+                        "<b>Description</b>" +
+                        "<br />" +
+                        "<p>" + profileList2[i].description + "</p>" +
+                        "<br />" +
+                        "<b>Interests</b>" +
+                        "<br />" +
+                        "<p>" + profileList2[i].interests + "</p>" +
+                        "<br />" +
+                        "<b>Hobbies</b>" +
+                        "<br />" +
+                        "<p>" + profileList2[i].hobbies + "</p>" +
+                        "<br />" +
+                        "</div>"
+                }
+                return profiles;
+            }
+
+            $("#profiles1").empty();
+            $("#profiles1").append(listProfiles1());
+
+            $("#profiles2").empty();
+            $("#profiles2").append(listProfiles2());
+        }(jQuery));
+    }
+</script>
+
+
+
+@*charlie
+    [10:49 AM]
+    *Profile picture:
+
+    *Name:
+    Carlos Hackenbruch Siri
+    *Employee id:
+    1377750
+    *TCS Email:
+    carlos.siri@tcs.com
+    *Brief Personal Description:
+    I entered Tata in January of 2017 and work as a junior developer aspiring to achieve Seniority and become a faculty and trainer in Microsoft .Net technologies.
+    *Interests:
+    Software Development, Leadership, Philosophy, Epistemology, Science, Math, Physics, Quantum computing
+    *Hobbies:
+    PC Gaming, Swimming, Science Teaching,*@
