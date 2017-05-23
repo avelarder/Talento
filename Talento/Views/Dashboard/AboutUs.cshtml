@@ -19,20 +19,13 @@
     </div>
 
     <!-- Team Members Row -->
-    <div class="row" id="profiles1">
-        @*<div class="col-lg-12">
-                <h2 class="page-header">Our Team</h2>
-            </div>*@
-    </div>
-    <div class="row" id="profiles2">
-            
+    <div class="row" id="profiles">
     </div>
     <hr>
 </div>
 
 
 <script type="text/javascript">
-
     window.onload = function () {
         (function ($) {
 
@@ -74,16 +67,16 @@
                     image: "1377751.jpg"
                 },
                 {
-                name: "Carlos Hackenbruch Siri",
-                employeeId: "1377750",
-                tcsEmail: "carlos.siri@tcs.com",
-                description: "I entered Tata in January of 2017 and work as a junior developer aspiring to achieve Seniority and become a faculty and trainer in Microsoft .Net technologies",
-                interests: "Software Development, Leadership, Philosophy, Epistemology, Science, Math, Physics, Quantum computing",
-                hobbies: "PC Gaming, Swimming, Science Teaching",
-                image: "1377750.png"
+                    name: "Carlos Hackenbruch Siri",
+                    employeeId: "1377750",
+                    tcsEmail: "carlos.siri@tcs.com",
+                    description: "I entered Tata in January of 2017 and work as a junior developer aspiring to achieve Seniority and become a faculty and trainer in Microsoft .Net technologies",
+                    interests: "Software Development, Leadership, Philosophy, Epistemology, Science, Math, Physics, Quantum computing",
+                    hobbies: "PC Gaming, Swimming, Science Teaching",
+                    image: "1377750.png"
                 },
                 {
-                    name: "Darío Prololoza",
+                    name: "Darío Prolo Loza",
                     employeeId: "1359388",
                     tcsEmail: "d.prololoza@tcs.com",
                     description: "",
@@ -104,103 +97,60 @@
                     name: "Federico Testoni",
                     employeeId: "1387239",
                     tcsEmail: "federico.testoni@tcs.com",
-                    description: "I am a Programmer and Web Designer, willing to grow and be part of diverse projects.",
+                    description: "I am a Programmer and Web Designer, willing to grow and be part of diverse projects",
                     interests: "Software Development, Music, Movies, and Sports",
                     hobbies: "Playing Guitar and Bass, hanging out with friends, and drinking cold beer",
                     image: "1377753.png"
                 }];
 
-            //Aca resolve el random dentro de profile list
+            function randItem(arr) {
+                var itemIndex = Math.floor(Math.random() * arr.length);
+                var itemValue = arr[itemIndex]
+                return itemValue;
+            }
 
-            //-- Despues de aca esta todo como lo dejaste:
+            function listProfiles() {
+                var profilesStr = '';
+                var profile = '';
 
-            var profileList1 = profileList.slice(0, 4);
-            var profileList2 = profileList.slice(4, 9);
+                //for (var i = 0; i <= profileList.length; i++) {
+                while (profileList.length > 0) {
+                    //profile = profileList[Math.floor(Math.random() * profileList.length)];
+                    var itemIndex = randItem(profileList);
 
-            function listProfiles1() {
-                var profiles = '';
-                for (var i = 0; i < profileList1.length; i++) {
-                    profiles +=
+                    profilesStr +=
                         "<div class='col-lg-3 col-sm-6 text-center'>" +
-                        "<img class='img-circle img-responsive img-center' src='/Content/Images/" + profileList1[i].image + "' alt='Profile image' style='width: 50%;'>" +
+                        "<img class='img-circle img-responsive img-center' src='/Content/Images/" + profile.image + "' alt='Profile image' style='width: 50%;'>" +
                         "<h3>" +
-                        "<b>" + profileList1[i].name + "</b>" +
+                        "<b>" + profile.name + "</b>" +
                         "<br />" +
-                        "<span>" + profileList1[i].employeeId + "</span>" +
+                        "<span>" + profile.employeeId + "</span>" +
                         "<br />" +
-                        "<span>" + profileList1[i].tcsEmail + "</span>" +
+                        "<span>" + profile.tcsEmail + "</span>" +
                         "</h3>" +
                         "<b>Description</b>" +
                         "<br />" +
-                        "<p>" + profileList1[i].description + "</p>" +
+                        "<p>" + profile.description + "</p>" +
                         "<br />" +
                         "<b>Interests</b>" +
                         "<br />" +
-                        "<p>" + profileList1[i].interests + "</p>" +
+                        "<p>" + profile.interests + "</p>" +
                         "<br />" +
                         "<b>Hobbies</b>" +
                         "<br />" +
-                        "<p>" + profileList1[i].hobbies + "</p>" +
+                        "<p>" + profile.hobbies + "</p>" +
                         "<br />" +
                         "</div>"
+
+                    //remove element from array
+                    //profileList.pop(profile);
+                    profileList.splice(itemIndex, 1);
                 }
-                return profiles;
+                return profilesStr;
             }
 
-            function listProfiles2() {
-                var profiles = '';
-                for (var i = 0; i < profileList2.length; i++) {
-                    profiles +=
-                        "<div class='col-lg-3 col-sm-6 text-center'>" +
-                    "<img class='img-circle img-responsive img-center' src='/Content/Images/" + profileList2[i].image + "' alt='Profile image' style='width: 50%;'>" +
-                        "<h3>" +
-                        "<b>" + profileList2[i].name + "</b>" +
-                        "<br />" +
-                        "<span>" + profileList2[i].employeeId + "</span>" +
-                        "<br />" +
-                        "<span>" + profileList2[i].tcsEmail + "</span>" +
-                        "</h3>" +
-                        "<b>Description</b>" +
-                        "<br />" +
-                        "<p>" + profileList2[i].description + "</p>" +
-                        "<br />" +
-                        "<b>Interests</b>" +
-                        "<br />" +
-                        "<p>" + profileList2[i].interests + "</p>" +
-                        "<br />" +
-                        "<b>Hobbies</b>" +
-                        "<br />" +
-                        "<p>" + profileList2[i].hobbies + "</p>" +
-                        "<br />" +
-                        "</div>"
-                }
-                return profiles;
-            }
-
-            $("#profiles1").empty();
-            $("#profiles1").append(listProfiles1());
-
-            $("#profiles2").empty();
-            $("#profiles2").append(listProfiles2());
+            $("#profiles").empty();
+            $("#profiles").append(listProfiles());
         }(jQuery));
     }
 </script>
-
-
-
-@*charlie
-    [10:49 AM]
-    *Profile picture:
-
-    *Name:
-    Carlos Hackenbruch Siri
-    *Employee id:
-    1377750
-    *TCS Email:
-    carlos.siri@tcs.com
-    *Brief Personal Description:
-    I entered Tata in January of 2017 and work as a junior developer aspiring to achieve Seniority and become a faculty and trainer in Microsoft .Net technologies.
-    *Interests:
-    Software Development, Leadership, Philosophy, Epistemology, Science, Math, Physics, Quantum computing
-    *Hobbies:
-    PC Gaming, Swimming, Science Teaching,*@
