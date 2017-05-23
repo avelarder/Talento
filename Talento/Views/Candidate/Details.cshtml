@@ -165,10 +165,14 @@
     </div>
     <div class="row">
 
+        <h3>
+            Files Attached to @Model.Email
+        </h3>
+
         <div class="list-group">
             @foreach (Talento.Entities.FileBlob f in Model.PositionCandidates.Single(x => x.CandidateID.Equals(Model.CandidateId) && x.PositionID.Equals(Model.PositionId)).Candidate.FileBlobs)
             {
-                <a href="#" class="list-group-item">@f.FileName</a>
+                <a class="list-group-item">@f.FileName</a>
             }
         </div>
 
