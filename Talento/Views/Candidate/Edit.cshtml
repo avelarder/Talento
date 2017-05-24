@@ -2,7 +2,7 @@
 @{ViewBag.Title = "Editing " + @Model.Name;
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";}
 
-<h2>@ViewBag.Title</h2>
+<span style="font-size:18px;">@ViewBag.Title</span>
 <form id="EditCandidateForm" method="post" action="/Candidate/Edit">
     <input name="Position_Id" id="Position_Id" value="@Model.Position_Id" type="hidden" />
     <input name="CandidateId" id="CandidateId" value="@Model.CandidateId" type="hidden" />
