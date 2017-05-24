@@ -25,12 +25,12 @@
         <label for="searchString" class="control-label">Filter:</label>
         @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control" })
     </div>
-        <div class="col-sm-2 form-group">
+        <div class="col-sm-1 form-group">
             <br />
             <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Search" style="margin-top: 4px" />
         </div>
 }
-<div class="col-sm-2 form-group">
+<div class="col-sm-2" style="margin-left:40px;">
     @using (Html.BeginForm("DownloadXl", "Dashboard", FormMethod.Get, new { id = "formtest"}))
     {
         <input type="hidden" name="TableSortOrder" id="TableSortOrder" value="" />
@@ -38,7 +38,10 @@
                 <input type="hidden" name="TableCurrentFilter" id="TableCurrentFilter" value="" />
                 <input type="hidden" name="TableSearchString" id="TableSearchString" value="" />
         //<input type="hidden" name="TablePage" id="TablePage" value="" />
-        <input type="submit" class="btn pmd-ripple-effect btn-primary" value="Export Excel" style="margin-top: 4px" />
+        <a href="" alt="Download Excel">
+            <i class="material-icons md-24 pull-left">file_download</i><input type="submit" class="btn pmd-btn-flat pmd-ripple-effect btn-primary valid" value="Export Excel" />
+        </a>
+        
     }
 </div>
 

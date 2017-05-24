@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
-<h2>Editing @Model.Title</h2>
+<span style="font-size:18px;">Editing @Model.Title</span>
 
 <form action="/Positions/Edit" method="post" novalidate="novalidate" id="editform">
     @Html.AntiForgeryToken()
