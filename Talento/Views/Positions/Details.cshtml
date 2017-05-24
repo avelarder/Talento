@@ -12,7 +12,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h2>@Html.DisplayFor(x => x.Title)</h2>
+        <p style="font-size:21px;">@Html.DisplayFor(x => x.Title)</p>
         <div class="col-md-4" style="position:relative; float:left; width:40%;">
             <span style="font-weight:bold">Creation date:</span> <span style="margin-right:10px; position:relative; float:right">@Html.DisplayFor(x => x.CreationDate) </span><br />
             <span style="font-weight:bold">Description: </span> <span style="margin-right:10px; position:relative; float:right">@Html.DisplayFor(x => x.Description) </span><br />
@@ -51,7 +51,7 @@
                     </div>
                     <div class="pmd-modal-action pmd-modal-bordered text-right">
                         <button data-dismiss="modal" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" type="button">Cancel</button>
-                        <button id="delete-position-button" data-position="@Model.PositionId" data-url="@Url.Action(" Delete", "Positions" , new { id=Model.PositionId })" data-dismiss="modal" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
+                        <button id="delete-position-button" data-position="@Model.PositionId" data-url="@Url.Action("Delete", "Positions" , new { id=Model.PositionId })" data-dismiss="modal" type="button" class="btn pmd-btn-flat pmd-ripple-effect btn-default">Delete</button>
                     </div>
                 </div>
             </div>
@@ -123,7 +123,7 @@
                         </td>
                     }
                     <td>
-                        <a href="@Url.Action(" Edit", "Candidate" ,new { id=cP.CandidateID, positionId=Model.PositionId } )" class="material-icons md-24 edit-candidate" alt="Edit candidate">
+                        <a href="@Url.Action("Edit", "Candidate" ,new { id=cP.CandidateID, positionId=Model.PositionId } )" class="material-icons md-24 edit-candidate" alt="Edit candidate">
                             mode_edit
                         </a>
                     </td>
@@ -409,7 +409,7 @@
     <br />
     <div id="comments" class="row">
         <h4 class="panel-title">
-            <a id="buttoncollapse" data-toggle="collapse" href="#collapse">Comments</a>
+            <a style="color:white;" id="buttoncollapse" data-toggle="collapse" href="#collapse" class="btn btn-primary dropdown-toggle">Comments<span style="margin-left:5px;" class="caret"></span></a>
             <br />
         </h4>
         <br />

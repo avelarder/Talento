@@ -4,10 +4,10 @@
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
-<h2>Postulation of @Model.Name for @Model.PositionCandidates.FirstOrDefault(x => x.PositionID.Equals(Model.PositionId)).Position.Title</h2>
+<span style="font-size:18px;">Postulation of <b>@Model.Name for @Model.PositionCandidates.FirstOrDefault(x => x.PositionID.Equals(Model.PositionId)).Position.Title</b></span>
 
 <div>
-    <h4>Details: </h4>
+    <span>Details: </span>
     <hr />
     <div class="row">
         <div class="col-lg-6">
@@ -69,7 +69,7 @@
             <br />
             <div id="comments" class="row">
                 <h4 class="panel-title">
-                    <a id="buttoncollapse" data-toggle="collapse" href="#collapse">Comments</a>
+                    <a style="color:white;" id="buttoncollapse" data-toggle="collapse" href="#collapse" class="btn btn-primary dropdown-toggle">Comments<span style="margin-left:5px;" class="caret"></span></a>
                     <br />
                 </h4>
                 <br />
@@ -165,10 +165,14 @@
     </div>
     <div class="row">
 
+        <h3>
+            Files Attached to @Model.Email
+        </h3>
+
         <div class="list-group">
             @foreach (Talento.Entities.FileBlob f in Model.PositionCandidates.Single(x => x.CandidateID.Equals(Model.CandidateId) && x.PositionID.Equals(Model.PositionId)).Candidate.FileBlobs)
             {
-                <a href="#" class="list-group-item">@f.FileName</a>
+                <a class="list-group-item">@f.FileName</a>
             }
         </div>
 

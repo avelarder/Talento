@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Talento.Core;
 using Talento.Entities;
@@ -61,27 +58,22 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ChangeProfileImage(ChangeImageProfileViewModel model)
         {
-            try
+            if(model.File!=null)
             {
+                ApplicationUser appUser = UserHelper.GetUserById(User.Identity.GetUserId());
 
-            ApplicationUser appUser = UserHelper.GetUserById(User.Identity.GetUserId());
+                Byte[] newImage = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength);
 
-            Byte[] newImage = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength);
+                appUser.ImageProfile = newImage;
 
-            appUser.ImageProfile = newImage;
-
-            if (ModelState.IsValid)
-            {
-                UserHelper.ChangeImageProfile(appUser);
-                return RedirectToAction("Index", "Dashboard");
+                if (ModelState.IsValid)
+                {
+                    UserHelper.ChangeImageProfile(appUser);
+                    return RedirectToAction("Index", "Dashboard");
+                }
             }
+            return RedirectToAction("Index", "Dashboard");
 
-            return View(model);
-            }
-            catch (Exception)
-            {
-                return View(model);
-            }
         }
     }
 }
