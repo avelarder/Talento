@@ -30,7 +30,7 @@ namespace Talento.Controllers
         public AccountController()
         {
         }
-        
+
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IMessenger emailManager, ICustomUser userhelper)
         {
             UserManager = userManager;
@@ -62,7 +62,7 @@ namespace Talento.Controllers
                 _userManager = value;
             }
         }
-        
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -123,7 +123,7 @@ namespace Talento.Controllers
 
             return View();
         }
-        
+
         //// POST: /Account/Login 
         [HttpPost]
         [AllowAnonymous]
@@ -204,15 +204,15 @@ namespace Talento.Controllers
             if (ModelState.IsValid)
             {
                 //Check if Role exists
-                var role = roles.SingleOrDefault(x=>x == model.UserType);
+                var role = roles.SingleOrDefault(x => x == model.UserType);
                 if (role == null || role == "Admin")
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid role.");              
+                    ModelState.AddModelError(string.Empty, "Invalid role.");
                     return View(model);
                 }
 
-                
-                 
+
+
                 Random rnd = new Random();
                 int dice = rnd.Next(1, 5);
 
@@ -221,9 +221,9 @@ namespace Talento.Controllers
                 Image img = Image.FromFile(Server.MapPath("/Content/Images/alien" + dice + ".png"));
                 img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, ImageProfile = ms.ToArray()};
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, ImageProfile = ms.ToArray(), CreatedDate = DateTime.Now };
                 var result = await UserManager.CreateAsync(user, model.Password);
-                
+
 
                 if (result.Succeeded)
                 {
@@ -252,7 +252,7 @@ namespace Talento.Controllers
                 }
                 AddErrors(result);
             }
-            
+
             return View(model);
         }
 
@@ -272,6 +272,7 @@ namespace Talento.Controllers
 
         //
         // GET: /Account/ConfirmEmail
+        //TODO: Refactor this to be used by the admin in order to activate an account
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
@@ -291,6 +292,55 @@ namespace Talento.Controllers
             if (result.Succeeded)
             {
                 ModelState.AddModelError("", "Your Account has been activated successfully.");
+                return View("Login");
+            }
+            else
+            {
+                ModelState.AddModelError("", "The operation you are trying to execute is not valid.");
+                return View("Login");
+            }
+        }
+
+        //
+        // GET: /Account/RejectEmail
+        //TODO: Refactor this to be used by the admin in order to reject an account
+        [AllowAnonymous]
+        public async Task<ActionResult> RejectEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                ModelState.AddModelError("", "The operation you are trying to execute is not valid.");
+                return View("Login");
+            }
+
+            if (UserManager.IsEmailConfirmed(userId))
+            {
+                ModelState.AddModelError("", "Account is activated already.");
+                return View("Login");
+            }
+
+            var user = await UserManager.FindByIdAsync(userId);
+            var logins = user.Logins;
+            var rolesForUser = await UserManager.GetRolesAsync(userId);
+
+            foreach (var login in logins.ToList())
+            {
+                await UserManager.RemoveLoginAsync(login.UserId, new UserLoginInfo(login.LoginProvider, login.ProviderKey));
+            }
+
+            if (rolesForUser.Count() > 0)
+            {
+                foreach (var item in rolesForUser.ToList())
+                {
+                    await _userManager.RemoveFromRoleAsync(user.Id, item);
+                }
+            }
+
+            var remove = await _userManager.DeleteAsync(user);
+
+            if (remove.Succeeded)
+            {
+                ModelState.AddModelError("", "Account has been deleted successfully.");
                 return View("Login");
             }
             else
@@ -325,7 +375,7 @@ namespace Talento.Controllers
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
-                    ModelState.AddModelError("","Error");
+                    ModelState.AddModelError("", "Error");
                     // Don't reveal that the user does not exist or is not confirmed
                     return View();
                 }
@@ -380,7 +430,7 @@ namespace Talento.Controllers
             ModelState.Clear();
             TryValidateModel(model);
             var user = await UserManager.FindByNameAsync(model.Email);
-            
+
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "An error occurred when trying to reset the password");
@@ -446,7 +496,7 @@ namespace Talento.Controllers
                 return View("MailSent");
 
                 //string body = "Reset Password. Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>";
-               // _emailManager.SendConfirmationEmail(model.Email, "talento forgot password confirmation email", body);
+                // _emailManager.SendConfirmationEmail(model.Email, "talento forgot password confirmation email", body);
 
             }
             ModelState.Clear();
@@ -562,6 +612,6 @@ namespace Talento.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
-#endregion
+        #endregion
     }
 }

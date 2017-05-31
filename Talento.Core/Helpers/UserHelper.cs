@@ -114,5 +114,17 @@ namespace Talento.Core.Helpers
                 throw;
             }
         }
+
+        public List<ApplicationUser> GetPendingUsers()
+        {
+            try
+            {
+                return Db.Users.Where(x => x.EmailConfirmed == false).ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

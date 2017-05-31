@@ -68,4 +68,24 @@
 			<EditedImagePath>Files\editedImage.png</EditedImagePath>
 		</ApplicationUser>
 	</ChangeImageProfileUserHelperTest>
+	<GetPendingUsersUserHelperTest>
+		<ApplicationUser>
+			<ApplicationUserId>1</ApplicationUserId>
+			<Email>user1@example.com</Email>
+			<Role>PM</Role>
+			<EmailConfirmed>False</EmailConfirmed>
+		</ApplicationUser>
+		<ApplicationUser>
+			<ApplicationUserId>2</ApplicationUserId>
+			<Email>user2@example.com</Email>
+			<Role>PM</Role>
+			<EmailConfirmed>False</EmailConfirmed>
+		</ApplicationUser>
+		<ApplicationUser>
+			<ApplicationUserId>3</ApplicationUserId>
+			<Email>user3@example.com</Email>
+			<Role>PM</Role>
+			<EmailConfirmed>False</EmailConfirmed>
+		</ApplicationUser>
+	</GetPendingUsersUserHelperTest>
 </Talento>
