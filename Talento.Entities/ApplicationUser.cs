@@ -22,5 +22,7 @@ namespace Talento.Entities
 
         [Column(TypeName = "image")]
         public byte[] ImageProfile { get; set; }
+
+        public DateTime CreatedDate { get; set; }
     }
 }
