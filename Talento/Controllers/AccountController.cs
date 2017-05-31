@@ -29,6 +29,7 @@ namespace Talento.Controllers
 
         public AccountController()
         {
+            
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IMessenger emailManager, ICustomUser userhelper)
@@ -233,7 +234,7 @@ namespace Talento.Controllers
                     {
                         result = UserManager.AddToRole(user.Id, model.UserType);
                     }
-
+                    
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -270,86 +271,7 @@ namespace Talento.Controllers
 
         }
 
-        //
-        // GET: /Account/ConfirmEmail
-        //TODO: Refactor this to be used by the admin in order to activate an account
-        [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
-        {
-            if (userId == null || code == null)
-            {
-                ModelState.AddModelError("", "The operation you are trying to execute is not valid.");
-                return View("Login");
-            }
-
-            if (UserManager.IsEmailConfirmed(userId))
-            {
-                ModelState.AddModelError("", "Account is activated already.");
-                return View("Login");
-            }
-
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
-            if (result.Succeeded)
-            {
-                ModelState.AddModelError("", "Your Account has been activated successfully.");
-                return View("Login");
-            }
-            else
-            {
-                ModelState.AddModelError("", "The operation you are trying to execute is not valid.");
-                return View("Login");
-            }
-        }
-
-        //
-        // GET: /Account/RejectEmail
-        //TODO: Refactor this to be used by the admin in order to reject an account
-        [AllowAnonymous]
-        public async Task<ActionResult> RejectEmail(string userId, string code)
-        {
-            if (userId == null || code == null)
-            {
-                ModelState.AddModelError("", "The operation you are trying to execute is not valid.");
-                return View("Login");
-            }
-
-            if (UserManager.IsEmailConfirmed(userId))
-            {
-                ModelState.AddModelError("", "Account is activated already.");
-                return View("Login");
-            }
-
-            var user = await UserManager.FindByIdAsync(userId);
-            var logins = user.Logins;
-            var rolesForUser = await UserManager.GetRolesAsync(userId);
-
-            foreach (var login in logins.ToList())
-            {
-                await UserManager.RemoveLoginAsync(login.UserId, new UserLoginInfo(login.LoginProvider, login.ProviderKey));
-            }
-
-            if (rolesForUser.Count() > 0)
-            {
-                foreach (var item in rolesForUser.ToList())
-                {
-                    await _userManager.RemoveFromRoleAsync(user.Id, item);
-                }
-            }
-
-            var remove = await _userManager.DeleteAsync(user);
-
-            if (remove.Succeeded)
-            {
-                ModelState.AddModelError("", "Account has been deleted successfully.");
-                return View("Login");
-            }
-            else
-            {
-                ModelState.AddModelError("", "The operation you are trying to execute is not valid.");
-                return View("Login");
-            }
-        }
-
+      
         //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]

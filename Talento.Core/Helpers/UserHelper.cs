@@ -95,6 +95,18 @@ namespace Talento.Core.Helpers
                 throw;
             }
         }
+        
+        public string GetRoleName(string roleid)
+        {
+            try
+            {
+               return Db.Roles.FirstOrDefault(x=>x.Id.Equals(roleid)).Name;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         /// <summary>
         /// Change image profile for one user.

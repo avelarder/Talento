@@ -15,6 +15,9 @@
             Name
         </th>
         <th>
+            Registered on
+        </th>
+        <th>
             Email
         </th>
         <th>
@@ -28,19 +31,22 @@
     {
         <tr>
             <td>
-                @u.UserName
+                @u.name
             </td>
             <td>
-                @u.Email
+                @u.createdon.ToShortDateString()
             </td>
             <td>
-                @u.Roles.First().RoleId;
+                @u.email
+            </td>
+            <td>
+                @u.role
         </td>
         <td>
-            <a class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" href="../Dashboard/Index">
+            <a class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" href="/Users/ConfirmEmail?userId=@u.id">
                 <i class="material-icons pmd-sm">check_circle</i>
             </a>
-            <a class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-danger btn-sm" href="../Dashboard/Index">
+            <a class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-danger btn-sm" href="/Users/RejectEmail?userId=@u.id">
                 <i class="material-icons pmd-sm">cancel</i>
             </a>
         </td>
