@@ -236,14 +236,14 @@ namespace Talento.Controllers
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     //_emailManager.SendConfirmationEmail(model.Email, "Confirm your account", "Talento account confirmation", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    ViewData["RegisterCode"] = HttpUtility.UrlEncode(code);
-                    ViewData["UserId"] = user.Id;
+                    //ViewData["RegisterCode"] = HttpUtility.UrlEncode(code);
+                    //ViewData["UserId"] = user.Id;
 
-                    return View("RegisterConfirmation");
+                    return View("Login");
 
                     //ModelState.AddModelError("", "A link has been sent to your registered mail address. Check for it in order to activate the account before being able to login.");
                     //return View("Login");
@@ -502,6 +502,8 @@ namespace Talento.Controllers
 
             base.Dispose(disposing);
         }
+
+
 
 #region Helpers
         // Used for XSRF protection when adding external logins
