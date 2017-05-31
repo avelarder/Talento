@@ -7,27 +7,40 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Talento.Core;
+using Talento.Core.Utilities;
 
 namespace Talento.Controllers
 {
     public class UsersController : Controller
     {
         ICustomUser UserHelper;
-
+        IUtilityApplicationSettings ApplicationSettings;
 
         public UsersController()
         {
             
         }
-        public UsersController(ICustomUser userHelper)
+        public UsersController(ICustomUser userHelper, IUtilityApplicationSettings apps)
         {
-            
+            ApplicationSettings = apps;
             UserHelper = userHelper;
         }
 
         [Authorize]
         public ActionResult UsersTable()
         {
+            List<string> roles = ApplicationSettings.GetAllSettings()
+                  .Where(x => x.SettingName.Trim().Equals("AllowUsersActivation"))
+                  .Select(y => y.ParameterName.Substring(5)).ToList();
+            //Then I get the role of the currently logged user
+            string loggedRole = UserHelper.GetRoleName(UserHelper.GetUserByEmail(User.Identity.Name).Roles.First().RoleId);
+            ViewData["UserTableVisible"] = roles.Contains(loggedRole);
+
+            if (!roles.Contains(loggedRole))
+            {
+                return RedirectToAction("Index", "Dashboard", null);
+            }
+
             List<Entities.ApplicationUser> users = UserHelper.GetPendingUsers();
             Models.UsersTableViewModel aux = new Models.UsersTableViewModel() { users = new List<Models.ApplicationUserViewModel>()};
             users.ForEach(x => aux.users.Add(new Models.ApplicationUserViewModel() {
