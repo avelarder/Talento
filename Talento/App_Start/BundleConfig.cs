@@ -16,7 +16,10 @@ namespace Talento
           "~/Content/toastr.min.css",
           "~/Content/alertify.min.css",
           "~/Content/select2-bootstrap.css",
-          "~/Content/round-about.css"
+          "~/Content/round-about.css",
+          "~/Content/reset.css",
+          "~/Content/style.css",
+          "~/Content/styleIE.css"
           ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
@@ -38,7 +41,9 @@ namespace Talento
                       "~/Scripts/typeahead.js",
                       "~/Scripts/alertify.min.js",
                       "~/Scripts/covervid-scripts.js",
-                      "~/Scripts/covervid.min.js"
+                      "~/Scripts/covervid.min.js",
+                      "~/Scripts/jquery.easing.1.3.js",
+                      "~/Scripts/modernizr.custom.11333.js"
                       ));
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(

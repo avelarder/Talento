@@ -176,5 +176,10 @@ namespace Talento.Controllers
         public ActionResult AboutUs() {
             return PartialView();
         }
+
+        public ActionResult SoftwareTimeline()
+        {
+            return PartialView();
+        }
     }
 }
