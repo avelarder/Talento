@@ -80,7 +80,7 @@
             </div>
 
             <div class="pmd-card-footer card-footer-no-border card-footer-p16 text-center">
-                <input type="submit" value="Register" class="btn pmd-ripple-effect btn-primary btn-block">
+                <input type="button" id="registerbutton" value="Register" class="btn pmd-ripple-effect btn-primary btn-block">
                 <p>
                     <br />Already an User?
                     @Html.ActionLink("Login", "Login")
@@ -89,3 +89,42 @@
         </div>
     }
 </div>
+
+<script>
+    window.onload = function () {
+        (function ($) {
+            $(document).ready(function () {
+                $("#registerbutton").click(function (evt) {
+                    alertify.set('notifier', 'position', 'bottom-left');
+                    var formData = new FormData($('form')[0]);
+
+                    var token = $('input[name="__RequestVerificationToken"]').val();
+                    var headers = {};
+                    headers['__RequestVerificationToken'] = token;
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/Account/RegistrationRequest/',
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
+                        headers : headers,
+                        data: formData,
+                        success: function (response) {
+                            setTimeout(function () {
+                                alertify.success('<b>The Registration Request has been sent</b>');
+                            }, 2500);
+                            setTimeout(function () {
+                                window.location = "/Account/Login";
+                            },4500);
+
+                        },
+                        error: function (error) {
+                            alertify.error("<b>Try another email.</b>");
+                        }
+                    });
+                });
+            });
+        }(jQuery));
+    }
+</script>
