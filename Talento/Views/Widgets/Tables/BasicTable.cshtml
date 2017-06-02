@@ -39,7 +39,10 @@
                 <input type="hidden" name="TableSearchString" id="TableSearchString" value="" />
         //<input type="hidden" name="TablePage" id="TablePage" value="" />
         <a href="" alt="Download Excel">
-            <i class="material-icons md-24 pull-left">file_download</i><input type="submit" class="btn pmd-btn-flat pmd-ripple-effect btn-primary valid" value="Export Excel" />
+            <i class="material-icons md-24 pull-left">file_download</i><input type="submit" 
+            style="background-color:rgb(249,249,249);border:0px;padding:0px; "
+                                                                                                      
+            value="Export Excel" />
         </a>
         
     }
@@ -127,7 +130,14 @@
                 @p.Owner.UserName
             </td>
             <td>
-                @p.OpenDays
+                @if (p.OpenDays == 0)
+                {
+                    <span>Today</span>
+                }
+                else
+                {
+                    <span>@p.OpenDays</span>
+                }
             </td>
             <td>
                 @if (p.Status == Talento.Entities.PositionStatus.Open)
