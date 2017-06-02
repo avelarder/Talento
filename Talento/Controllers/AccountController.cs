@@ -15,11 +15,12 @@ using System.Web.Security;
 using Talento.EmailManager;
 using Talento.Core;
 using System.Drawing;
+using System.Web.Helpers;
 
 namespace Talento.Controllers
 {
     [HandleError]
-    [Authorize]
+    //[Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -38,6 +39,42 @@ namespace Talento.Controllers
             SignInManager = signInManager;
             _emailManager = emailManager;
             UserHelper = userhelper;
+        }
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public JsonResult RegistrationRequest(RegisterViewModel model)
+        {
+            if (!Register(model))
+            {
+                return null;
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
+
+        [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+        protected class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
+        {
+            public void OnAuthorization(AuthorizationContext filterContext)
+            {
+                try
+                {
+                    if (filterContext == null)
+                    {
+                        throw new ArgumentNullException("filterContext");
+                    }
+                    var httpContext = filterContext.HttpContext;
+                    var cookie = httpContext.Request.Cookies[AntiForgeryConfig.CookieName];
+                    AntiForgery.Validate(cookie?.Value, httpContext.Request.Params["__RequestVerificationToken"]);
+                }
+                catch (Exception)
+                {
+                    //throw;
+                }
+            }
         }
 
         public ApplicationSignInManager SignInManager
@@ -188,7 +225,7 @@ namespace Talento.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public bool Register(RegisterViewModel model)
         {
             var roles = Roles.GetAllRoles();
             List<string> rolesName = new List<string>();
@@ -209,7 +246,7 @@ namespace Talento.Controllers
                 if (role == null || role == "Admin")
                 {
                     ModelState.AddModelError(string.Empty, "Invalid role.");
-                    return View(model);
+                    return false;
                 }
 
 
@@ -223,7 +260,7 @@ namespace Talento.Controllers
                 img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, ImageProfile = ms.ToArray(), CreatedDate = DateTime.Now };
-                var result = await UserManager.CreateAsync(user, model.Password);
+                var result = UserManager.Create(user, model.Password);
 
 
                 if (result.Succeeded)
@@ -244,7 +281,7 @@ namespace Talento.Controllers
                     //ViewData["RegisterCode"] = HttpUtility.UrlEncode(code);
                     //ViewData["UserId"] = user.Id;
 
-                    return View("Login");
+                    return true;
 
                     //ModelState.AddModelError("", "A link has been sent to your registered mail address. Check for it in order to activate the account before being able to login.");
                     //return View("Login");
@@ -254,7 +291,7 @@ namespace Talento.Controllers
                 AddErrors(result);
             }
 
-            return View(model);
+            return false;
         }
 
         [AllowAnonymous]

@@ -7,6 +7,7 @@ using Talento.Models;
 using Talento.Core;
 using Talento.Entities;
 using Talento.Core.Utilities;
+using System.Web.Helpers;
 
 namespace Talento.Controllers
 {
@@ -181,5 +182,6 @@ namespace Talento.Controllers
         {
             return PartialView();
         }
+
     }
 }

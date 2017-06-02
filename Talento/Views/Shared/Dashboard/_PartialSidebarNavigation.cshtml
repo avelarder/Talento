@@ -26,7 +26,16 @@
                     <li><a href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
                 </ul>
             </div>
-        </li>
+        </li><li>
+    <a class="pmd-ripple-effect" href="@Url.Action("SoftwareTimeLine", "Dashboard")">
+        <span class="pull-left">
+            <i class="material-icons pmd-sm">hourglass_empty</i>
+        </span>
+        <span class="pull-left">
+            <span class="menu-option">Software Timeline</span>
+        </span>
+    </a>
+</li>
         @if (ViewData["Role"].ToString() == "basic")
         {
             <li>
@@ -78,7 +87,7 @@
                     </span>
                 </a>
             </li>
-          
+            
             <li>
                 <a class="pmd-ripple-effect" href="@Url.Action("AboutUs", "Dashboard")">
                     <span class="pull-left">
@@ -95,7 +104,7 @@
             <li>
                 <a class="pmd-ripple-effect" href="@Url.Action("UsersTable", "Users")">
                     <span class="pull-left">
-                        <i class="material-icons pmd-sm">hourglass_empty</i>
+                        <i class="material-icons pmd-sm">account_circle</i>
                     </span>
                     <span class="pull-left">
                         <span class="menu-option">Pending Users</span>
