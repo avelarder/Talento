@@ -78,6 +78,7 @@
                     </span>
                 </a>
             </li>
+          
             <li>
                 <a class="pmd-ripple-effect" href="@Url.Action("AboutUs", "Dashboard")">
                     <span class="pull-left">
@@ -85,6 +86,19 @@
                     </span>
                     <span class="pull-left">
                         <span class="menu-option">About Us</span>
+                    </span>
+                </a>
+            </li>
+        }
+        @if ((bool)ViewData["UserTableVisible"])
+        {
+            <li>
+                <a class="pmd-ripple-effect" href="@Url.Action("UsersTable", "Users")">
+                    <span class="pull-left">
+                        <i class="material-icons pmd-sm">hourglass_empty</i>
+                    </span>
+                    <span class="pull-left">
+                        <span class="menu-option">Pending Users</span>
                     </span>
                 </a>
             </li>

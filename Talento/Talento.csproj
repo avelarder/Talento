@@ -202,6 +202,7 @@
     <Compile Include="Controllers\PositionsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TechnicalInterviewController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -362,6 +363,7 @@
     <Content Include="Views\Shared\_Background.cshtml" />
     <Content Include="Views\Dashboard\AboutUs.cshtml" />
     <Content Include="Views\ChangeImageProfile\Index.cshtml" />
+    <Content Include="Views\Users\UsersTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

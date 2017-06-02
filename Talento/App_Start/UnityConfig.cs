@@ -51,12 +51,14 @@ namespace Talento.App_Start
             container.RegisterType<IPosition, PositionHelper>(new PerRequestLifetimeManager());
             container.RegisterType<IComment, CommentHelper>(new PerRequestLifetimeManager());
             container.RegisterType<IPositionLog, PositionLogHelper>(new PerRequestLifetimeManager());
-            container.RegisterType<AccountController>(new InjectionConstructor());
             container.RegisterType<ICandidate, CandidateHelper>(new PerRequestLifetimeManager());
             container.RegisterType<ICustomUser, UserHelper>(new PerRequestLifetimeManager());
             container.RegisterType<IApplicationSetting, SettingsHelper>(new PerRequestLifetimeManager());
             container.RegisterType<IMessenger, Messenger>(new PerRequestLifetimeManager());
             container.RegisterType<IUtilityApplicationSettings, UtilityApplicationSettings>(new PerRequestLifetimeManager());
+            container.RegisterType<AccountController>(new InjectionConstructor());
+
+
         }
     }
 }

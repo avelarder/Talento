@@ -147,6 +147,8 @@ namespace Talento.Models
             Subset = base.Subset;
         }
     }
+
+
     public class PositionLogViewModel
     {
         public int Id { get; set; }
