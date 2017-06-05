@@ -95,6 +95,18 @@ namespace Talento.Core.Helpers
                 throw;
             }
         }
+        
+        public string GetRoleName(string roleid)
+        {
+            try
+            {
+               return Db.Roles.FirstOrDefault(x=>x.Id.Equals(roleid)).Name;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         /// <summary>
         /// Change image profile for one user.
@@ -108,6 +120,18 @@ namespace Talento.Core.Helpers
                 ApplicationUser toEdit = this.GetUserByEmail(user.Email);
                 toEdit = user;
                 return Db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<ApplicationUser> GetPendingUsers()
+        {
+            try
+            {
+                return Db.Users.Where(x => x.EmailConfirmed == false).ToList();
             }
             catch (Exception)
             {

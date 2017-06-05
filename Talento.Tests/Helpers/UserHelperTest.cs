@@ -262,6 +262,40 @@ namespace Talento.Tests.Helpers
             context.Verify(m => m.SaveChanges(), Times.AtLeastOnce());
             Assert.AreEqual(user, applicationUserSet.Object.Where(x=>x.Id == user.Id).Single());
         }
+
+        [TestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML",
+               "Resources\\Tests\\UserHelperTestData.xml",
+               "GetPendingUsersUserHelperTest",
+               DataAccessMethod.Sequential)]
+        public void GetPendingUsersUserHelperTest()
+        {
+            DataRow[] applicationUserData = TestContext.DataRow.GetChildRows("GetPendingUsersUserHelperTest_ApplicationUser");
+            List<ApplicationUser> users = new List<ApplicationUser>();
+
+            foreach (DataRow r in applicationUserData) {
+                users.Add(new ApplicationUser
+                {
+                    Id = r["ApplicationUserId"].ToString(),
+                    Email = r["Email"].ToString(),
+                    UserName = r["Email"].ToString(),
+                    EmailConfirmed = Convert.ToBoolean(r["EmailConfirmed"].ToString())
+                });
+            }
+
+            var applicationUserSet = new Mock<DbSet<ApplicationUser>>().SetupData(users);
+
+            var context = new Mock<ApplicationDbContext>();
+            context.Setup(c => c.Users).Returns(applicationUserSet.Object);
+
+            UserHelper userHelper = new UserHelper(context.Object);
+
+            var result = userHelper.GetPendingUsers();
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(List<ApplicationUser>));
+            Assert.AreEqual(users.Count, result.Count);
+        }
     }
 }
 
