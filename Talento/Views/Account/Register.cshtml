@@ -86,6 +86,9 @@
                     @Html.ActionLink("Login", "Login")
                 </p>
             </div>
+            <p id="passcriteria">
+                The password must contain one lowercase letter, one uppercase letter, one number, one unique character such as !@@#$%^&? and be at least 8 characters long.
+                </p>
         </div>
     }
 </div>
@@ -93,36 +96,48 @@
 <script>
     window.onload = function () {
         (function ($) {
+            $("#passcriteria").hide();
             $(document).ready(function () {
                 $("#registerbutton").click(function (evt) {
                     alertify.set('notifier', 'position', 'bottom-left');
                     var formData = new FormData($('form')[0]);
+                    var patt = /^.*(?=.{8,16})(?=.*\d)(?=.*[a-zA-Z])(?=.*[a-z])(?=.*[!@@#$%^&*? ]).*$/;                    
 
-                    var token = $('input[name="__RequestVerificationToken"]').val();
-                    var headers = {};
-                    headers['__RequestVerificationToken'] = token;
+                    if ($("#Password").val() != $("#ConfirmPassword").val()) {
+                        alertify.error("<b>Password and Confirmation fields have different content please try again.</b>");
+                    } else {
+                        if (patt.test($("#Password").val())) {
+                            var token = $('input[name="__RequestVerificationToken"]').val();
+                            var headers = {};
+                            headers['__RequestVerificationToken'] = token;
 
-                    $.ajax({
-                        type: "POST",
-                        url: '/Account/RegistrationRequest/',
-                        dataType: 'json',
-                        processData: false,
-                        contentType: false,
-                        headers : headers,
-                        data: formData,
-                        success: function (response) {
-                            setTimeout(function () {
-                                alertify.success('<b>The Registration Request has been sent</b>');
-                            }, 2500);
-                            setTimeout(function () {
-                                window.location = "/Account/Login";
-                            },4500);
+                            $.ajax({
+                                type: "POST",
+                                url: '/Account/RegistrationRequest/',
+                                dataType: 'json',
+                                processData: false,
+                                contentType: false,
+                                headers: headers,
+                                data: formData,
+                                success: function (response) {
+                                    setTimeout(function () {
+                                        alertify.success('<b>The Registration Request has been sent</b>');
+                                    }, 2500);
+                                    setTimeout(function () {
+                                        window.location = "/Account/Login";
+                                    }, 4500);
 
-                        },
-                        error: function (error) {
-                            alertify.error("<b>Try another email.</b>");
+                                },
+                                error: function (error) {
+                                    alertify.error("<b>Try another email.</b>");
+                                }
+                            });
+                        } else {
+                            alertify.error("<b>Password does not meet security criteria.</b>");
+                            $("#passcriteria").show();
                         }
-                    });
+                    }
+                    
                 });
             });
         }(jQuery));
