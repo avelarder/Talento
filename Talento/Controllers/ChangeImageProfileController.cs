@@ -60,16 +60,27 @@ namespace Talento.Controllers
         {
             if(model.File!=null)
             {
-                ApplicationUser appUser = UserHelper.GetUserById(User.Identity.GetUserId());
-
-                Byte[] newImage = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength);
-
-                appUser.ImageProfile = newImage;
-
-                if (ModelState.IsValid)
+                bool isvalidfile = true;
+                if (model.File.ContentType.ToLower() != "image/jpg" &&
+                    model.File.ContentType.ToLower() != "image/jpeg" &&
+                    model.File.ContentType.ToLower() != "image/pjpeg" &&
+                    model.File.ContentType.ToLower() != "image/gif" &&
+                    model.File.ContentType.ToLower() != "image/x-png" &&
+                    model.File.ContentType.ToLower() != "image/png")
                 {
+                    isvalidfile= false;
+                }
+
+
+                if (ModelState.IsValid && isvalidfile)
+                {
+                    ApplicationUser appUser = UserHelper.GetUserById(User.Identity.GetUserId());
+
+                    Byte[] newImage = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength);
+
+                    appUser.ImageProfile = newImage;
+
                     UserHelper.ChangeImageProfile(appUser);
-                    return RedirectToAction("Index", "Dashboard");
                 }
             }
             return RedirectToAction("Index", "Dashboard");

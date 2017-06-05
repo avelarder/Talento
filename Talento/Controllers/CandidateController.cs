@@ -46,7 +46,7 @@ namespace Talento.Controllers
         {
             MemoryStream ms = new MemoryStream();
             TextWriter tw = new StreamWriter(ms);
-            var callbackUrl = Url.Action("Details", "Positions", new { toApply.PositionId }, protocol: Request.Url.Scheme);
+            var callbackUrl = Url.Action("Details", "Positions", new { id = toApply.PositionId }, protocol: Request.Url.Scheme);
             string body = "A profile has been added to " + toApply.Title + " by " + User.Identity.Name + " . " +
                             "Please visit the following URL for more information: " + callbackUrl;
             tw.WriteLine(body);

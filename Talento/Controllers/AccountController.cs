@@ -15,11 +15,12 @@ using System.Web.Security;
 using Talento.EmailManager;
 using Talento.Core;
 using System.Drawing;
+using System.Web.Helpers;
 
 namespace Talento.Controllers
 {
     [HandleError]
-    [Authorize]
+    //[Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -29,14 +30,51 @@ namespace Talento.Controllers
 
         public AccountController()
         {
+            
         }
-        
+
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IMessenger emailManager, ICustomUser userhelper)
         {
             UserManager = userManager;
             SignInManager = signInManager;
             _emailManager = emailManager;
             UserHelper = userhelper;
+        }
+
+        [HttpPost]
+        [ValidateJsonAntiForgeryToken]
+        public JsonResult RegistrationRequest(RegisterViewModel model)
+        {
+            if (!Register(model))
+            {
+                return null;
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
+
+        [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+        protected class ValidateJsonAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
+        {
+            public void OnAuthorization(AuthorizationContext filterContext)
+            {
+                try
+                {
+                    if (filterContext == null)
+                    {
+                        throw new ArgumentNullException("filterContext");
+                    }
+                    var httpContext = filterContext.HttpContext;
+                    var cookie = httpContext.Request.Cookies[AntiForgeryConfig.CookieName];
+                    AntiForgery.Validate(cookie?.Value, httpContext.Request.Params["__RequestVerificationToken"]);
+                }
+                catch (Exception)
+                {
+                    //throw;
+                }
+            }
         }
 
         public ApplicationSignInManager SignInManager
@@ -62,7 +100,7 @@ namespace Talento.Controllers
                 _userManager = value;
             }
         }
-        
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -123,7 +161,7 @@ namespace Talento.Controllers
 
             return View();
         }
-        
+
         //// POST: /Account/Login 
         [HttpPost]
         [AllowAnonymous]
@@ -187,7 +225,7 @@ namespace Talento.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public bool Register(RegisterViewModel model)
         {
             var roles = Roles.GetAllRoles();
             List<string> rolesName = new List<string>();
@@ -204,15 +242,15 @@ namespace Talento.Controllers
             if (ModelState.IsValid)
             {
                 //Check if Role exists
-                var role = roles.SingleOrDefault(x=>x == model.UserType);
+                var role = roles.SingleOrDefault(x => x == model.UserType);
                 if (role == null || role == "Admin")
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid role.");              
-                    return View(model);
+                    ModelState.AddModelError(string.Empty, "Invalid role.");
+                    return false;
                 }
 
-                
-                 
+
+
                 Random rnd = new Random();
                 int dice = rnd.Next(1, 5);
 
@@ -221,9 +259,9 @@ namespace Talento.Controllers
                 Image img = Image.FromFile(Server.MapPath("/Content/Images/alien" + dice + ".png"));
                 img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, ImageProfile = ms.ToArray()};
-                var result = await UserManager.CreateAsync(user, model.Password);
-                
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, ImageProfile = ms.ToArray(), CreatedDate = DateTime.Now };
+                var result = UserManager.Create(user, model.Password);
+
 
                 if (result.Succeeded)
                 {
@@ -233,17 +271,17 @@ namespace Talento.Controllers
                     {
                         result = UserManager.AddToRole(user.Id, model.UserType);
                     }
-
+                    
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     //_emailManager.SendConfirmationEmail(model.Email, "Confirm your account", "Talento account confirmation", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    ViewData["RegisterCode"] = HttpUtility.UrlEncode(code);
-                    ViewData["UserId"] = user.Id;
+                    //ViewData["RegisterCode"] = HttpUtility.UrlEncode(code);
+                    //ViewData["UserId"] = user.Id;
 
-                    return View("RegisterConfirmation");
+                    return true;
 
                     //ModelState.AddModelError("", "A link has been sent to your registered mail address. Check for it in order to activate the account before being able to login.");
                     //return View("Login");
@@ -252,8 +290,8 @@ namespace Talento.Controllers
                 }
                 AddErrors(result);
             }
-            
-            return View(model);
+
+            return false;
         }
 
         [AllowAnonymous]
@@ -270,36 +308,7 @@ namespace Talento.Controllers
 
         }
 
-        //
-        // GET: /Account/ConfirmEmail
-        [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(string userId, string code)
-        {
-            if (userId == null || code == null)
-            {
-                ModelState.AddModelError("", "The operation you are trying to execute is not valid.");
-                return View("Login");
-            }
-
-            if (UserManager.IsEmailConfirmed(userId))
-            {
-                ModelState.AddModelError("", "Account is activated already.");
-                return View("Login");
-            }
-
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
-            if (result.Succeeded)
-            {
-                ModelState.AddModelError("", "Your Account has been activated successfully.");
-                return View("Login");
-            }
-            else
-            {
-                ModelState.AddModelError("", "The operation you are trying to execute is not valid.");
-                return View("Login");
-            }
-        }
-
+      
         //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]
@@ -325,7 +334,7 @@ namespace Talento.Controllers
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
-                    ModelState.AddModelError("","Error");
+                    ModelState.AddModelError("", "Error");
                     // Don't reveal that the user does not exist or is not confirmed
                     return View();
                 }
@@ -380,7 +389,7 @@ namespace Talento.Controllers
             ModelState.Clear();
             TryValidateModel(model);
             var user = await UserManager.FindByNameAsync(model.Email);
-            
+
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "An error occurred when trying to reset the password");
@@ -446,7 +455,7 @@ namespace Talento.Controllers
                 return View("MailSent");
 
                 //string body = "Reset Password. Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>";
-               // _emailManager.SendConfirmationEmail(model.Email, "talento forgot password confirmation email", body);
+                // _emailManager.SendConfirmationEmail(model.Email, "talento forgot password confirmation email", body);
 
             }
             ModelState.Clear();
@@ -502,6 +511,8 @@ namespace Talento.Controllers
 
             base.Dispose(disposing);
         }
+
+
 
 #region Helpers
         // Used for XSRF protection when adding external logins
@@ -560,6 +571,6 @@ namespace Talento.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
-#endregion
+        #endregion
     }
 }

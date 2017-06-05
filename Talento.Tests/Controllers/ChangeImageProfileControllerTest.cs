@@ -93,7 +93,11 @@ namespace Talento.Tests.Controllers
 
             uploadedFile
                 .Setup(f => f.FileName)
-                .Returns("editedImage.pdf");
+                .Returns("editedImage.png");
+
+            uploadedFile
+                .Setup(f => f.ContentType)
+                .Returns("image/png");
 
             uploadedFile
                 .Setup(f => f.InputStream)

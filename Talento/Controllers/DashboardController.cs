@@ -7,6 +7,7 @@ using Talento.Models;
 using Talento.Core;
 using Talento.Entities;
 using Talento.Core.Utilities;
+using System.Web.Helpers;
 
 namespace Talento.Controllers
 {
@@ -99,7 +100,6 @@ namespace Talento.Controllers
             string role = GetRole();
             ViewData["Role"] = role;
             ViewData["RoleClass"] = role + "-role";
-
             ViewData["Image"] = UserHelper.GetUserByEmail(User.Identity.Name).ImageProfile;
 
             return PartialView("~/Views/Shared/Dashboard/_PartialTopNavigation.cshtml");
@@ -111,7 +111,15 @@ namespace Talento.Controllers
             string role = GetRole();
             ViewData["Role"] = role;
             ViewData["RoleClass"] = role + "-role";
-
+            
+            //First I get the roles that are allowed by the settings
+            List<string> roles = ApplicationSettings.GetAllSettings()
+                .Where(x => x.SettingName.Trim().Equals("AllowUsersActivation"))
+                .Select(y => y.ParameterName.Substring(5)).ToList();
+            //Then I get the role of the currently logged user
+            string loggedRole = UserHelper.GetRoleName(UserHelper.GetUserByEmail(User.Identity.Name).Roles.First().RoleId);
+            ViewData["UserTableVisible"] = roles.Contains(loggedRole);
+            
             return PartialView("~/Views/Shared/Dashboard/_PartialSidebarNavigation.cshtml");
         }
 
@@ -169,5 +177,11 @@ namespace Talento.Controllers
         public ActionResult AboutUs() {
             return PartialView();
         }
+
+        public ActionResult SoftwareTimeline()
+        {
+            return PartialView();
+        }
+
     }
 }
