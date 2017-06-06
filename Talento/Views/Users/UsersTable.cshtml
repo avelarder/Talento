@@ -1,0 +1,55 @@
+﻿@model Talento.Models.UsersTableViewModel
+@using PagedList.Mvc;
+@using PagedList;
+
+@{Layout = "~/Views/Shared/_LayoutDashboard.cshtml"; }
+
+<div class="form-group col-sm-8">
+    <div class="row">
+        <h3>Pending Users:</h3>
+    </div>
+</div>
+<table id="example-checkbox" class="table pmd-table table-hover table-striped display responsive nowrap" cellspacing="0" style="width:100%">
+    <tr id="pagination-sort">
+        <th>
+            Name
+        </th>
+        <th>
+            Registered on
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Role
+        </th>
+        <th style="padding-left:30px;">
+            Actions
+        </th>
+    </tr>
+    @foreach (var u in Model.users)
+    {
+        <tr>
+            <td>
+                @u.name
+            </td>
+            <td>
+                @u.createdon.ToShortDateString()
+            </td>
+            <td>
+                @u.email
+            </td>
+            <td>
+                @u.role
+        </td>
+        <td>
+            <a class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" href="/Users/ConfirmEmail?userId=@u.id">
+                <i class="material-icons pmd-sm">check_circle</i>
+            </a>
+            <a class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-danger btn-sm" href="/Users/RejectEmail?userId=@u.id">
+                <i class="material-icons pmd-sm">cancel</i>
+            </a>
+        </td>
+    </tr>
+    }
+</table>

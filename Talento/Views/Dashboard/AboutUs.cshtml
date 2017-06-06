@@ -4,27 +4,32 @@
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            About Us
+            <small>It's Nice to Meet You!</small>
+        </h1>
+        <p>
+            We are a group of fresh TCSers that joined the company at the beginning of 2017 as junior IT Consultants. With the help of Arturo Velarde Rojas playing the role of Product Owner we were able to create this internal project following the SCRUM methodology with Ramon Arana as our Scrum Master. Arturo also helped as a techincal leader and we were pleased to have his backup in .Net technologies because it was for great help to build Talento!
+            We hope Talento grows strong and healthy. But we need your help for this! That is why any comment, useful feature, or missing feature you may find will be of great help for us to continue this project.
+            So in any case do not doubt in communicating with us!
+            Here is some information about ourselves:
+        </p>
+        <br/>
+    </div>
+</div>
+
+
 <!-- Page Content -->
-<div class="container" id="profiles">
+<div class="container" id="profiles" style="width:100%">
 
     <!-- Introduction Row -->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">
-                About Us
-                <small>It's Nice to Meet You!</small>
-            </h1>
-            <p>We are a group of fresh TCSers that joined the company at the beginning of 2017 as junior IT Consultants. With the help of Arturo Velarde Rojas playing the role of Product Owner we were able to create this internal project following the SCRUM methodology with Ramon Arana as our Scrum Master. Arturo also helped as a techincal leader and we were pleased to have his backup in .Net technologies because it was for great help to build Talento!
-We hope Talento grows strong and healthy. But we need your help for this! That is why any comment, useful feature, or missing feature you may find will be of great help for us to continue this project.
-So in any case do not doubt in communicating with us!
-Here is some information about ourselves:</p>
-        </div>
-    </div>
 
     <!-- Team Members Row -->
     @*<div class="row" id="profiles">
         </div>*@
-    
+
     <hr>
 </div>
 
@@ -33,6 +38,7 @@ Here is some information about ourselves:</p>
     window.onload = function () {
         (function ($) {
 
+            //add as many profiles as needed to the profileList array to list them
             var profileList = [
                 {
                     name: "Arturo Velarde Rojas",
@@ -123,6 +129,7 @@ Here is some information about ourselves:</p>
                     var randomProfile = getRandomItemInArray(profileList);
                     var index = profileList.findIndex(x => x.employeeId == randomProfile.employeeId);
 
+                    //list 4 profiles per row
                     if (i % 4 == 0 && i != 0) {
                         profilesStr += "</div>";
                         profilesStr += "<div class='row' id='profile_row_" + i + "'>";
@@ -151,7 +158,7 @@ Here is some information about ourselves:</p>
                         "<p>" + randomProfile.hobbies + "</p>" +
                         "<br />" +
                         "</div>"
-                    
+
                     //remove element from array
                     profileList.splice(index, 1);
                     i++;
@@ -165,97 +172,3 @@ Here is some information about ourselves:</p>
         }(jQuery));
     }
 </script>
-
-
-@*<div class='row' id='profile_row_0'>
-    <div class='col-lg-3 col-sm-6 text-center'>
-        <img class='img-circle img-responsive img-center' src='/Content/Images/1377750.png' alt='Profile image' style='width: 50%;'>
-        <h3><b>Carlos Hackenbruch Siri</b><br /><span>1377750</span><br /><span>carlos.siri@tcs.com</span></h3>
-        <b>Description</b><br />
-        <p>I entered Tata in January of 2017 and work as a junior developer aspiring to achieve Seniority and become a faculty and trainer in Microsoft .Net technologies</p>
-        <br /><b>Interests</b><br />
-        <p>Software Development, Leadership, Philosophy, Epistemology, Science, Math, Physics, Quantum computing</p>
-        <br /><b>Hobbies</b><br />
-        <p>PC Gaming, Swimming, Science Teaching</p>
-        <br />
-    </div>
-    <div class='col-lg-3 col-sm-6 text-center'>
-        <img class='img-circle img-responsive img-center' src='/Content/Images/1377751.jpg' alt='Profile image' style='width: 50%;'>
-        <h3><b>Fabián Gargaglione</b><br /><span>1377751</span><br /><span>arturo.velarde@tcs.com</span></h3>
-        <b>Description</b><br />
-        <p>I have joined TCS on January 2017 as a Junior Developer looking for new challenges to enhance my skills as a Developer</p>
-        <br /><b>Interests</b><br />
-        <p>Software Development, Popular Science, Domotics, Science Fiction, Philosophy, Travel, Other Cultures</p>
-        <br /><b>Hobbies</b><br />
-        <p>Skate, some Sports, Gaming, OS projects</p>
-        <br />
-    </div>
-    <div class='col-lg-3 col-sm-6 text-center'>
-        <img class='img-circle img-responsive img-center' src='/Content/Images/1377753.png' alt='Profile image' style='width: 50%;'>
-        <h3><b>Federico Testoni</b><br /><span>1387239</span><br /><span>federico.testoni@tcs.com</span></h3>
-        <b>Description</b><br />
-        <p>I am a Programmer and Web Designer, willing to grow and be part of diverse projects</p>
-        <br /><b>Interests</b><br />
-        <p>Software Development, Music, Movies, and Sports</p>
-        <br /><b>Hobbies</b><br />
-        <p>Playing Guitar and Bass, hanging out with friends, and drinking cold beer</p>
-        <br />
-    </div>
-    <div class='col-lg-3 col-sm-6 text-center'>
-        <img class='img-circle img-responsive img-center' src='/Content/Images/1377754.jpg' alt='Profile image' style='width: 50%;'>
-        <h3><b>Martin Mato</b><br /><span>1377754</span><br /><span>martin.mato@tcs.com</span></h3>
-        <b>Description</b><br />
-        <p>TCS associate since 2012, Martin is very communicative person and friendly</p>
-        <br /><b>Interests</b><br />
-        <p>Sci-Fi and Fantasy books, Music, Movies, VideoGames, technology</p>
-        <br /><b>Hobbies</b><br />
-        <p>Studying new technologies to improve his knowdlege, reading Sci-Fi books, movies, videogames and spend time with family and friends</p>
-        <br />
-    </div>
-    <div class='col-lg-3 col-sm-6 text-center'>
-        <img class='img-circle img-responsive img-center' src='/Content/Images/1377771.jpg' alt='Profile image' style='width: 50%;'>
-        <h3><b>Pablo Carmona</b><br /><span>1377771</span><br /><span>pablo.carmona@tcs.com</span></h3>
-        <b>Description</b><br />
-        <p>I am a very nice and friendly person. I enjoy contributing new ideas. I am self motivated and a very good team player.My hobbies are playing the guitar, practice sports and listening music</p>
-        <br /><b>Interests</b><br />
-        <p></p>
-        <br /><b>Hobbies</b><br />
-        <p>My hobbies are playing the guitar, practice sports and listening music</p>
-        <br />
-    </div>
-</div>
-<div class='row' id='profile_row_4'>
-    <div class='col-lg-3 col-sm-6 text-center'>
-        <img class='img-circle img-responsive img-center' src='/Content/Images/alien1.png' alt='Profile image' style='width: 50%;'>
-        <h3><b>Darío Prolo Loza</b><br /><span>1359388</span><br /><span>d.prololoza@tcs.com</span></h3>
-        <b>Description</b><br />
-        <p></p>
-        <br /><b>Interests</b><br />
-        <p>Soccer, Music</p>
-        <br /><b>Hobbies</b><br />
-        <p>I like playing guitar</p>
-        <br />
-    </div>
-    <div class='col-lg-3 col-sm-6 text-center'>
-        <img class='img-circle img-responsive img-center' src='/Content/Images/1377753.png' alt='Profile image' style='width: 50%;'>
-        <h3><b>Federico Testoni</b><br /><span>1387239</span><br /><span>federico.testoni@tcs.com</span></h3>
-        <b>Description</b><br />
-        <p>I am a Programmer and Web Designer, willing to grow and be part of diverse projects</p>
-        <br /><b>Interests</b><br />
-        <p>Software Development, Music, Movies, and Sports</p>
-        <br /><b>Hobbies</b><br />
-        <p>Playing Guitar and Bass, hanging out with friends, and drinking cold beer</p>
-        <br />
-    </div>
-    <div class='col-lg-3 col-sm-6 text-center'>
-        <img class='img-circle img-responsive img-center' src='/Content/Images/805634.png' alt='Profile image' style='width: 50%;'>
-        <h3><b>Arturo Velarde Rojas</b><br /><span>805634</span><br /><span>arturo.velarde@tcs.com</span></h3>
-        <b>Description</b><br />
-        <p>IT Guy interested on software engineering, technology and photography</p>
-        <br /><b>Interests</b><br />
-        <p>Software Development, Photography</p>
-        <br /><b>Hobbies</b><br />
-        <p>Woodworking and Bricolage</p>
-        <br />
-    </div>
-</div>*@
