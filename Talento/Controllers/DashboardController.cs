@@ -98,7 +98,7 @@ namespace Talento.Controllers
         [ChildActionOnly]
         public ActionResult TopNavigation()
         {
-            if (User == null)
+            if (User.Identity.Name != "")
             {
 
             string role = GetRole();
@@ -118,7 +118,7 @@ namespace Talento.Controllers
         [ChildActionOnly]
         public ActionResult SideNavigation()
         {
-            if (User == null)
+            if (User.Identity.Name != "")
             {
                 string role = GetRole();
                 ViewData["Role"] = role;
