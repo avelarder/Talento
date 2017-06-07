@@ -168,6 +168,7 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            model.Email = model.Email.Trim();
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindAsync(model.Email, model.Password);
@@ -227,6 +228,7 @@ namespace Talento.Controllers
         [ValidateAntiForgeryToken]
         public bool Register(RegisterViewModel model)
         {
+            model.Email = model.Email.Trim();
             var roles = Roles.GetAllRoles();
             List<string> rolesName = new List<string>();
 

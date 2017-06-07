@@ -12,7 +12,6 @@ using System.Web.Helpers;
 namespace Talento.Controllers
 {
     [HandleError]
-    [Authorize]
     public class DashboardController : Controller
     {
         ICustomPagingList DashboardPagingHelper;
@@ -32,6 +31,7 @@ namespace Talento.Controllers
             });
         }
 
+        [Authorize]
         // GET: Dashboard
         public ActionResult Index(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page = 1)
         {
@@ -93,34 +93,51 @@ namespace Talento.Controllers
             });
         }
 
+        //[Authorize]
         // Dashboard Partials
         [ChildActionOnly]
         public ActionResult TopNavigation()
         {
+            if (User == null)
+            {
+
             string role = GetRole();
             ViewData["Role"] = role;
             ViewData["RoleClass"] = role + "-role";
             ViewData["Image"] = UserHelper.GetUserByEmail(User.Identity.Name).ImageProfile;
 
             return PartialView("~/Views/Shared/Dashboard/_PartialTopNavigation.cshtml");
+            }
+            else
+            {
+                return null;
+            }
         }
 
+        //[Authorize]
         [ChildActionOnly]
         public ActionResult SideNavigation()
         {
-            string role = GetRole();
-            ViewData["Role"] = role;
-            ViewData["RoleClass"] = role + "-role";
-            
-            //First I get the roles that are allowed by the settings
-            List<string> roles = ApplicationSettings.GetAllSettings()
-                .Where(x => x.SettingName.Trim().Equals("AllowUsersActivation"))
-                .Select(y => y.ParameterName.Substring(5)).ToList();
-            //Then I get the role of the currently logged user
-            string loggedRole = UserHelper.GetRoleName(UserHelper.GetUserByEmail(User.Identity.Name).Roles.First().RoleId);
-            ViewData["UserTableVisible"] = roles.Contains(loggedRole);
-            
-            return PartialView("~/Views/Shared/Dashboard/_PartialSidebarNavigation.cshtml");
+            if (User == null)
+            {
+                string role = GetRole();
+                ViewData["Role"] = role;
+                ViewData["RoleClass"] = role + "-role";
+
+                //First I get the roles that are allowed by the settings
+                List<string> roles = ApplicationSettings.GetAllSettings()
+                    .Where(x => x.SettingName.Trim().Equals("AllowUsersActivation"))
+                    .Select(y => y.ParameterName.Substring(5)).ToList();
+                //Then I get the role of the currently logged user
+                string loggedRole = UserHelper.GetRoleName(UserHelper.GetUserByEmail(User.Identity.Name).Roles.First().RoleId);
+                ViewData["UserTableVisible"] = roles.Contains(loggedRole);
+
+                return PartialView("~/Views/Shared/Dashboard/_PartialSidebarNavigation.cshtml");
+            }
+            else
+            {
+                return null;
+            }
         }
 
         [Authorize(Roles = "Admin")]
@@ -135,6 +152,7 @@ namespace Talento.Controllers
             return View();
         }
 
+        [Authorize]
         // Helpers
         private string GetRole()
         {
@@ -146,6 +164,7 @@ namespace Talento.Controllers
             return role;
         }
 
+        [Authorize]
         public ActionResult AddSettingsForm()
         {
             return View();
@@ -174,10 +193,12 @@ namespace Talento.Controllers
             return aux;
         }
 
+        [AllowAnonymous]
         public ActionResult AboutUs() {
             return PartialView();
         }
 
+        [AllowAnonymous]
         public ActionResult SoftwareTimeline()
         {
             return PartialView();

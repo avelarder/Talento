@@ -245,7 +245,9 @@
     <Content Include="Content\styleIE.css" />
     <Content Include="Scripts\covervid.min.js" />
     <Content Include="Content\mdb.min.css" />
-    <Content Include="Content\Media\pwiaobv.mp4" />
+    <Content Include="Content\Media\pwiaobv.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\propeller.min.css" />

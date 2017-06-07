@@ -22,13 +22,22 @@
 
 <!-- Page Content -->
 <div class="container">
+    @if (User.Identity.Name == "")
+            {
+        <button style="float:right;" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" onclick="goBack()">Go Back</button>
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+    }
     <div id="ss-container" class="ss-container aux" style="">
         <div class="ss-row">
             <div class="ss-left">
-                <h2 id="november">Software Team</h2>
+                <h2 id="november" style="color:black;">Software Team</h2>
             </div>
             <div class="ss-right"style="left:20px;">
-                <h2>Timeline</h2>
+                <h2 style="color:black;">Timeline</h2>
             </div>
         </div>
         
@@ -198,7 +207,15 @@
                 </h3>
             </div>
         </div>
-        
+        @if (User.Identity.Name == "")
+            {
+            <button style="float:right;" class="btn pmd-btn-flat pmd-ripple-effect btn-primary" onclick="goBack()">Go Back</button>
+                <script>
+                    function goBack() {
+                        window.history.back();
+                    }
+                </script>
+        }
     </div>
 </div>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -471,38 +488,3 @@
 
 
 
-@*
-
-Friday 10th, March: Idea of Talento was introduced. Was still called OpenPositionsTool. The team were given the EPIC explaining the problem to be solved.
-
-Monday 13th, March: The team actually began reading and understanding the EPIC. DotNet and SCRUM methodology training had just finished, it was time to put it into practice.
-
-Tuesday 14th, March: Arturo was introduced to the team as Product Owner since he was the autor of the idea. He also involved himself as a Technical Leader which was of great help.
-
-Wednesday 15th, March: The entire team moves from Downtown Montevideo facility to Monte Caseros.
-
-Monday 20th, March: First Sprint begins. User management is implemented.
-
-Monday 27th, March: Second Sprint begins. Dashboard and Position management is implemented.
-
-Monday 3rd April: Third Sprint begins. Only one use story is completed. The iteration was a completely disaster.
-
-Monday 10th April: Fourth Sprint begins. Every bug was fixed and the profiles and positions logic is fully implemented.The demo was flagrantly more successful than the one of the previous week.
-
-Monday 17th April: Fifth Sprint begins. File Management and protection is implemented. Another successful demo, go team!
-
-Monday 24th April: Sixth Sprint begins. Mayor enhacement! Now we have application settings, and some bugs and enhacements were implemented.
-
-Tuesday 2nd May: Seventh Sprint begins. Now it is possible to record Techincal Interviews Feedback and Conditional Offers.
-
-Monday 8th May: Eighth Sprint begins. Minor bug fixes, TIFF template availability and the team had its ASP.NET MVC Apps Assessment!
-
-Monday 15th May: Last Sprint begins. Comments and Profile Images are added to the system. About us page was also added.
-
-Friday 19th May: Features development has finished. The MVP was assessed by Arturo and the team is ready for the real demo!
-
-Tuesday 23rd May: Arturo begins negotations with IS in order to prepare for the implementation before the demo.
-
-Monday 29th May: The testing enviroment is now online and working!
-
-Thursday 1st June: The team is back into coding. Ready to add enchacements before the demo.*@
