@@ -42,13 +42,13 @@ namespace Talento.Controllers
             }
 
             List<Entities.ApplicationUser> users = UserHelper.GetPendingUsers();
-            Models.UsersTableViewModel aux = new Models.UsersTableViewModel() { users = new List<Models.ApplicationUserViewModel>()};
-            users.ForEach(x => aux.users.Add(new Models.ApplicationUserViewModel() {
-                createdon = x.CreatedDate,
-                email = x.Email,
-                id = x.Id,
-                name = x.UserName,
-                role = UserHelper.GetRoleName(x.Roles.First().RoleId)
+            Models.UsersTableViewModel aux = new Models.UsersTableViewModel() { Users = new List<Models.ApplicationUserViewModel>()};
+            users.ForEach(x => aux.Users.Add(new Models.ApplicationUserViewModel() {
+                Createdon = x.CreatedDate,
+                Email = x.Email,
+                Id = x.Id,
+                Name = x.UserName,
+                Role = UserHelper.GetRoleName(x.Roles.First().RoleId)
             }));
             return View(aux);
         }

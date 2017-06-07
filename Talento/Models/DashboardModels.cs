@@ -31,19 +31,17 @@ namespace Talento.Models
     public class ApplicationUserViewModel
     {
 
-        public string id { get; set; }
-        public string name { get; set; }
-        public string email { get; set; }
-        public DateTime createdon { get; set; }
-        public string role { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public DateTime? Createdon { get; set; }
+        public string Role { get; set; }
 
     }
 
     public class UsersTableViewModel
     {
-        public List<ApplicationUserViewModel> users { get; set; }
-
-
+        public List<ApplicationUserViewModel> Users { get; set; }
     }
 
 }

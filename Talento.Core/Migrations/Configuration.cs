@@ -62,7 +62,38 @@ namespace Talento.Core.Migrations
                 }
             }
             context.SaveChanges();
-            #endregion            
+            #endregion
+
+            #region Admin User
+            if (!context.Users.Any(u => u.UserName == "martin.mato@tcs.com"))
+            {
+                var passwordHash = new PasswordHasher();
+                string password = passwordHash.HashPassword("tcs@123456");
+
+                var user = new ApplicationUser
+                {
+                    UserName = "martin.mato@tcs.com",
+                    Email = "martin.mato@tcs.com",
+                    PasswordHash = password,
+                    EmailConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                    CreatedDate = DateTime.Now
+                };
+
+                IdentityResult resultCreate = manager.Create(user);
+                if (resultCreate.Succeeded == false)
+                {
+                    throw new Exception(resultCreate.Errors.First());
+                }
+
+                IdentityResult resultAddToRole = manager.AddToRole(user.Id, "PM");
+                if (resultAddToRole.Succeeded == false)
+                {
+                    throw new Exception(resultAddToRole.Errors.First());
+                }
+            }
+            context.SaveChanges();
+            #endregion    
 
             #region ApplicationSettings
 
