@@ -54,7 +54,7 @@ namespace Talento.Tests.Helpers
 
             DashboardPagingHelper dashboardPagingHelper = new DashboardPagingHelper(context.Object, mockCommenthelper.Object);
 
-            var result = dashboardPagingHelper.GetAdminTable("", "", "", "", 1);
+            var result = dashboardPagingHelper.GetTable("", "", "", "", 1);
 
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(List<Position>));
@@ -99,7 +99,7 @@ namespace Talento.Tests.Helpers
 
             DashboardPagingHelper dashboardPagingHelper = new DashboardPagingHelper(context.Object, mockCommentHelper.Object);
 
-            var result = dashboardPagingHelper.GetBasicTable("", "", "", "", 1);
+            var result = dashboardPagingHelper.GetTable("", "", "", "", 1);
 
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(List<Position>));

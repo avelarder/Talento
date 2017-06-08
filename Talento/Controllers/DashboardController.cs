@@ -36,16 +36,10 @@ namespace Talento.Controllers
         public ActionResult Index(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page = 1)
         {
             string Dashboard = "_PartialContent.cshtml";
-            string test = ModelState.IsValid.ToString();
-            List<Position> rawData = new List<Position>();
+            List<Position> rawData = DashboardPagingHelper.GetTable(sortOrder, FilterBy, currentFilter, searchString, page);
             if (User.IsInRole("Admin"))
             {
-                Dashboard = "_PartialContentAdmin.cshtml";
-                rawData = DashboardPagingHelper.GetAdminTable(sortOrder, FilterBy, currentFilter, searchString, page);
-            }
-            if (!User.IsInRole("Admin"))
-            {
-                rawData = DashboardPagingHelper.GetBasicTable(sortOrder, FilterBy, currentFilter, searchString, page);
+                Dashboard = "_PartialContentAdmin.cshtml";                
             }
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "date_asc" : ""; //Default date descending
@@ -77,7 +71,7 @@ namespace Talento.Controllers
 
             // Pagination
             var pageSizeValue = ApplicationSettings.GetSetting("pagination", "pagesize"); // Setting Parameter
-            int pageSize = 0;
+            int pageSize;
 
             if (pageSizeValue != null)
             {
@@ -126,7 +120,7 @@ namespace Talento.Controllers
 
                 //First I get the roles that are allowed by the settings
                 List<string> roles = ApplicationSettings.GetAllSettings()
-                    .Where(x => x.SettingName.Trim().Equals("AllowUsersActivation"))
+                    .Where(x => x.SettingName.Trim().Equals("AllowUsersActivation") && x.ParameterValue.Trim().Equals("Enabled"))
                     .Select(y => y.ParameterName.Substring(5)).ToList();
                 //Then I get the role of the currently logged user
                 string loggedRole = UserHelper.GetRoleName(UserHelper.GetUserByEmail(User.Identity.Name).Roles.First().RoleId);
