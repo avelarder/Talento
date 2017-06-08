@@ -45,7 +45,7 @@ namespace Talento.Core.Migrations
                     Email = "Admin@example.com",
                     PasswordHash = password,
                     EmailConfirmed = true,
-                    SecurityStamp = Guid.NewGuid().ToString(), 
+                    SecurityStamp = Guid.NewGuid().ToString(),
                     CreatedDate = DateTime.Now
                 };
 
