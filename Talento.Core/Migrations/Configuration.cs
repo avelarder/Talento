@@ -105,7 +105,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "Status",
                     ParameterValue = "Enabled",
                     CreationDate = DateTime.Now,
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
                 new ApplicationSetting {
                     ApplicationSettingId = 2,
@@ -113,7 +114,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "PageSize",
                     ParameterValue = "10",
                     CreationDate = DateTime.Now.AddMinutes(-5),
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
                 new ApplicationSetting {
                     ApplicationSettingId = 3,
@@ -121,7 +123,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "PageSize1",
                     ParameterValue = "10",
                     CreationDate = DateTime.Now.AddMinutes(-7),
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
                 new ApplicationSetting {
                     ApplicationSettingId = 4,
@@ -129,7 +132,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "Status",
                     ParameterValue = "Enabled",
                     CreationDate = DateTime.Now.AddHours(-1),
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
 
                 new ApplicationSetting {
@@ -138,7 +142,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "SortBy",
                     ParameterValue = "CreationDate",
                     CreationDate = DateTime.Now.AddHours(-1).AddMinutes(-5),
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
                 new ApplicationSetting {
                     ApplicationSettingId = 6,
@@ -146,7 +151,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "DefaultSort",
                     ParameterValue = "DESC",
                     CreationDate = DateTime.Now.AddHours(-1).AddMinutes(-20),
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
                 new ApplicationSetting {
                     ApplicationSettingId = 7,
@@ -154,7 +160,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "Status",
                     ParameterValue = "Enabled",
                     CreationDate = DateTime.Now.AddHours(-2),
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
                 new ApplicationSetting {
                     ApplicationSettingId = 8,
@@ -162,7 +169,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "DefaultFilter",
                     ParameterValue = "All",
                     CreationDate = DateTime.Now.AddHours(-2).AddMinutes(-5),
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
                 new ApplicationSetting {
                     ApplicationSettingId = 9,
@@ -170,7 +178,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "DefaultName",
                     ParameterValue = "/[A-z]*_TIFF.(txt|pdf|doc)/g",
                     CreationDate = DateTime.Now.AddHours(-3),
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
                 new ApplicationSetting {
                     ApplicationSettingId = 10,
@@ -178,7 +187,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "AllowAdmin",
                     ParameterValue = "Enabled",
                     CreationDate = DateTime.Now,
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
                 new ApplicationSetting {
                     ApplicationSettingId = 11,
@@ -186,7 +196,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "AllowPM",
                     ParameterValue = "Disabled",
                     CreationDate = DateTime.Now,
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
                 new ApplicationSetting {
                     ApplicationSettingId = 12,
@@ -194,7 +205,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "AllowTAG",
                     ParameterValue = "Disabled",
                     CreationDate = DateTime.Now,
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
                 new ApplicationSetting {
                     ApplicationSettingId = 11,
@@ -202,7 +214,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "AllowTL",
                     ParameterValue = "Disabled",
                     CreationDate = DateTime.Now,
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
                 new ApplicationSetting {
                     ApplicationSettingId = 12,
@@ -210,7 +223,8 @@ namespace Talento.Core.Migrations
                     ParameterName = "AllowRMG",
                     ParameterValue = "Disabled",
                     CreationDate = DateTime.Now,
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                    CreatedBy = manager.FindByEmail("Admin@example.com"),
+                    ApplicationUser_Id = manager.FindByEmail("Admin@example.com").Id
                 },
             };
             appSettings.ForEach(r => context.ApplicationSetting.AddOrUpdate(p => p.ApplicationSettingId, r));

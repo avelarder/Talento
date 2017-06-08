@@ -149,7 +149,7 @@ namespace Talento.Tests.Controllers
             Mock<ICustomUser> mockUserHelper = mocks.Create<ICustomUser>();
             Mock<IUtilityApplicationSettings> utilAppSetting = new Mock<IUtilityApplicationSettings>();
             Mock<ICustomPagingList> dashboardPagingHelper = new Mock<ICustomPagingList>();
-            dashboardPagingHelper.Setup(x => x.CreateXl("id_desc", "Status", null, "", null)).Returns("filepath/");
+            dashboardPagingHelper.Setup(x => x.CreateXML("id_desc", "Status", null, "", null)).Returns("filepath/");
             Mock<ControllerContext> mockContext = new Mock<ControllerContext>();
             mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
             DashboardController controller = new DashboardController(dashboardPagingHelper.Object, utilAppSetting.Object, mockUserHelper.Object)
@@ -162,7 +162,7 @@ namespace Talento.Tests.Controllers
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(FilePathResult));
             Assert.IsTrue(((FilePathResult)result).ContentType == "application/msexcel");
-            Assert.IsTrue(((FilePathResult)result).FileDownloadName == "OpenPositions.xls");
+            Assert.IsTrue(((FilePathResult)result).FileDownloadName == "OpenPositions.xlsx");
             Assert.IsTrue(((FilePathResult)result).FileName == "filepath/");
         }
 

@@ -5,6 +5,7 @@ using System.Linq;
 using Talento.Entities;
 using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
+using ClosedXML.Excel;
 
 namespace Talento.Core.Helpers
 {
@@ -219,6 +220,167 @@ namespace Talento.Core.Helpers
                 return filePath;
             }
             catch(Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Create XML using ClosedXML, more information: https://github.com/closedxml/closedxml/wiki
+        /// </summary>
+        /// <param name="sortOrder"></param>
+        /// <param name="FilterBy"></param>
+        /// <param name="currentFilter"></param>
+        /// <param name="searchString"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        public string CreateXML(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
+        {
+            try
+            {
+                // Settings
+                int startX = 1;
+                int startY = 1;
+                // - Position Status Colors
+                XLColor[] statusColors = new XLColor[] { XLColor.Red, XLColor.Green, XLColor.Black, XLColor.White };
+                XLColor[] statusColorsBackground = new XLColor[] { XLColor.CoralRed, XLColor.LightGreen, XLColor.AshGrey, XLColor.BattleshipGrey };
+
+                // Positions 
+                List<Position> positionsList = GetTable(sortOrder, FilterBy, currentFilter, searchString, page);
+
+                // XML
+                var positionsXML = new XLWorkbook();
+                var positionsSheet = positionsXML.Worksheets.Add("Open Positions");
+
+                // XML Header
+                positionsSheet.Cell(startX, startY).Value = "Area";
+                positionsSheet.Cell(startX, startY + 1).Value = "Position Skill/Role";
+                positionsSheet.Cell(startX, startY + 2).Value = "Local Manager";
+                positionsSheet.Cell(startX, startY + 3).Value = "Onsite contact";
+                positionsSheet.Cell(startX, startY + 4).Value = "RGS ID";
+                positionsSheet.Cell(startX, startY + 5).Value = "Status on Position";
+                positionsSheet.Cell(startX, startY + 6).Value = "Created Date";
+                positionsSheet.Cell(startX, startY + 7).Value = "Days Open";
+                positionsSheet.Cell(startX, startY + 8).Value = "Candidate(s)";
+                positionsSheet.Cell(startX, startY + 9).Value = "Comments";
+                // Format Header
+                positionsSheet.Range(startX, startY, startX, startY + 9).Style
+                    .Font.SetBold(true)
+                    .Font.SetFontColor(XLColor.White)
+                    .Fill.SetBackgroundColor(XLColor.RoyalBlue)
+                    .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                    .Alignment.SetWrapText(true);
+                positionsSheet.SheetView.FreezeRows(startX);
+
+                // Fill Positions
+                foreach (Position position in positionsList)
+                {
+                    // Start Values
+                    startY = 1;
+
+                    // Area, Title, Owner Email, PM Email, RGS, Status, Creation Date
+                    positionsSheet.Cell(++startX, startY).SetValue(position.Area) // Area
+                        .Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin)
+                        .Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+                    positionsSheet.Cell(startX, ++startY).SetValue(position.Title) // Title
+                         .Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin)
+                         .Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+                    positionsSheet.Cell(startX, ++startY).SetValue(position.Owner.Email) // Owner Email
+                         .Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin)
+                         .Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+                    positionsSheet.Cell(startX, ++startY).SetValue(position.PortfolioManager.Email) // Pm Email
+                        .Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin)
+                        .Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+                    positionsSheet.Cell(startX, ++startY).SetValue(position.RGS) // RGS
+                        .Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin)
+                        .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                        .Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+                    positionsSheet.Cell(startX, ++startY) // Status
+                        .SetValue(position.Status.ToString())
+                        .Style.Font.SetFontColor(statusColors[((int)position.Status) - 1])
+                        .Fill.SetBackgroundColor(statusColorsBackground[((int)position.Status) - 1])
+                         .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                        .Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+
+                    positionsSheet.Cell(startX, ++startY) // Creation Date
+                        .SetValue(position.CreationDate.ToString())
+                        .SetDataType(XLCellValues.DateTime)
+                        .Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin)
+                        .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                    // Position Days Open
+                    int positionDays = 0;
+                    var positionDaysColor = XLColor.Green;
+                    switch (position.Status)
+                    {
+                        case PositionStatus.Open:
+                            positionDays = (DateTime.Today - (DateTime)position.LastOpenedDate).Days;
+                            break;
+                        case PositionStatus.Closed:
+                            positionDays = ((DateTime)position.LastClosedDate - (DateTime)position.LastOpenedDate).Days;
+                            positionDaysColor = XLColor.Red;
+                            break;
+                        case PositionStatus.Cancelled:
+                            positionDays = ((DateTime)position.LastCancelledDate - (DateTime)position.LastOpenedDate).Days;
+                            positionDaysColor = XLColor.Black;
+                            break;
+                    }
+                    positionsSheet.Cell(startX, ++startY)  // Position Days Open Format & Value
+                        .SetValue(positionDays)
+                        .Style.Font.SetFontColor(positionDaysColor)
+                        .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                        .Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+
+                    // Position Candidates
+                    var candidates = "No Canidates";
+                    if (position.PositionCandidates.Count > 0)
+                    {
+                        candidates = String.Join(Environment.NewLine, position.PositionCandidates.Select(x => x.Candidate.Name));
+                    }
+                    positionsSheet.Cell(startX, ++startY).SetValue(candidates) // Position Candidates added
+                        .Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+
+                    // Position Comments
+                    List<Comment> comments = CommentHelper.GetAll(position.PositionId);
+                    startY = startY + 1;
+                    if (comments.Count > 0)
+                    {
+                        var commentCell = positionsSheet.Cell(startX, startY);
+                        commentCell.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                        commentCell.Style.Alignment.SetWrapText(true);
+                        commentCell.Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+                        foreach (Comment comment in comments)
+                        {
+                            // RichText format for Position Comments "USER at DATE / Comment"
+                            commentCell.RichText
+                                .AddText(comment.User.UserName + " ").SetFontColor(XLColor.Blue).SetBold().SetFontSize(10)
+                                .AddText(" at ").SetFontSize(10)
+                                .AddText(comment.Date.ToString() + " ").SetBold().SetFontSize(10)
+                                .AddText(Environment.NewLine)
+                                .AddText(" -- " + comment.Content)
+                                .AddText(Environment.NewLine);
+                        }
+                    }
+                    else
+                    {
+                        positionsSheet.Cell(startX, startY).SetValue("No comments")
+                            .Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+                    }
+                } // End Foreach
+
+                // Final Formal SpreadSheet
+                positionsSheet.Columns().AdjustToContents();
+                positionsSheet.Rows().AdjustToContents();
+                positionsSheet.Columns().Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
+
+                // Save tmp file and return
+                var xmlPath = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".xlsx";
+                positionsXML.SaveAs(xmlPath);
+
+                return xmlPath;
+
+            } // End Try
+            catch (Exception)
             {
                 throw;
             }

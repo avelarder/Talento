@@ -182,8 +182,8 @@ namespace Talento.Controllers
         [HttpGet]
         public FileResult DownloadXl(string TableSortOrder, string TableFilterBy, string TableSearchString)
         {
-            FileResult aux = new FilePathResult(DashboardPagingHelper.CreateXl(TableSortOrder, TableFilterBy, null, TableSearchString, null), "application/msexcel");
-            aux.FileDownloadName = "OpenPositions.xls";
+            FileResult aux = new FilePathResult(DashboardPagingHelper.CreateXML(TableSortOrder, TableFilterBy, null, TableSearchString, null), "application/msexcel");
+            aux.FileDownloadName = "OpenPositions.xlsx";
             return aux;
         }
 
