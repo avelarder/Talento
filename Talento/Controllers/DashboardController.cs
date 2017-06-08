@@ -120,7 +120,7 @@ namespace Talento.Controllers
 
                 //First I get the roles that are allowed by the settings
                 List<string> roles = ApplicationSettings.GetAllSettings()
-                    .Where(x => x.SettingName.Trim().Equals("AllowUsersActivation"))
+                    .Where(x => x.SettingName.Trim().Equals("AllowUsersActivation") && x.ParameterValue.Trim().Equals("Enabled"))
                     .Select(y => y.ParameterName.Substring(5)).ToList();
                 //Then I get the role of the currently logged user
                 string loggedRole = UserHelper.GetRoleName(UserHelper.GetUserByEmail(User.Identity.Name).Roles.First().RoleId);

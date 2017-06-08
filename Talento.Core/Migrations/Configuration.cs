@@ -101,14 +101,6 @@ namespace Talento.Core.Migrations
             {
                 new ApplicationSetting {
                     ApplicationSettingId = 1,
-                    SettingName = "AllowUsersActivation",
-                    ParameterName = "AllowAdmin",
-                    ParameterValue = "Enabled",
-                    CreationDate = DateTime.Now,
-                    CreatedBy = manager.FindByEmail("Admin@example.com")
-                },
-                new ApplicationSetting {
-                    ApplicationSettingId = 1,
                     SettingName = "Pagination",
                     ParameterName = "Status",
                     ParameterValue = "Enabled",
@@ -179,7 +171,47 @@ namespace Talento.Core.Migrations
                     ParameterValue = "/[A-z]*_TIFF.(txt|pdf|doc)/g",
                     CreationDate = DateTime.Now.AddHours(-3),
                     CreatedBy = manager.FindByEmail("Admin@example.com")
-                }
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 10,
+                    SettingName = "AllowUsersActivation",
+                    ParameterName = "AllowAdmin",
+                    ParameterValue = "Enabled",
+                    CreationDate = DateTime.Now,
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 11,
+                    SettingName = "AllowUsersActivation",
+                    ParameterName = "AllowPM",
+                    ParameterValue = "Disabled",
+                    CreationDate = DateTime.Now,
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 12,
+                    SettingName = "AllowUsersActivation",
+                    ParameterName = "AllowTAG",
+                    ParameterValue = "Disabled",
+                    CreationDate = DateTime.Now,
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 11,
+                    SettingName = "AllowUsersActivation",
+                    ParameterName = "AllowTL",
+                    ParameterValue = "Disabled",
+                    CreationDate = DateTime.Now,
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 12,
+                    SettingName = "AllowUsersActivation",
+                    ParameterName = "AllowRMG",
+                    ParameterValue = "Disabled",
+                    CreationDate = DateTime.Now,
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
             };
             appSettings.ForEach(r => context.ApplicationSetting.AddOrUpdate(p => p.ApplicationSettingId, r));
             context.SaveChanges();

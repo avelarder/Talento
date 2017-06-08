@@ -1,12 +1,7 @@
-﻿using PagedList;
+﻿using System.Transactions;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Talento.Core.Data;
 using Talento.Entities;
 
@@ -18,6 +13,22 @@ namespace Talento.Core.Helpers
         public SettingsHelper(ApplicationDbContext db) : base(db)
         {
 
+        }
+
+
+        /// <summary>
+        /// Delete an app setting. 
+        /// </summary>
+        /// <param name="Id"></param>
+        public void Delete(int Id)
+        {
+            using (var tx = new TransactionScope(TransactionScopeOption.Required))
+            {
+                ApplicationSetting tobedeleted = Db.ApplicationSetting.Single(u => u.ApplicationSettingId.Equals(Id)); //Get Current User
+                var p = Db.Positions.Where(x => x.PositionId == Id).Single();
+                Db.SaveChanges();
+                tx.Complete();
+            }
         }
 
         /// <summary>

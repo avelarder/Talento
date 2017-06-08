@@ -17,5 +17,6 @@ namespace Talento.Core
         ApplicationSetting GetById(int id);
         int Create(ApplicationSetting aS);
         int Edit(ApplicationSetting aS);
+        void Delete(int id);
     }
 }

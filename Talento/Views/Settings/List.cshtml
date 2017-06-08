@@ -31,9 +31,9 @@
             @Html.ActionLink("Created By", "List", new { orderBy = ViewBag.SortUser, filter = ViewBag.CurrentFilter })
         </th>
         <th>
-            <button id="btnAddNewParameter" class="btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary" onclick="window.location.href='/Dashboard/AddSettingsForm'">
-                <strong>+</strong> Add Parameter
-            </button>
+            @*<button id="btnAddNewParameter" class="btn btn-sm pmd-btn-raised pmd-ripple-effect btn-primary" onclick="window.location.href='/Dashboard/AddSettingsForm'">
+        <strong>+</strong> Add Parameter
+    </button>*@
         </th>
     </tr>
     @foreach (var setting in Model)
@@ -55,12 +55,11 @@
                 @setting.CreatedBy.Email
             </td>
             <td>
-                <button data-id="@setting.ApplicationSettingId" class="button-edit btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" onclick="window.location.href='/Settings/EditSettingsForm/@setting.ApplicationSettingId'" >
+                <button data-id="@setting.ApplicationSettingId" 
+                        class="button-edit btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" 
+                        onclick="window.location.href='/Settings/EditSettingsForm/@setting.ApplicationSettingId'" >
                     <i class="material-icons pmd-sm">mode_edit</i>
-                </button>
-                <button data-id="@setting.ApplicationSettingId" data-toggle="modal" class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-danger btn-sm" type="button">
-                    <i class="material-icons pmd-sm">delete</i>
-                </button>
+                </button>                
             </td>
         </tr>
     }

@@ -34,7 +34,7 @@
                     <i class="material-icons md-24">mode_edit</i>
                 </a>
                 @*<input data-target="#complete-dialog" data-toggle="modal" class="btn btn-danger pmd-ripple-effect btn-primary pmd-z-depth" value="Delete" />*@
-                <a href="#" class="delete-position" data-target="#delete-position-dialog" data-position="@Model.PositionId" alt="Delete Position">
+                <a href="#" class="delete-position" data-target="#delete-position-dialog" data-position="" alt="Delete Position">
                     <i class="material-icons md-24">delete</i>
                 </a>
             </div>
@@ -179,7 +179,7 @@
                             url: url,
                             data: { idPosition: positionId}
                         }).done(function (response) {
-                            location.reload();
+                            location.href='@Url.Action("Index", "Dashboard", null)';
                         }).fail(function () {
                             location.reload();
                         });
@@ -430,7 +430,7 @@
                                     {
                                         var base64 = Convert.ToBase64String((byte[])ViewData["Image"]);
                                         imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-                                    }
+                                    } 
                                 }
                                 <img src="@imgSrc"
                                      class="img-circle avatar" alt="user profile image" />
