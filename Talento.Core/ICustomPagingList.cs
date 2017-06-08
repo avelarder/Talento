@@ -10,8 +10,7 @@ namespace Talento.Core
 {
     public interface ICustomPagingList
     {
-        List<Position> GetAdminTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page);
-        List<Position> GetBasicTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page);
+        List<Position> GetTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page);
         string CreateXl(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page);
     }
 }

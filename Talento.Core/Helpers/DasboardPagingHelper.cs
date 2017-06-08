@@ -2,10 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Talento.Entities;
-using Microsoft.Office.Core;
 using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -18,92 +15,6 @@ namespace Talento.Core.Helpers
         {
             CommentHelper = commentHelper;
         }
-        
-        public List<Position> GetAdminTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
-        {
-            //Keeping paging and sorting
-            if (searchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            //Linq query that lists the positions
-            var query = from p in Db.Positions
-                        select p;
-
-            //Filtering the positions by the parameters given
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                searchString = searchString.Trim();
-                switch (FilterBy)
-                {
-                    case "Status":
-                        query = query.Where(p => p.Status.ToString().Contains(searchString));
-                        break;
-                    case "Title":
-                        query = query.Where(p => p.Title.Contains(searchString));
-                        break;
-                    case "Owner":
-                        query = query.Where(p => p.Owner.UserName.ToString().Contains(searchString));
-                        break;
-                    case "EM":
-                        query = query.Where(p => p.EngagementManager.Contains(searchString));
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            //Sorting the list by the heading parameter given
-            switch (sortOrder)
-            {
-                case "title_desc":
-                    query = query.OrderByDescending(p => p.Title);
-                    break;
-                case "Title":
-                    query = query.OrderBy(p => p.Title);
-                    break;
-                case "date_asc":
-                    query = query.OrderBy(p => p.CreationDate);
-                    break;
-                case "Status":
-                    query = query.OrderBy(p => p.Status);
-                    break;
-                case "status_desc":
-                    query = query.OrderByDescending(p => p.Status);
-                    break;
-                case "Id":
-                    query = query.OrderBy(p => p.PositionId);
-                    break;
-                case "id_desc":
-                    query = query.OrderByDescending(p => p.PositionId);
-                    break;
-                case "EM":
-                    query = query.OrderBy(p => p.EngagementManager);
-                    break;
-                case "em_desc":
-                    query = query.OrderByDescending(p => p.EngagementManager);
-                    break;
-                case "Owner":
-                    query = query.OrderBy(p => p.Owner.UserName);
-                    break;
-                case "owner_desc":
-                    query = query.OrderByDescending(p => p.Owner.UserName);
-                    break;
-
-                default:  // Date descending 
-                    query = query.OrderByDescending(p => p.CreationDate);
-                    break;
-            }
-
-            int pageNumber = (page ?? 1);
-            return query.ToList();
-        }
-
         /// <summary>
         /// Get a list of positions for a basic user. You can provide sorting and filtering.
         /// </summary>
@@ -113,7 +24,7 @@ namespace Talento.Core.Helpers
         /// <param name="searchString"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public List<Position> GetBasicTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
+        public List<Position> GetTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page)
         {
             //Keeping paging and sorting
             if (searchString != null)
@@ -217,7 +128,7 @@ namespace Talento.Core.Helpers
                 object misValue = System.Reflection.Missing.Value;
                 Excel.Range xlCellrange;
 
-                List<Position> ListToExport = GetBasicTable(sortOrder, FilterBy, currentFilter, searchString, page);
+                List<Position> ListToExport = GetTable(sortOrder, FilterBy, currentFilter, searchString, page);
                 xl.Visible = false;
                 xl.DisplayAlerts = false;
                 xlworkBook = xl.Workbooks.Add(misValue);
