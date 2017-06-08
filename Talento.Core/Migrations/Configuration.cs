@@ -101,6 +101,14 @@ namespace Talento.Core.Migrations
             {
                 new ApplicationSetting {
                     ApplicationSettingId = 1,
+                    SettingName = "AllowUsersActivation",
+                    ParameterName = "AllowAdmin",
+                    ParameterValue = "Enabled",
+                    CreationDate = DateTime.Now,
+                    CreatedBy = manager.FindByEmail("Admin@example.com")
+                },
+                new ApplicationSetting {
+                    ApplicationSettingId = 1,
                     SettingName = "Pagination",
                     ParameterName = "Status",
                     ParameterValue = "Enabled",

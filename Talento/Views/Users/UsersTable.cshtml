@@ -27,26 +27,26 @@
             Actions
         </th>
     </tr>
-    @foreach (var u in Model.users)
+    @foreach (var u in Model.Users)
     {
         <tr>
             <td>
-                @u.name
+                @u.Name
             </td>
             <td>
-                @u.createdon.ToShortDateString()
+                @u.Createdon.Value.ToShortDateString()
             </td>
             <td>
-                @u.email
+                @u.Email
             </td>
             <td>
-                @u.role
+                @u.Role
         </td>
         <td>
-            <a class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" href="/Users/ConfirmEmail?userId=@u.id">
+            <a class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success btn-sm" href="/Users/ConfirmEmail?userId=@u.Id">
                 <i class="material-icons pmd-sm">check_circle</i>
             </a>
-            <a class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-danger btn-sm" href="/Users/RejectEmail?userId=@u.id">
+            <a class="button-delete btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-danger btn-sm" href="/Users/RejectEmail?userId=@u.Id">
                 <i class="material-icons pmd-sm">cancel</i>
             </a>
         </td>
