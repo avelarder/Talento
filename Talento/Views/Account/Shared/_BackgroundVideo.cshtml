@@ -1,0 +1,26 @@
+﻿<style>
+    .covervid-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    body {
+
+    }
+</style>
+
+<div class="covervid-wrapper">
+    <video class="covervid-video" autoplay loop>
+        <source src="~/Content/Media/pwiaobv.mp4" type="video/mp4">
+    </video>
+</div>
+
+<script type="text/javascript">    
+    
+    $('.covervid-video').coverVid(1920, 1080);
+    $("body").css("overflow", "hidden");
+    $("body").css("overflow-y", "auto");                
+      
+</script>

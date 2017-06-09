@@ -7,31 +7,15 @@
     <!-- Render Styles -->
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-</head>
-<body class="@ViewBag.BodyClass @this.ViewContext.HttpContext.Items["RoleClass"]">
-    <!-- Render Body -->
-    @RenderBody()
 
     <!-- Scripts -->
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/scripts")
     @Scripts.Render("~/bundles/jqueryval")
-
-    <script>
-        $('.covervid-video').coverVid(1920, 1080);
-        $("body").css("overflow", "hidden");
-        $("body").css("overflow-y", "auto");
-    </script>
-
+</head>
+<body class="@ViewBag.BodyClass @this.ViewContext.HttpContext.Items["RoleClass"]">
+    <!-- Render Body -->
+    @RenderBody()
 </body>
 </html>
-<style>
-    .covervid-wrapper {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-</style>

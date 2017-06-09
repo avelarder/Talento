@@ -6,7 +6,7 @@
     Layout = "~/Views/Account/Shared/_LayoutLogin.cshtml";
 }
 
-@Html.Partial("_Background")
+@Html.Partial("~/Views/Account/Shared/_BackgroundVideo.cshtml")
 
 @using (Html.BeginForm("ForgotPasswordConfirmation", "Account", FormMethod.Post, new { id = "ResetPassword" }))
 {

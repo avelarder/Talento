@@ -367,7 +367,7 @@
     <Content Include="Views\TechnicalInterview\NewTechnicalInterview.cshtml" />
     <Content Include="Views\Candidate\Create.cshtml" />
     <Content Include="Views\Candidate\Details.cshtml" />
-    <Content Include="Views\Shared\_Background.cshtml" />
+    <Content Include="Views\Account\Shared\_BackgroundVideo.cshtml" />
     <Content Include="Views\Dashboard\AboutUs.cshtml" />
     <Content Include="Views\ChangeImageProfile\Index.cshtml" />
     <Content Include="Views\Users\UsersTable.cshtml" />
