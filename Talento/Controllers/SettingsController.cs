@@ -34,7 +34,7 @@ namespace Talento.Controllers
         }
 
         // List All Settings
-        [ChildAndAjaxActionOnly]
+        [ChildActionOnly]
         public ActionResult List(int pageSize = 5, int page = 1, string orderBy = "CreationDate", string filter = "")
         {
             // Set ViewBag

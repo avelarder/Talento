@@ -281,7 +281,6 @@ namespace Talento.Controllers
         }
         
         [HttpPost]
-        [ChildAndAjaxActionOnly]
         [Authorize]
         public ActionResult ChangeStatus(int positionCandidateId, int status)
         {
