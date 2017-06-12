@@ -12,5 +12,6 @@ namespace Talento.Core
     {
         List<Position> GetTable(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page);
         string CreateXl(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page);
+        string CreateXML(string sortOrder, string FilterBy, string currentFilter, string searchString, int? page);
     }
 }
