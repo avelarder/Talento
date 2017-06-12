@@ -13,7 +13,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Talento.Controllers
 {
-    [HandleError]
+    //[HandleError]
     public class CandidateController : Controller
     {
         ICandidate CandidateHelper;
