@@ -19,12 +19,12 @@ namespace Talento
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
 
-        protected void Application_Error(object sender, EventArgs e)
-        {
-            Exception exception = Server.GetLastError();
+        //protected void Application_Error(object sender, EventArgs e)
+        //{
+        //    Exception exception = Server.GetLastError();
             
-            Server.ClearError();
-            Response.Redirect("/Dashboard/Error");
-        }
+        //    Server.ClearError();
+        //    Response.Redirect("/Dashboard/Error");
+        //}
     }
 }
