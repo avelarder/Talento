@@ -334,14 +334,11 @@ namespace Talento.Controllers
         }
 
         #region PositionLogs
+        [ChildAndAjaxActionOnly]
         public ActionResult List(int? id, int pagex = 1, int pagesize = 5, string clase = "slide-right")
         {
             try
             {
-                if (!Request.IsLocal)
-                {
-                    throw new SecurityException();
-                }
                 // No ID return 404
                 if (id == null)
                 {
