@@ -52,6 +52,14 @@
                 </dd>
                 <br />
                 <dt>
+                    Status
+                </dt>
+
+                <dd>
+                    @Html.Action("Status", "Candidate", new { positionId = Model.PositionId, candidateId = Model.CandidateId })
+                </dd>
+                <br />
+                <dt>
                     @if (Model.IsTcsEmployee)
                     {
                         <span>Is TCS Employee</span>

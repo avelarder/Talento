@@ -238,9 +238,9 @@ namespace Talento.Controllers
 
         [ChildActionOnly]
         [Authorize]
-        public ActionResult Status(PositionModel positionModel, int candidateId)
+        public ActionResult Status(int positionId, int candidateId)
         {
-            PositionCandidatesStatus status = positionModel.PositionCandidates.FirstOrDefault(x => x.CandidateID == candidateId).Status;
+            PositionCandidatesStatus status = PositionHelper.Get(positionId).PositionCandidates.Single(x => x.CandidateID == candidateId).Status;
 
             var name = Enum.GetName(typeof(PositionCandidatesStatus), status);
             name = name.Replace("_", " ");
