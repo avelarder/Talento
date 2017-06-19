@@ -5,7 +5,9 @@
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
-<span style="font-size:20px;">New Technical Interview</span>
+<h1 class="page-header">
+    New Technical Interview for @Model.CandidateEmail
+</h1>
 @Html.Partial("TIFFDownload")
 
 <form action="/TechnicalInterview/NewTechnicalInterview" method="post" enctype="multipart/form-data" id="interviewform">

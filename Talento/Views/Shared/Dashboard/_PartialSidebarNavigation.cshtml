@@ -18,7 +18,7 @@
                 <div class="media-left user-image">
                     <img src="https://cdn4.iconfinder.com/data/icons/ios7-active-2/512/Management.png" width="48" height="48" alt="User Image">
                 </div>
-                <div class="media-body media-middle"><span>@ViewData["Role"]</span> Dashboard</div>
+                <div class="media-body media-middle"><span>My Dashboard</span></div>
             </a>
             <div class="pmd-dropdown-menu-container">
                 <ul class="dropdown-menu">
@@ -26,16 +26,7 @@
                     <li><a href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
                 </ul>
             </div>
-        </li><li>
-    <a class="pmd-ripple-effect" href="@Url.Action("SoftwareTimeLine", "Dashboard")">
-        <span class="pull-left">
-            <i class="material-icons pmd-sm">hourglass_empty</i>
-        </span>
-        <span class="pull-left">
-            <span class="menu-option">Software Timeline</span>
-        </span>
-    </a>
-</li>
+        </li>
         @if (ViewData["Role"].ToString() == "basic")
         {
             <li>
@@ -44,7 +35,7 @@
                         <i class="material-icons pmd-sm">note_add</i>
                     </span>
                     <span class="pull-left">
-                        <span class="menu-option">Create new Position</span>
+                        <span class="menu-option">Create new position</span>
                     </span>
                 </a>
             </li>
@@ -54,7 +45,7 @@
                         <i class="material-icons">perm_identity</i>
                     </span>
                     <span class="pull-left">
-                        <span class="menu-option">About Us</span>
+                        <span class="menu-option">About us</span>
                     </span>
                 </a>
             </li>
@@ -83,7 +74,7 @@
                         <i class="material-icons pmd-sm">settings</i>
                     </span>
                     <span class="pull-left">
-                        <span class="menu-option">Applications Settings</span>
+                        <span class="menu-option">Applications settings</span>
                     </span>
                 </a>
             </li>
@@ -94,11 +85,21 @@
                         <i class="material-icons">perm_identity</i>
                     </span>
                     <span class="pull-left">
-                        <span class="menu-option">About Us</span>
+                        <span class="menu-option">About us</span>
                     </span>
                 </a>
             </li>
         }
+        <li>
+            <a class="pmd-ripple-effect" href="@Url.Action("SoftwareTimeLine", "Dashboard")">
+                <span class="pull-left">
+                    <i class="material-icons pmd-sm">hourglass_empty</i>
+                </span>
+                <span class="pull-left">
+                    <span class="menu-option">Software timeline</span>
+                </span>
+            </a>
+        </li>
         @if ((bool)ViewData["UserTableVisible"])
         {
             <li>
@@ -107,7 +108,7 @@
                         <i class="material-icons pmd-sm">account_circle</i>
                     </span>
                     <span class="pull-left">
-                        <span class="menu-option">Pending Users</span>
+                        <span class="menu-option">Pending users</span>
                     </span>
                 </a>
             </li>

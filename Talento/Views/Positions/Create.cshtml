@@ -4,7 +4,10 @@
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
-<span style="font-size:18px;">Creating a new Position</span>
+<h1 class="page-header">
+    Creating a new position    
+</h1>
+
 <form action="/Positions/Create" method="post" novalidate="novalidate" id="createform">
     @Html.AntiForgeryToken()
     <div class="form-horizontal">

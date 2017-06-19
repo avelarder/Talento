@@ -4,8 +4,9 @@
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
-
-<span style="font-size:18px;">Editing @Model.Title</span>
+<h1 class="page-header">
+    Editing @Model.Title
+</h1>
 
 <form action="/Positions/Edit" method="post" novalidate="novalidate" id="editform">
     @Html.AntiForgeryToken()
