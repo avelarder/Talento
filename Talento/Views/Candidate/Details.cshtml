@@ -8,8 +8,6 @@
     Postulation of <b>@Model.Name for @Model.PositionCandidates.FirstOrDefault(x => x.PositionID.Equals(Model.PositionId)).Position.Title</b>
 </h1>
 <div>
-    <span>Details: </span>
-    <hr />
     <div class="row">
         <div class="col-lg-6">
             <dl class="dl-horizontal">
@@ -65,6 +63,18 @@
                 </dt>
                 <br />
             </dl>
+            <br/>
+            <h3>
+                Files Attached to @Model.Email <small>(Click to download)</small>
+            </h3>
+            <div class="list-group">
+                @foreach (Talento.Entities.FileBlob f in Model.PositionCandidates.Single(x => x.CandidateID.Equals(Model.CandidateId) && x.PositionID.Equals(Model.PositionId)).Candidate.FileBlobs)
+                {
+                    <a class="list-group-item" href="/Candidate/DownloadAttachment?candidateId=@Model.CandidateId&fileName=@f.FileName">@f.FileName <i style="float:right;" class="material-icons md-24 pull-left">file_download</i></a>
+                    
+                }
+            </div>
+
         </div>
         <div class="col-lg-6">
             <br />
@@ -166,16 +176,7 @@
     </div>
     <div class="row">
 
-        <h3>
-            Files Attached to @Model.Email
-        </h3>
-
-        <div class="list-group">
-            @foreach (Talento.Entities.FileBlob f in Model.PositionCandidates.Single(x => x.CandidateID.Equals(Model.CandidateId) && x.PositionID.Equals(Model.PositionId)).Candidate.FileBlobs)
-            {
-                <a class="list-group-item">@f.FileName</a>
-            }
-        </div>
+        
 
     </div>
 

@@ -111,7 +111,7 @@ namespace Talento.Controllers
             TechnicalInterview newTechnicalInterview = new TechnicalInterview()
             {
                 Date = model.Date,
-                FeedbackFile = new FileBlob() { Blob = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength), FileName = model.CandidateEmail.Split('@')[0] + "_" + model.Date.Year + model.Date.Month + model.Date.Day + ".doc" },
+                FeedbackFile = new FileBlob() { Blob = new BinaryReader(model.File.InputStream).ReadBytes(model.File.ContentLength), FileName = model.CandidateEmail.Split('@')[0] + "_" + model.Date.Year + model.Date.Month + model.Date.Day +"_"+ model.File.FileName },
                 InterviewerId = model.InterviewerId + "",
                 InterviewerName = model.InterviewerName,
                 IsAccepted = model.Result,
