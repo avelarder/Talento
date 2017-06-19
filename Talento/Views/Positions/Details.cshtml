@@ -12,7 +12,10 @@
 
 <div class="row">
     <div class="col-md-12">
-        <p style="font-size:21px;">@Html.DisplayFor(x => x.Title)</p>
+        <h1 class="page-header">
+            @Model.Title
+        </h1>
+
         <div class="col-md-4" style="position:relative; float:left; width:40%;">
             <span style="font-weight:bold">Creation date:</span> <span style="margin-right:10px; position:relative; float:right">@Html.DisplayFor(x => x.CreationDate) </span><br />
             <span style="font-weight:bold">Description: </span> <span style="margin-right:10px; position:relative; float:right">@Html.DisplayFor(x => x.Description) </span><br />
@@ -20,7 +23,7 @@
             <span style="font-weight:bold">Owner: </span><span style="margin-right:10px; position:relative; float:right">@Html.DisplayFor(x => x.Owner.UserName)</span><br />
             <span style="font-weight:bold">Engagement Manager: </span><span style="margin-right:10px; position:relative; float:right">@Html.DisplayFor(x => x.EngagementManager)</span><br />
             <span style="font-weight:bold">Portfolio Manager: </span><span style="margin-right:10px; position:relative; float:right">@Html.DisplayFor(x => x.PortfolioManager.UserName)</span><br />
-            <span style="font-weight:bold">RGS: </span><span style="margin-right:10px; position:relative; float:right">@Html.DisplayFor(x => x.RGS)</span><br />
+            <span style="font-weight:bold">RGS: </span><span style="margin-right:10px; position:relative; float:right">@if (Model.RGS == "") { Html.DisplayFor(x => x.RGS); } else { <span>Not specified yet</span>}</span><br />
             <span style="font-weight:bold">Status: </span><span style="margin-right:10px; position:relative; float:right">@Html.DisplayFor(x => x.Status)</span><br />
 
             <div>

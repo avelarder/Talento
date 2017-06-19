@@ -4,7 +4,7 @@
     ViewBag.Title = "Widgets";
     ViewBag.BodyClass = "dashboard-home";
 }
-
+<h1 class="page-header">My Dashboard</h1>
 @Html.Partial("TIFFDownload")
 @{string actionName = "Index"; }
 @using (Html.BeginForm(actionName, "Dashboard", FormMethod.Get))

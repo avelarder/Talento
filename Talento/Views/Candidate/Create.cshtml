@@ -2,7 +2,10 @@
 @{ViewBag.Title = "Attaching a new Profile to " + @Model.Position_Name;
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";}
 
-<span style="font-size:18px;">@ViewBag.Title</span>
+<h1 class="page-header">
+    @ViewBag.Title
+</h1>
+
 
 <form id="formnewprofile" action="/Candidate/Create/" method="post">
     <input name="Position_Id" id="Position_Id" value="@Model.Position_Id" type="hidden" />

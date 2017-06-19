@@ -4,8 +4,9 @@
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
-<span style="font-size:18px;">Postulation of <b>@Model.Name for @Model.PositionCandidates.FirstOrDefault(x => x.PositionID.Equals(Model.PositionId)).Position.Title</b></span>
-
+<h1 class="page-header">
+    Postulation of <b>@Model.Name for @Model.PositionCandidates.FirstOrDefault(x => x.PositionID.Equals(Model.PositionId)).Position.Title</b>
+</h1>
 <div>
     <span>Details: </span>
     <hr />
