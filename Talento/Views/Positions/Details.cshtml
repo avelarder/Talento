@@ -115,7 +115,7 @@
                         @cP.Candidate.CreatedBy.Email
                     </td>
                     <td>
-                        @Html.Action("Status", "Candidate", new { positionModel = Model, candidateId = cP.CandidateID })
+                        @Html.Action("Status", "Candidate", new { positionId = cP.PositionID, candidateId = cP.CandidateID })
                     </td>
                     @if (Model.Status == Talento.Entities.PositionStatus.Open)
                     {
