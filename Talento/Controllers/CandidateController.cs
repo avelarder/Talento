@@ -280,6 +280,15 @@ namespace Talento.Controllers
             return RedirectToAction("Details", "Candidate", new { id = CandidateId, positionId = PositionId });
         }
         
+        [Authorize]
+        public FileResult DownloadAttachment(int candidateId, string fileName)
+        {
+            byte[] file = CandidateHelper.Get(candidateId).FileBlobs.Single(x => x.FileName.Equals(fileName)).Blob;
+            return File(file, "application/"+ fileName.Split('.')[fileName.Split('.').Length-1],fileName);
+            //return File(file, controntType, Path.GetFileName(file));
+
+           
+        }
         [HttpPost]
         [Authorize]
         public ActionResult ChangeStatus(int positionCandidateId, int status)
